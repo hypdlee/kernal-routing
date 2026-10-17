@@ -151,6 +151,9 @@ def main(log_path, results_dir):
         put(f"mbm{kk}", sg(q["mean"])); put(f"mbm{kk}p", pv(q["p"])); put(f"mbm{kk}v", verdict(q))
         put(f"mbm{kk}r", f"{ratio:.2f}"); put(f"mbm{kk}i", sg(interp))
     pathlib.Path("tab_MBMATCHED.tex").write_text("\n".join(rows) + "\n")
+    inv = [PM[(ds, ws, 4, "static")][0] / PM[(ds, wg, 4, "gap")][0]
+           for ds, wg, ws in [("cifar100", 16, 32), ("cifar100", 32, 64), ("tinyimagenet", 32, 64)]]
+    put("mbpinvlo", f"{min(inv):.1f}"); put("mbpinvhi", f"{max(inv):.1f}")
 
     # ------------------------------------------------------------ bank size
     rows = []
@@ -206,17 +209,23 @@ def main(log_path, results_dir):
     nsig_r18 = sum(q["p"] < 0.05 and q["mean"] > 0 for q in r18_pairs)
     lst = lambda qs: ", ".join(sg(q["mean"], 2) for q in qs)
     contra = [
-        ("Bank term ($\\texttt{uniform}-\\texttt{static}$)", f"equivalent in {rbank} of 5", f"equivalent in {nb} of 5; never significant (largest {max((b['mean'] for b,_,_ in dec.values()), key=abs):+.2f})", "holds, weaker"),
-        ("Routing term significant", f"{sum(paired(r18(ds,w,'gap'),r18(ds,w,'uniform'))['p']<0.05 for ds,w in COND)} of 5", f"{nr} of 5", "holds"),
-        ("$\\texttt{gap}-\\texttt{static}$, CIFAR-100 w64", f"{sg(r18_w64['mean'],2)} ({verdict(r18_w64)})", f"{sg(mb_w64['mean'],2)} ({verdict(mb_w64)})", "\\textbf{contradicts}"),
-        ("Plain $2c$ beats \\texttt{gap} $c$ (3 pairs)", f"{nsig_r18} of 3 ({lst(r18_pairs)})", f"{np2} of 3 ({lst(pairs)})", "\\textbf{contradicts}"),
-        ("Annealed $-$ constant $\\tau$ (w16, 32, 64)", lst(r18_ann), lst(mb_ann), "\\textbf{differs}"),
-        ("$\\texttt{frozen\\_random}-\\texttt{gap}$, w64", f"{sg(r18_frz['mean'],2)} (both null)", f"{sg(mb_frz['mean'],2)}; vs \\texttt{{uniform}} {sg(mb_frzu['mean'],2)}", "new"),
-        ("$K=8$ vs $K=2$, CIFAR-100 w32", f"{sg(r18_k['mean'],2)} ({verdict(r18_k)})", f"{sg(q['mean'],2) if False else sg(paired(mb('cifar100',32,'gap',k=8),mb('cifar100',32,'gap',k=2))['mean'],2)} ({verdict(paired(mb('cifar100',32,'gap',k=8),mb('cifar100',32,'gap',k=2)))})", "holds"),
+        ("Bank term ($\\texttt{uniform}-\\texttt{static}$)", f"equivalent in {rbank} of 5", f"equivalent in {nb} of 5; never significant (largest {max((b['mean'] for b,_,_ in dec.values()), key=abs):+.2f})", "holds on both (weaker on MobileNetV2)"),
+        ("Routing term significant", f"{sum(paired(r18(ds,w,'gap'),r18(ds,w,'uniform'))['p']<0.05 for ds,w in COND)} of 5", f"{nr} of 5", "holds on both"),
+        ("$\\texttt{gap}-\\texttt{static}$, CIFAR-100 w64", f"{sg(r18_w64['mean'],2)} ({verdict(r18_w64)})", f"{sg(mb_w64['mean'],2)} ({verdict(mb_w64)})", "\\textbf{backbone-dependent}"),
+        ("Plain $2c$ beats \\texttt{gap} $c$ (3 pairs)", f"{nsig_r18} of 3 ({lst(r18_pairs)})", f"{np2} of 3 ({lst(pairs)})", "\\textbf{backbone-dependent}"),
+        ("Annealed $-$ constant $\\tau$ (w16, 32, 64)", lst(r18_ann), lst(mb_ann), "holds on both (never higher)"),
+        ("$\\texttt{frozen\\_random}-\\texttt{gap}$, w64", f"{sg(r18_frz['mean'],2)} (both null)", f"{sg(mb_frz['mean'],2)}; vs \\texttt{{uniform}} {sg(mb_frzu['mean'],2)}", "MobileNetV2 only"),
+        ("$K=8$ vs $K=2$, CIFAR-100 w32", f"{sg(r18_k['mean'],2)} ({verdict(r18_k)})", f"{sg(q['mean'],2) if False else sg(paired(mb('cifar100',32,'gap',k=8),mb('cifar100',32,'gap',k=2))['mean'],2)} ({verdict(paired(mb('cifar100',32,'gap',k=8),mb('cifar100',32,'gap',k=2)))})", "holds on both"),
     ]
     pathlib.Path("tab_CONTRA.tex").write_text("\n".join(f"{a} & {b} & {c} & {d} \\\\" for a, b, c, d in contra) + "\n")
     put("rbmpairs", lst(r18_pairs)); put("mbmpairs", lst(pairs))
     put("rbanlist", lst(r18_ann)); put("mbanlist", lst(mb_ann))
+    put("nannlower", str(sum(q["p"] < 0.05 and q["mean"] < 0 for q in r18_ann + mb_ann)))
+    put("nannhigher", str(sum(q["p"] < 0.05 and q["mean"] > 0 for q in r18_ann + mb_ann)))
+    rbn = sum(paired(r18(ds, w, 'gap'), r18(ds, w, 'uniform'))['p'] < 0.05 for ds, w in COND)
+    put("rbnrout", str(rbn)); put("bothrout", str(rbn + nr))
+    put("rbnbanksig", str(sum(b["p"] < 0.05 for b in r18bank)))
+    put("bothbanksig", str(sum(b["p"] < 0.05 for b in r18bank) + sum(b["p"] < 0.05 for b, _, _ in dec.values())))
 
     # ------------------------------------------------------------ loss vs effect (both backbones)
     pts = []
@@ -412,6 +421,8 @@ def main(log_path, results_dir):
     pathlib.Path("tab_COST.tex").write_text("\n".join(rows) + "\n")
     r18_eq = [paired(r18(ds, w, "gap"), r18(ds, w, "static")) for ds, w in COND]
     put("rbeqmac", str(sum(q["p"] < 0.05 and q["mean"] > 0 for q in r18_eq)))
+    put("botheff", str(sum(q["p"] < 0.05 and q["mean"] > 0 for q in r18_eq)
+                       + sum(t["p"] < 0.05 and t["mean"] > 0 for _, _, t in dec.values())))
     put("mbeqmac", str(sum(t["p"] < 0.05 and t["mean"] > 0 for _, _, t in dec.values())))
     put("rbmacextra", f"{100 * max(macs[('resnet18', ds, w, 4, 'gap')] / macs[('resnet18', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
     put("mbmacextra", f"{100 * max(macs[('mobilenetv2', ds, w, 4, 'gap')] / macs[('mobilenetv2', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
@@ -539,16 +550,20 @@ def entropy(results_dir, R, mb, r18, put):
          f"annealed {P_fl(HR)}$\\times$ flatter, larger benefit ({sg(paired(r18('cifar100',16,'gap',rec='anneal'),r18('cifar100',16,'uniform'))['mean'],2)} vs "
          f"{sg(paired(r18('cifar100',16,'gap'),r18('cifar100',16,'uniform'))['mean'],2)})",
          f"annealed {H('cifar100',16)/H('cifar100',16,'anneal'):.1f}$\\times$ flatter, smaller benefit "
-         f"({sg(BEN[('cifar100',16,'anneal')]['mean'],2)} vs {sg(BEN[('cifar100',16,'const')]['mean'],2)})", "\\textbf{does not replicate}"),
+         f"({sg(BEN[('cifar100',16,'anneal')]['mean'],2)} vs {sg(BEN[('cifar100',16,'const')]['mean'],2)})", "\\textbf{backbone-dependent}"),
         ("Constant-$\\tau$ $1-\\tilde H$ as width grows (w16, 32, 64)",
          ", ".join(f(HR(w, "const"), 4) for w in (16, 32, 64)) + " (flattens)",
-         ", ".join(f(H("cifar100", w), 4) for w in (16, 32, 64)) + " (sharpens)", "\\textbf{differs}"),
+         ", ".join(f(H("cifar100", w), 4) for w in (16, 32, 64)) + " (sharpens)", "\\textbf{backbone-dependent}"),
         ("Same $1-\\tilde H$, CIFAR-100 w64, \\texttt{gap}$-$\\texttt{uniform}",
          f"{f(HR(64,'const'),4)}: {sg(r18w64['mean'],2)} ({verdict(r18w64)})",
-         f"{f(H('cifar100',64),4)}: {sg(BEN[('cifar100',64,'const')]['mean'],2)} ({verdict(BEN[('cifar100',64,'const')])})", "new"),
+         f"{f(H('cifar100',64),4)}: {sg(BEN[('cifar100',64,'const')]['mean'],2)} ({verdict(BEN[('cifar100',64,'const')])})", "across backbones"),
     ]
     with open("tab_CONTRA.tex", "a") as fh:
         fh.write("\n".join(f"{a} & {b} & {c} & {d} \\\\" for a, b, c, d in extra) + "\n")
+    status = [l.rsplit("&", 1)[1] for l in pathlib.Path("tab_CONTRA.tex").read_text().splitlines() if l.strip()]
+    put("ncontra", str(len(status)))
+    put("ncontraBD", str(sum("backbone-dependent" in x for x in status)))
+    put("ncontraHold", str(sum("holds on both" in x for x in status)))
 
     # ---------------- figure G8
     fig, ax = plt.subplots(1, 3, figsize=(7.9, 3.0), gridspec_kw=dict(width_ratios=[1, 1.15, 1.2]))
