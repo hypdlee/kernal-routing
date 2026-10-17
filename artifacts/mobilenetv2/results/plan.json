@@ -1,0 +1,82 @@
+{
+  "mobilenetv2__cifar100__w64__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "shuffled",
+    "sec_per_step": 0.08073190450668336,
+    "peak_mem_gb": 2.314514636993408,
+    "est_minutes_per_run": 0.8073190450668335
+  },
+  "mobilenetv2__cifar100__w32__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.045480334758758546,
+    "peak_mem_gb": 1.269700050354004,
+    "est_minutes_per_run": 0.45480334758758545
+  },
+  "mobilenetv2__cifar100__w16__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.04087244272232056,
+    "peak_mem_gb": 0.721961498260498,
+    "est_minutes_per_run": 0.40872442722320557
+  },
+  "mobilenetv2__cifar100__w32__K2__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.03482528924942017,
+    "peak_mem_gb": 1.0987658500671387,
+    "est_minutes_per_run": 0.34825289249420166
+  },
+  "mobilenetv2__cifar100__w32__K8__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.11253056526184083,
+    "peak_mem_gb": 1.6134052276611328,
+    "est_minutes_per_run": 1.1253056526184082
+  },
+  "mobilenetv2__tinyimagenet__w32__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.1712300419807434,
+    "peak_mem_gb": 4.699975967407227,
+    "est_minutes_per_run": 1.712300419807434
+  },
+  "mobilenetv2__cifar100__w64__K4__anneal": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.09477854967117309,
+    "peak_mem_gb": 2.3152308464050293,
+    "est_minutes_per_run": 0.947785496711731
+  },
+  "mobilenetv2__cifar100__w32__K4__anneal": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.04997891187667847,
+    "peak_mem_gb": 1.269700050354004,
+    "est_minutes_per_run": 0.49978911876678467
+  },
+  "mobilenetv2__cifar100__w16__K4__anneal": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.04232144355773926,
+    "peak_mem_gb": 0.721961498260498,
+    "est_minutes_per_run": 0.4232144355773926
+  },
+  "mobilenetv2__tinyimagenet__w64__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.3147998332977295,
+    "peak_mem_gb": 8.518089771270752,
+    "est_minutes_per_run": 3.147998332977295
+  }
+}

@@ -21,7 +21,7 @@ Private research repository of Ankit Kumar.
 | `README_MODELS.md`, `docs/KernelRoute_Run_Guide.pdf` | how to run the five-backbone program (PowerShell) |
 | `README_RESNET18.md` | the original ResNet-18 study README |
 | `artifacts/resnet18/` | 24 stage-1 result JSONs and the training logs shared during the study |
-| `artifacts/mobilenetv2/` | MobileNetV2 `train.log` (all 132 runs) and the per-seed CSV parsed from it |
+| `artifacts/mobilenetv2/` | MobileNetV2 `train.log` and `runner.log` (all 132 runs), the per-seed CSV parsed from the log, and `results/`: the 132 result JSONs (accuracy, history, per-layer routing statistics), the 10 memory probes and the runner plan |
 | `docs/` | research ideology documents, day-1 notes, run guide source |
 | `artifacts/session_uploads/` | every file shared during the project: logs, crash traces, screenshots, the stage-1 results zip |
 | `artifacts/mobilenetv2/analysis_first_pass/` | the first, independent MobileNetV2 parser and analysis, used to cross-check the paper |
@@ -33,9 +33,16 @@ Private research repository of Ankit Kumar.
 ```powershell
 pip install -r requirements.txt
 python tests\test_analysis.py all
-python report\build_paper2.py --r18-results <ResNet-18 results dir> --mb-log artifacts\mobilenetv2\train.log
+python report\build_paper2.py --r18-fixture --mb-log artifacts\mobilenetv2\train.log --mb-results artifacts\mobilenetv2\results
 ```
 
-`--r18-fixture` instead of `--r18-results` rebuilds ResNet-18 from the per-seed
-values printed in the paper. The full ResNet-18 and MobileNetV2 result JSONs live
-on the training machine (`results/`, `results_models/`) and are not committed.
+`--r18-fixture` rebuilds ResNet-18 from the per-seed values printed in the
+paper; `--r18-results <dir>` reads ResNet-18 result JSONs instead. MobileNetV2
+accuracies are read from the log, routing entropies from the result files, and
+the build stops if any final accuracy in the result files differs from the log.
+The full ResNet-18 result JSONs live on the training machine (`results/`); only
+the 24 stage-1 files in `artifacts/resnet18/` are committed.
+
+Routing entropies, on every backbone, describe the last test batch only (16
+images, the same in every run on a dataset); see the threats section of the
+paper and `README_RESNET18.md`.

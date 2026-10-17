@@ -293,6 +293,61 @@
 \expandafter\def\csname vmbeqmac\endcsname{5}
 \expandafter\def\csname vrbmacextra\endcsname{8}
 \expandafter\def\csname vmbmacextra\endcsname{2}
+\expandafter\def\csname vmbjsonn\endcsname{132}
+\expandafter\def\csname vmbnlayers\endcsname{17}
+\expandafter\def\csname vmbeGap\endcsname{0.0132}
+\expandafter\def\csname vmbeFrz\endcsname{0.0029}
+\expandafter\def\csname vmbeShuf\endcsname{0.00005}
+\expandafter\def\csname vmbeGapMin\endcsname{0.9827}
+\expandafter\def\csname vmbeGapMax\endcsname{0.9895}
+\expandafter\def\csname vmbeFrzMin\endcsname{0.9965}
+\expandafter\def\csname vmbeFrzMax\endcsname{0.9974}
+\expandafter\def\csname vmbeFrzRatio\endcsname{4.5}
+\expandafter\def\csname vmbeShufFlat\endcsname{14--16}
+\expandafter\def\csname vmbeFrzFlat\endcsname{0--2}
+\expandafter\def\csname vmbeGapFlat\endcsname{2--4}
+\expandafter\def\csname vrbeShuf\endcsname{0.0004}
+\expandafter\def\csname vrbeFrz\endcsname{0.0029}
+\expandafter\def\csname vmbrho\endcsname{0.83}
+\expandafter\def\csname vmbrhop\endcsname{0.042}
+\expandafter\def\csname vrbrho\endcsname{0.60}
+\expandafter\def\csname vrbrhop\endcsname{0.208}
+\expandafter\def\csname vmbhcA\endcsname{0.0084}
+\expandafter\def\csname vmbhaA\endcsname{0.00112}
+\expandafter\def\csname vmbflA\endcsname{7.5}
+\expandafter\def\csname vmbbcA\endcsname{+1.32}
+\expandafter\def\csname vmbbaA\endcsname{+0.16}
+\expandafter\def\csname vmbbapA\endcsname{0.7242}
+\expandafter\def\csname vmbbavA\endcsname{inconclusive}
+\expandafter\def\csname vrbhcA\endcsname{0.0398}
+\expandafter\def\csname vmbhcB\endcsname{0.0109}
+\expandafter\def\csname vmbhaB\endcsname{0.00084}
+\expandafter\def\csname vmbflB\endcsname{13.1}
+\expandafter\def\csname vmbbcB\endcsname{+1.41}
+\expandafter\def\csname vmbbaB\endcsname{+0.13}
+\expandafter\def\csname vmbbapB\endcsname{0.4319}
+\expandafter\def\csname vmbbavB\endcsname{equivalent}
+\expandafter\def\csname vrbhcB\endcsname{0.0213}
+\expandafter\def\csname vmbhcC\endcsname{0.0132}
+\expandafter\def\csname vmbhaC\endcsname{0.00069}
+\expandafter\def\csname vmbflC\endcsname{19.1}
+\expandafter\def\csname vmbbcC\endcsname{+1.47}
+\expandafter\def\csname vmbbaC\endcsname{+0.55}
+\expandafter\def\csname vmbbapC\endcsname{0.0133}
+\expandafter\def\csname vmbbavC\endcsname{higher}
+\expandafter\def\csname vrbhcC\endcsname{0.0115}
+\expandafter\def\csname vmbflatAmin\endcsname{15}
+\expandafter\def\csname vmbflatAmax\endcsname{16}
+\expandafter\def\csname vmbflatCmin\endcsname{2}
+\expandafter\def\csname vmbflatCmax\endcsname{7}
+\expandafter\def\csname vmbannlayers\endcsname{1, 2 and 4}
+\expandafter\def\csname vrbguC\endcsname{+0.03}
+\expandafter\def\csname vrbguCv\endcsname{equivalent}
+\expandafter\def\csname vmbguC\endcsname{+1.47}
+\expandafter\def\csname vmbguCp\endcsname{$<10^{-4}$}
+\expandafter\def\csname vrbguA\endcsname{+0.76}
+\expandafter\def\csname vrbguAa\endcsname{+0.87}
+\expandafter\def\csname vrbflA\endcsname{14}
 
 \title{\vspace{-1.3cm}\textbf{Where Does the Gain in Dynamic Convolution Come From?}\\[3pt]
 \large A controlled study of routing, capacity and width on two backbones\thanks{Draft of 17 October 2026. ResNet-18 and MobileNetV2 are complete; the same program on VGG-16, ResNet-50 and ConvNeXt-Tiny is pre-registered and running.}}
@@ -330,8 +385,10 @@ the softmax temperature, which DY-Conv presents as necessary, costs about
 counterpart: a router frozen at its random initialisation is not
 distinguishable from a trained one and delivers the full benefit over the
 constant mixture, while routing each image with another image's
-descriptor removes it. Routing entropy, measured on ResNet-18, does not
-track the benefit. Of the four predictions we recorded before running the
+descriptor removes it. Routing entropy does not measure the benefit: on
+CIFAR-100 at width 64 the trained routers of the two backbones have nearly
+the same entropy, and one improves on the constant mixture by
+\V{rbguC}\,pp while the other improves on it by \V{mbguC}\,pp. Of the four predictions we recorded before running the
 experiments that test them, three failed, and we report each one.
 \end{abstract}
 
@@ -393,8 +450,10 @@ harmful; on MobileNetV2 it is harmful at every width.
 frozen at random initialisation does as well as a trained one
 (Section~\ref{sec:mbw64}); on ResNet-18 the test is uninformative.
 \end{enumerate}
-On ResNet-18, routing entropy does not measure whether routing is useful
-(Section~\ref{sec:entropy}).
+Routing entropy does not measure whether routing is useful
+(Sections~\ref{sec:entropy} and~\ref{sec:mbentropy}), and under an
+annealed temperature the MobileNetV2 router ends flat in nearly every
+layer.
 
 We recorded four predictions before running the experiments that test
 them. On ResNet-18 we attributed the CIFAR-100 width-64 null to the
@@ -948,7 +1007,11 @@ by entropy and delivers the larger benefit over \texttt{uniform}.}
 \end{figure}
 
 Normalised routing entropy $\tilde H=H(\zv)/\log K$ is the statistic
-this literature reports to show that a router is doing something.
+this literature reports to show that a router is doing something. Each
+run records it once, after training, on the last batch of the unshuffled
+test set, which is the same 16 images in every run on a dataset; a value
+is the mean over those images and over the dynamic layers
+(Section~\ref{sec:threats}).
 Table~\ref{tab:entben} sets it against the benefit each router delivers
 over \texttt{uniform} in six conditions.
 
@@ -979,7 +1042,7 @@ Table~\ref{tab:entben}, sorting by $1-\tilde H$ does not sort the
 benefit, and the two schedules do not lie on one curve
 (Figure~\ref{fig:temp}c). A value of $\tilde H$ below one is not evidence
 that routing is useful, and a value near one is not evidence that it is
-not.
+not. Section~\ref{sec:mbentropy} repeats the analysis on MobileNetV2.
 
 \begin{table}[!htbp]\centering\small
 \caption{Routing entropy against the benefit it is taken to indicate,
@@ -1014,10 +1077,11 @@ GPU-hours. None diverged and every group trained at batch 128. One run
 \V{mbresumedacc}\,\%) was stopped by a GPU fault at epoch 125 and resumed
 from its checkpoint; without it, $\texttt{gap}-\texttt{static}$ in that
 condition is \V{mbsensTB}\,pp ($p=\V{mbsensTBp}$, $n=5$), so no conclusion
-depends on it. The MobileNetV2 numbers in this draft are taken from the
-training log, which prints every run's final accuracy and training loss;
-the routing entropies are recorded only in the result files and are not
-analysed here.
+depends on it. Accuracies and training losses are parsed from the training
+log and routing entropies are read from the \V{mbjsonn} result files. Every
+final accuracy in the result files is identical to the logged one, and
+every final training loss agrees with it to the three decimals the log
+prints.
 
 \subsection{The bank adds nothing measurable; routing helps everywhere}\label{sec:mbdecomp}
 
@@ -1114,6 +1178,39 @@ On ResNet-18 the same controls are uninformative, since no arm differed
 from \texttt{static} at this width. The frozen router was run only on
 CIFAR-100 at width 64, and the claim is limited to that condition.
 
+The entropies separate the three routers (Table~\ref{tab:mbentw64}). The
+trained router is the furthest from uniform ($1-\tilde H=\V{mbeGap}$). The
+frozen router is \V{mbeFrzRatio} times closer to uniform
+($1-\tilde H=\V{mbeFrz}$), but its departure is spread over the network:
+its entropy reaches 0.9999 in only \V{mbeFrzFlat} of the \V{mbnlayers}
+dynamic layers, against \V{mbeGapFlat} for the trained router. The
+\texttt{shuffled} router, whose input carries no information about the
+image it routes, has trained itself to near-uniform
+($1-\tilde H=\V{mbeShuf}$, flat in \V{mbeShufFlat} layers), as it did on
+ResNet-18 ($1-\tilde H=\V{rbeShuf}$). In this condition a router that
+entropy rates at \V{mbeFrzMin} to \V{mbeFrzMax} delivered the same
+accuracy as one it rates at \V{mbeGapMin} to \V{mbeGapMax}.
+
+\begin{table}[!htbp]\centering\small
+\caption{Routing entropy by arm, CIFAR-100 width 64, per-seed means over
+the recorded images and layers. Flat layers: the number of the
+\V{mbnlayers} MobileNetV2 dynamic layers with $\tilde H\ge0.9999$, range
+over seeds.}
+\label{tab:mbentw64}
+\begin{tabular}{l rr rrrr r}
+\toprule
+& \multicolumn{2}{c}{ResNet-18} & \multicolumn{5}{c}{MobileNetV2} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-8}
+arm & mean $\tilde H$ & $1-\tilde H$ & mean $\tilde H$ & min & max & $1-\tilde H$ & flat layers \\
+\midrule
+\texttt{uniform} & 1.0000 & 0.00000 & 1.00000 & 1.00000 & 1.00000 & 0.00000 & 17 \\
+\texttt{gap} & 0.9885 & 0.01147 & 0.98680 & 0.98272 & 0.98955 & 0.01320 & 2--4 \\
+\texttt{frozen\_random} & 0.9971 & 0.00287 & 0.99706 & 0.99649 & 0.99736 & 0.00294 & 0--2 \\
+\texttt{shuffled} & 0.9996 & 0.00040 & 0.99995 & 0.99992 & 0.99996 & 0.00005 & 14--16 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \begin{table}[!htbp]\centering\small
 \caption{Routing controls on CIFAR-100 at width 64. The ResNet-18 columns
 are repeated from Section~\ref{sec:w64} for comparison.}
@@ -1202,9 +1299,9 @@ Annealing $\tau$ from 30 to 1 lowers \texttt{gap} at every width:
 annealed runs also end at a higher training loss at every width
 (\V{mblaA}, \V{mblaB}, \V{mblaC} against \V{mblcA}, \V{mblcB},
 \V{mblcC}). On ResNet-18 at width 64 the annealed router went flat and
-stayed flat (Section~\ref{sec:temp}); whether the same happens on
-MobileNetV2 needs the routing entropies, which this draft does not
-include.
+stayed flat (Section~\ref{sec:temp}). On MobileNetV2 the annealed router
+ends flat at every width and in nearly every layer
+(Section~\ref{sec:mbentropy}).
 
 \begin{table}[!htbp]\centering\small
 \caption{MobileNetV2: bank size at CIFAR-100 width 32.}
@@ -1236,6 +1333,94 @@ width & $\tau=1$ & annealed & $\Delta$ & $p$ & $\tau=1$ & annealed & $p$ & $\Del
 64 & 73.755 & 72.833 & -0.922 & 0.0011 & +1.360 & +0.438 & 0.0051 & +0.552 & higher \\
 \bottomrule
 \end{tabular}
+\end{table}
+
+\subsection{Routing entropy}\label{sec:mbentropy}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{fig/g8_entropy.pdf}
+\caption{Routing entropy on both backbones. (a) Departure from uniform,
+$1-\tilde H$, against width on CIFAR-100; open markers and dashed lines are
+the annealed schedule. (b) $1-\tilde H$ against the benefit over
+\texttt{uniform} in the six CIFAR-100 conditions of each backbone; ``a''
+marks the annealed schedule. (c) MobileNetV2, CIFAR-100 width 64:
+$1-\tilde H$ for each dynamic layer, mean over six seeds.}
+\label{fig:mbent}
+\end{figure}
+
+Table~\ref{tab:mbentben} repeats the analysis of
+Section~\ref{sec:entropy} on MobileNetV2 and adds, for each condition, the
+number of dynamic layers whose router is flat, meaning
+$\tilde H\ge0.9999$. By Eq.~\eqref{eq:ent} that threshold allows a
+root-mean-square deviation from $1/K$ of about 0.004, under
+\SI{2}{\percent} of $1/K$.
+
+\paragraph{Annealing leaves the router flat.} Under the annealed schedule
+the router is flat in \V{mbflatAmin} to \V{mbflatAmax} of the
+\V{mbnlayers} dynamic layers, in every seed at every width; across all
+eighteen annealed runs the only layers that are ever not flat are
+layers \V{mbannlayers}, counted from the input (Figure~\ref{fig:mbent}c,
+Table~\ref{tab:mblayer}). Under a constant temperature \V{mbflatCmin} to
+\V{mbflatCmax} layers are flat. The annealed routers are \V{mbflA},
+\V{mbflB} and \V{mbflC} times closer to uniform than the constant ones at
+widths 16, 32 and 64, and their benefit over \texttt{uniform} falls from
+\V{mbbcA}, \V{mbbcB} and \V{mbbcC}\,pp to \V{mbbaA}, \V{mbbaB} and
+\V{mbbaC}\,pp. The temperature reaches 1 at epoch 10, so the annealed
+routers stay flat through 140 epochs at the same temperature as the
+constant ones. This is consistent with the cost of annealing in
+Section~\ref{sec:mbtemp}, but it is a measurement at the end of training
+only: entropies were not recorded during training, and we cannot say
+whether a router ever left the flat state it starts in at $\tau=30$.
+
+\paragraph{Within MobileNetV2, entropy and benefit move together.}
+Across the six CIFAR-100 conditions the rank correlation between
+$1-\tilde H$ and the benefit over \texttt{uniform} is \V{mbrho} on
+MobileNetV2 (Spearman, $p=\V{mbrhop}$) against \V{rbrho} on ResNet-18
+($p=\V{rbrhop}$). The ResNet-18 counterexample at width 16 does not recur.
+There the annealed router was \V{rbflA} times closer to uniform and
+delivered more (\V{anuA} against \V{bcA}\,pp); on MobileNetV2 it is
+\V{mbflA} times closer to uniform and delivers less (\V{mbbaA}\,pp,
+$p=\V{mbbapA}$, against \V{mbbcA}\,pp). Inside the annealed schedule the
+order is reversed: the router closest to uniform, at width 64, is the only
+annealed one whose benefit is significant (\V{mbbaC}\,pp, $p=\V{mbbapC}$,
+against \V{mbbaA} and \V{mbbaB}\,pp at widths 16 and 32). The
+differences between these three benefits were not tested.
+
+\paragraph{Between backbones, it does not.} On CIFAR-100 at width 64 the
+constant-temperature routers of the two backbones are almost equally far
+from uniform ($1-\tilde H=\V{rbhcC}$ on ResNet-18, \V{mbhcC} on
+MobileNetV2). The ResNet-18 router is equivalent to \texttt{uniform}
+(\V{rbguC}\,pp); the MobileNetV2 router beats it by \V{mbguC}\,pp
+($p$\,\V{mbguCp}). The width trend also reverses: from width 16 to 64 the
+ResNet-18 router moves towards uniform (\V{rbhcA} to \V{rbhcC}) and the
+MobileNetV2 router away from it (\V{mbhcA} to \V{mbhcC};
+Figure~\ref{fig:mbent}a). The same entropy accompanies no benefit on one
+backbone and a clear benefit on the other, so entropy cannot be read as a
+measure of routing usefulness across architectures, even where, as within
+MobileNetV2, the two happen to move together.
+
+\begin{table}[!htbp]\centering\small
+\caption{MobileNetV2: routing entropy against the benefit over
+\texttt{uniform}, for every \texttt{gap} group that has a \texttt{uniform}
+arm. RMS dev is recovered from Eq.~\eqref{eq:ent} as in
+Table~\ref{tab:entben}. Flat layers: dynamic layers (of \V{mbnlayers})
+with $\tilde H\ge0.9999$, range over seeds.}
+\label{tab:mbentben}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l r l rrr r rll}
+\toprule
+dataset & width & $\tau$ & $\tilde H$ & $1-\tilde H$ & RMS dev & flat layers & \texttt{gap}$-$\texttt{uniform} (pp) & $p$ & verdict \\
+\midrule
+CIFAR-100 & 16 & $1$ & 0.99159 & 0.00841 & 0.0382 & 6--7 & +1.322 & 0.0011 & higher \\
+CIFAR-100 & 16 & $30\!\to\!1$ & 0.99888 & 0.00112 & 0.0139 & 15--16 & +0.162 & 0.7242 & inconclusive \\
+CIFAR-100 & 32 & $1$ & 0.98906 & 0.01094 & 0.0435 & 4--7 & +1.408 & 0.0002 & higher \\
+CIFAR-100 & 32 & $30\!\to\!1$ & 0.99916 & 0.00084 & 0.0120 & 15 & +0.132 & 0.4319 & equivalent \\
+CIFAR-100 & 64 & $1$ & 0.98680 & 0.01320 & 0.0478 & 2--4 & +1.473 & $<10^{-4}$ & higher \\
+CIFAR-100 & 64 & $30\!\to\!1$ & 0.99931 & 0.00069 & 0.0110 & 15--16 & +0.552 & 0.0133 & higher \\
+Tiny-ImageNet & 32 & $1$ & 0.99267 & 0.00733 & 0.0356 & 3--5 & +1.888 & 0.0008 & higher \\
+Tiny-ImageNet & 64 & $1$ & 0.99160 & 0.00840 & 0.0382 & 2--5 & +1.807 & 0.0014 & higher \\
+\bottomrule
+\end{tabular}}
 \end{table}
 
 \subsection{The pre-registered predictions}\label{sec:mbprereg}
@@ -1284,6 +1469,9 @@ Plain $2c$ beats \texttt{gap} $c$ (3 pairs) & 3 of 3 (+4.35, +2.31, +2.52) & 1 o
 Annealed $-$ constant $\tau$ (w16, 32, 64) & +0.11, -0.68, -0.05 & -1.16, -1.28, -0.92 & \textbf{differs} \\
 $\texttt{frozen\_random}-\texttt{gap}$, w64 & +0.10 (both null) & +0.15; vs \texttt{uniform} +1.63 & new \\
 $K=8$ vs $K=2$, CIFAR-100 w32 & +0.10 (equivalent) & +0.11 (inconclusive) & holds \\
+Entropy counterexample, CIFAR-100 w16 & annealed 14$\times$ flatter, larger benefit (+0.87 vs +0.76) & annealed 7.5$\times$ flatter, smaller benefit (+0.16 vs +1.32) & \textbf{does not replicate} \\
+Constant-$\tau$ $1-\tilde H$ as width grows (w16, 32, 64) & 0.0398, 0.0213, 0.0115 (flattens) & 0.0084, 0.0109, 0.0132 (sharpens) & \textbf{differs} \\
+Same $1-\tilde H$, CIFAR-100 w64, \texttt{gap}$-$\texttt{uniform} & 0.0115: +0.03 (equivalent) & 0.0132: +1.47 (higher) & new \\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -1293,7 +1481,10 @@ measurable on its own, the routing term carries the effect wherever there
 is one, and no bank size beyond $K=2$ is distinguishable from $K=2$. On
 MobileNetV2 static and bank kernels share one initialisation, so its bank
 term is free of the initialisation mismatch that affects the ResNet-18
-bank term (Section~\ref{sec:threats}), and it gives the same answer.
+bank term (Section~\ref{sec:threats}), and it gives the same answer. On
+both backbones a router fed another image's descriptor trains itself to
+near-uniform, and on both, routing entropy fails as a measure of routing
+usefulness, though in different ways (Section~\ref{sec:mbentropy}).
 
 \paragraph{Which cost to hold fixed.} The ResNet-18 conclusion that
 parameters are better spent on width is a statement at equal parameters.
@@ -1362,8 +1553,12 @@ and 64), against \V{rbanlist}\,pp on ResNet-18. On MobileNetV2 the router
 also does not need training. Both results point the same way: what
 matters is that the mixture differ across images from the start of
 training, not that it be optimised, and a schedule that keeps it flat
-early removes most of the benefit. We state this as an interpretation;
-neither experiment was designed to test it.
+early removes most of the benefit. The entropies add one observation:
+after annealing, the MobileNetV2 router is flat in at least
+\V{mbflatAmin} of its \V{mbnlayers} layers (Section~\ref{sec:mbentropy}),
+so in those layers the network is close to the constant mixture that
+Proposition~\ref{prop:collapse} reduces to a single kernel. We state this
+as an interpretation; neither experiment was designed to test it.
 
 \paragraph{Why the backbones differ.} Several properties change at once
 between ResNet-18 and MobileNetV2: the share of parameters in dynamic
@@ -1381,8 +1576,9 @@ $7\times7$ layers dynamic.
 one consumer GPU. Behaviour at ImageNet scale is untested and cannot be
 tested on this hardware.
 
-\paragraph{Two backbones.} Two backbones disagree on three of the main
-results, so what holds on both is the minimum that can be claimed. The
+\paragraph{Two backbones.} The two backbones disagree on five of the
+results in Table~\ref{tab:contra}, so what holds on both is the minimum
+that can be claimed. The
 same program on VGG-16, ResNet-50 and ConvNeXt-Tiny was pre-registered on
 30 September 2026 and is running; its results will be added as they
 complete, whatever they show.
@@ -1394,13 +1590,22 @@ bank. A different rule, such as making every convolution but the stem
 dynamic, could change the MobileNetV2 results. The frozen-router control
 shows that the trainable router parameters do not produce the gain.
 
-\paragraph{MobileNetV2 from the log.} The MobileNetV2 numbers are taken
-from the training log's final lines, parsed twice by independent code
-with identical results. The result files on the training machine record
-the same values plus routing entropies; the entropy analyses
-(Sections~\ref{sec:w64}, \ref{sec:temp} and~\ref{sec:entropy}) will be
-repeated for MobileNetV2 from those files. One MobileNetV2 run was
-resumed after a GPU fault; the conclusions do not depend on it.
+\paragraph{MobileNetV2 provenance.} MobileNetV2 accuracies and training
+losses are parsed from the training log, by two independent parsers with
+identical results, and checked against the \V{mbjsonn} result files: every
+final accuracy is identical and every training loss agrees to the log's
+three decimals. The routing entropies come from the result files. One
+MobileNetV2 run was resumed after a GPU fault; the conclusions do not
+depend on it.
+
+\paragraph{Entropy sample.} The routing statistics are overwritten at each
+test batch, so every recorded entropy, on both backbones, describes the
+last batch of the unshuffled test set: the same 16 images in every run on
+a dataset. Comparisons between arms, widths and schedules are therefore
+made on identical inputs, and the spread across seeds is small
+(Tables~\ref{tab:entw64} and~\ref{tab:mbentw64}), but no entropy here is
+a test-set average. The trained weights were not kept, so the entropies
+cannot be recomputed on the full test set. No accuracy is affected.
 
 \paragraph{One recipe.} Both backbones use the ResNet-18 recipe. The
 MobileNetV2 static arms never approach zero training loss under it, and
@@ -1483,9 +1688,12 @@ Several results did not survive the second backbone. The ResNet-18 null
 on CIFAR-100 at width 64 does not appear on MobileNetV2. Temperature
 annealing, neutral or harmful on ResNet-18, costs about \SI{1}{pp} at
 every MobileNetV2 width. Two of the three MobileNetV2 predictions failed,
-as did the recorded ResNet-18 prediction for Tiny-ImageNet. The entropy
-diagnostic, tested on ResNet-18, does not measure whether routing is
-useful.
+as did the recorded ResNet-18 prediction for Tiny-ImageNet. Routing
+entropy does not measure whether routing is useful: the ResNet-18
+counterexample did not recur on MobileNetV2, but on CIFAR-100 at width 64
+the two backbones' routers are almost equally far from uniform and deliver
+\V{rbguC} and \V{mbguC}\,pp. After annealing, the MobileNetV2 router is
+flat in nearly every layer.
 
 \paragraph{Reproducibility.} \V{totruns} runs (\V{nruns} ResNet-18,
 \V{mbruns} MobileNetV2), \V{totgpuh} GPU-hours, one RTX 4070 Ti. Code, the pre-registration, the dated prediction, the gate
@@ -1609,7 +1817,8 @@ Tiny-ImageNet & 64 & \texttt{gap} & 44.52 & 288.0 & 0.0190 & 687.2 \\
 \end{table}
 
 \begin{table}[h]\centering\small
-\caption{Routing entropy by arm, CIFAR-100 width 64, per-seed means.}
+\caption{ResNet-18: routing entropy by arm, CIFAR-100 width 64, per-seed
+means.}
 \label{tab:entw64}
 \begin{tabular}{l rrr r}
 \toprule
@@ -1709,6 +1918,39 @@ Tiny-ImageNet & 64 & \texttt{uniform} & -0.175 & [-0.664, +0.314] & 0.4001 & 1.0
 Tiny-ImageNet & 64 & \texttt{gap} & +1.632 & [+1.201, +2.062] & 0.0002 & 0.0312 & +3.98 & 0.9995 & higher \\
 \bottomrule
 \end{tabular}}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{MobileNetV2: departure of each dynamic layer's router from
+uniform, $10^3\,(1-\tilde H)$, mean over six seeds, $K=4$. Layers are
+numbered from the input; a value of 0.00 is below $5\times10^{-6}$.}
+\label{tab:mblayer}
+\begin{tabular}{r rrrr rr r}
+\toprule
+& \multicolumn{4}{c}{CIFAR-100, width 64} & \multicolumn{2}{c}{CIFAR-100, width 16} & TIN w64 \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-7}\cmidrule(lr){8-8}
+layer & \texttt{gap} & \texttt{gap} ann. & \texttt{frozen\_random} & \texttt{shuffled} & \texttt{gap} & \texttt{gap} ann. & \texttt{gap} \\
+\midrule
+1 & 3.66 & 4.15 & 4.23 & 0.11 & 7.79 & 16.51 & 1.87 \\
+2 & 9.38 & 7.63 & 6.45 & 0.11 & 7.14 & 0.43 & 5.87 \\
+3 & 9.54 & 0.00 & 2.46 & 0.01 & 7.31 & 0.00 & 9.59 \\
+4 & 9.36 & 0.00 & 3.89 & 0.02 & 7.64 & 2.05 & 4.22 \\
+5 & 6.34 & 0.00 & 6.19 & 0.02 & 0.37 & 0.00 & 0.90 \\
+6 & 5.33 & 0.00 & 2.46 & 0.00 & 1.37 & 0.00 & 1.65 \\
+7 & 26.08 & 0.00 & 4.94 & 0.02 & 9.49 & 0.00 & 7.38 \\
+8 & 13.15 & 0.00 & 2.26 & 0.02 & 6.17 & 0.00 & 0.04 \\
+9 & 9.26 & 0.00 & 1.80 & 0.00 & 0.00 & 0.00 & 4.38 \\
+10 & 39.87 & 0.00 & 2.52 & 0.00 & 0.00 & 0.00 & 4.37 \\
+11 & 29.20 & 0.00 & 3.18 & 0.27 & 19.95 & 0.00 & 15.63 \\
+12 & 13.11 & 0.00 & 5.60 & 0.04 & 5.12 & 0.00 & 15.31 \\
+13 & 5.94 & 0.00 & 1.68 & 0.00 & 4.54 & 0.00 & 15.55 \\
+14 & 23.36 & 0.00 & 0.29 & 0.03 & 35.60 & 0.00 & 15.25 \\
+15 & 8.10 & 0.00 & 1.40 & 0.20 & 7.85 & 0.00 & 22.07 \\
+16 & 2.89 & 0.00 & 0.43 & 0.07 & 6.86 & 0.00 & 13.50 \\
+17 & 9.83 & 0.00 & 0.24 & 0.00 & 15.80 & 0.00 & 5.21 \\
+\midrule mean & 13.20 & 0.69 & 2.94 & 0.05 & 8.41 & 1.12 & 8.40 \\
+\bottomrule
+\end{tabular}
 \end{table}
 
 \begin{table}[h]\centering\small

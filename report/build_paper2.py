@@ -1,9 +1,12 @@
 """
 The two-backbone paper: ResNet-18 sections from the ResNet-18 results,
-MobileNetV2 sections from the MobileNetV2 training log (or, later, results).
+MobileNetV2 sections from the MobileNetV2 training log and result files.
+Accuracies and losses are read from the log; routing entropies from the
+result files, after every final accuracy in them has been checked against
+the log (the build stops on any mismatch).
 
-    python report/build_paper2.py --r18-results results --mb-log results_models/mobilenetv2/train.log
-    python report/build_paper2.py --r18-fixture --mb-log path/to/train.log
+    python report/build_paper2.py --r18-results results --mb-log results_models/mobilenetv2/train.log --mb-results results_models/mobilenetv2
+    python report/build_paper2.py --r18-fixture --mb-log path/to/train.log --mb-results path/to/mobilenetv2
 
 Output: report/out/paper2/main.pdf with a self-contained main.tex and fig/.
 """
@@ -13,14 +16,17 @@ sys.path.insert(0, str(HERE)); sys.path.insert(0, str(HERE.parent / "tests" / "f
 from gen import generate
 
 
-def build(r18_results, mb_log, out):
+def build(r18_results, mb_log, mb_results, out):
+    # resolve every input before changing directory into the output folder
     out = pathlib.Path(out).resolve()
+    mb_log, mb_results = pathlib.Path(mb_log).resolve(), pathlib.Path(mb_results).resolve()
+    r18_results = [pathlib.Path(r).resolve() for r in r18_results]
     generate("resnet18", r18_results, out)
     cwd = os.getcwd()
     try:
         os.chdir(out)
         import mbv2_section
-        mbv2_section.main(str(pathlib.Path(mb_log).resolve()))
+        mbv2_section.main(str(mb_log), str(mb_results))
     finally:
         os.chdir(cwd)
     src = (HERE / "paper2_template.tex").read_text()
@@ -48,13 +54,14 @@ if __name__ == "__main__":
     ap.add_argument("--r18-results", nargs="+")
     ap.add_argument("--r18-fixture", action="store_true")
     ap.add_argument("--mb-log", required=True)
+    ap.add_argument("--mb-results", required=True, help="directory with the 132 MobileNetV2 result files")
     ap.add_argument("--out", default=str(HERE / "out" / "paper2"))
     a = ap.parse_args()
     res = a.r18_results
     if a.r18_fixture:
         import make_r18_jsons
         tmp = pathlib.Path(tempfile.mkdtemp()); make_r18_jsons.write(tmp); res = [tmp]
-    pdf, errs, und, missing = build(res, a.mb_log, a.out)
+    pdf, errs, und, missing = build(res, a.mb_log, a.mb_results, a.out)
     print(f"{pdf}: errors {len(errs)}, undefined refs {len(und)}, undefined macros {missing}")
     for e in errs[:10]: print("  ", e)
     for u in und[:10]: print("  ", u)

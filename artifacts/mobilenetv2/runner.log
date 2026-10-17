@@ -1,0 +1,429 @@
+2026-10-06 14:26:49  [1/132] mobilenetv2__cifar100__w64__K4__const static seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [1/132] mobilenetv2__cifar100__w64__K4__const static seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [2/132] mobilenetv2__cifar100__w64__K4__const static seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [3/132] mobilenetv2__cifar100__w64__K4__const static seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [4/132] mobilenetv2__cifar100__w64__K4__const static seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [5/132] mobilenetv2__cifar100__w64__K4__const static seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [6/132] mobilenetv2__cifar100__w64__K4__const static seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [7/132] mobilenetv2__cifar100__w64__K4__const uniform seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [8/132] mobilenetv2__cifar100__w64__K4__const uniform seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [9/132] mobilenetv2__cifar100__w64__K4__const uniform seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [10/132] mobilenetv2__cifar100__w64__K4__const uniform seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [11/132] mobilenetv2__cifar100__w64__K4__const uniform seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [12/132] mobilenetv2__cifar100__w64__K4__const uniform seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [13/132] mobilenetv2__cifar100__w64__K4__const gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [14/132] mobilenetv2__cifar100__w64__K4__const gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [15/132] mobilenetv2__cifar100__w64__K4__const gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [16/132] mobilenetv2__cifar100__w64__K4__const gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [17/132] mobilenetv2__cifar100__w64__K4__const gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [18/132] mobilenetv2__cifar100__w64__K4__const gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [19/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [20/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [21/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [22/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [23/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [24/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [25/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [26/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [27/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [28/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [29/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [30/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [31/132] mobilenetv2__cifar100__w32__K4__const static seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [32/132] mobilenetv2__cifar100__w32__K4__const static seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [33/132] mobilenetv2__cifar100__w32__K4__const static seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [34/132] mobilenetv2__cifar100__w32__K4__const static seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [35/132] mobilenetv2__cifar100__w32__K4__const static seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [36/132] mobilenetv2__cifar100__w32__K4__const static seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [37/132] mobilenetv2__cifar100__w32__K4__const uniform seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [38/132] mobilenetv2__cifar100__w32__K4__const uniform seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [39/132] mobilenetv2__cifar100__w32__K4__const uniform seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [40/132] mobilenetv2__cifar100__w32__K4__const uniform seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [41/132] mobilenetv2__cifar100__w32__K4__const uniform seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [42/132] mobilenetv2__cifar100__w32__K4__const uniform seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [43/132] mobilenetv2__cifar100__w32__K4__const gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [44/132] mobilenetv2__cifar100__w32__K4__const gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [45/132] mobilenetv2__cifar100__w32__K4__const gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [46/132] mobilenetv2__cifar100__w32__K4__const gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [47/132] mobilenetv2__cifar100__w32__K4__const gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [48/132] mobilenetv2__cifar100__w32__K4__const gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [49/132] mobilenetv2__cifar100__w16__K4__const static seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [50/132] mobilenetv2__cifar100__w16__K4__const static seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [51/132] mobilenetv2__cifar100__w16__K4__const static seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [52/132] mobilenetv2__cifar100__w16__K4__const static seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [53/132] mobilenetv2__cifar100__w16__K4__const static seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [54/132] mobilenetv2__cifar100__w16__K4__const static seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [55/132] mobilenetv2__cifar100__w16__K4__const uniform seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [56/132] mobilenetv2__cifar100__w16__K4__const uniform seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [57/132] mobilenetv2__cifar100__w16__K4__const uniform seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [58/132] mobilenetv2__cifar100__w16__K4__const uniform seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [59/132] mobilenetv2__cifar100__w16__K4__const uniform seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [60/132] mobilenetv2__cifar100__w16__K4__const uniform seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [61/132] mobilenetv2__cifar100__w16__K4__const gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [62/132] mobilenetv2__cifar100__w16__K4__const gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [63/132] mobilenetv2__cifar100__w16__K4__const gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [64/132] mobilenetv2__cifar100__w16__K4__const gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [65/132] mobilenetv2__cifar100__w16__K4__const gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [66/132] mobilenetv2__cifar100__w16__K4__const gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [67/132] mobilenetv2__cifar100__w32__K2__const gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [68/132] mobilenetv2__cifar100__w32__K2__const gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [69/132] mobilenetv2__cifar100__w32__K2__const gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [70/132] mobilenetv2__cifar100__w32__K2__const gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [71/132] mobilenetv2__cifar100__w32__K2__const gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [72/132] mobilenetv2__cifar100__w32__K2__const gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [73/132] mobilenetv2__cifar100__w32__K8__const gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [74/132] mobilenetv2__cifar100__w32__K8__const gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [75/132] mobilenetv2__cifar100__w32__K8__const gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [76/132] mobilenetv2__cifar100__w32__K8__const gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [77/132] mobilenetv2__cifar100__w32__K8__const gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [78/132] mobilenetv2__cifar100__w32__K8__const gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [79/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [80/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [81/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [82/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [83/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [84/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [85/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [86/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [87/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [88/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [89/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [90/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [91/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [92/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [93/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [94/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [95/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [96/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [97/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [98/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:35:59  [99/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [100/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [101/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [102/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [103/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [104/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [105/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [106/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [107/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [108/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [109/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [110/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [111/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [112/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [113/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [114/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [115/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [116/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [117/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [118/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [119/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [121/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [122/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [123/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 2 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [124/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [125/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [126/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 3 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [127/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [128/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [129/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 4 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [130/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [131/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  [132/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 5 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:36:00  mobilenetv2: all 132 jobs present (0 run this session, 0.0 h)
+2026-10-06 14:39:36  [1/132] mobilenetv2__cifar100__w64__K4__const static seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 14:39:39  run failed (rc=1); stopping. Rerun the same command to resume.
+2026-10-06 14:44:22  [1/132] mobilenetv2__cifar100__w64__K4__const static seed 0 (micro-batch 128); 132 left for mobilenetv2
+2026-10-06 15:35:39     finished in 51.3 min, final 72.66
+2026-10-06 15:35:39  [2/132] mobilenetv2__cifar100__w64__K4__const static seed 1 (micro-batch 128); 131 left for mobilenetv2
+2026-10-06 16:00:18     finished in 24.7 min, final 72.18
+2026-10-06 16:00:18  [3/132] mobilenetv2__cifar100__w64__K4__const static seed 2 (micro-batch 128); 130 left for mobilenetv2
+2026-10-06 16:25:04     finished in 24.8 min, final 72.15
+2026-10-06 16:25:04  [4/132] mobilenetv2__cifar100__w64__K4__const static seed 3 (micro-batch 128); 129 left for mobilenetv2
+2026-10-06 16:49:58     finished in 24.9 min, final 72.25
+2026-10-06 16:49:58  [5/132] mobilenetv2__cifar100__w64__K4__const static seed 4 (micro-batch 128); 128 left for mobilenetv2
+2026-10-06 17:14:45     finished in 24.8 min, final 72.41
+2026-10-06 17:14:45  [6/132] mobilenetv2__cifar100__w64__K4__const static seed 5 (micro-batch 128); 127 left for mobilenetv2
+2026-10-06 17:39:34     finished in 24.8 min, final 72.72
+2026-10-06 17:39:34  [7/132] mobilenetv2__cifar100__w64__K4__const uniform seed 0 (micro-batch 128); 126 left for mobilenetv2
+2026-10-06 18:06:12     finished in 26.6 min, final 72.32
+2026-10-06 18:06:12  [8/132] mobilenetv2__cifar100__w64__K4__const uniform seed 1 (micro-batch 128); 125 left for mobilenetv2
+2026-10-06 18:33:02     finished in 26.8 min, final 71.77
+2026-10-06 18:33:02  [9/132] mobilenetv2__cifar100__w64__K4__const uniform seed 2 (micro-batch 128); 124 left for mobilenetv2
+2026-10-06 18:59:39     finished in 26.6 min, final 72.75
+2026-10-06 18:59:39  [10/132] mobilenetv2__cifar100__w64__K4__const uniform seed 3 (micro-batch 128); 123 left for mobilenetv2
+2026-10-06 19:26:25     finished in 26.8 min, final 72.24
+2026-10-06 19:26:25  [11/132] mobilenetv2__cifar100__w64__K4__const uniform seed 4 (micro-batch 128); 122 left for mobilenetv2
+2026-10-06 19:53:42     finished in 27.3 min, final 72.25
+2026-10-06 19:53:42  [12/132] mobilenetv2__cifar100__w64__K4__const uniform seed 5 (micro-batch 128); 121 left for mobilenetv2
+2026-10-06 20:21:16     finished in 27.6 min, final 72.36
+2026-10-06 20:21:16  [13/132] mobilenetv2__cifar100__w64__K4__const gap seed 0 (micro-batch 128); 120 left for mobilenetv2
+2026-10-06 21:40:34     finished in 79.3 min, final 74.22
+2026-10-06 21:40:34  [14/132] mobilenetv2__cifar100__w64__K4__const gap seed 1 (micro-batch 128); 119 left for mobilenetv2
+2026-10-06 22:58:43     finished in 78.1 min, final 73.26
+2026-10-06 22:58:43  [15/132] mobilenetv2__cifar100__w64__K4__const gap seed 2 (micro-batch 128); 118 left for mobilenetv2
+2026-10-07 00:16:49     finished in 78.1 min, final 73.93
+2026-10-07 00:16:49  [16/132] mobilenetv2__cifar100__w64__K4__const gap seed 3 (micro-batch 128); 117 left for mobilenetv2
+2026-10-07 01:34:52     finished in 78.1 min, final 73.91
+2026-10-07 01:34:52  [17/132] mobilenetv2__cifar100__w64__K4__const gap seed 4 (micro-batch 128); 116 left for mobilenetv2
+2026-10-07 02:52:52     finished in 78.0 min, final 73.60
+2026-10-07 02:52:52  [18/132] mobilenetv2__cifar100__w64__K4__const gap seed 5 (micro-batch 128); 115 left for mobilenetv2
+2026-10-07 04:10:47     finished in 77.9 min, final 73.61
+2026-10-07 04:10:47  [19/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 0 (micro-batch 128); 114 left for mobilenetv2
+2026-10-07 05:37:12     finished in 86.4 min, final 72.34
+2026-10-07 05:37:12  [20/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 1 (micro-batch 128); 113 left for mobilenetv2
+2026-10-07 07:03:23     finished in 86.2 min, final 72.62
+2026-10-07 07:03:23  [21/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 2 (micro-batch 128); 112 left for mobilenetv2
+2026-10-07 08:29:45     finished in 86.4 min, final 72.54
+2026-10-07 08:29:45  [22/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 3 (micro-batch 128); 111 left for mobilenetv2
+2026-10-07 09:56:04     finished in 86.3 min, final 72.74
+2026-10-07 09:56:04  [23/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 4 (micro-batch 128); 110 left for mobilenetv2
+2026-10-07 11:39:14     finished in 103.2 min, final 72.89
+2026-10-07 11:39:14  [24/132] mobilenetv2__cifar100__w64__K4__const shuffled seed 5 (micro-batch 128); 109 left for mobilenetv2
+2026-10-07 13:23:35     finished in 104.3 min, final 72.47
+2026-10-07 13:23:35  [25/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 0 (micro-batch 128); 108 left for mobilenetv2
+2026-10-07 14:40:26     finished in 76.9 min, final 74.22
+2026-10-07 14:40:26  [26/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 1 (micro-batch 128); 107 left for mobilenetv2
+2026-10-07 15:59:59     finished in 79.5 min, final 74.30
+2026-10-07 15:59:59  [27/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 2 (micro-batch 128); 106 left for mobilenetv2
+2026-10-07 17:17:43     finished in 77.7 min, final 73.81
+2026-10-07 17:17:43  [28/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 3 (micro-batch 128); 105 left for mobilenetv2
+2026-10-07 18:34:28     finished in 76.8 min, final 73.34
+2026-10-07 18:34:28  [29/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 4 (micro-batch 128); 104 left for mobilenetv2
+2026-10-07 19:51:50     finished in 77.4 min, final 73.87
+2026-10-07 19:51:50  [30/132] mobilenetv2__cifar100__w64__K4__const frozen_random seed 5 (micro-batch 128); 103 left for mobilenetv2
+2026-10-07 21:08:54     finished in 77.1 min, final 73.90
+2026-10-07 21:08:59  probe mobilenetv2__cifar100__w32__K4__const: about 0 min per run for the heaviest arm (gap) at micro-batch 128; this group is 18 runs, at most ~0.1 h (training steps only, data loading and evaluation add to it)
+2026-10-07 21:08:59  [31/132] mobilenetv2__cifar100__w32__K4__const static seed 0 (micro-batch 128); 102 left for mobilenetv2
+2026-10-07 21:27:20     finished in 18.4 min, final 70.92
+2026-10-07 21:27:20  [32/132] mobilenetv2__cifar100__w32__K4__const static seed 1 (micro-batch 128); 101 left for mobilenetv2
+2026-10-07 21:45:29     finished in 18.1 min, final 71.05
+2026-10-07 21:45:29  [33/132] mobilenetv2__cifar100__w32__K4__const static seed 2 (micro-batch 128); 100 left for mobilenetv2
+2026-10-07 22:03:38     finished in 18.1 min, final 70.71
+2026-10-07 22:03:38  [34/132] mobilenetv2__cifar100__w32__K4__const static seed 3 (micro-batch 128); 99 left for mobilenetv2
+2026-10-07 22:21:45     finished in 18.1 min, final 70.80
+2026-10-07 22:21:45  [35/132] mobilenetv2__cifar100__w32__K4__const static seed 4 (micro-batch 128); 98 left for mobilenetv2
+2026-10-07 22:39:45     finished in 18.0 min, final 70.41
+2026-10-07 22:39:45  [36/132] mobilenetv2__cifar100__w32__K4__const static seed 5 (micro-batch 128); 97 left for mobilenetv2
+2026-10-07 22:57:42     finished in 18.0 min, final 70.76
+2026-10-07 22:57:42  [37/132] mobilenetv2__cifar100__w32__K4__const uniform seed 0 (micro-batch 128); 96 left for mobilenetv2
+2026-10-07 23:19:25     finished in 21.7 min, final 70.49
+2026-10-07 23:19:25  [38/132] mobilenetv2__cifar100__w32__K4__const uniform seed 1 (micro-batch 128); 95 left for mobilenetv2
+2026-10-07 23:41:14     finished in 21.8 min, final 70.39
+2026-10-07 23:41:14  [39/132] mobilenetv2__cifar100__w32__K4__const uniform seed 2 (micro-batch 128); 94 left for mobilenetv2
+2026-10-08 00:02:40     finished in 21.4 min, final 70.98
+2026-10-08 00:02:40  [40/132] mobilenetv2__cifar100__w32__K4__const uniform seed 3 (micro-batch 128); 93 left for mobilenetv2
+2026-10-08 00:24:25     finished in 21.7 min, final 70.72
+2026-10-08 00:24:25  [41/132] mobilenetv2__cifar100__w32__K4__const uniform seed 4 (micro-batch 128); 92 left for mobilenetv2
+2026-10-08 00:46:04     finished in 21.7 min, final 70.75
+2026-10-08 00:46:04  [42/132] mobilenetv2__cifar100__w32__K4__const uniform seed 5 (micro-batch 128); 91 left for mobilenetv2
+2026-10-08 01:07:46     finished in 21.7 min, final 70.71
+2026-10-08 01:07:46  [43/132] mobilenetv2__cifar100__w32__K4__const gap seed 0 (micro-batch 128); 90 left for mobilenetv2
+2026-10-08 01:55:07     finished in 47.3 min, final 72.39
+2026-10-08 01:55:07  [44/132] mobilenetv2__cifar100__w32__K4__const gap seed 1 (micro-batch 128); 89 left for mobilenetv2
+2026-10-08 02:42:26     finished in 47.3 min, final 71.76
+2026-10-08 02:42:26  [45/132] mobilenetv2__cifar100__w32__K4__const gap seed 2 (micro-batch 128); 88 left for mobilenetv2
+2026-10-08 03:29:56     finished in 47.5 min, final 72.31
+2026-10-08 03:29:56  [46/132] mobilenetv2__cifar100__w32__K4__const gap seed 3 (micro-batch 128); 87 left for mobilenetv2
+2026-10-08 04:17:24     finished in 47.5 min, final 71.70
+2026-10-08 04:17:24  [47/132] mobilenetv2__cifar100__w32__K4__const gap seed 4 (micro-batch 128); 86 left for mobilenetv2
+2026-10-08 05:04:49     finished in 47.4 min, final 72.50
+2026-10-08 05:04:49  [48/132] mobilenetv2__cifar100__w32__K4__const gap seed 5 (micro-batch 128); 85 left for mobilenetv2
+2026-10-08 05:52:24     finished in 47.6 min, final 71.83
+2026-10-08 05:52:28  probe mobilenetv2__cifar100__w16__K4__const: about 0 min per run for the heaviest arm (gap) at micro-batch 128; this group is 18 runs, at most ~0.1 h (training steps only, data loading and evaluation add to it)
+2026-10-08 05:52:28  [49/132] mobilenetv2__cifar100__w16__K4__const static seed 0 (micro-batch 128); 84 left for mobilenetv2
+2026-10-08 06:08:39     finished in 16.2 min, final 65.43
+2026-10-08 06:08:39  [50/132] mobilenetv2__cifar100__w16__K4__const static seed 1 (micro-batch 128); 83 left for mobilenetv2
+2026-10-08 06:25:02     finished in 16.4 min, final 67.41
+2026-10-08 06:25:02  [51/132] mobilenetv2__cifar100__w16__K4__const static seed 2 (micro-batch 128); 82 left for mobilenetv2
+2026-10-08 06:41:17     finished in 16.2 min, final 66.59
+2026-10-08 06:41:17  [52/132] mobilenetv2__cifar100__w16__K4__const static seed 3 (micro-batch 128); 81 left for mobilenetv2
+2026-10-08 06:57:28     finished in 16.2 min, final 65.18
+2026-10-08 06:57:28  [53/132] mobilenetv2__cifar100__w16__K4__const static seed 4 (micro-batch 128); 80 left for mobilenetv2
+2026-10-08 07:13:47     finished in 16.3 min, final 67.47
+2026-10-08 07:13:47  [54/132] mobilenetv2__cifar100__w16__K4__const static seed 5 (micro-batch 128); 79 left for mobilenetv2
+2026-10-08 07:30:04     finished in 16.3 min, final 66.06
+2026-10-08 07:30:04  [55/132] mobilenetv2__cifar100__w16__K4__const uniform seed 0 (micro-batch 128); 78 left for mobilenetv2
+2026-10-08 07:50:20     finished in 20.3 min, final 66.88
+2026-10-08 07:50:20  [56/132] mobilenetv2__cifar100__w16__K4__const uniform seed 1 (micro-batch 128); 77 left for mobilenetv2
+2026-10-08 08:10:40     finished in 20.3 min, final 66.90
+2026-10-08 08:10:40  [57/132] mobilenetv2__cifar100__w16__K4__const uniform seed 2 (micro-batch 128); 76 left for mobilenetv2
+2026-10-08 08:31:10     finished in 20.5 min, final 66.63
+2026-10-08 08:31:10  [58/132] mobilenetv2__cifar100__w16__K4__const uniform seed 3 (micro-batch 128); 75 left for mobilenetv2
+2026-10-08 08:51:26     finished in 20.3 min, final 67.14
+2026-10-08 08:51:26  [59/132] mobilenetv2__cifar100__w16__K4__const uniform seed 4 (micro-batch 128); 74 left for mobilenetv2
+2026-10-08 09:11:39     finished in 20.2 min, final 67.32
+2026-10-08 09:11:39  [60/132] mobilenetv2__cifar100__w16__K4__const uniform seed 5 (micro-batch 128); 73 left for mobilenetv2
+2026-10-08 09:31:50     finished in 20.2 min, final 66.83
+2026-10-08 09:31:50  [61/132] mobilenetv2__cifar100__w16__K4__const gap seed 0 (micro-batch 128); 72 left for mobilenetv2
+2026-10-08 10:12:52     finished in 41.0 min, final 68.69
+2026-10-08 10:12:52  [62/132] mobilenetv2__cifar100__w16__K4__const gap seed 1 (micro-batch 128); 71 left for mobilenetv2
+2026-10-08 10:54:16     finished in 41.4 min, final 67.83
+2026-10-08 10:54:16  [63/132] mobilenetv2__cifar100__w16__K4__const gap seed 2 (micro-batch 128); 70 left for mobilenetv2
+2026-10-08 11:35:17     finished in 41.0 min, final 67.66
+2026-10-08 11:35:17  [64/132] mobilenetv2__cifar100__w16__K4__const gap seed 3 (micro-batch 128); 69 left for mobilenetv2
+2026-10-08 12:16:14     finished in 40.9 min, final 69.06
+2026-10-08 12:16:14  [65/132] mobilenetv2__cifar100__w16__K4__const gap seed 4 (micro-batch 128); 68 left for mobilenetv2
+2026-10-08 12:57:12     finished in 41.0 min, final 68.10
+2026-10-08 12:57:12  [66/132] mobilenetv2__cifar100__w16__K4__const gap seed 5 (micro-batch 128); 67 left for mobilenetv2
+2026-10-08 13:38:26     finished in 41.2 min, final 68.29
+2026-10-08 13:38:40  probe mobilenetv2__cifar100__w32__K2__const: about 0 min per run for the heaviest arm (gap) at micro-batch 128; this group is 6 runs, at most ~0.0 h (training steps only, data loading and evaluation add to it)
+2026-10-08 13:38:40  [67/132] mobilenetv2__cifar100__w32__K2__const gap seed 0 (micro-batch 128); 66 left for mobilenetv2
+2026-10-08 14:17:27     finished in 38.8 min, final 71.24
+2026-10-08 14:17:27  [68/132] mobilenetv2__cifar100__w32__K2__const gap seed 1 (micro-batch 128); 65 left for mobilenetv2
+2026-10-08 14:56:53     finished in 39.4 min, final 72.38
+2026-10-08 14:56:53  [69/132] mobilenetv2__cifar100__w32__K2__const gap seed 2 (micro-batch 128); 64 left for mobilenetv2
+2026-10-08 15:34:46     finished in 37.9 min, final 71.54
+2026-10-08 15:34:46  [70/132] mobilenetv2__cifar100__w32__K2__const gap seed 3 (micro-batch 128); 63 left for mobilenetv2
+2026-10-08 16:25:11     finished in 50.4 min, final 72.34
+2026-10-08 16:25:11  [71/132] mobilenetv2__cifar100__w32__K2__const gap seed 4 (micro-batch 128); 62 left for mobilenetv2
+2026-10-08 17:35:47     finished in 70.6 min, final 71.78
+2026-10-08 17:35:47  [72/132] mobilenetv2__cifar100__w32__K2__const gap seed 5 (micro-batch 128); 61 left for mobilenetv2
+2026-10-08 18:48:47     finished in 73.0 min, final 71.36
+2026-10-08 18:48:56  probe mobilenetv2__cifar100__w32__K8__const: about 1 min per run for the heaviest arm (gap) at micro-batch 128; this group is 6 runs, at most ~0.1 h (training steps only, data loading and evaluation add to it)
+2026-10-08 18:48:56  [73/132] mobilenetv2__cifar100__w32__K8__const gap seed 0 (micro-batch 128); 60 left for mobilenetv2
+2026-10-08 20:31:30     finished in 102.6 min, final 72.07
+2026-10-08 20:31:30  [74/132] mobilenetv2__cifar100__w32__K8__const gap seed 1 (micro-batch 128); 59 left for mobilenetv2
+2026-10-08 22:10:00     finished in 98.5 min, final 72.16
+2026-10-08 22:10:00  [75/132] mobilenetv2__cifar100__w32__K8__const gap seed 2 (micro-batch 128); 58 left for mobilenetv2
+2026-10-08 23:48:57     finished in 98.9 min, final 71.93
+2026-10-08 23:48:57  [76/132] mobilenetv2__cifar100__w32__K8__const gap seed 3 (micro-batch 128); 57 left for mobilenetv2
+2026-10-09 01:29:00     finished in 100.1 min, final 71.95
+2026-10-09 01:29:00  [77/132] mobilenetv2__cifar100__w32__K8__const gap seed 4 (micro-batch 128); 56 left for mobilenetv2
+2026-10-09 03:09:21     finished in 100.4 min, final 72.11
+2026-10-09 03:09:21  [78/132] mobilenetv2__cifar100__w32__K8__const gap seed 5 (micro-batch 128); 55 left for mobilenetv2
+2026-10-09 04:43:03     finished in 93.7 min, final 71.09
+2026-10-09 04:43:03  Tiny-ImageNet not prepared at ./data. Run: python download_tinyimagenet.py --root ./data   then rerun this command; it resumes here.
+2026-10-09 10:17:49  Tiny-ImageNet not prepared at ./data. Run: python download_tinyimagenet.py --root ./data   then rerun this command; it resumes here.
+2026-10-09 10:25:17  probe mobilenetv2__tinyimagenet__w32__K4__const: about 2 min per run for the heaviest arm (gap) at micro-batch 128; this group is 18 runs, at most ~0.5 h (training steps only, data loading and evaluation add to it)
+2026-10-09 10:25:17  [79/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 0 (micro-batch 128); 54 left for mobilenetv2
+2026-10-09 12:20:13     finished in 114.9 min, final 57.01
+2026-10-09 12:20:13  [80/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 1 (micro-batch 128); 53 left for mobilenetv2
+2026-10-09 14:15:36     finished in 115.4 min, final 57.08
+2026-10-09 14:15:36  [81/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 2 (micro-batch 128); 52 left for mobilenetv2
+2026-10-09 16:11:18     finished in 115.7 min, final 56.45
+2026-10-09 16:11:18  [82/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 3 (micro-batch 128); 51 left for mobilenetv2
+2026-10-09 18:07:09     finished in 115.8 min, final 57.22
+2026-10-09 18:07:09  [83/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 4 (micro-batch 128); 50 left for mobilenetv2
+2026-10-09 20:06:49     finished in 119.7 min, final 56.49
+2026-10-09 20:06:49  [84/132] mobilenetv2__tinyimagenet__w32__K4__const static seed 5 (micro-batch 128); 49 left for mobilenetv2
+2026-10-09 22:03:36     finished in 116.8 min, final 57.55
+2026-10-09 22:03:36  [85/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 0 (micro-batch 128); 48 left for mobilenetv2
+2026-10-10 00:09:21     finished in 125.8 min, final 56.06
+2026-10-10 00:09:21  [86/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 1 (micro-batch 128); 47 left for mobilenetv2
+2026-10-10 02:16:15     finished in 126.9 min, final 56.65
+2026-10-10 02:16:15  [87/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 2 (micro-batch 128); 46 left for mobilenetv2
+2026-10-10 04:20:54     finished in 124.6 min, final 56.88
+2026-10-10 04:20:54  [88/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 3 (micro-batch 128); 45 left for mobilenetv2
+2026-10-10 06:04:38     finished in 103.7 min, final 56.73
+2026-10-10 06:04:38  [89/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 4 (micro-batch 128); 44 left for mobilenetv2
+2026-10-10 07:48:21     finished in 103.7 min, final 57.17
+2026-10-10 07:48:21  [90/132] mobilenetv2__tinyimagenet__w32__K4__const uniform seed 5 (micro-batch 128); 43 left for mobilenetv2
+2026-10-10 09:31:43     finished in 103.4 min, final 57.15
+2026-10-10 09:31:43  [91/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 0 (micro-batch 128); 42 left for mobilenetv2
+2026-10-10 15:11:47     finished in 340.1 min, final 58.90
+2026-10-10 15:11:47  [92/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 1 (micro-batch 128); 41 left for mobilenetv2
+2026-10-10 20:52:13     finished in 340.4 min, final 58.34
+2026-10-10 20:52:13  [93/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 2 (micro-batch 128); 40 left for mobilenetv2
+2026-10-11 02:32:34     finished in 340.3 min, final 59.06
+2026-10-11 02:32:34  [94/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 3 (micro-batch 128); 39 left for mobilenetv2
+2026-10-11 08:13:02     finished in 340.5 min, final 57.68
+2026-10-11 08:13:02  [95/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 4 (micro-batch 128); 38 left for mobilenetv2
+2026-10-11 13:53:31     finished in 340.5 min, final 58.75
+2026-10-11 13:53:31  [96/132] mobilenetv2__tinyimagenet__w32__K4__const gap seed 5 (micro-batch 128); 37 left for mobilenetv2
+2026-10-11 19:36:42     finished in 343.2 min, final 59.24
+2026-10-11 19:36:50  probe mobilenetv2__cifar100__w64__K4__anneal: about 1 min per run for the heaviest arm (gap) at micro-batch 128; this group is 6 runs, at most ~0.1 h (training steps only, data loading and evaluation add to it)
+2026-10-11 19:36:50  [97/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 0 (micro-batch 128); 36 left for mobilenetv2
+2026-10-11 22:09:42     finished in 152.9 min, final 73.07
+2026-10-11 22:09:42  [98/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 1 (micro-batch 128); 35 left for mobilenetv2
+2026-10-11 23:30:38     finished in 80.9 min, final 72.68
+2026-10-11 23:30:38  [99/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 2 (micro-batch 128); 34 left for mobilenetv2
+2026-10-12 00:48:54     finished in 78.3 min, final 72.72
+2026-10-12 00:48:54  [100/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 3 (micro-batch 128); 33 left for mobilenetv2
+2026-10-12 02:06:46     finished in 77.9 min, final 72.65
+2026-10-12 02:06:46  [101/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 4 (micro-batch 128); 32 left for mobilenetv2
+2026-10-12 03:24:41     finished in 77.9 min, final 73.12
+2026-10-12 03:24:41  [102/132] mobilenetv2__cifar100__w64__K4__anneal gap seed 5 (micro-batch 128); 31 left for mobilenetv2
+2026-10-12 04:42:39     finished in 78.0 min, final 72.76
+2026-10-12 04:42:43  probe mobilenetv2__cifar100__w32__K4__anneal: about 0 min per run for the heaviest arm (gap) at micro-batch 128; this group is 6 runs, at most ~0.0 h (training steps only, data loading and evaluation add to it)
+2026-10-12 04:42:43  [103/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 0 (micro-batch 128); 30 left for mobilenetv2
+2026-10-12 05:30:11     finished in 47.5 min, final 70.41
+2026-10-12 05:30:11  [104/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 1 (micro-batch 128); 29 left for mobilenetv2
+2026-10-12 06:17:52     finished in 47.7 min, final 71.22
+2026-10-12 06:17:52  [105/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 2 (micro-batch 128); 28 left for mobilenetv2
+2026-10-12 07:05:30     finished in 47.6 min, final 70.84
+2026-10-12 07:05:30  [106/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 3 (micro-batch 128); 27 left for mobilenetv2
+2026-10-12 07:52:59     finished in 47.5 min, final 70.55
+2026-10-12 07:52:59  [107/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 4 (micro-batch 128); 26 left for mobilenetv2
+2026-10-12 08:40:27     finished in 47.5 min, final 71.00
+2026-10-12 08:40:27  [108/132] mobilenetv2__cifar100__w32__K4__anneal gap seed 5 (micro-batch 128); 25 left for mobilenetv2
+2026-10-12 09:27:57     finished in 47.5 min, final 70.81
+2026-10-12 09:28:01  probe mobilenetv2__cifar100__w16__K4__anneal: about 0 min per run for the heaviest arm (gap) at micro-batch 128; this group is 6 runs, at most ~0.0 h (training steps only, data loading and evaluation add to it)
+2026-10-12 09:28:01  [109/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 0 (micro-batch 128); 24 left for mobilenetv2
+2026-10-12 10:09:15     finished in 41.2 min, final 67.77
+2026-10-12 10:09:15  [110/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 1 (micro-batch 128); 23 left for mobilenetv2
+2026-10-12 10:50:29     finished in 41.2 min, final 65.22
+2026-10-12 10:50:29  [111/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 2 (micro-batch 128); 22 left for mobilenetv2
+2026-10-12 11:31:45     finished in 41.3 min, final 67.66
+2026-10-12 11:31:45  [112/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 3 (micro-batch 128); 21 left for mobilenetv2
+2026-10-12 12:13:10     finished in 41.4 min, final 66.99
+2026-10-12 12:13:10  [113/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 4 (micro-batch 128); 20 left for mobilenetv2
+2026-10-12 12:54:23     finished in 41.2 min, final 67.17
+2026-10-12 12:54:23  [114/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 5 (micro-batch 128); 19 left for mobilenetv2
+2026-10-12 13:35:43     finished in 41.3 min, final 67.86
+2026-10-12 13:36:05  probe mobilenetv2__tinyimagenet__w64__K4__const: about 3 min per run for the heaviest arm (gap) at micro-batch 128; this group is 18 runs, at most ~0.9 h (training steps only, data loading and evaluation add to it)
+2026-10-12 13:36:05  [115/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 0 (micro-batch 128); 18 left for mobilenetv2
+2026-10-12 16:43:53     finished in 187.8 min, final 59.07
+2026-10-12 16:43:53  [116/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 0 (micro-batch 128); 17 left for mobilenetv2
+2026-10-12 20:06:50     finished in 203.0 min, final 58.39
+2026-10-12 20:06:50  [117/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 0 (micro-batch 128); 16 left for mobilenetv2
+2026-10-13 08:11:10     finished in 724.3 min, final 60.45
+2026-10-13 08:11:10  [118/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 1 (micro-batch 128); 15 left for mobilenetv2
+2026-10-13 11:20:00     finished in 188.8 min, final 58.99
+2026-10-13 11:20:00  [119/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 1 (micro-batch 128); 14 left for mobilenetv2
+2026-10-13 14:37:20     finished in 197.3 min, final 58.16
+2026-10-13 14:37:20  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 14:09:55  run failed (rc=3221226505); stopping. Rerun the same command to resume.
+2026-10-14 14:12:57  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 14:13:34  run failed (rc=1); stopping. Rerun the same command to resume.
+2026-10-14 14:23:56  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 14:24:03  run failed (rc=1); stopping. Rerun the same command to resume.
+2026-10-14 14:28:25  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 14:28:32  run failed (rc=1); stopping. Rerun the same command to resume.
+2026-10-14 14:30:20  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 14:30:27  run failed (rc=1); stopping. Rerun the same command to resume.
+2026-10-14 15:07:37  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 15:07:44  run failed (rc=1); stopping. Rerun the same command to resume.
+2026-10-14 15:16:40  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 15:17:41  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 15:17:54  run failed (rc=1); stopping. Rerun the same command to resume.
+2026-10-14 15:26:05  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 15:26:08  run failed (rc=1); stopping. Rerun the same command to resume.
+2026-10-14 15:30:38  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+2026-10-14 17:16:52     finished in 106.2 min, final 61.15
+2026-10-14 17:16:52  [121/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 2 (micro-batch 128); 12 left for mobilenetv2
+2026-10-14 20:25:21     finished in 188.5 min, final 58.89
+2026-10-14 20:25:21  [122/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 2 (micro-batch 128); 11 left for mobilenetv2
+2026-10-14 23:31:30     finished in 186.1 min, final 58.99
+2026-10-14 23:31:30  [123/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 2 (micro-batch 128); 10 left for mobilenetv2
+2026-10-15 09:59:49     finished in 628.3 min, final 60.04
+2026-10-15 09:59:49  [124/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 3 (micro-batch 128); 9 left for mobilenetv2
+2026-10-15 13:09:09     finished in 189.3 min, final 58.74
+2026-10-15 13:09:09  [125/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 3 (micro-batch 128); 8 left for mobilenetv2
+2026-10-15 16:18:52     finished in 189.7 min, final 58.75
+2026-10-15 16:18:52  [126/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 3 (micro-batch 128); 7 left for mobilenetv2
+2026-10-16 02:49:45     finished in 630.9 min, final 60.62
+2026-10-16 02:49:45  [127/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 4 (micro-batch 128); 6 left for mobilenetv2
+2026-10-16 05:55:18     finished in 185.6 min, final 58.75
+2026-10-16 05:55:18  [128/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 4 (micro-batch 128); 5 left for mobilenetv2
+2026-10-16 09:01:34     finished in 186.3 min, final 58.77
+2026-10-16 09:01:34  [129/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 4 (micro-batch 128); 4 left for mobilenetv2
+2026-10-16 19:33:19     finished in 631.7 min, final 60.04
+2026-10-16 19:33:19  [130/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 5 (micro-batch 128); 3 left for mobilenetv2
+2026-10-16 22:39:18     finished in 186.0 min, final 58.46
+2026-10-16 22:39:18  [131/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 5 (micro-batch 128); 2 left for mobilenetv2
+2026-10-17 01:45:42     finished in 186.4 min, final 58.79
+2026-10-17 01:45:42  [132/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 5 (micro-batch 128); 1 left for mobilenetv2
+2026-10-17 12:16:19     finished in 630.6 min, final 60.39
+2026-10-17 12:16:19  mobilenetv2: all 132 jobs present (13 run this session, 68.8 h)

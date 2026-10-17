@@ -89,7 +89,8 @@ MINS = {
  ("tinyimagenet",64,4,"const"): dict(static=129.0, uniform=141.0, gap=687.2),
 }
 
-# ---- normalised routing entropy, per seed (mean over layers & test set) -
+# ---- normalised routing entropy, per seed: mean over layers and over the
+# ---- last test batch (16 images, the same in every run; see README) ------
 ENT = {
  ("cifar100",16,"const"):  A(0.9613,0.9566,0.9662,0.9550,0.9549,0.9670),
  ("cifar100",32,"const"):  A(0.9757,0.9770,0.9782,0.9795,0.9856,0.9761),

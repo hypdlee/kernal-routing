@@ -4,8 +4,10 @@ two-backbone comparisons. Run with the output directory as the working
 directory (build_paper2.py does this).
 
 Inputs: the MobileNetV2 records parsed from train.log (mbv2_log.py), the
-ResNet-18 per-seed values the paper is built on (paper_r18_data.py), and
-counted parameter totals (PARAMS_EXPECTED.md). Every number in the
+132 MobileNetV2 result files (for routing entropies; every final accuracy
+in them is checked against the log and the build stops on any mismatch),
+the ResNet-18 per-seed values the paper is built on (paper_r18_data.py),
+and counted parameter totals (PARAMS_EXPECTED.md). Every number in the
 MobileNetV2 section is computed here; none is typed.
 """
 import importlib.util, math, pathlib, sys
@@ -48,7 +50,7 @@ def counted(model):
     return out
 
 
-def main(log_path):
+def main(log_path, results_dir):
     R = mbv2_log.parse(log_path)
     assert len(R) == 132, len(R)
     PM = counted("mobilenetv2")
@@ -414,12 +416,182 @@ def main(log_path):
     put("rbmacextra", f"{100 * max(macs[('resnet18', ds, w, 4, 'gap')] / macs[('resnet18', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
     put("mbmacextra", f"{100 * max(macs[('mobilenetv2', ds, w, 4, 'gap')] / macs[('mobilenetv2', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
 
+    entropy(results_dir, R, mb, r18, put)
+
     out = [f"\\expandafter\\def\\csname v{k}\\endcsname{{{v}}}" for k, v in M.items()]
     pathlib.Path("macros_mb.tex").write_text("\n".join(out) + "\n")
     return M
 
 
+FLAT = 0.9999   # a layer is "flat" when its normalised entropy is at least this
+
+
+def entropy(results_dir, R, mb, r18, put):
+    """Routing-entropy analyses for MobileNetV2, from the result files.
+
+    The result files are loaded with the strict loader (duplicates, recipe
+    drift and parameter counts are checked there), then every run's final
+    accuracy is compared with the value parsed from the log: they must be
+    identical, and the final training loss must agree to the log's three
+    decimals. Only then are the entropies used."""
+    import json
+    errs = S.load("mobilenetv2", [results_dir])
+    if errs or S.n_runs() != 132 or S.MISSING:
+        raise SystemExit(f"result files: errors {errs}, runs {S.n_runs()}, missing {len(S.MISSING)}")
+    files = sorted(pathlib.Path(results_dir).glob("mobilenetv2__*_seed[0-9].json"))
+    layers = {}
+    for fp in files:
+        j = json.loads(fp.read_text())
+        _, key, arm, seed = S.cell_of(j)
+        k = key + (arm, seed)
+        if k not in R:
+            raise SystemExit(f"{fp.name}: not in the log")
+        if j["final_acc"] != R[k]["final"] or abs(j["history"][-1]["loss"] - R[k]["loss"]) > 5e-4 + 1e-9:
+            raise SystemExit(f"{fp.name}: result file and log disagree")
+        if j.get("routing"):
+            layers[k] = np.array([l["z_entropy_norm"] for l in j["routing"]])
+    if len(files) != 132:
+        raise SystemExit(f"{len(files)} result files")
+    put("mbjsonn", str(len(files)))
+    nl = len(layers[("cifar100", 64, 4, "const", "gap", 0)])
+    put("mbnlayers", str(nl))
+
+    E = lambda ds, w, rec="const": S.ENT[(ds, w, rec)]
+    H = lambda ds, w, rec="const": 1 - E(ds, w, rec).mean()
+    HR = lambda w, rec: 1 - P.ENT[("cifar100", w, rec)].mean()
+    rmsdev = lambda d: math.sqrt(d / (4 / (2 * math.log(4))) / 4)
+    nflat = lambda ds, w, arm, rec="const", k=4: np.array([(layers[(ds, w, k, rec, arm, s)] >= FLAT).sum() for s in range(6)])
+    rng = lambda v: f"{v.min()}" if v.min() == v.max() else f"{v.min()}--{v.max()}"
+
+    # ---------------- table: entropy by arm at CIFAR-100 width 64, both backbones
+    rows = []
+    for a in ["uniform", "gap", "frozen_random", "shuffled"]:
+        e, er = S.ENT_W64[a], P.ENT_W64[a]
+        nf = np.array([(layers[("cifar100", 64, 4, "const", a, s)] >= FLAT).sum() for s in range(6)])
+        rows.append(f"{tt(a)} & {f(er.mean(), 4)} & {f(1 - er.mean(), 5)} & {f(e.mean(), 5)} & {f(e.min(), 5)} & "
+                    f"{f(e.max(), 5)} & {f(1 - e.mean(), 5)} & {rng(nf)} \\\\")
+    pathlib.Path("tab_MBENTW64.tex").write_text("\n".join(rows) + "\n")
+    put("mbeGap", f(H("cifar100", 64), 4)); put("mbeFrz", f(1 - S.ENT_W64["frozen_random"].mean(), 4))
+    put("mbeShuf", f(1 - S.ENT_W64["shuffled"].mean(), 5))
+    put("mbeGapMin", f(S.ENT_W64["gap"].min(), 4)); put("mbeGapMax", f(S.ENT_W64["gap"].max(), 4))
+    put("mbeFrzMin", f(S.ENT_W64["frozen_random"].min(), 4)); put("mbeFrzMax", f(S.ENT_W64["frozen_random"].max(), 4))
+    put("mbeFrzRatio", f"{H('cifar100', 64) / (1 - S.ENT_W64['frozen_random'].mean()):.1f}")
+    put("mbeShufFlat", rng(nflat("cifar100", 64, "shuffled"))); put("mbeFrzFlat", rng(nflat("cifar100", 64, "frozen_random")))
+    put("mbeGapFlat", rng(nflat("cifar100", 64, "gap")))
+    put("rbeShuf", f(1 - P.ENT_W64["shuffled"].mean(), 4)); put("rbeFrz", f(1 - P.ENT_W64["frozen_random"].mean(), 4))
+
+    # ---------------- table: entropy against benefit, MobileNetV2, every gap group with a uniform arm
+    rows, sixmb, sixr18 = [], [], []
+    conds = [("cifar100", 16, "const"), ("cifar100", 16, "anneal"), ("cifar100", 32, "const"), ("cifar100", 32, "anneal"),
+             ("cifar100", 64, "const"), ("cifar100", 64, "anneal"), ("tinyimagenet", 32, "const"), ("tinyimagenet", 64, "const")]
+    BEN = {}
+    for ds, w, rec in conds:
+        d = H(ds, w, rec)
+        q = paired(mb(ds, w, "gap", rec=rec), mb(ds, w, "uniform")); BEN[(ds, w, rec)] = q
+        nf = nflat(ds, w, "gap", rec)
+        taul = "$1$" if rec == "const" else "$30\\!\\to\\!1$"
+        rows.append(f"{DSN[ds]} & {w} & {taul} & {f(E(ds, w, rec).mean(), 5)} & "
+                    f"{f(d, 5)} & {f(rmsdev(d), 4)} & {rng(nf)} & {sg(q['mean'])} & {pv(q['p'])} & {verdict(q)} \\\\")
+        if ds == "cifar100":
+            sixmb.append((d, q["mean"]))
+            sixr18.append((HR(w, rec), paired(r18(ds, w, "gap", rec=rec), r18(ds, w, "uniform"))["mean"]))
+    pathlib.Path("tab_MBENTBEN.tex").write_text("\n".join(rows) + "\n")
+    rho_mb = stats.spearmanr(*zip(*sixmb)); rho_r = stats.spearmanr(*zip(*sixr18))
+    put("mbrho", f"{rho_mb.statistic:.2f}"); put("mbrhop", f"{rho_mb.pvalue:.3f}")
+    put("rbrho", f"{rho_r.statistic:.2f}"); put("rbrhop", f"{rho_r.pvalue:.3f}")
+    for w, tag in [(16, "A"), (32, "B"), (64, "C")]:
+        put(f"mbhc{tag}", f(H("cifar100", w), 4)); put(f"mbha{tag}", f(H("cifar100", w, "anneal"), 5))
+        put(f"mbfl{tag}", f"{H('cifar100', w) / H('cifar100', w, 'anneal'):.1f}")
+        put(f"mbbc{tag}", sg(BEN[("cifar100", w, "const")]["mean"], 2)); put(f"mbba{tag}", sg(BEN[("cifar100", w, "anneal")]["mean"], 2))
+        put(f"mbbap{tag}", pv(BEN[("cifar100", w, "anneal")]["p"]))
+        put(f"mbbav{tag}", verdict(BEN[("cifar100", w, "anneal")]))
+        put(f"rbhc{tag}", f(HR(w, "const"), 4))
+    put("mbflatAmin", str(min(nflat("cifar100", w, "gap", "anneal").min() for w in (16, 32, 64))))
+    put("mbflatAmax", str(max(nflat("cifar100", w, "gap", "anneal").max() for w in (16, 32, 64))))
+    put("mbflatCmin", str(min(nflat("cifar100", w, "gap").min() for w in (16, 32, 64))))
+    put("mbflatCmax", str(max(nflat("cifar100", w, "gap").max() for w in (16, 32, 64))))
+    # which layers carry the annealed routers' remaining departure from uniform
+    ann = np.array([layers[("cifar100", w, 4, "anneal", "gap", s)] for w in (16, 32, 64) for s in range(6)])
+    nonflat = sorted({int(i) for row in ann for i in np.where(row < FLAT)[0]})
+    names = [str(i + 1) for i in nonflat]
+    put("mbannlayers", names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1])
+    r18w64 = paired(r18("cifar100", 64, "gap"), r18("cifar100", 64, "uniform"))
+    put("rbguC", sg(r18w64["mean"], 2)); put("rbguCv", verdict(r18w64))
+    put("mbguC", sg(BEN[("cifar100", 64, "const")]["mean"], 2)); put("mbguCp", pv(BEN[("cifar100", 64, "const")]["p"]))
+    put("rbguA", sg(paired(r18("cifar100", 16, "gap"), r18("cifar100", 16, "uniform"))["mean"], 2))
+    put("rbguAa", sg(paired(r18("cifar100", 16, "gap", rec="anneal"), r18("cifar100", 16, "uniform"))["mean"], 2))
+    put("rbflA", f"{HR(16, 'const') / HR(16, 'anneal'):.0f}")
+
+    # ---------------- table (appendix): per-layer departure from uniform, x 10^3
+    cols = [("cifar100", 64, "const", "gap"), ("cifar100", 64, "anneal", "gap"), ("cifar100", 64, "const", "frozen_random"),
+            ("cifar100", 64, "const", "shuffled"), ("cifar100", 16, "const", "gap"), ("cifar100", 16, "anneal", "gap"),
+            ("tinyimagenet", 64, "const", "gap")]
+    mat = {c: np.mean([1 - layers[(c[0], c[1], 4, c[2], c[3], s)] for s in range(6)], axis=0) for c in cols}
+    rows = []
+    for i in range(nl):
+        rows.append(f"{i + 1} & " + " & ".join(f"{1e3 * mat[c][i]:.2f}" for c in cols) + " \\\\")
+    rows.append("\\midrule mean & " + " & ".join(f"{1e3 * mat[c].mean():.2f}" for c in cols) + " \\\\")
+    pathlib.Path("tab_MBLAYER.tex").write_text("\n".join(rows) + "\n")
+
+    # ---------------- contradiction rows for the transfer table
+    extra = [
+        ("Entropy counterexample, CIFAR-100 w16",
+         f"annealed {P_fl(HR)}$\\times$ flatter, larger benefit ({sg(paired(r18('cifar100',16,'gap',rec='anneal'),r18('cifar100',16,'uniform'))['mean'],2)} vs "
+         f"{sg(paired(r18('cifar100',16,'gap'),r18('cifar100',16,'uniform'))['mean'],2)})",
+         f"annealed {H('cifar100',16)/H('cifar100',16,'anneal'):.1f}$\\times$ flatter, smaller benefit "
+         f"({sg(BEN[('cifar100',16,'anneal')]['mean'],2)} vs {sg(BEN[('cifar100',16,'const')]['mean'],2)})", "\\textbf{does not replicate}"),
+        ("Constant-$\\tau$ $1-\\tilde H$ as width grows (w16, 32, 64)",
+         ", ".join(f(HR(w, "const"), 4) for w in (16, 32, 64)) + " (flattens)",
+         ", ".join(f(H("cifar100", w), 4) for w in (16, 32, 64)) + " (sharpens)", "\\textbf{differs}"),
+        ("Same $1-\\tilde H$, CIFAR-100 w64, \\texttt{gap}$-$\\texttt{uniform}",
+         f"{f(HR(64,'const'),4)}: {sg(r18w64['mean'],2)} ({verdict(r18w64)})",
+         f"{f(H('cifar100',64),4)}: {sg(BEN[('cifar100',64,'const')]['mean'],2)} ({verdict(BEN[('cifar100',64,'const')])})", "new"),
+    ]
+    with open("tab_CONTRA.tex", "a") as fh:
+        fh.write("\n".join(f"{a} & {b} & {c} & {d} \\\\" for a, b, c, d in extra) + "\n")
+
+    # ---------------- figure G8
+    fig, ax = plt.subplots(1, 3, figsize=(7.9, 3.0), gridspec_kw=dict(width_ratios=[1, 1.15, 1.2]))
+    W = [16, 32, 64]
+    for name, hf, col, mk in [("ResNet-18", lambda w, rec: HR(w, rec), C["r18"], "s"), ("MobileNetV2", lambda w, rec: H("cifar100", w, rec), C["mb"], "o")]:
+        ax[0].plot(W, [hf(w, "const") for w in W], marker=mk, ms=4.5, lw=1.3, color=col, label=f"{name}, $\\tau=1$")
+        ax[0].plot(W, [hf(w, "anneal") for w in W], marker=mk, ms=4.5, lw=1.3, ls="--", color=col, mfc="white",
+                   label=f"{name}, $\\tau:30\\to1$")
+    ax[0].set_yscale("log"); ax[0].set_xscale("log", base=2); ax[0].set_xticks(W); ax[0].set_xticklabels(W)
+    ax[0].set_xlabel("base width $c$"); ax[0].set_ylabel("$1-\\tilde H$ (log)"); ax[0].legend(fontsize=5.6, loc="upper right", handlelength=2.2)
+    ax[0].set_ylim(top=ax[0].get_ylim()[1] * 6)
+    ax[0].set_title("(a) router flatness, CIFAR-100", fontsize=9)
+    # label offsets (points) chosen so that labels of neighbouring markers do not overlap
+    OFF = {("MobileNetV2", 16, "const"): (-5, -2), ("MobileNetV2", 32, "const"): (-5, 1), ("MobileNetV2", 64, "const"): (4, 2),
+           ("MobileNetV2", 16, "anneal"): (4, 1), ("MobileNetV2", 32, "anneal"): (-5, -5), ("MobileNetV2", 64, "anneal"): (-5, 2),
+           ("ResNet-18", 64, "anneal"): (4, 3), ("ResNet-18", 64, "const"): (4, 3)}
+    for name, pts_, col, mk in [("ResNet-18", sixr18, C["r18"], "s"), ("MobileNetV2", sixmb, C["mb"], "o")]:
+        for (x, y), (w, rec) in zip(pts_, [(w, r) for w in W for r in ("const", "anneal")]):
+            ax[1].scatter(x, y, marker=mk, s=30, color=col if rec == "const" else "white", edgecolor=col, zorder=3,
+                          label=name if (w, rec) == (16, "const") else None)
+            off = OFF.get((name, w, rec), (4, -2))
+            ax[1].annotate(f"w{w}{'' if rec == 'const' else 'a'}", (x, y), xytext=off, textcoords="offset points",
+                           fontsize=5.8, ha="right" if off[0] < 0 else "left")
+    ax[1].axhline(0, color="k", lw=.8); ax[1].set_xscale("log"); ax[1].set_xlabel("$1-\\tilde H$ (log)")
+    ax[1].set_ylabel("gap $-$ uniform (pp)"); ax[1].legend(fontsize=6.5, loc="upper left")
+    ax[1].set_title("(b) flatness vs benefit (a = annealed)", fontsize=9)
+    x = np.arange(1, nl + 1)
+    for (c, lbl, col, ls) in [(("cifar100", 64, "const", "gap"), "gap, $\\tau=1$", C["gap"], "-"),
+                              (("cifar100", 64, "anneal", "gap"), "gap, annealed", C["ann"], "--"),
+                              (("cifar100", 64, "const", "frozen_random"), "frozen_random", C["frozen_random"], "-."),
+                              (("cifar100", 64, "const", "shuffled"), "shuffled", C["shuffled"], ":")]:
+        ax[2].plot(x, 1e3 * mat[c], marker="o", ms=2.5, lw=1.2, color=col, ls=ls, label=lbl)
+    ax[2].set_xlabel("dynamic layer (input to output)"); ax[2].set_ylabel("$10^3\\,(1-\\tilde H)$")
+    ax[2].set_xticks([1, 5, 9, 13, 17]); ax[2].legend(fontsize=6.3, loc="upper left")
+    ax[2].set_title("(c) MobileNetV2 by layer, C100 w64", fontsize=9)
+    plt.tight_layout(); plt.savefig("fig/g8_entropy.pdf"); plt.close()
+
+
+def P_fl(HR):
+    return f"{HR(16, 'const') / HR(16, 'anneal'):.0f}"
+
+
 if __name__ == "__main__":
-    M = main(sys.argv[1])
+    M = main(sys.argv[1], sys.argv[2])
     for k, v in M.items():
         print(f"{k:16} {v}")

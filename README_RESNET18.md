@@ -140,6 +140,11 @@ combines them.
 
 Every run ends with one eval pass that records, per dynamic layer, the mean
 softmax weights, normalised entropy, and how many samples each branch won.
+The statistics are overwritten at every test batch, so what is stored
+describes the last batch of the unshuffled test set only: 16 images (10000
+test images, eval batch 256), the same images in every run on a dataset.
+The stored values are not test-set averages, and since the final weights
+are not kept they cannot be recomputed.
 Entropy near 1.0 means near-uniform mixing: the router is not choosing.
 `uniform` sits at exactly 1.0 by construction and is the reference.
 

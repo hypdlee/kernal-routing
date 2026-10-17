@@ -8,8 +8,8 @@ records keyed exactly as the result files are, so the paper can be built
 before the result JSONs are copied off the training machine.
 
 What the log does not contain: routing entropies (they are only in the JSON
-files). Nothing here invents them; entropy analyses for MobileNetV2 are left
-out until the JSON files are available.
+files). Nothing here invents them; mbv2_section.py reads them from the
+result files after checking every final accuracy there against this log.
 
     python report/mbv2_log.py path/to/train.log out.csv
 """
