@@ -1,0 +1,73 @@
+2026-10-08 23:48:57  [76/132] mobilenetv2__cifar100__w32__K8__const gap seed 3 (micro-batch 128); 57 left for mobilenetv2
+[mobilenetv2 cifar100 gap w32 K8 seed=3] device=cuda params=1.34M router=292.8K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.330  acc 8.23  best 8.23  (63s)
+  ep  10  loss 1.812  acc 44.09  best 44.09  (462s)
+  ep  20  loss 1.687  acc 43.35  best 49.62  (860s)
+  ep  30  loss 1.623  acc 46.17  best 49.62  (1257s)
+  ep  40  loss 1.564  acc 45.65  best 51.31  (1653s)
+  ep  50  loss 1.507  acc 46.84  best 51.31  (2051s)
+  ep  60  loss 1.443  acc 45.29  best 53.08  (2449s)
+  ep  70  loss 1.357  acc 50.08  best 57.23  (2857s)
+  ep  80  loss 1.266  acc 53.82  best 57.23  (3255s)
+  ep  90  loss 1.151  acc 58.92  best 60.22  (3653s)
+  ep 100  loss 1.025  acc 61.64  best 63.41  (4050s)
+  ep 110  loss 0.872  acc 64.74  best 65.21  (4447s)
+  ep 120  loss 0.702  acc 67.86  best 67.86  (4844s)
+  ep 130  loss 0.527  acc 70.66  best 70.66  (5240s)
+  ep 140  loss 0.387  acc 71.77  best 71.88  (5637s)
+  ep 149  loss 0.342  acc 71.95  best 72.13  (5994s)
+[mobilenetv2 gap seed=3] final=71.95 best=72.13 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K8__const_gap_seed3.json
+2026-10-09 01:29:00     finished in 100.1 min, final 71.95
+2026-10-09 01:29:00  [77/132] mobilenetv2__cifar100__w32__K8__const gap seed 4 (micro-batch 128); 56 left for mobilenetv2
+[mobilenetv2 cifar100 gap w32 K8 seed=4] device=cuda params=1.34M router=292.8K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.319  acc 8.46  best 8.46  (63s)
+  ep  10  loss 1.808  acc 44.95  best 44.95  (464s)
+  ep  20  loss 1.665  acc 44.96  best 46.41  (863s)
+  ep  30  loss 1.602  acc 49.38  best 49.38  (1262s)
+  ep  40  loss 1.540  acc 49.67  best 51.61  (1662s)
+  ep  50  loss 1.491  acc 53.97  best 54.23  (2061s)
+  ep  60  loss 1.423  acc 53.78  best 54.23  (2460s)
+  ep  70  loss 1.351  acc 54.35  best 55.13  (2860s)
+  ep  80  loss 1.252  acc 54.15  best 58.10  (3263s)
+  ep  90  loss 1.135  acc 60.08  best 60.08  (3662s)
+  ep 100  loss 1.021  acc 60.29  best 62.98  (4060s)
+  ep 110  loss 0.864  acc 63.24  best 65.60  (4458s)
+  ep 120  loss 0.695  acc 67.99  best 67.99  (4858s)
+  ep 130  loss 0.512  acc 70.30  best 70.72  (5256s)
+  ep 140  loss 0.375  acc 71.59  best 71.59  (5654s)
+  ep 149  loss 0.332  acc 72.11  best 72.11  (6012s)
+[mobilenetv2 gap seed=4] final=72.11 best=72.11 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K8__const_gap_seed4.json
+2026-10-09 03:09:21     finished in 100.4 min, final 72.11
+2026-10-09 03:09:21  [78/132] mobilenetv2__cifar100__w32__K8__const gap seed 5 (micro-batch 128); 55 left for mobilenetv2
+[mobilenetv2 cifar100 gap w32 K8 seed=5] device=cuda params=1.34M router=292.8K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.313  acc 7.86  best 7.86  (63s)
+  ep  10  loss 1.787  acc 46.77  best 46.77  (461s)
+  ep  20  loss 1.650  acc 44.39  best 49.40  (857s)
+  ep  30  loss 1.595  acc 45.70  best 49.95  (1254s)
+  ep  40  loss 1.555  acc 46.30  best 51.23  (1653s)
+  ep  50  loss 1.501  acc 49.87  best 51.50  (2050s)
+  ep  60  loss 1.431  acc 52.17  best 54.07  (2445s)
+  ep  70  loss 1.345  acc 51.86  best 56.03  (2843s)
+  ep  80  loss 1.256  acc 57.84  best 57.84  (3240s)
+  ep  90  loss 1.145  acc 55.69  best 59.73  (3638s)
+  ep 100  loss 1.008  acc 62.06  best 62.71  (4034s)
+  ep 110  loss 0.861  acc 64.93  best 65.04  (4433s)
+  ep 120  loss 0.689  acc 67.92  best 67.92  (4737s)
+  ep 130  loss 0.509  acc 69.95  best 69.95  (5032s)
+  ep 140  loss 0.369  acc 70.90  best 71.11  (5327s)
+  ep 149  loss 0.332  acc 71.09  best 71.14  (5593s)
+[mobilenetv2 gap seed=5] final=71.09 best=71.14 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K8__const_gap_seed5.json
+2026-10-09 04:43:03     finished in 93.7 min, final 71.09
+2026-10-09 04:43:03  Tiny-ImageNet not prepared at ./data. Run: python download_tinyimagenet.py --root ./data   then rerun this command; it resumes here.
+
+mobilenetv2: tin_missing
+PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others> proceed 
+proceed : The term 'proceed' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is 
+correct and try again.
+At line:1 char:1
++ proceed
++ ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (proceed:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others> 

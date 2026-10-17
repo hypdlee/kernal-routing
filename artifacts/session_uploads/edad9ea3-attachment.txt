@@ -1,0 +1,217 @@
+  ep 149  loss 0.707  acc 67.17  best 67.50  tau 1.00  (2467s)
+[mobilenetv2 gap seed=4] final=67.17 best=67.50 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__anneal_gap_seed4.json
+2026-10-12 12:54:23     finished in 41.2 min, final 67.17
+2026-10-12 12:54:23  [114/132] mobilenetv2__cifar100__w16__K4__anneal gap seed 5 (micro-batch 128); 19 left for mobilenetv2
+[mobilenetv2 cifar100 gap w16 K4 seed=5] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.440  acc 6.19  best 6.19  tau 30.00  (32s)
+  ep  10  loss 2.115  acc 40.59  best 40.59  tau 1.00  (195s)
+  ep  20  loss 1.880  acc 43.85  best 43.85  tau 1.00  (362s)
+  ep  30  loss 1.798  acc 44.01  best 44.01  tau 1.00  (524s)
+  ep  40  loss 1.745  acc 46.88  best 46.88  tau 1.00  (691s)
+  ep  50  loss 1.691  acc 47.55  best 49.33  tau 1.00  (853s)
+  ep  60  loss 1.625  acc 49.25  best 49.33  tau 1.00  (1016s)
+  ep  70  loss 1.546  acc 51.49  best 51.79  tau 1.00  (1181s)
+  ep  80  loss 1.462  acc 52.27  best 54.37  tau 1.00  (1343s)
+  ep  90  loss 1.350  acc 56.67  best 56.67  tau 1.00  (1508s)
+  ep 100  loss 1.242  acc 58.36  best 58.62  tau 1.00  (1669s)
+  ep 110  loss 1.120  acc 60.88  best 60.88  tau 1.00  (1838s)
+  ep 120  loss 0.979  acc 64.16  best 64.27  tau 1.00  (1998s)
+  ep 130  loss 0.837  acc 66.44  best 66.44  tau 1.00  (2165s)
+  ep 140  loss 0.728  acc 67.71  best 67.71  tau 1.00  (2326s)
+  ep 149  loss 0.688  acc 67.86  best 67.86  tau 1.00  (2475s)
+[mobilenetv2 gap seed=5] final=67.86 best=67.86 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__anneal_gap_seed5.json
+2026-10-12 13:35:43     finished in 41.3 min, final 67.86
+probe {"model": "mobilenetv2", "dataset": "tinyimagenet", "width": 64, "num_kernels": 4, "scope": "all", "router": "gap", "batch_size": 128, "micro_batch": 128, "accum": 1, "params": 3810092, "device": "cuda", "oom": false, "sec_per_step": 0.3147998332977295, "steps_per_epoch": 4, "est_minutes": 3.147998332977295, "peak_mem_gb": 8.518089771270752}
+2026-10-12 13:36:05  probe mobilenetv2__tinyimagenet__w64__K4__const: about 3 min per run for the heaviest arm (gap) at micro-batch 128; this group is 18 runs, at most ~0.9 h (training steps only, data loading and evaluation add to it)
+2026-10-12 13:36:05  [115/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 0 (micro-batch 128); 18 left for mobilenetv2
+[mobilenetv2 tinyimagenet static w64 K4 seed=0] device=cuda params=2.48M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.878  acc 8.28  best 8.28  (90s)
+  ep  10  loss 2.611  acc 25.31  best 31.12  (829s)
+  ep  20  loss 2.567  acc 29.43  best 33.30  (1570s)
+  ep  30  loss 2.564  acc 28.07  best 33.64  (2313s)
+  ep  40  loss 2.549  acc 28.99  best 33.64  (3067s)
+  ep  50  loss 2.505  acc 27.16  best 33.64  (3809s)
+  ep  60  loss 2.441  acc 28.82  best 34.76  (4551s)
+  ep  70  loss 2.358  acc 31.79  best 37.50  (5301s)
+  ep  80  loss 2.261  acc 37.73  best 38.72  (6067s)
+  ep  90  loss 2.141  acc 40.73  best 41.10  (6817s)
+  ep 100  loss 1.996  acc 43.88  best 45.31  (7565s)
+  ep 110  loss 1.850  acc 47.48  best 48.14  (8314s)
+  ep 120  loss 1.658  acc 51.73  best 51.73  (9063s)
+  ep 130  loss 1.437  acc 55.28  best 55.50  (9809s)
+  ep 140  loss 1.219  acc 58.36  best 58.36  (10564s)
+  ep 149  loss 1.126  acc 59.07  best 59.07  (11262s)
+[mobilenetv2 static seed=0] final=59.07 best=59.07 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_static_seed0.json
+2026-10-12 16:43:53     finished in 187.8 min, final 59.07
+2026-10-12 16:43:53  [116/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 0 (micro-batch 128); 17 left for mobilenetv2
+[mobilenetv2 tinyimagenet uniform w64 K4 seed=0] device=cuda params=2.67M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.898  acc 7.28  best 7.28  (96s)
+  ep  10  loss 2.601  acc 26.28  best 31.10  (877s)
+  ep  20  loss 2.562  acc 31.06  best 31.42  (1664s)
+  ep  30  loss 2.554  acc 30.46  best 32.18  (2472s)
+  ep  40  loss 2.548  acc 26.84  best 32.42  (3274s)
+  ep  50  loss 2.491  acc 20.68  best 34.62  (4067s)
+  ep  60  loss 2.436  acc 35.43  best 35.74  (4836s)
+  ep  70  loss 2.363  acc 36.88  best 36.88  (5591s)
+  ep  80  loss 2.267  acc 38.06  best 39.54  (6344s)
+  ep  90  loss 2.154  acc 36.64  best 41.24  (7097s)
+  ep 100  loss 2.014  acc 44.45  best 44.45  (7849s)
+  ep 110  loss 1.854  acc 48.49  best 48.49  (8877s)
+  ep 120  loss 1.667  acc 51.96  best 51.96  (9752s)
+  ep 130  loss 1.445  acc 55.43  best 55.43  (10612s)
+  ep 140  loss 1.225  acc 57.53  best 57.56  (11407s)
+  ep 149  loss 1.136  acc 58.39  best 58.58  (12167s)
+[mobilenetv2 uniform seed=0] final=58.39 best=58.58 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_uniform_seed0.json
+2026-10-12 20:06:50     finished in 203.0 min, final 58.39
+2026-10-12 20:06:50  [117/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 0 (micro-batch 128); 16 left for mobilenetv2
+[mobilenetv2 tinyimagenet gap w64 K4 seed=0] device=cuda params=3.81M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.856  acc 7.92  best 7.92  (295s)
+  ep  10  loss 2.510  acc 33.26  best 33.26  (3433s)
+  ep  20  loss 2.462  acc 35.53  best 35.53  (6350s)
+  ep  30  loss 2.461  acc 32.07  best 35.53  (9244s)
+  ep  40  loss 2.439  acc 26.86  best 35.53  (12127s)
+  ep  50  loss 2.405  acc 33.38  best 35.86  (15010s)
+  ep  60  loss 2.350  acc 35.90  best 38.80  (17891s)
+  ep  70  loss 2.269  acc 31.75  best 38.80  (20762s)
+  ep  80  loss 2.167  acc 38.11  best 40.41  (23632s)
+  ep  90  loss 2.044  acc 43.94  best 43.94  (26500s)
+  ep 100  loss 1.903  acc 46.51  best 46.51  (29375s)
+  ep 110  loss 1.734  acc 49.33  best 50.46  (32240s)
+  ep 120  loss 1.547  acc 53.09  best 53.09  (35104s)
+  ep 130  loss 1.316  acc 57.63  best 57.63  (37969s)
+  ep 140  loss 1.087  acc 59.65  best 59.93  (40831s)
+  ep 149  loss 0.996  acc 60.45  best 60.50  (43412s)
+[mobilenetv2 gap seed=0] final=60.45 best=60.50 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_gap_seed0.json
+2026-10-13 08:11:10     finished in 724.3 min, final 60.45
+2026-10-13 08:11:10  [118/132] mobilenetv2__tinyimagenet__w64__K4__const static seed 1 (micro-batch 128); 15 left for mobilenetv2
+[mobilenetv2 tinyimagenet static w64 K4 seed=1] device=cuda params=2.48M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.859  acc 9.33  best 9.33  (97s)
+  ep  10  loss 2.619  acc 30.80  best 32.51  (848s)
+  ep  20  loss 2.576  acc 27.07  best 33.55  (1599s)
+  ep  30  loss 2.557  acc 26.36  best 33.55  (2352s)
+  ep  40  loss 2.546  acc 25.45  best 33.55  (3104s)
+  ep  50  loss 2.513  acc 31.09  best 33.55  (3856s)
+  ep  60  loss 2.440  acc 34.76  best 35.42  (4609s)
+  ep  70  loss 2.369  acc 37.88  best 37.88  (5362s)
+  ep  80  loss 2.269  acc 38.47  best 40.45  (6115s)
+  ep  90  loss 2.150  acc 38.98  best 41.60  (6868s)
+  ep 100  loss 2.014  acc 42.89  best 44.57  (7621s)
+  ep 110  loss 1.848  acc 47.39  best 47.73  (8374s)
+  ep 120  loss 1.661  acc 51.48  best 52.14  (9127s)
+  ep 130  loss 1.439  acc 55.78  best 55.78  (9879s)
+  ep 140  loss 1.217  acc 58.05  best 58.32  (10632s)
+  ep 149  loss 1.133  acc 58.99  best 58.99  (11310s)
+[mobilenetv2 static seed=1] final=58.99 best=58.99 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_static_seed1.json
+2026-10-13 11:20:00     finished in 188.8 min, final 58.99
+2026-10-13 11:20:00  [119/132] mobilenetv2__tinyimagenet__w64__K4__const uniform seed 1 (micro-batch 128); 14 left for mobilenetv2
+[mobilenetv2 tinyimagenet uniform w64 K4 seed=1] device=cuda params=2.67M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.912  acc 8.21  best 8.21  (99s)
+  ep  10  loss 2.598  acc 32.42  best 32.42  (857s)
+  ep  20  loss 2.547  acc 26.67  best 33.99  (1611s)
+  ep  30  loss 2.560  acc 29.72  best 33.99  (2365s)
+  ep  40  loss 2.527  acc 23.93  best 33.99  (3142s)
+  ep  50  loss 2.491  acc 27.25  best 33.99  (3912s)
+  ep  60  loss 2.430  acc 33.99  best 33.99  (4686s)
+  ep  70  loss 2.364  acc 30.99  best 35.61  (5515s)
+  ep  80  loss 2.263  acc 33.16  best 39.29  (6300s)
+  ep  90  loss 2.137  acc 39.14  best 40.87  (7088s)
+  ep 100  loss 2.004  acc 42.67  best 44.78  (7913s)
+  ep 110  loss 1.842  acc 48.34  best 48.34  (8718s)
+  ep 120  loss 1.645  acc 50.70  best 51.98  (9520s)
+  ep 130  loss 1.424  acc 55.21  best 55.21  (10312s)
+  ep 140  loss 1.200  acc 57.58  best 57.58  (11108s)
+  ep 149  loss 1.104  acc 58.16  best 58.42  (11831s)
+[mobilenetv2 uniform seed=1] final=58.16 best=58.42 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_uniform_seed1.json
+2026-10-13 14:37:20     finished in 197.3 min, final 58.16
+2026-10-13 14:37:20  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+[mobilenetv2 tinyimagenet gap w64 K4 seed=1] device=cuda params=3.81M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.899  acc 6.67  best 6.67  (327s)
+  ep  10  loss 2.500  acc 29.88  best 31.99  (5757s)
+  ep  20  loss 2.446  acc 33.29  best 33.32  (9644s)
+  ep  30  loss 2.457  acc 35.30  best 35.30  (16167s)
+  ep  40  loss 2.437  acc 32.99  best 35.30  (20423s)
+  ep  50  loss 2.400  acc 29.77  best 35.30  (28446s)
+  ep  60  loss 2.334  acc 31.47  best 36.17  (36985s)
+  ep  70  loss 2.262  acc 38.92  best 39.53  (45613s)
+  ep  80  loss 2.158  acc 36.68  best 40.20  (53131s)
+  ep  90  loss 2.042  acc 42.83  best 43.06  (59360s)
+  ep 100  loss 1.901  acc 45.59  best 46.26  (67817s)
+  ep 110  loss 1.737  acc 51.03  best 51.03  (76709s)
+  ep 120  loss 1.544  acc 53.42  best 53.52  (82935s)
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main
+    return _main()
+           ^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 297, in _main
+    run_loss += train_step(model, opt, sched, crit, scaler, x, y, device, amp_dtype, args.accum)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 65, in train_step
+    total += loss.item()
+             ^^^^^^^^^^^
+RuntimeError: CUDA error: an illegal memory access was encountered
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Unhandled exception caught in c10/util/AbortHandler.h
+00007FFCA1C8CC3400007FFCA1C697F0 torch_python.dll!THPGenerator_initDefaultGenerator [<unknown file> @ <unknown line number>]
+00007FFCF636218700007FFCF6362170 ucrtbase.dll!terminate [<unknown file> @ <unknown line number>]
+00007FFCD8A51911 <unknown symbol address> VCRUNTIME140_1.dll!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FFCD8A5218F <unknown symbol address> VCRUNTIME140_1.dll!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FFCD8A521E9 <unknown symbol address> VCRUNTIME140_1.dll!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FFCD8A5401900007FFCD8A53F70 VCRUNTIME140_1.dll!_CxxFrameHandler4 [<unknown file> @ <unknown line number>]
+00007FFCF8EA54FF00007FFCF8EA5460 ntdll.dll!_chkstk [<unknown file> @ <unknown line number>]
+00007FFCF8E0BD2500007FFCF8E0B6D0 ntdll.dll!RtlWow64GetCurrentMachine [<unknown file> @ <unknown line number>]
+00007FFCF8D4F88D00007FFCF8D4F700 ntdll.dll!RtlRaiseException [<unknown file> @ <unknown line number>]
+00007FFCF64C41CA00007FFCF64C4140 KERNELBASE.dll!RaiseException [<unknown file> @ <unknown line number>]
+00007FFCE05D526700007FFCE05D51D0 VCRUNTIME140.dll!CxxThrowException [<unknown file> @ <unknown line number>]
+00007FFCAAB37A7E00007FFCAAB37A10 c10.dll!c10::detail::torchCheckFail [<unknown file> @ <unknown line number>]
+00007FFCAE134E3F00007FFCAE134B40 c10_cuda.dll!c10::cuda::c10_cuda_check_implementation [<unknown file> @ <unknown line number>]
+00007FFADCCF515C00007FFADCCF5050 torch_cuda.dll!at::cuda::CUDAEvent::record [<unknown file> @ <unknown line number>]
+00007FFADCD0332900007FFADCD021A0 torch_cuda.dll!at::cuda::getCachingHostAllocator [<unknown file> @ <unknown line number>]
+00007FFADCD01B7900007FFADCD00240 torch_cuda.dll!torch::cuda::CUDAPluggableAllocator::CUDAPluggableAllocator::enable [<unknown file> @ <unknown line number>]
+00007FFCAAAFB5F400007FFCAAAFB5A0 c10.dll!c10::StorageImpl::~StorageImpl [<unknown file> @ <unknown line number>]
+00007FFCAAAFC1F700007FFCAAAFC040 c10.dll!c10::SymBool::operator| [<unknown file> @ <unknown line number>]
+00007FFCAAAEF30200007FFCAAAEF290 c10.dll!c10::SymNodeImpl::~SymNodeImpl [<unknown file> @ <unknown line number>]
+00007FFCAAB204C500007FFCAAB20450 c10.dll!c10::TensorImpl::~TensorImpl [<unknown file> @ <unknown line number>]
+00007FFB700E6B6500007FFB700E5340 torch_cpu.dll!at::DynamicLibrary::sym [<unknown file> @ <unknown line number>]
+00007FFB7008CE9800007FFB7008CE10 torch_cpu.dll!at::TensorBase::reset [<unknown file> @ <unknown line number>]
+00007FFCA1C9B9B500007FFCA1C8D720 torch_python.dll!initModule [<unknown file> @ <unknown line number>]
+00007FFCA1D3C20600007FFCA1D39C90 torch_python.dll!THPVariable_Wrap [<unknown file> @ <unknown line number>]
+00007FFCA1D3C48200007FFCA1D39C90 torch_python.dll!THPVariable_Wrap [<unknown file> @ <unknown line number>]
+00007FFC423822CC00007FFC42382054 python312.dll!PyObject_GC_UnTrack [<unknown file> @ <unknown line number>]
+00007FFC42381F1800007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC42381F0900007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC42381F0900007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC42381F0900007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC42381F0900007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC423AD6E100007FFC423AB9BC python312.dll!PyArg_CheckPositional [<unknown file> @ <unknown line number>]
+00007FFC42384DA600007FFC42384D0C python312.dll!PyDict_SetItem [<unknown file> @ <unknown line number>]
+00007FFC4234A41B00007FFC4234A3BC python312.dll!PyDict_SetItemString [<unknown file> @ <unknown line number>]
+00007FFC4234D00200007FFC4234CDA4 python312.dll!PyModule_AddFunctions [<unknown file> @ <unknown line number>]
+00007FFC4234CF4800007FFC4234CDA4 python312.dll!PyModule_AddFunctions [<unknown file> @ <unknown line number>]
+00007FFC42351D9800007FFC42351244 python312.dll!PyUnicode_EncodeUTF32 [<unknown file> @ <unknown line number>]
+00007FFC4235953900007FFC4235946C python312.dll!Py_FinalizeEx [<unknown file> @ <unknown line number>]
+00007FFC4235870500007FFC423586E8 python312.dll!Py_RunMain [<unknown file> @ <unknown line number>]
+00007FF7820243CC <unknown symbol address> python3.12.exe!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FF782025CD4 <unknown symbol address> python3.12.exe!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FFCF6B4CD8700007FFCF6B4CD70 KERNEL32.DLL!BaseThreadInitThunk [<unknown file> @ <unknown line number>]
+00007FFCF8DECAEC00007FFCF8DECAC0 ntdll.dll!RtlUserThreadStart [<unknown file> @ <unknown line number>]
+
+2026-10-14 14:09:55  run failed (rc=3221226505); stopping. Rerun the same command to resume.
+
+mobilenetv2: stopped
+PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others> python .\run_all_models.py
+2026-10-14 14:12:57  [120/132] mobilenetv2__tinyimagenet__w64__K4__const gap seed 1 (micro-batch 128); 13 left for mobilenetv2
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main

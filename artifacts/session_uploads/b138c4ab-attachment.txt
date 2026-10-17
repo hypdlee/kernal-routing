@@ -1,0 +1,127 @@
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> python run_stage1b_static.py
+6 runs, 0 already done, 6 to go.
+
+=== [1/6] static seed 0
+[static seed=0] device=cuda params=11.22M router=0.0K dyn_layers=0
+  ep   0  loss 4.238  acc 9.75  best 9.75  (21s)
+  ep  10  loss 1.450  acc 47.56  best 50.12  (83s)
+  ep  20  loss 1.137  acc 55.84  best 57.93  (145s)
+  ep  30  loss 1.012  acc 60.77  best 60.77  (207s)
+  ep  40  loss 0.924  acc 59.49  best 61.73  (270s)
+  ep  50  loss 0.834  acc 61.74  best 63.36  (331s)
+  ep  60  loss 0.741  acc 60.59  best 64.68  (393s)
+  ep  70  loss 0.627  acc 63.45  best 65.39  (455s)
+  ep  80  loss 0.506  acc 63.62  best 66.57  (517s)
+  ep  90  loss 0.379  acc 66.71  best 66.91  (578s)
+  ep 100  loss 0.222  acc 70.08  best 70.08  (640s)
+  ep 110  loss 0.090  acc 72.41  best 72.60  (702s)
+  ep 120  loss 0.016  acc 76.98  best 76.98  (764s)
+  ep 130  loss 0.009  acc 77.49  best 78.08  (826s)
+  ep 140  loss 0.008  acc 77.94  best 78.08  (889s)
+  ep 149  loss 0.008  acc 78.05  best 78.23  (947s)
+[static seed=0] final=78.05 best=78.23 -> results\stage1b_static_seed0.json
+
+=== [2/6] static seed 1
+[static seed=1] device=cuda params=11.22M router=0.0K dyn_layers=0
+  ep   0  loss 4.229  acc 9.88  best 9.88  (21s)
+  ep  10  loss 1.446  acc 50.46  best 50.46  (97s)
+  ep  20  loss 1.132  acc 54.27  best 57.85  (175s)
+  ep  30  loss 1.005  acc 59.69  best 60.55  (251s)
+  ep  40  loss 0.928  acc 56.88  best 62.43  (328s)
+  ep  50  loss 0.845  acc 62.26  best 62.43  (405s)
+  ep  60  loss 0.739  acc 62.79  best 62.79  (482s)
+  ep  70  loss 0.629  acc 63.65  best 64.32  (559s)
+  ep  80  loss 0.497  acc 65.58  best 67.50  (636s)
+  ep  90  loss 0.360  acc 67.58  best 67.58  (713s)
+  ep 100  loss 0.214  acc 69.39  best 69.39  (790s)
+  ep 110  loss 0.085  acc 73.05  best 73.05  (867s)
+  ep 120  loss 0.016  acc 77.12  best 77.12  (944s)
+  ep 130  loss 0.009  acc 78.21  best 78.39  (1021s)
+  ep 140  loss 0.008  acc 78.40  best 78.52  (1097s)
+  ep 149  loss 0.008  acc 78.67  best 78.70  (1166s)
+[static seed=1] final=78.67 best=78.70 -> results\stage1b_static_seed1.json
+
+=== [3/6] static seed 2
+[static seed=2] device=cuda params=11.22M router=0.0K dyn_layers=0
+  ep   0  loss 4.230  acc 9.30  best 9.30  (23s)
+  ep  10  loss 1.454  acc 49.38  best 49.79  (100s)
+  ep  20  loss 1.139  acc 55.41  best 56.59  (178s)
+  ep  30  loss 1.014  acc 57.59  best 61.18  (255s)
+  ep  40  loss 0.923  acc 58.41  best 61.59  (332s)
+  ep  50  loss 0.832  acc 61.39  best 62.17  (409s)
+  ep  60  loss 0.745  acc 63.01  best 64.24  (486s)
+  ep  70  loss 0.642  acc 62.11  best 64.82  (564s)
+  ep  80  loss 0.511  acc 65.21  best 66.33  (641s)
+  ep  90  loss 0.368  acc 67.77  best 68.39  (718s)
+  ep 100  loss 0.222  acc 68.92  best 69.81  (797s)
+  ep 110  loss 0.087  acc 73.47  best 73.47  (874s)
+  ep 120  loss 0.019  acc 77.04  best 77.04  (951s)
+  ep 130  loss 0.009  acc 78.61  best 78.61  (1028s)
+  ep 140  loss 0.008  acc 78.75  best 78.81  (1090s)
+  ep 149  loss 0.008  acc 78.63  best 78.81  (1146s)
+[static seed=2] final=78.63 best=78.81 -> results\stage1b_static_seed2.json
+
+=== [4/6] static seed 3
+[static seed=3] device=cuda params=11.22M router=0.0K dyn_layers=0
+  ep   0  loss 4.234  acc 9.29  best 9.29  (21s)
+  ep  10  loss 1.442  acc 50.43  best 53.11  (83s)
+  ep  20  loss 1.127  acc 55.71  best 58.55  (161s)
+  ep  30  loss 1.006  acc 57.25  best 61.43  (237s)
+  ep  40  loss 0.920  acc 59.96  best 61.43  (314s)
+  ep  50  loss 0.841  acc 58.93  best 62.56  (391s)
+  ep  60  loss 0.750  acc 57.78  best 64.66  (467s)
+  ep  70  loss 0.640  acc 63.53  best 64.67  (544s)
+  ep  80  loss 0.516  acc 65.62  best 66.43  (621s)
+  ep  90  loss 0.374  acc 66.12  best 67.42  (698s)
+  ep 100  loss 0.220  acc 69.47  best 69.69  (774s)
+  ep 110  loss 0.083  acc 73.53  best 73.53  (851s)
+  ep 120  loss 0.018  acc 76.85  best 76.85  (928s)
+  ep 130  loss 0.009  acc 77.77  best 78.02  (1004s)
+  ep 140  loss 0.008  acc 78.35  best 78.50  (1081s)
+  ep 149  loss 0.008  acc 78.27  best 78.54  (1150s)
+[static seed=3] final=78.27 best=78.54 -> results\stage1b_static_seed3.json
+
+=== [5/6] static seed 4
+[static seed=4] device=cuda params=11.22M router=0.0K dyn_layers=0
+  ep   0  loss 4.247  acc 10.58  best 10.58  (23s)
+  ep  10  loss 1.449  acc 51.81  best 51.81  (100s)
+  ep  20  loss 1.140  acc 55.49  best 58.15  (178s)
+  ep  30  loss 1.019  acc 59.84  best 59.84  (255s)
+  ep  40  loss 0.919  acc 61.23  best 61.23  (332s)
+  ep  50  loss 0.833  acc 60.53  best 63.63  (409s)
+  ep  60  loss 0.741  acc 63.41  best 65.02  (486s)
+  ep  70  loss 0.636  acc 62.82  best 65.02  (564s)
+  ep  80  loss 0.506  acc 66.86  best 66.86  (641s)
+  ep  90  loss 0.362  acc 68.35  best 68.35  (718s)
+  ep 100  loss 0.218  acc 69.47  best 69.47  (796s)
+  ep 110  loss 0.078  acc 72.21  best 73.02  (873s)
+  ep 120  loss 0.016  acc 76.72  best 76.72  (950s)
+  ep 130  loss 0.009  acc 77.78  best 77.78  (1028s)
+  ep 140  loss 0.008  acc 78.03  best 78.08  (1105s)
+  ep 149  loss 0.008  acc 78.00  best 78.08  (1175s)
+[static seed=4] final=78.00 best=78.08 -> results\stage1b_static_seed4.json
+
+=== [6/6] static seed 5
+[static seed=5] device=cuda params=11.22M router=0.0K dyn_layers=0
+  ep   0  loss 4.242  acc 9.68  best 9.68  (23s)
+  ep  10  loss 1.450  acc 52.07  best 52.07  (101s)
+  ep  20  loss 1.127  acc 58.22  best 58.22  (179s)
+  ep  30  loss 1.009  acc 57.28  best 60.84  (257s)
+  ep  40  loss 0.920  acc 61.62  best 62.57  (334s)
+  ep  50  loss 0.839  acc 60.76  best 62.57  (412s)
+  ep  60  loss 0.744  acc 61.76  best 64.60  (490s)
+  ep  70  loss 0.644  acc 64.80  best 64.80  (568s)
+  ep  80  loss 0.510  acc 66.24  best 66.24  (646s)
+  ep  90  loss 0.370  acc 67.49  best 67.49  (723s)
+  ep 100  loss 0.222  acc 70.27  best 70.27  (801s)
+  ep 110  loss 0.096  acc 72.44  best 72.63  (879s)
+  ep 120  loss 0.018  acc 77.26  best 77.26  (957s)
+  ep 130  loss 0.009  acc 78.17  best 78.31  (1035s)
+  ep 140  loss 0.008  acc 78.29  best 78.62  (1112s)
+  ep 149  loss 0.008  acc 78.41  best 78.62  (1182s)
+[static seed=5] final=78.41 best=78.62 -> results\stage1b_static_seed5.json
+
+done in 113.4 min
+
+now run:  python compare_static.py
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> 

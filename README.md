@@ -23,7 +23,10 @@ Private research repository of Ankit Kumar.
 | `artifacts/resnet18/` | 24 stage-1 result JSONs and the training logs shared during the study |
 | `artifacts/mobilenetv2/` | MobileNetV2 `train.log` (all 132 runs) and the per-seed CSV parsed from it |
 | `docs/` | research ideology documents, day-1 notes, run guide source |
-| `history/` | every earlier code and paper package, as delivered, for provenance |
+| `artifacts/session_uploads/` | every file shared during the project: logs, crash traces, screenshots, the stage-1 results zip |
+| `artifacts/mobilenetv2/analysis_first_pass/` | the first, independent MobileNetV2 parser and analysis, used to cross-check the paper |
+| `paper/per_model_examples/` | per-model report format: ResNet-18 from the paper's values, the other four on SYNTHETIC test data (watermarked) |
+| `history/` | every earlier code and paper package as delivered, loose scripts, the dated fixes, the original report generators |
 
 ## Rebuild
 

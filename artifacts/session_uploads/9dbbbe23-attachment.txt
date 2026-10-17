@@ -1,0 +1,108 @@
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> Get-ChildItem "$env:USERPROFILE\Downloads\analy*", "$env:USERPROFILE\Downloads\check_grid*", "$env:USERPROFILE\Downloads\analysis-fix*" | Select-Object Name, LastWriteTime
+
+Name                    LastWriteTime       
+----                    -------------       
+analysis-fix.zip        9/17/2026 2:01:51 PM
+analyze_capacity.py     9/11/2026 5:00:48 PM
+analyze_capacity_v3.zip 9/11/2026 5:01:47 PM
+analysis-fix.zip        9/17/2026 2:01:51 PM
+
+
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> cd C:\Users\ankit\Downloads\idea\topoconv\kernelroute
+>> Expand-Archive -Path "$env:USERPROFILE\Downloads\analysis-fix.zip" -DestinationPath . -Force
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> Select-String -Path analyze_capacity.py -Pattern "datasets_present"
+>> Select-String -Path analyze_ksweep.py -Pattern "dataset=dataset|!= dataset"
+>> Select-String -Path check_grid.py -Pattern '"width", "dataset"'
+
+analyze_capacity.py:62:def datasets_present():
+analyze_capacity.py:76:        present = datasets_present()
+analyze_ksweep.py:23:        if c.get("dataset", "cifar100") != 
+dataset:
+check_grid.py:32:            "num_kernels", "temperature", "width", 
+"dataset"]
+
+
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> python analyze_capacity.py
+
+Results contain more than one dataset: ['cifar100', 'tinyimagenet']
+Reporting each separately. Pass --dataset to select one.
+
+
+==========================================================================
+CAPACITY SWEEP  |  dataset=cifar100  K=4
+==========================================================================
+
+--- width 16 ----------------------------------------------------------
+  static    n=6  69.995 +/- 0.246     0.71M   final train loss 0.1643
+  uniform   n=6  69.772 +/- 0.279     2.77M   final train loss 0.1653
+  gap       n=6  70.527 +/- 0.160     2.79M   final train loss 0.0638
+
+  uniform - static: -0.223pp  95% CI [-0.500, +0.054]  p=0.0931  TOST=0.0251  -> EQUIVALENT to static
+  gap - static: +0.532pp  95% CI [+0.292, +0.771]  p=0.0023  TOST=0.6260  -> BEATS static
+
+--- width 32 ----------------------------------------------------------
+  static    n=6  74.872 +/- 0.262     2.82M   final train loss 0.0171
+  uniform   n=6  75.047 +/- 0.305    11.06M   final train loss 0.0171
+  gap       n=6  76.025 +/- 0.156    11.13M   final train loss 0.0131
+
+  uniform - static: +0.175pp  95% CI [-0.146, +0.496]  p=0.2206  TOST=0.0242  -> EQUIVALENT to static
+  gap - static: +1.153pp  95% CI [+0.940, +1.367]  p=0.0000  TOST=0.9997  -> BEATS static
+
+--- width 64 ----------------------------------------------------------
+  static    n=6  78.338 +/- 0.284    11.22M   final train loss 0.0081
+  uniform   n=6  78.387 +/- 0.202    44.18M   final train loss 0.0081
+  gap       n=6  78.418 +/- 0.299    44.46M   final train loss 0.0074
+
+  uniform - static: +0.048pp  95% CI [-0.332, +0.429]  p=0.7573  TOST=0.0142  -> EQUIVALENT to static
+  gap - static: +0.080pp  95% CI [-0.305, +0.465]  p=0.6158  TOST=0.0188  -> EQUIVALENT to static
+
+==========================================================================
+TREND: does the advantage grow as capacity shrinks?
+==========================================================================
+
+  uniform minus static, by width:
+    w16  -0.223pp  p=0.0931  ----
+    w32  +0.175pp  p=0.2206  +++
+    w64  +0.048pp  p=0.7573  
+    Pearson r with log2(width) = +0.667 (3 points, df=1; no p-value reported, see note in source)
+    -> equivalent to static at every width tested. No effect at any
+       capacity, so the ordering of the point estimates is noise.
+
+  gap minus static, by width:
+    w16  +0.532pp  p=0.0023  ++++++++++
+    w32  +1.153pp  p=0.0000  +++++++++++++++++++++++
+    w64  +0.080pp  p=0.6158  +
+    Pearson r with log2(width) = -0.419 (3 points, df=1; no p-value reported, see note in source)
+    -> NON-MONOTONE. The effect peaks at w32 (+1.153pp), not at the smallest width.
+       w16 +0.532pp, w32 +1.153pp, w64 +0.080pp.
+       Do not describe this as a monotone capacity trend. The shape
+       is an inverted U and the peak width is itself a finding.
+
+Saturation check: a final train loss near 0.008 means the model
+memorised the training set. A width where that no longer happens is
+the one that answers the reviewer's objection.
+
+
+==========================================================================
+CAPACITY SWEEP  |  dataset=tinyimagenet  K=4
+==========================================================================
+
+--- width 32 ----------------------------------------------------------
+  static    n=6  61.560 +/- 0.217     2.85M   final train loss 0.1194
+  gap       n=6  63.745 +/- 0.260    11.16M   final train loss 0.0420
+
+  gap - static: +2.185pp  95% CI [+1.781, +2.589]  p=0.0000  TOST=0.9999  -> BEATS static
+
+==========================================================================
+TREND: does the advantage grow as capacity shrinks?
+==========================================================================
+
+  gap minus static, by width:
+    w32  +2.185pp  p=0.0000  ++++++++++++++++++++++++++++++++++++++++
+    only 1 width(s) present; run the rest before reading a trend.
+
+Saturation check: a final train loss near 0.008 means the model
+memorised the training set. A width where that no longer happens is
+the one that answers the reviewer's objection.
+
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> 

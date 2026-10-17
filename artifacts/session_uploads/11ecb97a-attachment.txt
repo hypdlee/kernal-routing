@@ -1,0 +1,239 @@
+run_stage3.py --part temp --seeds 0 1 2 3 4 5
+nothing to do. run: python analyze_stage3.py
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> for ($s=0; $s -le 5; $s++) { python -m src.train --router gap --scope all --width 16 --num-kernels 4 --seed $s --epochs 150 --batch-size 128 --impl blend --amp bf16 --workers 4 --temp-start 30 --temp-end 1 --temp-epochs 10 --out results --tag stage3temp_w16 }
+[cifar100 gap w16 K4 seed=0] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.396  acc 7.54  best 7.54  tau 30.00  (29s)
+  ep  10  loss 1.886  acc 36.01  best 39.49  tau 1.00  (168s)
+  ep  20  loss 1.562  acc 46.70  best 50.73  tau 1.00  (308s)
+  ep  30  loss 1.448  acc 50.71  best 50.78  tau 1.00  (442s)
+  ep  40  loss 1.369  acc 47.63  best 55.01  tau 1.00  (577s)
+  ep  50  loss 1.298  acc 51.20  best 55.01  tau 1.00  (715s)
+  ep  60  loss 1.226  acc 56.39  best 56.39  tau 1.00  (847s)
+  ep  70  loss 1.146  acc 59.09  best 59.09  tau 1.00  (985s)
+  ep  80  loss 1.040  acc 59.12  best 60.96  tau 1.00  (1121s)
+  ep  90  loss 0.931  acc 60.54  best 62.02  tau 1.00  (1256s)
+  ep 100  loss 0.789  acc 63.20  best 63.50  tau 1.00  (1394s)
+  ep 110  loss 0.634  acc 64.70  best 65.67  tau 1.00  (1529s)
+  ep 120  loss 0.448  acc 67.81  best 68.19  tau 1.00  (1665s)
+  ep 130  loss 0.281  acc 69.79  best 69.82  tau 1.00  (1803s)
+  ep 140  loss 0.175  acc 70.75  best 71.13  tau 1.00  (1936s)
+  ep 149  loss 0.154  acc 71.07  best 71.13  tau 1.00  (2060s)
+[gap seed=0] final=71.07 best=71.13 -> results\stage3temp_w16_gap_seed0.json
+[cifar100 gap w16 K4 seed=1] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.398  acc 7.44  best 7.44  tau 30.00  (28s)
+  ep  10  loss 1.896  acc 43.76  best 43.76  tau 1.00  (157s)
+  ep  20  loss 1.576  acc 48.31  best 48.52  tau 1.00  (283s)
+  ep  30  loss 1.465  acc 51.24  best 51.78  tau 1.00  (416s)
+  ep  40  loss 1.379  acc 54.54  best 54.54  tau 1.00  (542s)
+  ep  50  loss 1.312  acc 55.32  best 55.32  tau 1.00  (670s)
+  ep  60  loss 1.234  acc 57.99  best 57.99  tau 1.00  (801s)
+  ep  70  loss 1.143  acc 57.26  best 58.76  tau 1.00  (926s)
+  ep  80  loss 1.046  acc 56.85  best 59.41  tau 1.00  (1056s)
+  ep  90  loss 0.938  acc 61.37  best 61.58  tau 1.00  (1187s)
+  ep 100  loss 0.798  acc 63.12  best 63.39  tau 1.00  (1312s)
+  ep 110  loss 0.638  acc 65.74  best 65.74  tau 1.00  (1442s)
+  ep 120  loss 0.458  acc 67.71  best 67.71  tau 1.00  (1573s)
+  ep 130  loss 0.280  acc 69.11  best 69.47  tau 1.00  (1697s)
+  ep 140  loss 0.177  acc 70.22  best 70.37  tau 1.00  (1829s)
+  ep 149  loss 0.161  acc 70.62  best 70.63  tau 1.00  (1946s)
+[gap seed=1] final=70.62 best=70.63 -> results\stage3temp_w16_gap_seed1.json
+[cifar100 gap w16 K4 seed=2] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.393  acc 7.86  best 7.86  tau 30.00  (28s)
+  ep  10  loss 1.848  acc 43.75  best 43.75  tau 1.00  (163s)
+  ep  20  loss 1.550  acc 43.71  best 51.07  tau 1.00  (304s)
+  ep  30  loss 1.438  acc 51.07  best 52.98  tau 1.00  (437s)
+  ep  40  loss 1.366  acc 52.52  best 53.06  tau 1.00  (574s)
+  ep  50  loss 1.299  acc 55.68  best 55.92  tau 1.00  (711s)
+  ep  60  loss 1.221  acc 54.05  best 56.69  tau 1.00  (843s)
+  ep  70  loss 1.143  acc 56.14  best 58.20  tau 1.00  (981s)
+  ep  80  loss 1.052  acc 62.03  best 62.03  tau 1.00  (1114s)
+  ep  90  loss 0.942  acc 59.46  best 62.03  tau 1.00  (1248s)
+  ep 100  loss 0.803  acc 63.25  best 63.42  tau 1.00  (1385s)
+  ep 110  loss 0.640  acc 66.57  best 66.57  tau 1.00  (1516s)
+  ep 120  loss 0.451  acc 68.15  best 68.15  tau 1.00  (1654s)
+  ep 130  loss 0.275  acc 69.18  best 69.28  tau 1.00  (1790s)
+  ep 140  loss 0.176  acc 70.26  best 70.26  tau 1.00  (1921s)
+  ep 149  loss 0.156  acc 70.17  best 70.46  tau 1.00  (2045s)
+[gap seed=2] final=70.17 best=70.46 -> results\stage3temp_w16_gap_seed2.json
+[cifar100 gap w16 K4 seed=3] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.407  acc 7.51  best 7.51  tau 30.00  (28s)
+  ep  10  loss 1.888  acc 45.31  best 45.31  tau 1.00  (162s)
+  ep  20  loss 1.559  acc 47.53  best 49.62  tau 1.00  (302s)
+  ep  30  loss 1.441  acc 46.07  best 53.33  tau 1.00  (441s)
+  ep  40  loss 1.365  acc 53.24  best 53.65  tau 1.00  (573s)
+  ep  50  loss 1.294  acc 55.89  best 56.68  tau 1.00  (712s)
+  ep  60  loss 1.220  acc 55.47  best 56.68  tau 1.00  (845s)
+  ep  70  loss 1.142  acc 56.85  best 59.43  tau 1.00  (979s)
+  ep  80  loss 1.039  acc 57.41  best 60.61  tau 1.00  (1117s)
+  ep  90  loss 0.932  acc 62.31  best 62.31  tau 1.00  (1249s)
+  ep 100  loss 0.799  acc 64.12  best 64.12  tau 1.00  (1389s)
+  ep 110  loss 0.635  acc 65.12  best 65.12  tau 1.00  (1527s)
+  ep 120  loss 0.453  acc 68.34  best 68.34  tau 1.00  (1660s)
+  ep 130  loss 0.275  acc 69.63  best 69.63  tau 1.00  (1798s)
+  ep 140  loss 0.172  acc 70.57  best 70.74  tau 1.00  (1932s)
+  ep 149  loss 0.150  acc 70.69  best 70.87  tau 1.00  (2054s)
+[gap seed=3] final=70.69 best=70.87 -> results\stage3temp_w16_gap_seed3.json
+[cifar100 gap w16 K4 seed=4] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.393  acc 7.42  best 7.42  tau 30.00  (28s)
+  ep  10  loss 1.878  acc 42.09  best 42.77  tau 1.00  (158s)
+  ep  20  loss 1.562  acc 43.07  best 48.45  tau 1.00  (331s)
+  ep  30  loss 1.450  acc 50.65  best 51.83  tau 1.00  (595s)
+  ep  40  loss 1.377  acc 54.29  best 54.29  tau 1.00  (858s)
+  ep  50  loss 1.301  acc 56.53  best 56.53  tau 1.00  (1123s)
+  ep  60  loss 1.221  acc 53.52  best 57.18  tau 1.00  (1387s)
+  ep  70  loss 1.136  acc 58.74  best 58.74  tau 1.00  (1654s)
+  ep  80  loss 1.047  acc 55.99  best 59.99  tau 1.00  (1918s)
+  ep  90  loss 0.924  acc 60.59  best 60.94  tau 1.00  (2183s)
+  ep 100  loss 0.787  acc 63.66  best 63.66  tau 1.00  (2448s)
+  ep 110  loss 0.630  acc 65.76  best 65.76  tau 1.00  (2709s)
+  ep 120  loss 0.446  acc 67.71  best 67.81  tau 1.00  (2973s)
+  ep 130  loss 0.275  acc 69.71  best 69.71  tau 1.00  (3236s)
+  ep 140  loss 0.170  acc 70.43  best 70.51  tau 1.00  (3499s)
+  ep 149  loss 0.152  acc 70.69  best 70.74  tau 1.00  (3738s)
+[gap seed=4] final=70.69 best=70.74 -> results\stage3temp_w16_gap_seed4.json
+[cifar100 gap w16 K4 seed=5] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.406  acc 7.45  best 7.45  tau 30.00  (43s)
+  ep  10  loss 1.905  acc 42.81  best 42.81  tau 1.00  (314s)
+  ep  20  loss 1.562  acc 48.99  best 52.54  tau 1.00  (580s)
+  ep  30  loss 1.445  acc 53.66  best 53.97  tau 1.00  (845s)
+  ep  40  loss 1.374  acc 47.93  best 53.97  tau 1.00  (1110s)
+  ep  50  loss 1.303  acc 53.97  best 55.99  tau 1.00  (1376s)
+  ep  60  loss 1.232  acc 57.20  best 57.20  tau 1.00  (1646s)
+  ep  70  loss 1.142  acc 58.35  best 58.65  tau 1.00  (1911s)
+  ep  80  loss 1.035  acc 60.25  best 60.41  tau 1.00  (2176s)
+  ep  90  loss 0.931  acc 61.10  best 61.39  tau 1.00  (2445s)
+  ep 100  loss 0.788  acc 64.35  best 64.81  tau 1.00  (2714s)
+  ep 110  loss 0.627  acc 66.17  best 66.32  tau 1.00  (2980s)
+  ep 120  loss 0.449  acc 66.32  best 67.17  tau 1.00  (3244s)
+  ep 130  loss 0.276  acc 69.46  best 69.46  tau 1.00  (3510s)
+  ep 140  loss 0.171  acc 70.30  best 70.67  tau 1.00  (3779s)
+  ep 149  loss 0.150  acc 70.61  best 70.69  tau 1.00  (4018s)
+[gap seed=5] final=70.61 best=70.69 -> results\stage3temp_w16_gap_seed5.json
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> python run_stage3.py --part uniform
+6 runs to go.
+Estimate: CIFAR w64 ~86 min, CIFAR w32 ~39 min, Tiny-ImageNet w32 ~300 min per run.
+
+=== [1/6] uniform --scope all --width 32 --num-kernels 4 --seed 0 --epochs 150 --tag tin_w32
+[tinyimagenet uniform w32 K4 seed=0] device=cuda params=11.09M router=0.0K dyn_layers=16
+  ep   0  loss 5.082  acc 4.75  best 4.75  (38s)
+  ep  10  loss 2.489  acc 26.27  best 33.71  (264s)
+  ep  20  loss 2.221  acc 34.89  best 39.50  (488s)
+  ep  30  loss 2.109  acc 36.67  best 41.64  (710s)
+  ep  40  loss 2.023  acc 42.02  best 43.42  (932s)
+  ep  50  loss 1.944  acc 41.93  best 43.48  (1154s)
+  ep  60  loss 1.846  acc 38.44  best 46.24  (1377s)
+  ep  70  loss 1.738  acc 44.85  best 46.39  (1603s)
+  ep  80  loss 1.592  acc 49.37  best 49.37  (1828s)
+  ep  90  loss 1.425  acc 51.80  best 52.80  (2050s)
+  ep 100  loss 1.224  acc 53.84  best 53.84  (2273s)
+  ep 110  loss 0.974  acc 56.00  best 56.00  (2496s)
+  ep 120  loss 0.654  acc 57.69  best 57.89  (2718s)
+  ep 130  loss 0.315  acc 59.80  best 60.00  (2941s)
+  ep 140  loss 0.143  acc 61.54  best 61.54  (3164s)
+  ep 149  loss 0.118  acc 61.52  best 61.72  (3364s)
+[uniform seed=0] final=61.52 best=61.72 -> results\tin_w32_uniform_seed0.json
+
+=== [2/6] uniform --scope all --width 32 --num-kernels 4 --seed 1 --epochs 150 --tag tin_w32
+[tinyimagenet uniform w32 K4 seed=1] device=cuda params=11.09M router=0.0K dyn_layers=16
+  ep   0  loss 5.062  acc 5.03  best 5.03  (38s)
+  ep  10  loss 2.474  acc 32.01  best 33.11  (265s)
+  ep  20  loss 2.208  acc 38.29  best 39.55  (493s)
+  ep  30  loss 2.095  acc 39.20  best 39.55  (720s)
+  ep  40  loss 2.016  acc 35.52  best 43.34  (948s)
+  ep  50  loss 1.942  acc 44.00  best 44.79  (1175s)
+  ep  60  loss 1.845  acc 45.73  best 45.73  (1402s)
+  ep  70  loss 1.731  acc 46.03  best 48.55  (1630s)
+  ep  80  loss 1.593  acc 48.41  best 49.57  (1857s)
+  ep  90  loss 1.433  acc 51.90  best 51.90  (2084s)
+  ep 100  loss 1.227  acc 54.82  best 54.82  (2312s)
+  ep 110  loss 0.972  acc 56.96  best 56.96  (2539s)
+  ep 120  loss 0.660  acc 56.93  best 58.01  (2766s)
+  ep 130  loss 0.323  acc 60.77  best 60.77  (2994s)
+  ep 140  loss 0.148  acc 61.43  best 61.60  (3221s)
+  ep 149  loss 0.120  acc 61.53  best 61.68  (3425s)
+[uniform seed=1] final=61.53 best=61.68 -> results\tin_w32_uniform_seed1.json
+
+=== [3/6] uniform --scope all --width 32 --num-kernels 4 --seed 2 --epochs 150 --tag tin_w32
+[tinyimagenet uniform w32 K4 seed=2] device=cuda params=11.09M router=0.0K dyn_layers=16
+  ep   0  loss 5.071  acc 4.53  best 4.53  (37s)
+  ep  10  loss 2.483  acc 32.68  best 32.97  (261s)
+  ep  20  loss 2.204  acc 36.60  best 37.24  (486s)
+  ep  30  loss 2.100  acc 36.43  best 40.90  (710s)
+  ep  40  loss 2.016  acc 40.76  best 42.76  (934s)
+  ep  50  loss 1.934  acc 43.45  best 44.08  (1158s)
+  ep  60  loss 1.840  acc 43.51  best 44.94  (1382s)
+  ep  70  loss 1.729  acc 47.02  best 47.02  (1606s)
+  ep  80  loss 1.591  acc 48.44  best 49.07  (1830s)
+  ep  90  loss 1.429  acc 51.33  best 51.37  (2054s)
+  ep 100  loss 1.230  acc 51.59  best 54.17  (2278s)
+  ep 110  loss 0.974  acc 56.02  best 56.02  (2502s)
+  ep 120  loss 0.658  acc 57.07  best 57.95  (2726s)
+  ep 130  loss 0.322  acc 60.48  best 60.48  (2950s)
+  ep 140  loss 0.149  acc 61.43  best 61.43  (3174s)
+  ep 149  loss 0.122  acc 61.55  best 61.68  (3375s)
+[uniform seed=2] final=61.55 best=61.68 -> results\tin_w32_uniform_seed2.json
+
+=== [4/6] uniform --scope all --width 32 --num-kernels 4 --seed 3 --epochs 150 --tag tin_w32
+[tinyimagenet uniform w32 K4 seed=3] device=cuda params=11.09M router=0.0K dyn_layers=16
+  ep   0  loss 5.075  acc 4.56  best 4.56  (37s)
+  ep  10  loss 2.473  acc 30.38  best 34.01  (261s)
+  ep  20  loss 2.201  acc 37.93  best 38.42  (484s)
+  ep  30  loss 2.096  acc 37.42  best 40.81  (708s)
+  ep  40  loss 2.018  acc 37.16  best 43.61  (931s)
+  ep  50  loss 1.935  acc 34.36  best 45.10  (1155s)
+  ep  60  loss 1.837  acc 44.55  best 45.10  (1379s)
+  ep  70  loss 1.728  acc 42.22  best 49.85  (1602s)
+  ep  80  loss 1.591  acc 49.51  best 49.85  (1826s)
+  ep  90  loss 1.432  acc 51.58  best 51.58  (2050s)
+  ep 100  loss 1.229  acc 52.61  best 54.25  (2273s)
+  ep 110  loss 0.978  acc 55.10  best 55.67  (2496s)
+  ep 120  loss 0.659  acc 57.15  best 57.83  (2720s)
+  ep 130  loss 0.318  acc 60.02  best 60.02  (2943s)
+  ep 140  loss 0.149  acc 61.43  best 61.43  (3167s)
+  ep 149  loss 0.120  acc 61.62  best 61.75  (3368s)
+[uniform seed=3] final=61.62 best=61.75 -> results\tin_w32_uniform_seed3.json
+
+=== [5/6] uniform --scope all --width 32 --num-kernels 4 --seed 4 --epochs 150 --tag tin_w32
+[tinyimagenet uniform w32 K4 seed=4] device=cuda params=11.09M router=0.0K dyn_layers=16
+  ep   0  loss 5.065  acc 4.63  best 4.63  (37s)
+  ep  10  loss 2.486  acc 35.03  best 35.03  (261s)
+  ep  20  loss 2.208  acc 34.98  best 38.75  (485s)
+  ep  30  loss 2.101  acc 36.12  best 42.08  (709s)
+  ep  40  loss 2.025  acc 42.40  best 43.58  (934s)
+  ep  50  loss 1.942  acc 46.50  best 46.50  (1158s)
+  ep  60  loss 1.841  acc 41.05  best 46.50  (1382s)
+  ep  70  loss 1.729  acc 47.95  best 48.07  (1609s)
+  ep  80  loss 1.598  acc 48.44  best 49.17  (1832s)
+  ep  90  loss 1.428  acc 48.97  best 51.63  (2055s)
+  ep 100  loss 1.227  acc 53.16  best 53.82  (2278s)
+  ep 110  loss 0.974  acc 56.14  best 56.14  (2502s)
+  ep 120  loss 0.666  acc 58.90  best 58.90  (2725s)
+  ep 130  loss 0.326  acc 60.17  best 60.17  (2948s)
+  ep 140  loss 0.149  acc 60.99  best 61.26  (3171s)
+  ep 149  loss 0.121  acc 61.66  best 61.68  (3372s)
+[uniform seed=4] final=61.66 best=61.68 -> results\tin_w32_uniform_seed4.json
+
+=== [6/6] uniform --scope all --width 32 --num-kernels 4 --seed 5 --epochs 150 --tag tin_w32
+[tinyimagenet uniform w32 K4 seed=5] device=cuda params=11.09M router=0.0K dyn_layers=16
+  ep   0  loss 5.074  acc 4.48  best 4.48  (37s)
+  ep  10  loss 2.474  acc 33.75  best 34.74  (260s)
+  ep  20  loss 2.209  acc 34.69  best 38.47  (482s)
+  ep  30  loss 2.099  acc 41.15  best 41.15  (705s)
+  ep  40  loss 2.017  acc 40.88  best 41.15  (927s)
+  ep  50  loss 1.933  acc 37.97  best 42.99  (1150s)
+  ep  60  loss 1.840  acc 42.23  best 44.70  (1373s)
+  ep  70  loss 1.731  acc 44.66  best 45.19  (1596s)
+  ep  80  loss 1.594  acc 48.59  best 48.98  (1818s)
+  ep  90  loss 1.430  acc 50.25  best 52.10  (2041s)
+  ep 100  loss 1.224  acc 55.20  best 55.20  (2264s)
+  ep 110  loss 0.968  acc 55.58  best 56.20  (2486s)
+  ep 120  loss 0.651  acc 58.50  best 58.50  (2709s)
+  ep 130  loss 0.319  acc 60.81  best 60.81  (2932s)
+  ep 140  loss 0.145  acc 61.88  best 61.88  (3155s)
+  ep 149  loss 0.119  acc 62.12  best 62.12  (3357s)
+[uniform seed=5] final=62.12 best=62.12 -> results\tin_w32_uniform_seed5.json
+
+done in 338.4 min
+
+now run:  python analyze_stage3.py
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> 
