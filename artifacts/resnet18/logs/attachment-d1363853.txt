@@ -1,0 +1,422 @@
+                                                               python run_stage1c_capacity.py --widths 16ity.py
+>> python analyze_capacity.pynloads\idea\topoconv\kernelroute> 
+18 runs in the sweep, 0 already done, 18 to go.
+
+=== [1/18] w16 static seed 0
+[static w16 seed=0] device=cuda params=0.71M router=0.0K dyn_layers=0
+  ep   0  loss 4.393  acc 7.09  best 7.09  (18s)
+  ep  10  loss 1.808  acc 41.47  best 42.94  (49s)
+  ep  20  loss 1.538  acc 44.58  best 50.82  (80s)
+  ep  30  loss 1.436  acc 48.77  best 51.41  (111s)
+  ep  40  loss 1.365  acc 50.86  best 54.56  (142s)
+  ep  50  loss 1.309  acc 53.92  best 54.65  (173s)
+  ep  60  loss 1.235  acc 51.67  best 55.67  (204s)
+  ep  70  loss 1.150  acc 54.97  best 58.45  (235s)
+  ep  80  loss 1.062  acc 58.51  best 59.63  (267s)
+  ep  90  loss 0.940  acc 61.30  best 61.30  (298s)
+  ep 100  loss 0.812  acc 61.17  best 62.34  (328s)
+  ep 110  loss 0.646  acc 63.69  best 64.46  (360s)
+  ep 120  loss 0.459  acc 66.30  best 67.42  (390s)
+  ep 130  loss 0.282  acc 68.68  best 68.68  (421s)
+  ep 140  loss 0.181  acc 69.65  best 69.66  (452s)
+  ep 149  loss 0.160  acc 69.91  best 70.14  (480s)
+[static seed=0] final=69.91 best=70.14 -> results\stage1c_w16_static_seed0.json
+
+=== [2/18] w16 static seed 1
+[static w16 seed=1] device=cuda params=0.71M router=0.0K dyn_layers=0
+  ep   0  loss 4.389  acc 7.67  best 7.67  (18s)
+  ep  10  loss 1.816  acc 38.54  best 44.29  (49s)
+  ep  20  loss 1.556  acc 48.38  best 49.98  (80s)
+  ep  30  loss 1.456  acc 52.38  best 53.25  (112s)
+  ep  40  loss 1.384  acc 53.32  best 53.32  (143s)
+  ep  50  loss 1.314  acc 54.60  best 54.62  (175s)
+  ep  60  loss 1.247  acc 53.88  best 56.74  (206s)
+  ep  70  loss 1.160  acc 55.63  best 57.14  (237s)
+  ep  80  loss 1.060  acc 57.36  best 59.76  (268s)
+  ep  90  loss 0.949  acc 60.05  best 60.17  (298s)
+  ep 100  loss 0.814  acc 61.00  best 63.62  (331s)
+  ep 110  loss 0.648  acc 64.82  best 64.82  (363s)
+  ep 120  loss 0.472  acc 66.44  best 66.81  (396s)
+  ep 130  loss 0.288  acc 69.11  best 69.11  (453s)
+  ep 140  loss 0.188  acc 69.81  best 69.81  (517s)
+  ep 149  loss 0.168  acc 69.75  best 70.07  (575s)
+[static seed=1] final=69.75 best=70.07 -> results\stage1c_w16_static_seed1.json
+
+=== [3/18] w16 static seed 2
+[static w16 seed=2] device=cuda params=0.71M router=0.0K dyn_layers=0
+  ep   0  loss 4.394  acc 7.02  best 7.02  (22s)
+  ep  10  loss 1.833  acc 40.55  best 44.19  (86s)
+  ep  20  loss 1.563  acc 47.39  best 51.01  (150s)
+  ep  30  loss 1.462  acc 50.20  best 52.54  (214s)
+  ep  40  loss 1.383  acc 54.55  best 54.55  (279s)
+  ep  50  loss 1.318  acc 52.12  best 54.75  (344s)
+  ep  60  loss 1.240  acc 57.13  best 57.13  (408s)
+  ep  70  loss 1.152  acc 58.05  best 58.44  (473s)
+  ep  80  loss 1.060  acc 57.17  best 59.74  (537s)
+  ep  90  loss 0.937  acc 62.11  best 62.11  (601s)
+  ep 100  loss 0.802  acc 62.48  best 63.54  (664s)
+  ep 110  loss 0.646  acc 64.92  best 64.92  (728s)
+  ep 120  loss 0.464  acc 66.75  best 66.75  (792s)
+  ep 130  loss 0.294  acc 68.46  best 69.07  (855s)
+  ep 140  loss 0.187  acc 69.44  best 69.78  (919s)
+  ep 149  loss 0.163  acc 69.86  best 70.00  (955s)
+[static seed=2] final=69.86 best=70.00 -> results\stage1c_w16_static_seed2.json
+
+=== [4/18] w16 static seed 3
+[static w16 seed=3] device=cuda params=0.71M router=0.0K dyn_layers=0
+  ep   0  loss 4.380  acc 7.58  best 7.58  (18s)
+  ep  10  loss 1.810  acc 44.00  best 44.00  (49s)
+  ep  20  loss 1.546  acc 46.67  best 49.08  (80s)
+  ep  30  loss 1.450  acc 46.21  best 53.15  (111s)
+  ep  40  loss 1.376  acc 51.19  best 53.15  (143s)
+  ep  50  loss 1.307  acc 51.11  best 55.57  (173s)
+  ep  60  loss 1.232  acc 58.35  best 58.35  (204s)
+  ep  70  loss 1.146  acc 58.22  best 58.62  (235s)
+  ep  80  loss 1.050  acc 58.90  best 59.82  (267s)
+  ep  90  loss 0.944  acc 59.11  best 61.24  (298s)
+  ep 100  loss 0.804  acc 60.82  best 63.60  (329s)
+  ep 110  loss 0.647  acc 64.83  best 64.95  (360s)
+  ep 120  loss 0.462  acc 66.90  best 67.75  (391s)
+  ep 130  loss 0.290  acc 69.37  best 69.37  (422s)
+  ep 140  loss 0.188  acc 70.40  best 70.44  (453s)
+  ep 149  loss 0.163  acc 70.46  best 70.60  (480s)
+[static seed=3] final=70.46 best=70.60 -> results\stage1c_w16_static_seed3.json
+
+=== [5/18] w16 static seed 4
+[static w16 seed=4] device=cuda params=0.71M router=0.0K dyn_layers=0
+  ep   0  loss 4.380  acc 7.95  best 7.95  (18s)
+  ep  10  loss 1.837  acc 43.29  best 45.97  (48s)
+  ep  20  loss 1.556  acc 52.73  best 52.73  (79s)
+  ep  30  loss 1.457  acc 49.85  best 52.73  (110s)
+  ep  40  loss 1.389  acc 50.90  best 54.47  (142s)
+  ep  50  loss 1.317  acc 54.32  best 57.31  (174s)
+  ep  60  loss 1.247  acc 54.41  best 58.19  (205s)
+  ep  70  loss 1.164  acc 58.44  best 58.90  (236s)
+  ep  80  loss 1.064  acc 59.40  best 59.40  (267s)
+  ep  90  loss 0.954  acc 59.97  best 60.77  (298s)
+  ep 100  loss 0.815  acc 62.72  best 63.37  (329s)
+  ep 110  loss 0.648  acc 63.62  best 65.19  (361s)
+  ep 120  loss 0.475  acc 66.90  best 67.02  (391s)
+  ep 130  loss 0.292  acc 69.16  best 69.16  (422s)
+  ep 140  loss 0.186  acc 69.79  best 69.79  (452s)
+  ep 149  loss 0.166  acc 70.00  best 70.03  (481s)
+[static seed=4] final=70.00 best=70.03 -> results\stage1c_w16_static_seed4.json
+
+=== [6/18] w16 static seed 5
+[static w16 seed=5] device=cuda params=0.71M router=0.0K dyn_layers=0
+  ep   0  loss 4.389  acc 8.05  best 8.05  (18s)
+  ep  10  loss 1.861  acc 43.41  best 43.41  (49s)
+  ep  20  loss 1.563  acc 47.20  best 51.09  (81s)
+  ep  30  loss 1.463  acc 50.70  best 51.99  (112s)
+  ep  40  loss 1.380  acc 52.18  best 53.83  (143s)
+  ep  50  loss 1.314  acc 54.34  best 55.88  (175s)
+  ep  60  loss 1.243  acc 51.62  best 55.88  (206s)
+  ep  70  loss 1.158  acc 56.13  best 57.76  (237s)
+  ep  80  loss 1.057  acc 57.69  best 57.90  (268s)
+  ep  90  loss 0.951  acc 58.62  best 61.22  (299s)
+  ep 100  loss 0.807  acc 62.78  best 62.78  (330s)
+  ep 110  loss 0.644  acc 64.87  best 64.87  (362s)
+  ep 120  loss 0.461  acc 66.77  best 67.53  (393s)
+  ep 130  loss 0.288  acc 68.60  best 68.62  (424s)
+  ep 140  loss 0.185  acc 69.74  best 69.76  (456s)
+  ep 149  loss 0.166  acc 69.99  best 70.08  (484s)
+[static seed=5] final=69.99 best=70.08 -> results\stage1c_w16_static_seed5.json
+
+=== [7/18] w16 uniform seed 0
+[uniform w16 seed=0] device=cuda params=2.77M router=0.0K dyn_layers=16
+  ep   0  loss 4.382  acc 8.32  best 8.32  (19s)
+  ep  10  loss 1.863  acc 39.78  best 41.75  (63s)
+  ep  20  loss 1.560  acc 48.13  best 49.97  (108s)
+  ep  30  loss 1.455  acc 47.25  best 53.48  (151s)
+  ep  40  loss 1.390  acc 50.12  best 53.48  (195s)
+  ep  50  loss 1.311  acc 52.59  best 54.36  (241s)
+  ep  60  loss 1.237  acc 53.70  best 56.08  (285s)
+  ep  70  loss 1.151  acc 57.16  best 57.43  (329s)
+  ep  80  loss 1.062  acc 56.64  best 60.48  (373s)
+  ep  90  loss 0.941  acc 58.49  best 61.64  (416s)
+  ep 100  loss 0.808  acc 63.56  best 63.56  (461s)
+  ep 110  loss 0.643  acc 64.14  best 65.90  (505s)
+  ep 120  loss 0.466  acc 67.36  best 67.36  (549s)
+  ep 130  loss 0.290  acc 68.71  best 68.77  (594s)
+  ep 140  loss 0.186  acc 69.36  best 69.45  (639s)
+  ep 149  loss 0.165  acc 69.68  best 69.78  (679s)
+[uniform seed=0] final=69.68 best=69.78 -> results\stage1c_w16_uniform_seed0.json
+
+=== [8/18] w16 uniform seed 1
+[uniform w16 seed=1] device=cuda params=2.77M router=0.0K dyn_layers=16
+  ep   0  loss 4.384  acc 7.47  best 7.47  (19s)
+  ep  10  loss 1.871  acc 43.51  best 43.51  (62s)
+  ep  20  loss 1.572  acc 49.57  best 49.57  (106s)
+  ep  30  loss 1.460  acc 52.47  best 53.75  (150s)
+  ep  40  loss 1.396  acc 52.64  best 53.75  (195s)
+  ep  50  loss 1.321  acc 53.78  best 55.72  (239s)
+  ep  60  loss 1.252  acc 54.60  best 56.26  (284s)
+  ep  70  loss 1.167  acc 54.66  best 59.02  (329s)
+  ep  80  loss 1.059  acc 59.07  best 59.65  (373s)
+  ep  90  loss 0.956  acc 58.76  best 60.81  (417s)
+  ep 100  loss 0.810  acc 62.95  best 62.95  (460s)
+  ep 110  loss 0.658  acc 64.90  best 64.97  (506s)
+  ep 120  loss 0.478  acc 66.36  best 66.67  (550s)
+  ep 130  loss 0.295  acc 68.21  best 68.40  (593s)
+  ep 140  loss 0.188  acc 69.40  best 69.40  (638s)
+  ep 149  loss 0.164  acc 69.32  best 69.48  (678s)
+[uniform seed=1] final=69.32 best=69.48 -> results\stage1c_w16_uniform_seed1.json
+
+=== [9/18] w16 uniform seed 2
+[uniform w16 seed=2] device=cuda params=2.77M router=0.0K dyn_layers=16
+  ep   0  loss 4.397  acc 7.97  best 7.97  (19s)
+  ep  10  loss 1.860  acc 45.04  best 45.04  (63s)
+  ep  20  loss 1.565  acc 48.30  best 50.61  (107s)
+  ep  30  loss 1.451  acc 52.90  best 52.90  (150s)
+  ep  40  loss 1.379  acc 51.80  best 54.45  (196s)
+  ep  50  loss 1.316  acc 51.23  best 56.05  (240s)
+  ep  60  loss 1.234  acc 58.18  best 58.18  (285s)
+  ep  70  loss 1.159  acc 58.35  best 58.35  (329s)
+  ep  80  loss 1.059  acc 59.05  best 59.31  (374s)
+  ep  90  loss 0.947  acc 57.28  best 60.47  (418s)
+  ep 100  loss 0.818  acc 63.40  best 63.40  (461s)
+  ep 110  loss 0.658  acc 64.90  best 65.82  (505s)
+  ep 120  loss 0.467  acc 66.67  best 66.67  (548s)
+  ep 130  loss 0.299  acc 69.02  best 69.05  (593s)
+  ep 140  loss 0.188  acc 69.95  best 69.95  (637s)
+  ep 149  loss 0.167  acc 69.84  best 70.05  (677s)
+[uniform seed=2] final=69.84 best=70.05 -> results\stage1c_w16_uniform_seed2.json
+
+=== [10/18] w16 uniform seed 3
+[uniform w16 seed=3] device=cuda params=2.77M router=0.0K dyn_layers=16
+  ep   0  loss 4.395  acc 8.10  best 8.10  (19s)
+  ep  10  loss 1.859  acc 42.21  best 44.65  (64s)
+  ep  20  loss 1.549  acc 51.31  best 51.31  (107s)
+  ep  30  loss 1.440  acc 50.87  best 53.10  (151s)
+  ep  40  loss 1.379  acc 51.74  best 53.37  (194s)
+  ep  50  loss 1.309  acc 51.89  best 56.18  (239s)
+  ep  60  loss 1.239  acc 55.03  best 56.18  (282s)
+  ep  70  loss 1.151  acc 58.30  best 58.31  (326s)
+  ep  80  loss 1.059  acc 57.70  best 59.68  (371s)
+  ep  90  loss 0.953  acc 61.15  best 61.53  (415s)
+  ep 100  loss 0.813  acc 60.57  best 62.87  (459s)
+  ep 110  loss 0.647  acc 62.76  best 65.01  (502s)
+  ep 120  loss 0.470  acc 66.03  best 67.06  (545s)
+  ep 130  loss 0.293  acc 68.50  best 68.50  (589s)
+  ep 140  loss 0.185  acc 69.61  best 69.68  (634s)
+  ep 149  loss 0.164  acc 69.91  best 70.05  (674s)
+[uniform seed=3] final=69.91 best=70.05 -> results\stage1c_w16_uniform_seed3.json
+
+=== [11/18] w16 uniform seed 4
+[uniform w16 seed=4] device=cuda params=2.77M router=0.0K dyn_layers=16
+  ep   0  loss 4.392  acc 8.70  best 8.70  (19s)
+  ep  10  loss 1.903  acc 42.52  best 44.41  (64s)
+  ep  20  loss 1.585  acc 46.01  best 48.86  (107s)
+  ep  30  loss 1.472  acc 36.36  best 51.24  (150s)
+  ep  40  loss 1.392  acc 49.88  best 54.04  (193s)
+  ep  50  loss 1.332  acc 53.32  best 54.36  (238s)
+  ep  60  loss 1.246  acc 52.34  best 57.55  (283s)
+  ep  70  loss 1.159  acc 53.85  best 57.55  (327s)
+  ep  80  loss 1.067  acc 56.02  best 59.70  (372s)
+  ep  90  loss 0.951  acc 59.56  best 60.93  (416s)
+  ep 100  loss 0.821  acc 64.00  best 64.00  (459s)
+  ep 110  loss 0.650  acc 65.22  best 65.22  (503s)
+  ep 120  loss 0.472  acc 66.94  best 66.97  (546s)
+  ep 130  loss 0.293  acc 68.78  best 68.78  (589s)
+  ep 140  loss 0.189  acc 69.53  best 69.83  (634s)
+  ep 149  loss 0.165  acc 69.72  best 69.89  (673s)
+[uniform seed=4] final=69.72 best=69.89 -> results\stage1c_w16_uniform_seed4.json
+
+=== [12/18] w16 uniform seed 5
+[uniform w16 seed=5] device=cuda params=2.77M router=0.0K dyn_layers=16
+  ep   0  loss 4.409  acc 6.94  best 6.94  (19s)
+  ep  10  loss 1.873  acc 41.89  best 43.17  (64s)
+  ep  20  loss 1.574  acc 49.12  best 50.65  (108s)
+  ep  30  loss 1.472  acc 49.54  best 52.83  (152s)
+  ep  40  loss 1.392  acc 54.47  best 54.47  (195s)
+  ep  50  loss 1.317  acc 53.30  best 55.64  (240s)
+  ep  60  loss 1.248  acc 53.20  best 57.46  (289s)
+  ep  70  loss 1.164  acc 56.20  best 59.22  (336s)
+  ep  80  loss 1.068  acc 59.24  best 59.24  (383s)
+  ep  90  loss 0.951  acc 60.66  best 61.78  (432s)
+  ep 100  loss 0.809  acc 62.47  best 62.58  (480s)
+  ep 110  loss 0.649  acc 63.90  best 65.01  (526s)
+  ep 120  loss 0.464  acc 67.21  best 67.79  (573s)
+  ep 130  loss 0.295  acc 68.76  best 69.26  (619s)
+  ep 140  loss 0.188  acc 70.20  best 70.20  (667s)
+  ep 149  loss 0.167  acc 70.16  best 70.47  (708s)
+[uniform seed=5] final=70.16 best=70.47 -> results\stage1c_w16_uniform_seed5.json
+
+=== [13/18] w16 gap seed 0
+[gap w16 seed=0] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.395  acc 7.48  best 7.48  (29s)
+  ep  10  loss 1.878  acc 38.20  best 41.25  (166s)
+  ep  20  loss 1.538  acc 44.81  best 49.43  (298s)
+  ep  30  loss 1.423  acc 53.26  best 53.26  (432s)
+  ep  40  loss 1.331  acc 49.73  best 53.85  (565s)
+  ep  50  loss 1.260  acc 53.17  best 57.33  (695s)
+  ep  60  loss 1.173  acc 56.19  best 57.33  (827s)
+  ep  70  loss 1.084  acc 58.42  best 58.45  (960s)
+  ep  80  loss 0.962  acc 61.34  best 61.34  (1090s)
+  ep  90  loss 0.846  acc 62.17  best 62.70  (1225s)
+  ep 100  loss 0.680  acc 63.58  best 64.50  (1357s)
+  ep 110  loss 0.495  acc 64.28  best 65.10  (1485s)
+  ep 120  loss 0.290  acc 67.04  best 67.04  (1621s)
+  ep 130  loss 0.131  acc 69.81  best 69.81  (1751s)
+  ep 140  loss 0.075  acc 69.92  best 70.17  (1883s)
+  ep 149  loss 0.065  acc 70.35  best 70.35  (2004s)
+[gap seed=0] final=70.35 best=70.35 -> results\stage1c_w16_gap_seed0.json
+
+=== [14/18] w16 gap seed 1
+[gap w16 seed=1] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.396  acc 7.50  best 7.50  (29s)
+  ep  10  loss 1.910  acc 40.90  best 40.90  (160s)
+  ep  20  loss 1.559  acc 48.15  best 49.95  (298s)
+  ep  30  loss 1.438  acc 50.44  best 52.93  (432s)
+  ep  40  loss 1.353  acc 51.64  best 52.93  (563s)
+  ep  50  loss 1.264  acc 55.95  best 55.95  (700s)
+  ep  60  loss 1.182  acc 53.85  best 56.11  (834s)
+  ep  70  loss 1.086  acc 58.72  best 58.80  (966s)
+  ep  80  loss 0.972  acc 59.71  best 59.71  (1100s)
+  ep  90  loss 0.835  acc 58.96  best 61.90  (1232s)
+  ep 100  loss 0.674  acc 61.08  best 63.82  (1368s)
+  ep 110  loss 0.482  acc 64.69  best 64.69  (1501s)
+  ep 120  loss 0.278  acc 67.34  best 67.34  (1632s)
+  ep 130  loss 0.123  acc 69.46  best 69.85  (1769s)
+  ep 140  loss 0.068  acc 70.14  best 70.33  (1899s)
+  ep 149  loss 0.060  acc 70.51  best 70.55  (2020s)
+[gap seed=1] final=70.51 best=70.55 -> results\stage1c_w16_gap_seed1.json
+
+=== [15/18] w16 gap seed 2
+[gap w16 seed=2] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.393  acc 7.62  best 7.62  (28s)
+  ep  10  loss 1.835  acc 44.22  best 44.22  (161s)
+  ep  20  loss 1.515  acc 46.89  best 48.20  (291s)
+  ep  30  loss 1.406  acc 53.57  best 53.57  (428s)
+  ep  40  loss 1.328  acc 50.51  best 55.97  (599s)
+  ep  50  loss 1.260  acc 55.76  best 56.07  (738s)
+  ep  60  loss 1.174  acc 54.57  best 56.55  (875s)
+  ep  70  loss 1.087  acc 57.92  best 59.05  (1010s)
+  ep  80  loss 0.975  acc 61.08  best 61.08  (1147s)
+  ep  90  loss 0.843  acc 60.72  best 61.75  (1282s)
+  ep 100  loss 0.680  acc 64.01  best 64.01  (1411s)
+  ep 110  loss 0.505  acc 65.04  best 65.58  (1546s)
+  ep 120  loss 0.301  acc 67.63  best 67.63  (1677s)
+  ep 130  loss 0.141  acc 69.31  best 69.39  (1808s)
+  ep 140  loss 0.079  acc 70.44  best 70.61  (1941s)
+  ep 149  loss 0.067  acc 70.41  best 70.63  (2057s)
+[gap seed=2] final=70.41 best=70.63 -> results\stage1c_w16_gap_seed2.json
+
+=== [16/18] w16 gap seed 3
+[gap w16 seed=3] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.407  acc 7.48  best 7.48  (27s)
+  ep  10  loss 1.846  acc 46.12  best 46.12  (162s)
+  ep  20  loss 1.513  acc 44.88  best 50.79  (294s)
+  ep  30  loss 1.400  acc 46.79  best 52.41  (425s)
+  ep  40  loss 1.322  acc 47.59  best 55.96  (561s)
+  ep  50  loss 1.248  acc 52.80  best 58.21  (691s)
+  ep  60  loss 1.167  acc 55.65  best 58.21  (823s)
+  ep  70  loss 1.080  acc 56.50  best 59.54  (956s)
+  ep  80  loss 0.970  acc 59.83  best 60.78  (1087s)
+  ep  90  loss 0.838  acc 62.71  best 62.71  (1222s)
+  ep 100  loss 0.682  acc 63.57  best 64.92  (1356s)
+  ep 110  loss 0.486  acc 63.82  best 65.97  (1484s)
+  ep 120  loss 0.291  acc 67.05  best 67.48  (1619s)
+  ep 130  loss 0.130  acc 69.54  best 69.54  (1749s)
+  ep 140  loss 0.073  acc 70.57  best 70.57  (1879s)
+  ep 149  loss 0.063  acc 70.63  best 70.76  (2001s)
+[gap seed=3] final=70.63 best=70.76 -> results\stage1c_w16_gap_seed3.json
+
+=== [17/18] w16 gap seed 4
+[gap w16 seed=4] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.392  acc 7.21  best 7.21  (28s)
+  ep  10  loss 1.852  acc 42.65  best 42.65  (157s)
+  ep  20  loss 1.525  acc 51.95  best 51.95  (291s)
+  ep  30  loss 1.416  acc 50.32  best 52.67  (424s)
+  ep  40  loss 1.334  acc 53.41  best 54.83  (552s)
+  ep  50  loss 1.257  acc 55.30  best 55.30  (688s)
+  ep  60  loss 1.167  acc 55.72  best 58.72  (818s)
+  ep  70  loss 1.084  acc 56.85  best 58.72  (948s)
+  ep  80  loss 0.982  acc 58.58  best 60.16  (1084s)
+  ep  90  loss 0.839  acc 61.84  best 62.55  (1213s)
+  ep 100  loss 0.675  acc 64.35  best 64.35  (1345s)
+  ep 110  loss 0.489  acc 65.91  best 65.91  (1479s)
+  ep 120  loss 0.295  acc 67.33  best 68.07  (1609s)
+  ep 130  loss 0.128  acc 70.44  best 70.44  (1744s)
+  ep 140  loss 0.071  acc 70.75  best 70.75  (1878s)
+  ep 149  loss 0.063  acc 70.79  best 71.04  (1995s)
+[gap seed=4] final=70.79 best=71.04 -> results\stage1c_w16_gap_seed4.json
+
+=== [18/18] w16 gap seed 5
+[gap w16 seed=5] device=cuda params=2.79M router=21.3K dyn_layers=16
+  ep   0  loss 4.406  acc 7.44  best 7.44  (30s)
+  ep  10  loss 1.855  acc 42.14  best 42.14  (169s)
+  ep  20  loss 1.522  acc 48.42  best 50.37  (305s)
+  ep  30  loss 1.409  acc 50.21  best 51.62  (442s)
+  ep  40  loss 1.329  acc 49.12  best 54.65  (580s)
+  ep  50  loss 1.260  acc 52.13  best 56.39  (716s)
+  ep  60  loss 1.175  acc 57.58  best 58.72  (856s)
+  ep  70  loss 1.091  acc 58.92  best 58.92  (992s)
+  ep  80  loss 0.973  acc 57.69  best 60.48  (1127s)
+  ep  90  loss 0.849  acc 61.56  best 61.56  (1263s)
+  ep 100  loss 0.687  acc 63.93  best 64.19  (1398s)
+  ep 110  loss 0.498  acc 65.32  best 65.94  (1533s)
+  ep 120  loss 0.292  acc 67.59  best 68.00  (1666s)
+  ep 130  loss 0.134  acc 69.76  best 69.76  (1796s)
+  ep 140  loss 0.074  acc 70.40  best 70.68  (1932s)
+  ep 149  loss 0.065  acc 70.47  best 70.68  (2050s)
+[gap seed=5] final=70.47 best=70.68 -> results\stage1c_w16_gap_seed5.json
+
+done in 329.6 min
+
+now run:  python analyze_capacity.py
+
+==========================================================================
+CAPACITY SWEEP: dynamic convolution vs plain ResNet-18
+==========================================================================
+
+--- width 16 ----------------------------------------------------------
+  static    n=6  69.995 +/- 0.246     0.71M   final train loss 0.1643
+  uniform   n=6  69.772 +/- 0.279     2.77M   final train loss 0.1653
+  gap       n=6  70.527 +/- 0.160     2.79M   final train loss 0.0638
+
+  uniform - static: -0.223pp  95% CI [-0.500, +0.054]  p=0.0931  TOST=0.0251  -> EQUIVALENT to static
+  gap - static: +0.532pp  95% CI [+0.292, +0.771]  p=0.0023  TOST=0.6260  -> BEATS static
+
+--- width 32 ----------------------------------------------------------
+  static    n=6  74.872 +/- 0.262     2.82M   final train loss 0.0171
+  uniform   n=6  75.047 +/- 0.305    11.06M   final train loss 0.0171
+  gap       n=6  76.025 +/- 0.156    11.13M   final train loss 0.0131
+
+  uniform - static: +0.175pp  95% CI [-0.146, +0.496]  p=0.2206  TOST=0.0242  -> EQUIVALENT to static
+  gap - static: +1.153pp  95% CI [+0.940, +1.367]  p=0.0000  TOST=0.9997  -> BEATS static
+
+--- width 64 ----------------------------------------------------------
+  static    n=6  78.338 +/- 0.284    11.22M   final train loss 0.0081
+  uniform   n=6  78.387 +/- 0.202    44.18M   final train loss 0.0081
+  gap       n=6  78.418 +/- 0.299    44.46M   final train loss 0.0074
+
+  uniform - static: +0.048pp  95% CI [-0.332, +0.429]  p=0.7573  TOST=0.0142  -> EQUIVALENT to static
+  gap - static: +0.080pp  95% CI [-0.305, +0.465]  p=0.6158  TOST=0.0188  -> EQUIVALENT to static
+
+==========================================================================
+TREND: does the advantage grow as capacity shrinks?
+==========================================================================
+
+  uniform minus static, by width:
+    w16  -0.223pp  p=0.0931  ----
+    w32  +0.175pp  p=0.2206  +++
+    w64  +0.048pp  p=0.7573  
+    Pearson r with log2(width) = +0.667 (3 points, df=1; no p-value reported, see note in source)
+    -> equivalent to static at every width tested. The null holds
+       across capacity, which is the strongest form of the claim.
+
+  gap minus static, by width:
+    w16  +0.532pp  p=0.0023  ++++++++++
+    w32  +1.153pp  p=0.0000  +++++++++++++++++++++++
+    w64  +0.080pp  p=0.6158  +
+    Pearson r with log2(width) = -0.419 (3 points, df=1; no p-value reported, see note in source)
+    -> at w16 the advantage is real (+0.532pp, p=0.0023) and at w64 it is gone.
+       The width-64 null is a saturation effect. That is the finding,
+       and it explains why the published gains exist.
+
+Saturation check: a final train loss near 0.008 means the model
+memorised the training set. A width where that no longer happens is
+the one that answers the reviewer's objection.
+
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> 

@@ -1,0 +1,256 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,microtype,siunitx}
+\usepackage[table]{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{times}
+\usepackage[section]{placeins}
+\captionsetup{font=small,labelfont=bf}
+\sisetup{detect-all}
+\input{macros.tex}
+
+\title{\vspace{-1.3cm}\textbf{Routing, capacity and width in dynamic convolution\\ across five backbones}\\[3pt]
+\large Cross-model summary of the replicated 132-run program}
+\author{Ankit Kumar\\\small Mechatronics Department, University of Agder, Grimstad, Norway}
+\date{\small Generated from result files by \texttt{report/cross.py}}
+
+\begin{document}
+\maketitle
+\vspace{-0.4cm}
+\V{synthbanner}
+
+\noindent The 132-run ResNet-18 program (ten groups, 22 arms, six seeds)
+was repeated on each backbone with the same recipe, arms, seeds, margin
+and dynamic-layer rule. This summary puts \V{nmodels} backbones side by
+side (\V{nruns} runs, \V{gpuh} GPU-hours logged). Every number is
+computed from the result files by the code that builds the per-model
+reports, so the two always agree. Backbones that did not pass the gate or
+have no results are listed in Table~\ref{tab:xsummary}, not dropped.
+
+\section{The backbones}
+
+\begin{table}[h]\centering\small
+\caption{Per backbone, CIFAR-100 width 64: stored parameters of the static
+and $K=4$ \texttt{gap} networks, the share of the static network's
+parameters that sit in dynamic layers, the \texttt{gap} router's size
+relative to the static network, the gate run, the static mean over
+six seeds, runs present, diverged runs, groups that needed gradient
+accumulation, and logged GPU-hours.}
+\label{tab:xsummary}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l rr r r rr r r r r}
+\toprule
+backbone & static (M) & gap (M) & dyn.\ share (\%) & router (\% of static) & gate (\%) & static mean (\%) & runs & diverged & accum.\ groups & GPU-h \\
+\midrule
+%%XSUMMARY%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\section{Bank against routing}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{fig/x1_decomp.pdf}
+\caption{(a) Bank term, \texttt{uniform}$-$\texttt{static}, and (b)
+routing term, \texttt{gap}$-$\texttt{uniform}, for every backbone and
+condition (C: CIFAR-100, T: Tiny-ImageNet, number: width), \SI{95}{\percent}
+confidence intervals.}
+\label{fig:xdecomp}
+\end{figure}
+
+The bank term is equivalent to zero (TOST, $\pm$\SI{0.5}{pp}) in
+\V{bankeq} of \V{bankn} backbone--condition cells, and the routing term
+is positive with $p<0.05$ in \V{routpos} of \V{bankn}
+(Tables~\ref{tab:xbank},~\ref{tab:xrout}).
+
+\begin{table}[h]\centering\small
+\caption{Bank term (pp); $\equiv$ marks equivalence to zero by TOST.}
+\label{tab:xbank}
+\begin{tabular}{l rrrrr}
+\toprule
+backbone & C16 & C32 & C64 & T32 & T64 \\
+\midrule
+%%XBANK%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{Routing term (pp); * marks $p<0.05$.}
+\label{tab:xrout}
+\begin{tabular}{l rrrrr}
+\toprule
+backbone & C16 & C32 & C64 & T32 & T64 \\
+\midrule
+%%XROUT%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Total effect by width}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{fig/x2_total.pdf}
+\caption{\texttt{gap}$-$\texttt{static} against width, every backbone,
+\SI{95}{\percent} CI; the band is the margin.}
+\label{fig:xtotal}
+\end{figure}
+
+\begin{table}[h]\centering\small
+\caption{\texttt{gap}$-$\texttt{static} (pp) and verdict per condition.}
+\label{tab:xtotal}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l lllll}
+\toprule
+backbone & C16 & C32 & C64 & T32 & T64 \\
+\midrule
+%%XTOTAL%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\section{Equal parameter budgets}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{fig/x3_matched.pdf}
+\caption{(a) \texttt{static} at width $2c$ minus \texttt{gap} at width
+$c$, \SI{95}{\percent} CI; the number under each bar is the parameter ratio
+routed/plain, red where it is outside $\pm$10\,\%. (b) The static accuracy
+curve interpolated in log-parameters at the \texttt{gap} network's count,
+minus \texttt{gap}; missing points fall outside the static range.}
+\label{fig:xmatched}
+\end{figure}
+
+Width doubling is a matched-budget comparison only where nearly all
+parameters sit in dynamic layers. It is matched (within 10\,\%) in
+\V{nmatched} of \V{npairs} backbone--pair cells
+(Table~\ref{tab:xmatched}); elsewhere the table gives the ratio and the
+interpolated equal-parameter comparison.
+
+\begin{table}[h]\centering\small
+\caption{\texttt{static}($2c$) $-$ \texttt{gap}($c$), parameter ratio and
+the interpolated comparison at equal parameters (no CI).}
+\label{tab:xmatched}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l l r l l r l r}
+\toprule
+backbone & pair & $\Delta$ (pp) & \SI{95}{\percent} CI & $p$ & ratio & label & $\Delta$ at equal params \\
+\midrule
+%%XMATCHED%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{fig/x5_curves.pdf}
+\caption{CIFAR-100 accuracy against stored parameters, widths 16, 32 and
+64, per backbone.}
+\label{fig:xcurves}
+\end{figure}
+
+\section{Temperature, bank size and routing entropy}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{fig/x6_temp_k.pdf}
+\caption{(a) Annealed minus constant temperature, \texttt{gap},
+CIFAR-100. (b) $K=8$ minus $K=2$, CIFAR-100 width 32.}
+\label{fig:xtempk}
+\end{figure}
+
+\begin{table}[h]\centering\small
+\caption{Annealed $-$ constant (pp, $p$) per width, and $K=8-K=2$.}
+\label{tab:xtempk}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l lll r l}
+\toprule
+backbone & w16 & w32 & w64 & $K=8-K=2$ & verdict \\
+\midrule
+%%XTEMPK%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[h]\centering
+\includegraphics[width=0.62\textwidth]{fig/x4_entropy.pdf}
+\caption{Router flatness $1-\tilde H$ against the benefit over
+\texttt{uniform}, CIFAR-100, three widths and two recipes per backbone;
+$\rho$ is Spearman's correlation within a backbone.}
+\label{fig:xent}
+\end{figure}
+
+\begin{table}[h]\centering\small
+\caption{Entropy against benefit: points, Spearman $\rho$, and at width 16
+the ratio of constant to annealed $1-\tilde H$.}
+\label{tab:xent}
+\begin{tabular}{l r r r}
+\toprule
+backbone & points & $\rho$ & flatness ratio (w16) \\
+\midrule
+%%XENT%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Pre-registered predictions}
+
+Recorded in \texttt{PREREGISTRATION\_MODELS.md} on 30 September 2026 for
+the \V{nnew} new backbones before any of their runs. P1: the bank term is
+equivalent to zero in all five conditions (held for \V{p1held} of
+\V{nnew}). P2: \texttt{static} at width $2c$ beats \texttt{gap} at width
+$c$ in all three pairs (held for \V{p2held}). P3: the routing term is
+positive with $p<0.05$ in at least three conditions (held for
+\V{p3held}). ResNet-18 is shown for reference; for it these are post hoc.
+
+\begin{table}[h]\centering\small
+\caption{Pre-registered predictions per backbone.}
+\label{tab:xprereg}
+\begin{tabular}{l rl rl rl}
+\toprule
+& \multicolumn{2}{c}{P1 bank $\equiv 0$} & \multicolumn{2}{c}{P2 width wins} & \multicolumn{2}{c}{P3 routing $>0$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+backbone & count & outcome & count & outcome & count & outcome \\
+\midrule
+%%XPREREG%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Threats to validity}
+
+\paragraph{One recipe for five architectures.} Every backbone is trained
+with the ResNet-18 recipe (SGD, lr 0.1, 150 epochs). That is the design:
+a per-architecture recipe would change two things at once. It also means
+absolute accuracies, above all ConvNeXt-Tiny's, sit below what a tuned
+recipe reaches. The gate guards against a backbone the recipe does not
+train at all; it does not make the recipes equally good.
+
+\paragraph{Placement.} The ResNet-18 rule makes different shares of each
+network dynamic (Table~\ref{tab:xsummary}): nearly all of ResNet-18 and
+VGG-16, a smaller part of ResNet-50, and only depthwise layers in
+MobileNetV2 and ConvNeXt-Tiny. A backbone-to-backbone difference may come
+from this share rather than from the architecture.
+
+\paragraph{Router size.} Every backbone uses the ResNet-18 router, a
+two-layer MLP of hidden width $C_{\text{in}}/4$. Its size grows with the
+square of the input channels while a depthwise kernel grows linearly, so
+in the depthwise backbones the router is much larger than the bank it
+routes (Table~\ref{tab:xsummary}). The routing term
+\texttt{gap}$-$\texttt{uniform} then also compares networks of very
+different stored size; \texttt{frozen\_random} (an untrained router,
+held as buffers) is the control for this at CIFAR-100 width 64.
+
+\paragraph{Initialisation.} In the 132 ResNet-18 runs static convolutions
+kept PyTorch's default initialisation while bank kernels were
+Kaiming-normal. The new backbones use one scheme for both. The routing
+term (\texttt{gap}$-$\texttt{uniform}) is unaffected in either case,
+since both arms have banks; the bank term of ResNet-18 compares two
+initialisations as well as two architectures.
+
+\paragraph{Gradient accumulation.} Where batch 128 did not fit, a group
+ran with micro-batches and accumulation (Table~\ref{tab:xsummary}). The
+optimiser steps and schedule are unchanged; BatchNorm statistics are per
+micro-batch. The choice is per group, so every paired comparison within a
+group shares it.
+
+\end{document}

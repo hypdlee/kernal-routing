@@ -1,0 +1,286 @@
+\documentclass[10.5pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{booktabs,tabularx,xcolor,enumitem,microtype,array}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\definecolor{code}{HTML}{F4F5F7}
+\definecolor{rule}{HTML}{C9CDD3}
+\definecolor{accent}{HTML}{1F4E79}
+\definecolor{warn}{HTML}{8A1C1C}
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{code},frame=single,rulecolor=\color{rule},
+  breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,
+  aboveskip=6pt,belowskip=8pt,xleftmargin=4pt,xrightmargin=4pt,framesep=4pt}
+\titleformat{\section}{\large\bfseries\color{accent}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\setlist{itemsep=2pt,topsep=3pt}
+\newcommand{\cmd}[1]{\texttt{#1}}
+\newcommand{\notebox}[2]{\par\smallskip\noindent\fcolorbox{rule}{white}{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{\small\textbf{#1}\enspace #2}}\par\smallskip}
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize KernelRoute: running the five-backbone program}\fancyfoot[R]{\footnotesize\thepage}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+
+\begin{document}
+
+{\LARGE\bfseries\color{accent} Run guide: the 132-run program on four more backbones}\par\smallskip
+{\large What to run, in which order, when, and how to check it}\par\smallskip
+{\small Ankit Kumar, University of Agder \quad\textbullet\quad 1 October 2026 \quad\textbullet\quad for the package \cmd{kernelroute-models.zip}, Windows PowerShell, one RTX 4070 Ti}
+\vspace{6pt}\hrule\vspace{8pt}
+
+\section*{The short version}
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=1.6em]
+\item \textbf{Day 1, about 1 hour:} unzip, install, get the data, commit the pre-registration, run the tests (Section~\ref{sec:setup}).
+\item \textbf{Day 1, evening:} start the program with one command and leave it running (Section~\ref{sec:run}):
+\begin{lstlisting}
+python run_all_models.py
+\end{lstlisting}
+\item \textbf{Every day, 2 minutes:} check progress and the log (Section~\ref{sec:daily}).
+\item \textbf{At four check points:} look at each backbone's gate result and build its report as soon as it finishes (Section~\ref{sec:when}).
+\item \textbf{At the end:} build the cross-model report and send me the results folder (Section~\ref{sec:reports}).
+\end{enumerate}
+
+The program trains 528 networks: 132 per backbone, in the order MobileNetV2, VGG-16, ResNet-50, ConvNeXt-Tiny. Everything is automatic: memory, resuming after a crash, skipping a backbone that does not train. Expect roughly 7 to 10 weeks on one GPU (Section~\ref{sec:when}).
+
+\section{What gets run}\label{sec:what}
+
+Each backbone repeats the ResNet-18 study exactly: the same ten groups, the same arms, six seeds (0 to 5), the same recipe (SGD Nesterov 0.9, lr 0.1, weight decay $5\times10^{-4}$, batch 128, 5 warm-up epochs then cosine, 150 epochs, crop and flip, bf16).
+
+\begin{center}\small
+\begin{tabular}{r l r r l l r}
+\toprule
+group & dataset & width & $K$ & temperature & arms & runs \\
+\midrule
+1 & CIFAR-100 & 64 & 4 & 1 & static, uniform, gap, shuffled, frozen\_random & 30 \\
+2 & CIFAR-100 & 32 & 4 & 1 & static, uniform, gap & 18 \\
+3 & CIFAR-100 & 16 & 4 & 1 & static, uniform, gap & 18 \\
+4 & CIFAR-100 & 32 & 2 & 1 & gap & 6 \\
+5 & CIFAR-100 & 32 & 8 & 1 & gap & 6 \\
+6 & Tiny-ImageNet & 32 & 4 & 1 & static, uniform, gap & 18 \\
+7 & CIFAR-100 & 64 & 4 & 30$\to$1 & gap & 6 \\
+8 & CIFAR-100 & 32 & 4 & 30$\to$1 & gap & 6 \\
+9 & CIFAR-100 & 16 & 4 & 30$\to$1 & gap & 6 \\
+10 & Tiny-ImageNet & 64 & 4 & 1 & static, uniform, gap (seed by seed) & 18 \\
+\midrule
+\multicolumn{6}{l}{per backbone} & 132 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Inside a group the runner goes arm by arm (all six seeds of \cmd{static}, then \cmd{uniform}, and so on). Group 10 goes seed by seed, so an interruption still leaves complete static/uniform/gap triplets. The very first run of every backbone is \textbf{the gate}: \cmd{static}, CIFAR-100, width 64, seed 0.
+
+\section{One-time setup (Day 1, about 1 hour)}\label{sec:setup}
+
+\subsection{Unzip and install}
+Unzip \cmd{kernelroute-models.zip} into a folder, for example \cmd{C:\textbackslash research\textbackslash kernelroute}. If you still have the ResNet-18 folder, keep it separate; you will point the reports at its \cmd{results} folder later. Open PowerShell in the new folder:
+\begin{lstlisting}
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+pip install -r requirements.txt
+python -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+\end{lstlisting}
+The last line must print \cmd{True} and your GPU's name. If activation is blocked, run \cmd{Set-ExecutionPolicy -Scope CurrentUser RemoteSigned} once and try again.
+
+For the reports you also need LaTeX: install MiKTeX and make sure \cmd{pdflatex} works in a new PowerShell window (\cmd{pdflatex --version}).
+
+\subsection{Data}
+CIFAR-100 downloads itself on the first run. Tiny-ImageNet is needed from group 6 onward. If you already have it from the ResNet-18 study, copy the folder \cmd{tiny-imagenet-200} into \cmd{.\textbackslash data}. Otherwise:
+\begin{lstlisting}
+python download_tinyimagenet.py --root .\data
+\end{lstlisting}
+
+\subsection{Commit the pre-registration (before the first run finishes)}
+\cmd{PREREGISTRATION\_MODELS.md} records the predictions, gate floors and rules dated 30 September 2026. It only counts as a pre-registration if it is time-stamped before results exist. Do one of these, unmodified:
+\begin{itemize}
+\item with git, then push:
+\begin{lstlisting}
+git add PREREGISTRATION_MODELS.md
+git commit -m "pre-registration, five backbones"
+\end{lstlisting}
+\item or upload it to OSF (osf.io) as a registration;
+\item or, at minimum, email it to yourself and your supervisors.
+\end{itemize}
+
+\subsection{Run the tests (about 20 minutes, CPU is fine)}
+These prove the code does what the paper says before you spend GPU weeks on it.
+\begin{lstlisting}
+python tests\test_paths.py
+python tests\test_models.py all
+python tests\test_train.py all
+python tests\test_runner.py all
+python tests\test_analysis.py all
+python tests\test_report.py all
+\end{lstlisting}
+Each one must end with \cmd{ok} (or \cmd{all tests passed}) and no \cmd{Traceback}. Two checks print \emph{skipped} or \emph{built only} on your machine because they compare against files that only existed in my workspace; that is expected.
+
+\subsection{Look before you leap}
+\begin{lstlisting}
+python run_all_models.py --dry-run
+\end{lstlisting}
+This prints all 528 training commands and runs nothing. Skim it: the first command of each backbone should be the static width-64 seed-0 gate run.
+
+\section{Starting the program}\label{sec:run}
+
+\subsection{Prepare the PC}
+\begin{itemize}
+\item Settings, System, Power: \emph{Sleep: never} and \emph{Screen off} as you like. Plug the laptop in if it is one.
+\item Pause Windows Update for the longest period offered (Settings, Windows Update). A forced reboot is harmless (the program resumes) but loses up to one epoch.
+\item Close other GPU programs (games, browser video). They take GPU memory and can cause an out-of-memory error.
+\end{itemize}
+
+\subsection{Start}
+\begin{lstlisting}
+cd C:\research\kernelroute
+.\.venv\Scripts\Activate.ps1
+python run_all_models.py
+\end{lstlisting}
+That one command runs all four backbones in order into \cmd{.\textbackslash results\_models\textbackslash <backbone>\textbackslash}. Leave the window open. To run one backbone only: \cmd{python run\_all\_models.py --models mobilenetv2}.
+
+\subsection{What happens automatically}
+\begin{description}[leftmargin=1.2em,style=nextline]
+\item[Probe (a few minutes before each group)] The runner tries a few training steps and one evaluation pass of the group's heaviest arm at batch 128. If it runs out of memory, it retries at 64$\times$2, 32$\times$4, 16$\times$8 (gradient accumulation: same data order, same optimiser steps and learning-rate schedule). The choice is saved in \cmd{plan.json}, written to \cmd{DEVIATIONS.md} if it is not 128, and the log prints a measured time per run for the group.
+\item[Gate (the first run of each backbone)] If the static width-64 seed-0 run ends below the floor (MobileNetV2 65\,\%, VGG-16 65\,\%, ResNet-50 70\,\%, ConvNeXt-Tiny 60\,\%), the runner writes \cmd{GATE\_FAILED.json}, skips that backbone's other 131 runs, and moves on to the next backbone.
+\item[Each run] writes one result file, for example \cmd{vgg16\_\_cifar100\_\_w32\_\_K4\_\_const\_gap\_seed3.json}, and a checkpoint every epoch while it is running.
+\item[Divergence] A run whose loss becomes NaN leaves a \cmd{.DIVERGED} marker and the program continues. It is reported, never retried.
+\item[Out of memory mid-run] The group steps down one micro-batch size from that run on, logs it, and redoes the run.
+\end{description}
+
+\subsection{Stopping and resuming}
+Press Ctrl+C at any time, or let Windows reboot. To continue, run \textbf{exactly the same command} again. Finished runs are skipped; an interrupted run continues from its last finished epoch. Nothing else to do.
+
+\section{When: timeline and check points}\label{sec:when}
+
+The hours below are an \textbf{estimate}: the ResNet-18 times you logged, scaled by how much arithmetic each backbone does. MobileNetV2 and ConvNeXt-Tiny are built from depthwise convolutions, which run slower than their arithmetic suggests, so treat their numbers as a lower bound. The log line after each probe gives the measured figure within the first hour of every group; trust that over this table.
+
+\begin{center}\small
+\begin{tabular}{l l r r l}
+\toprule
+when & what runs & est.\ GPU-h & est.\ days & check point (you) \\
+\midrule
+Day 1 & setup, tests, start & -- & -- & tests pass; pre-registration committed \\
+Day 1 to 2 or 4 & MobileNetV2 & 35+ & 1.5 to 4.5 & gate result after first run (about 1 h) \\
+next & VGG-16 (BN) & 121 & about 5 & gate; MobileNetV2 report \\
+next & ResNet-50 & 467 & about 20 & gate; VGG-16 report \\
+next & ConvNeXt-Tiny & 518+ & 22 to 30+ & gate; ResNet-50 report \\
+end & reports & -- & 1 & ConvNeXt report, cross-model report \\
+\midrule
+\multicolumn{2}{l}{total} & about 1{,}140+ & \multicolumn{2}{l}{roughly 7 to 10 weeks on one GPU} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{At each check point:}
+\begin{enumerate}
+\item \textbf{About an hour after a backbone starts:} open its \cmd{runner.log} and find the gate result (\cmd{finished in ... min, final XX.XX}). Above the floor: nothing to do. Below: see Section~\ref{sec:trouble}, \emph{gate failed}.
+\item \textbf{When a backbone finishes} (the log says \cmd{all 132 jobs present}): build its report (Section~\ref{sec:reports}) and read the coverage table on page 1. You can do this while the next backbone trains.
+\item \textbf{Halfway through a long backbone}, if you are curious: the report also builds from partial results; missing runs show as \cmd{-{}-} and are listed.
+\end{enumerate}
+
+\textbf{Two GPUs?} The program splits cleanly: run two PowerShell windows,
+\begin{lstlisting}
+$env:CUDA_VISIBLE_DEVICES=0; python run_all_models.py --models mobilenetv2 vgg16
+$env:CUDA_VISIBLE_DEVICES=1; python run_all_models.py --models resnet50 convnext_tiny
+\end{lstlisting}
+Use the same GPU model on both, or report which backbone ran on which GPU.
+
+\section{Daily routine (2 minutes)}\label{sec:daily}
+
+In a second PowerShell window, in the same folder:
+\begin{lstlisting}
+.\.venv\Scripts\Activate.ps1
+python run_all_models.py --status
+Get-Content .\results_models\resnet50\runner.log -Tail 15
+\end{lstlisting}
+\cmd{-{}-status} prints, per backbone, runs done, runs diverged, of 132, and whether the gate failed. It reads files only; it is safe while training runs.
+
+\textbf{What normal looks like in the log:} one line \cmd{[n/132] <group> <arm> seed s (micro-batch m); k left} when a run starts and one line \cmd{finished in X min, final YY.YY} when it ends. Lines starting with \cmd{DEVIATION} are expected for large models on Tiny-ImageNet and are reported automatically. To watch live: add \cmd{-Wait} to \cmd{Get-Content}.
+
+\textbf{Worth a look:} \cmd{nvidia-smi} (GPU in use, memory below 12\,GB), and that \cmd{k left} keeps going down from one day to the next.
+
+\section{Building the reports}\label{sec:reports}
+
+\subsection{One backbone, as soon as it finishes}
+\begin{lstlisting}
+python report\build_model_report.py --model mobilenetv2 --results .\results_models\mobilenetv2
+\end{lstlisting}
+Output: \cmd{report\textbackslash out\textbackslash mobilenetv2\textbackslash report\_mobilenetv2.pdf}, with the same 10 figures and 13 tables as the ResNet-18 paper, plus a coverage table (missing runs, divergences, micro-batch changes) and an equal-parameter table. The folder can be uploaded to Overleaf as it is. Replace \cmd{mobilenetv2} with \cmd{vgg16}, \cmd{resnet50}, \cmd{convnext\_tiny}.
+
+\subsection{ResNet-18 from your original result files}
+Point it at the \cmd{results} folder of the ResNet-18 study (the 132 JSON files):
+\begin{lstlisting}
+python report\build_model_report.py --model resnet18 --results C:\research\kernelroute-stage1\results
+python report\build_paper.py --results C:\research\kernelroute-stage1\results
+\end{lstlisting}
+The second command rebuilds the paper itself, with the corrected parameter counts and the initialisation disclosure, from your files. It should match \cmd{KernelRoute\_Report\_revised.pdf}.
+
+\subsection{All five side by side (at the end)}
+\begin{lstlisting}
+python report\cross.py --results resnet18=C:\research\kernelroute-stage1\results mobilenetv2=.\results_models\mobilenetv2 vgg16=.\results_models\vgg16 resnet50=.\results_models\resnet50 convnext_tiny=.\results_models\convnext_tiny
+\end{lstlisting}
+Output: \cmd{report\textbackslash out\textbackslash cross\textbackslash cross\_models.pdf}. A backbone whose gate failed appears as a row saying so; it is not dropped.
+
+\notebox{The analysis refuses to run}{if two files claim the same run, if the recipe differs inside one backbone, or if a run's parameter count does not match \cmd{PARAMS\_EXPECTED.md} (wrong width, $K$ or arm). The message names the file. One-epoch probe or test files in the folder are ignored and listed, not averaged.}
+
+\section{Rules that keep the results valid}\label{sec:rules}
+
+\begin{enumerate}
+\item \textbf{Do not change the code, recipe or gate floors once the first run has started.} If something must change, stop, write down what and why with the date, and tell me before continuing.
+\item \textbf{Never delete or rerun a finished run to get a better number.} If a run must be redone for a technical reason (corrupted file, wrong GPU), move the old file to a folder \cmd{excluded}, write the reason in \cmd{DEVIATIONS.md}, and rerun.
+\item \textbf{Do not lower a gate floor after seeing a failed gate.} A failed gate is a result to report.
+\item \textbf{Keep the software the same.} Do not upgrade PyTorch, the NVIDIA driver or Python during the program. Every result file records the versions it ran with.
+\item \textbf{One GPU type per backbone}, so the timing columns mean something.
+\end{enumerate}
+
+\section{When something goes wrong}\label{sec:trouble}
+
+\renewcommand{\arraystretch}{1.25}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.1cm} X}
+\toprule
+what you see & what to do \\
+\midrule
+PC rebooted, window closed, power cut & Run the same command again. It resumes. \\
+\cmd{run failed (rc=1); stopping} & Open \cmd{train.log} in that backbone's folder and read the last 30 lines. Usually a full disk or a driver error. Fix it, rerun the same command. If unclear, send me the 30 lines. \\
+\cmd{GATE FAILED <backbone>} & Nothing to do; the runner moved on. Note it. Do not lower the floor. Send me \cmd{GATE\_FAILED.json} and the gate run's JSON; whether to try a tuned recipe is a separate, reported decision. \\
+\cmd{DEVIATION ...: micro-batch 64 x 2} & Expected for big models on Tiny-ImageNet. Recorded and reported automatically. \\
+\cmd{out of memory even at micro-batch 16} & Another program is using the GPU, or the GPU has less than 12\,GB. Close other programs and rerun. \\
+\cmd{DIVERGED} in the log & Expected occasionally. Do not rerun. It is counted and reported. More than three in one backbone: tell me. \\
+\cmd{Tiny-ImageNet not prepared} & Run \cmd{python download\_tinyimagenet.py --root .\textbackslash data}, then the same command; it resumes there. \\
+Disk full & Each result file is small; checkpoints are deleted when a run finishes. Free space, rerun. Keep at least 20\,GB free. \\
+\cmd{k left} has not moved for a day & Check \cmd{nvidia-smi}. If the GPU is idle, Ctrl+C and rerun the same command. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{What to send me}\label{sec:send}
+
+After each backbone, or at the end:
+\begin{lstlisting}
+Compress-Archive -Path .\results_models -DestinationPath results_models.zip
+\end{lstlisting}
+Send \cmd{results\_models.zip} (result files, \cmd{runner.log}, \cmd{plan.json}, \cmd{DEVIATIONS.md}; it holds no checkpoints once runs finish) and the report PDFs. With those I can check every number and write up the cross-architecture section.
+
+\section*{Where things are}
+\begin{center}\small
+\begin{tabular}{l l}
+\toprule
+file or folder & what \\
+\midrule
+\cmd{run\_all\_models.py} & the runner (probe, gate, resume, divergence) \\
+\cmd{src\textbackslash program.py} & the 132-run program, defined once \\
+\cmd{PREREGISTRATION\_MODELS.md} & predictions, floors, rules (commit before running) \\
+\cmd{README\_MODELS.md} & the same commands as this guide, as text \\
+\cmd{PARAMS\_EXPECTED.md} & expected parameter count of every run \\
+\cmd{COMPUTE\_ESTIMATE.md} & the time estimate in Section~\ref{sec:when} \\
+\cmd{results\_models\textbackslash<backbone>\textbackslash} & results, \cmd{runner.log}, \cmd{train.log}, \cmd{plan.json}, \cmd{DEVIATIONS.md} \\
+\cmd{report\textbackslash out\textbackslash} & the PDFs you build \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

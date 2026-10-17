@@ -1,0 +1,416 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,microtype,siunitx}
+\usepackage[table]{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{times}
+\usepackage[section]{placeins}
+\captionsetup{font=small,labelfont=bf}
+\sisetup{detect-all}
+\input{macros.tex}
+\input{verdicts.tex}
+
+\title{\vspace{-1.3cm}\textbf{Routing, capacity and width in dynamic convolution:\\ \V{modelname}}\\[3pt]
+\large Replication of the 132-run ResNet-18 program}
+\author{Ankit Kumar\\\small Mechatronics Department, University of Agder, Grimstad, Norway}
+\date{\small Generated from result files by \texttt{report/build\_model\_report.py}}
+
+\begin{document}
+\maketitle
+\vspace{-0.4cm}
+\V{synthbanner}
+
+\noindent This document reports one backbone of the cross-architecture
+replication. It is generated from the result files: every number, table
+and figure is computed, and every sentence states what a test returned.
+Interpretation across backbones is in the cross-model report. Method,
+statistical protocol and the pre-registered margin are those of the
+ResNet-18 study and are not repeated here.
+
+\section{Setup and coverage}\label{sec:setup}
+
+\paragraph{Backbone.} \V{modelname}, adapted to $32\times32$ and
+$64\times64$ inputs as recorded in \texttt{src/models}. Width 64 is the
+standard network; widths 32 and 16 scale every channel count by $1/2$
+and $1/4$. Dynamic layers follow the ResNet-18 rule literally (every
+$k\times k$ convolution with $k>1$ inside the blocks; stem, $1\times1$
+convolutions, shortcuts, downsampling layers and head static): here
+\V{placement}, \V{ndyn} layers. Initialisation: \V{initdesc}.
+
+\paragraph{Size.} At CIFAR-100 width 64 the static network stores
+\V{pstatic}\,M parameters and the $K=4$ \texttt{gap} network
+\V{pgap}\,M, of which \V{prouter}\,K are router parameters
+(Table~\ref{tab:config}). The bank adds \V{pbankadd}\,M to the static
+network; the router is \V{prouterpct}\,\% of the static network's size.
+The router is the ResNet-18 design (a two-layer MLP with hidden width
+$C_{\text{in}}/4$ on the global descriptor), so its size grows with the
+square of a layer's input channels while a depthwise kernel grows
+linearly: where dynamic layers are depthwise, the routed arms carry many
+more parameters than the bank. The \texttt{gap}$-$\texttt{uniform}
+routing term includes them.
+
+\paragraph{Gate.} The first run, static, CIFAR-100, width 64, seed 0,
+reached \V{gateacc}\,\% against a pre-registered floor of
+\V{gatefloor}\,\%: \V{gateverdict}.
+
+\paragraph{Coverage.} \V{nruns} of 132 runs are present; \V{nmissing}
+are missing, of which \V{ndiverged} diverged (non-finite training loss).
+\V{ndevgroups} group(s) ran with gradient accumulation because batch 128
+did not fit in memory. Table~\ref{tab:cover} lists every missing run and
+every deviation. Paired tests use the seeds both arms have; a verdict
+computed on fewer than six pairs carries its $n$.
+
+\begin{table}[!htbp]\centering\small
+\caption{Missing runs, divergences and deviations from the recipe.}
+\label{tab:cover}
+\begin{tabular}{l r r l l r l}
+\toprule
+dataset & width & $K$ & $\tau$ & arm & seed & status \\
+\midrule
+%%COVER%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{CIFAR-100 at the standard width}\label{sec:w64}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{fig/f3_w64.pdf}
+\caption{CIFAR-100, width 64. (a) Every run of the five arms; bars are
+arm means and the shaded band is $\pm$\SI{0.5}{pp} around
+\texttt{static}. (b) Router flatness $1-\tilde H$ per seed, log scale;
+\texttt{uniform} is exactly zero and is drawn at the axis floor.}
+\label{fig:w64}
+\end{figure}
+
+Against \texttt{static}: \V{wsixfour}. \V{wsixfourneq} of the four
+arms are equivalent to \texttt{static} within \SI{0.5}{pp}. The largest
+gap between arm means is \V{spread64}\,pp against a median within-arm
+seed standard deviation of \V{seedsd64}\,pp; one-way ANOVA across the
+five arms $F=\V{anovaF}$, $p=\V{anovaP}$. \texttt{frozen\_random}$-$\texttt{gap}
+$=\V{frzVgap}$\,pp ($p=\V{frzVgapP}$, $p_{\text{TOST}}=\V{frzVgapT}$).
+Power for \texttt{gap}$-$\texttt{uniform} here: paired sd \V{powsd}\,pp,
+minimum detectable difference \V{mde}\,pp, simulated power \V{pwA}, \V{pwB}
+and \V{pwC}\,\% at true effects of 0.25, 0.5 and \SI{1.0}{pp}.
+Table~\ref{tab:entw64} gives the routing entropy by arm.
+
+\begin{table}[!htbp]\centering\small
+\caption{Routing entropy by arm, CIFAR-100 width 64, per-seed means.}
+\label{tab:entw64}
+\begin{tabular}{l rrr r}
+\toprule
+arm & mean $\tilde H$ & min & max & $1-\tilde H$ \\
+\midrule
+%%ENTW64%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{The capacity sweep on CIFAR-100}\label{sec:capacity}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{fig/f1_sweep.pdf}
+\caption{CIFAR-100. (a) Accuracy against base width, $\pm1$ standard
+deviation over six seeds. (b) Paired difference against \texttt{static}
+with \SI{95}{\percent} confidence intervals; the band is the
+$\pm$\SI{0.5}{pp} margin.}
+\label{fig:sweep}
+\end{figure}
+
+\texttt{gap}$-$\texttt{static}: \V{caplist} (Figure~\ref{fig:sweep},
+Table~\ref{tab:vsstatic}).
+
+\section{Bank against routing}\label{sec:decomp}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=0.84\textwidth]{fig/f4_decomp.pdf}
+\caption{The total effect split into a bank term
+(\texttt{uniform}$-$\texttt{static}) and a routing term
+(\texttt{gap}$-$\texttt{uniform}), five conditions, \SI{95}{\percent}
+confidence intervals.}
+\label{fig:decomp}
+\end{figure}
+
+The bank term is equivalent to zero in \V{nbankeq} of 5 conditions;
+the others: \V{bankother}. The routing term is positive with $p<0.05$ in
+\V{nroutpos} of 5 conditions: \V{routlist} (Table~\ref{tab:decomp},
+Figure~\ref{fig:decomp}).
+
+\begin{table}[!htbp]\centering\small
+\caption{Decomposition. Bank verdicts use TOST at $\pm$\SI{0.5}{pp}.}
+\label{tab:decomp}
+\begin{tabular}{l r rll rl rl}
+\toprule
+& & \multicolumn{3}{c}{bank (\texttt{uniform}$-$\texttt{static})}
+& \multicolumn{2}{c}{routing (\texttt{gap}$-$\texttt{uniform})}
+& \multicolumn{2}{c}{total} \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+dataset & width & $\Delta$ (pp) & $p_{\text{TOST}}$ & verdict & $\Delta$ (pp) & $p$ & $\Delta$ (pp) & $p$ \\
+\midrule
+%%DECOMP%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Bank size}\label{sec:ksweep}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=0.84\textwidth]{fig/f6_k.pdf}
+\caption{CIFAR-100 width 32, \texttt{gap} with $K=2,4,8$. (a) Difference
+against \texttt{static}, \SI{95}{\percent} CI. (b) Stored parameters and
+minutes per run.}
+\label{fig:k}
+\end{figure}
+
+$K=8$ against $K=2$: \V{keight}\,pp (\V{keightv}) for
+\V{kparratio}$\times$ the parameters (Tables~\ref{tab:k},~\ref{tab:kpairs}).
+
+\begin{table}[!htbp]\centering\small
+\caption{Bank size at CIFAR-100 width 32. Differences are against \texttt{static}.}
+\label{tab:k}
+\begin{tabular}{l rr rl l rr}
+\toprule
+$K$ & accuracy & sd & $\Delta$ (pp) & \SI{95}{\percent} CI & $p$ & params (M) & min/run \\
+\midrule
+%%KSWEEP%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]\centering\small
+\caption{Pairwise comparisons between bank sizes.}
+\label{tab:kpairs}
+\begin{tabular}{l rl ll l}
+\toprule
+comparison & $\Delta$ (pp) & \SI{95}{\percent} CI & $p$ & $p_{\text{TOST}}$ & verdict \\
+\midrule
+%%KPAIRS%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Tiny-ImageNet}\label{sec:tin}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{fig/f7_tin.pdf}
+\caption{Tiny-ImageNet. (a) Every run at widths 32 and 64. (b)
+\texttt{gap}$-$\texttt{static} against width on both datasets,
+\SI{95}{\percent} CI; the band is the margin.}
+\label{fig:tin}
+\end{figure}
+
+\texttt{gap}$-$\texttt{static} is \V{tin32}\,pp at width 32 (\V{tin32v})
+and \V{tin64}\,pp at width 64 (\V{tin64v}).
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{fig/f8_prediction.pdf}
+\caption{(a) Training loss, seed 0, sampled every ten epochs. (b)
+\texttt{gap}$-$\texttt{static} against the static arm's final training
+loss; the shaded region is where the ResNet-18 study predicted a null.}
+\label{fig:pred}
+\end{figure}
+
+Across the five conditions the Spearman correlation between the static
+arm's final training loss and \texttt{gap}$-$\texttt{static} is
+$\rho=\V{satrho}$ (Table~\ref{tab:satur}, Figure~\ref{fig:pred}).
+
+\begin{table}[!htbp]\centering\small
+\caption{Five conditions ordered by the final training loss of the
+static arm.}
+\label{tab:satur}
+\begin{tabular}{l r r rl l}
+\toprule
+dataset & width & static train loss & $\texttt{gap}-\texttt{static}$ (pp) & \SI{95}{\percent} CI & verdict \\
+\midrule
+%%SATUR%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Equal parameter budgets}\label{sec:matched}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{fig/f5_matched.pdf}
+\caption{Accuracy against stored parameters. Arrows join \texttt{gap} at
+width $c$ to \texttt{static} at width $2c$; the label is the accuracy
+difference, and the parameter ratio where it is outside $\pm$10\,\%.}
+\label{fig:matched}
+\end{figure}
+
+The ResNet-18 comparison of \texttt{gap} at width $c$ with
+\texttt{static} at width $2c$ was a matched-budget comparison because a
+$K=4$ bank and a doubling of width both multiply the parameters of the
+dynamic layers by four. That holds only where almost every parameter is
+in a dynamic layer. Here \V{nmatchedpairs} of 3 pairs are within
+10\,\% and are called matched: \V{matchlist} (Table~\ref{tab:matched}).
+Table~\ref{tab:interp} adds the comparison at equal parameters: the
+static accuracy curve interpolated linearly in log-parameters between the
+static widths that were run, evaluated at the \texttt{gap} network's
+count. It is an interpolation, not a run, and has no confidence interval.
+
+\begin{table}[!htbp]\centering\small
+\caption{\texttt{gap} at width $c$ against \texttt{static} at width $2c$.
+$\Delta$ is plain minus routed. The last column is the routed network's
+parameters divided by the plain one's; a pair is called matched only
+within 10\,\%.}
+\label{tab:matched}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l l l rr rl l r l}
+\toprule
+dataset & routed & plain & routed & plain & $\Delta$ (pp) & \SI{95}{\percent} CI & $p$ & min/run & param ratio \\
+\midrule
+%%MATCHED%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[!htbp]\centering\small
+\caption{\texttt{gap} against the static accuracy curve at equal
+parameters (interpolated, no CI).}
+\label{tab:interp}
+\begin{tabular}{l l r r r r}
+\toprule
+dataset & routed & params (M) & routed acc. & static at equal params & $\Delta$ (pp) \\
+\midrule
+%%INTERP%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Temperature schedule}\label{sec:temp}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{fig/f9_temp.pdf}
+\caption{Constant $\tau=1$ against $\tau$ annealed from 30 to 1 over ten
+epochs, CIFAR-100. (a) \texttt{gap}$-$\texttt{static}. (b) Router
+flatness. (c) Flatness against benefit over \texttt{uniform}.}
+\label{fig:temp}
+\end{figure}
+
+Annealed minus constant, \texttt{gap}: \V{templist} (Table~\ref{tab:temp}).
+
+\begin{table}[!htbp]\centering\small
+\caption{Temperature schedule, CIFAR-100.}
+\label{tab:temp}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{r rr rl r rl rl}
+\toprule
+& \multicolumn{2}{c}{accuracy} & \multicolumn{2}{c}{annealed $-$ constant}
+& \multicolumn{3}{c}{vs \texttt{static}} & \multicolumn{2}{c}{annealed vs \texttt{uniform}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-8}\cmidrule(lr){9-10}
+width & $\tau=1$ & annealed & $\Delta$ & $p$ & $\tau=1$ & annealed & $p_{\text{TOST}}$ & $\Delta$ & verdict \\
+\midrule
+%%TEMP%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\section{Routing entropy and routing benefit}\label{sec:entropy}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=0.74\textwidth]{fig/f10_entropy.pdf}
+\caption{CIFAR-100 width 16, both temperature recipes. (a) Router
+flatness. (b) Benefit of \texttt{gap} over \texttt{uniform}.}
+\label{fig:entropy}
+\end{figure}
+
+At width 16 the constant-temperature router's $1-\tilde H$ is
+\V{flatratio} times the annealed router's; the benefit over
+\texttt{uniform} is \V{bsixc}\,pp constant and \V{bsixa}\,pp annealed.
+Across the \V{entn} width--recipe points the Spearman correlation between
+$1-\tilde H$ and \texttt{gap}$-$\texttt{uniform} is $\rho=\V{entrho}$
+(Table~\ref{tab:entben}).
+
+\begin{table}[!htbp]\centering\small
+\caption{Routing entropy against the benefit over \texttt{uniform}.}
+\label{tab:entben}
+\begin{tabular}{r l rrr rl}
+\toprule
+width & $\tau$ & $\tilde H$ & $1-\tilde H$ & RMS dev & \texttt{gap}$-$\texttt{uniform} (pp) & $p$ \\
+\midrule
+%%ENTBEN%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Pre-registered predictions}\label{sec:prereg}
+
+\V{preregsource}
+
+\begin{table}[!htbp]\centering\small
+\caption{Pre-registered predictions and their outcomes.}
+\label{tab:predict}
+\begin{tabular}{l p{6.4cm} p{3.2cm} l}
+\toprule
+& prediction & measured & outcome \\
+\midrule
+%%PREDICT%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+\section{Complete results}\label{sec:all}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{fig/f2_allruns.pdf}
+\caption{Every CIFAR-100 run at $K=4$, $\tau=1$. Bars are arm means.}
+\label{fig:all}
+\end{figure}
+
+\begin{table}[!htbp]\centering\small
+\caption{Every run at $K=4$ and $\tau=1$: final-epoch top-1 accuracy (\%).
+-- marks a missing or diverged run (Table~\ref{tab:cover}).}
+\label{tab:allruns}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l r l rrrrrr rr}
+\toprule
+dataset & width & arm & s0 & s1 & s2 & s3 & s4 & s5 & mean & sd \\
+\midrule
+%%ALLRUNS%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[!htbp]\centering\small
+\caption{Paired comparisons against \texttt{static}. $p_W$ is the
+Wilcoxon signed-rank $p$ (floor 0.031 at $n=6$).}
+\label{tab:vsstatic}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l r l r l ll r l l}
+\toprule
+dataset & width & arm & $\Delta$ (pp) & \SI{95}{\percent} CI & $p_t$ & $p_W$ & $d_z$ & $p_{\text{TOST}}$ & verdict \\
+\midrule
+%%VSSTATIC%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[!htbp]\centering\small
+\caption{Configuration and cost. Router parameters in thousands; training
+loss is the final-epoch mean over seeds; minutes are logged wall clock.}
+\label{tab:config}
+\begin{tabular}{l r l rr r r}
+\toprule
+dataset & width & arm & params (M) & router (K) & train loss & min/run \\
+\midrule
+%%CONFIG%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]\centering\small
+\caption{Every run of this backbone. GPU-hours from logged wall clock.}
+\label{tab:invent}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l r r l l r r}
+\toprule
+dataset & width & $K$ & $\tau$ & arms & runs & GPU-h \\
+\midrule
+%%INVENT%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\end{document}

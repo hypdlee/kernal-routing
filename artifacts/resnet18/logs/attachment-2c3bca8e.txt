@@ -1,0 +1,344 @@
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> cd C:\Users\ankit\Downloads\idea\topoconv\kernelroute
+>> Copy-Item src\train.py src\train.py.bak
+>> Expand-Archive -Path "$env:USERPROFILE\Downloads\kernelroute-stage3.zip" -DestinationPath . -Force
+>> Move-Item -Force train.py src\train.py
+>> python tests\test_paths.py
+ok  blend == combine
+ok  uniform == mean-kernel conv
+ok  uniform and frozen_random contribute no trainable router params
+ok  shuffled router still permutes in eval mode
+ok  gradients flow for all 8 routers
+ok  dataset specs: 100/200 classes, 32/64 px, pad 4/8
+ok  fake loaders produce correct shapes for both datasets
+ok  unknown dataset name is rejected
+ok  classifier head width matches each dataset
+
+all tests passed
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> python run_stage3.py --part temp
+>> python analyze_stage3.py
+12 runs to go.
+Estimate: CIFAR w64 ~86 min, CIFAR w32 ~39 min, Tiny-ImageNet w32 ~300 min per run.
+
+=== [1/12] gap --scope all --width 64 --num-kernels 4 --seed 0 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w64
+[cifar100 gap w64 K4 seed=0] device=cuda params=44.46M router=288.0K dyn_layers=16
+  ep   0  loss 4.231  acc 9.71  best 9.71  tau 30.00  (50s)
+  ep  10  loss 1.491  acc 54.62  best 54.62  tau 1.00  (395s)
+  ep  20  loss 1.156  acc 57.07  best 57.21  tau 1.00  (742s)
+  ep  30  loss 1.010  acc 55.94  best 59.05  tau 1.00  (1090s)
+  ep  40  loss 0.926  acc 60.99  best 60.99  tau 1.00  (1437s)
+  ep  50  loss 0.847  acc 62.27  best 63.43  tau 1.00  (1784s)
+  ep  60  loss 0.752  acc 64.29  best 64.96  tau 1.00  (2132s)
+  ep  70  loss 0.646  acc 66.66  best 66.66  tau 1.00  (2479s)
+  ep  80  loss 0.522  acc 64.11  best 67.02  tau 1.00  (2826s)
+  ep  90  loss 0.374  acc 67.12  best 68.48  tau 1.00  (3173s)
+  ep 100  loss 0.231  acc 68.83  best 70.12  tau 1.00  (3521s)
+  ep 110  loss 0.098  acc 73.08  best 73.08  tau 1.00  (3868s)
+  ep 120  loss 0.019  acc 77.10  best 77.10  tau 1.00  (4211s)
+  ep 130  loss 0.009  acc 78.27  best 78.28  tau 1.00  (4552s)
+  ep 140  loss 0.008  acc 78.35  best 78.44  tau 1.00  (4893s)
+  ep 149  loss 0.008  acc 78.44  best 78.65  tau 1.00  (5201s)
+[gap seed=0] final=78.44 best=78.65 -> results\stage3temp_w64_gap_seed0.json
+
+=== [2/12] gap --scope all --width 64 --num-kernels 4 --seed 1 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w64
+[cifar100 gap w64 K4 seed=1] device=cuda params=44.46M router=288.0K dyn_layers=16
+  ep   0  loss 4.239  acc 9.85  best 9.85  tau 30.00  (49s)
+  ep  10  loss 1.489  acc 48.62  best 53.51  tau 1.00  (391s)
+  ep  20  loss 1.139  acc 57.59  best 57.59  tau 1.00  (733s)
+  ep  30  loss 1.018  acc 58.53  best 61.11  tau 1.00  (1076s)
+  ep  40  loss 0.927  acc 60.60  best 62.30  tau 1.00  (1418s)
+  ep  50  loss 0.836  acc 59.15  best 62.76  tau 1.00  (1760s)
+  ep  60  loss 0.749  acc 63.70  best 63.70  tau 1.00  (2102s)
+  ep  70  loss 0.646  acc 64.88  best 64.88  tau 1.00  (2445s)
+  ep  80  loss 0.521  acc 66.76  best 66.76  tau 1.00  (2787s)
+  ep  90  loss 0.377  acc 66.05  best 67.02  tau 1.00  (3129s)
+  ep 100  loss 0.241  acc 68.51  best 68.97  tau 1.00  (3471s)
+  ep 110  loss 0.101  acc 71.98  best 72.76  tau 1.00  (3814s)
+  ep 120  loss 0.018  acc 77.04  best 77.26  tau 1.00  (4156s)
+  ep 130  loss 0.009  acc 78.21  best 78.28  tau 1.00  (4498s)
+  ep 140  loss 0.008  acc 78.57  best 78.57  tau 1.00  (4841s)
+  ep 149  loss 0.008  acc 78.65  best 78.65  tau 1.00  (5149s)
+[gap seed=1] final=78.65 best=78.65 -> results\stage3temp_w64_gap_seed1.json
+
+=== [3/12] gap --scope all --width 64 --num-kernels 4 --seed 2 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w64
+[cifar100 gap w64 K4 seed=2] device=cuda params=44.46M router=288.0K dyn_layers=16
+  ep   0  loss 4.237  acc 9.79  best 9.79  tau 30.00  (49s)
+  ep  10  loss 1.478  acc 48.85  best 48.85  tau 1.00  (390s)
+  ep  20  loss 1.136  acc 58.88  best 58.88  tau 1.00  (732s)
+  ep  30  loss 1.008  acc 60.25  best 60.57  tau 1.00  (1073s)
+  ep  40  loss 0.918  acc 60.69  best 61.47  tau 1.00  (1415s)
+  ep  50  loss 0.836  acc 59.92  best 62.38  tau 1.00  (1756s)
+  ep  60  loss 0.740  acc 62.54  best 63.82  tau 1.00  (2098s)
+  ep  70  loss 0.643  acc 65.36  best 65.71  tau 1.00  (2439s)
+  ep  80  loss 0.526  acc 65.60  best 67.16  tau 1.00  (2781s)
+  ep  90  loss 0.388  acc 68.57  best 68.57  tau 1.00  (3123s)
+  ep 100  loss 0.243  acc 69.95  best 70.90  tau 1.00  (3464s)
+  ep 110  loss 0.102  acc 72.56  best 72.56  tau 1.00  (3806s)
+  ep 120  loss 0.021  acc 76.45  best 76.45  tau 1.00  (4147s)
+  ep 130  loss 0.009  acc 78.23  best 78.23  tau 1.00  (4489s)
+  ep 140  loss 0.008  acc 78.49  best 78.58  tau 1.00  (4830s)
+  ep 149  loss 0.008  acc 78.61  best 78.70  tau 1.00  (5138s)
+[gap seed=2] final=78.61 best=78.70 -> results\stage3temp_w64_gap_seed2.json
+
+=== [4/12] gap --scope all --width 64 --num-kernels 4 --seed 3 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w64
+[cifar100 gap w64 K4 seed=3] device=cuda params=44.46M router=288.0K dyn_layers=16
+  ep   0  loss 4.239  acc 9.06  best 9.06  tau 30.00  (49s)
+  ep  10  loss 1.481  acc 49.26  best 50.34  tau 1.00  (391s)
+  ep  20  loss 1.142  acc 55.70  best 56.54  tau 1.00  (734s)
+  ep  30  loss 1.016  acc 61.55  best 61.55  tau 1.00  (1076s)
+  ep  40  loss 0.925  acc 59.99  best 62.70  tau 1.00  (1419s)
+  ep  50  loss 0.846  acc 60.65  best 62.75  tau 1.00  (1761s)
+  ep  60  loss 0.743  acc 62.42  best 65.22  tau 1.00  (2104s)
+  ep  70  loss 0.640  acc 64.04  best 65.22  tau 1.00  (2446s)
+  ep  80  loss 0.519  acc 65.48  best 67.16  tau 1.00  (2788s)
+  ep  90  loss 0.394  acc 66.31  best 67.40  tau 1.00  (3131s)
+  ep 100  loss 0.235  acc 69.83  best 70.79  tau 1.00  (3473s)
+  ep 110  loss 0.109  acc 72.62  best 72.62  tau 1.00  (3816s)
+  ep 120  loss 0.019  acc 76.40  best 76.40  tau 1.00  (4158s)
+  ep 130  loss 0.009  acc 77.77  best 77.98  tau 1.00  (4501s)
+  ep 140  loss 0.008  acc 78.01  best 78.08  tau 1.00  (4843s)
+  ep 149  loss 0.008  acc 78.10  best 78.26  tau 1.00  (5151s)
+[gap seed=3] final=78.10 best=78.26 -> results\stage3temp_w64_gap_seed3.json
+
+=== [5/12] gap --scope all --width 64 --num-kernels 4 --seed 4 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w64
+[cifar100 gap w64 K4 seed=4] device=cuda params=44.46M router=288.0K dyn_layers=16
+  ep   0  loss 4.235  acc 10.19  best 10.19  tau 30.00  (49s)
+  ep  10  loss 1.491  acc 49.39  best 49.70  tau 1.00  (392s)
+  ep  20  loss 1.141  acc 55.50  best 55.77  tau 1.00  (735s)
+  ep  30  loss 1.017  acc 58.34  best 60.10  tau 1.00  (1078s)
+  ep  40  loss 0.927  acc 59.58  best 62.39  tau 1.00  (1421s)
+  ep  50  loss 0.839  acc 62.00  best 62.39  tau 1.00  (1764s)
+  ep  60  loss 0.756  acc 62.15  best 63.67  tau 1.00  (2107s)
+  ep  70  loss 0.656  acc 66.55  best 66.55  tau 1.00  (2450s)
+  ep  80  loss 0.518  acc 65.75  best 67.27  tau 1.00  (2794s)
+  ep  90  loss 0.386  acc 67.34  best 68.01  tau 1.00  (3137s)
+  ep 100  loss 0.245  acc 67.33  best 69.67  tau 1.00  (3480s)
+  ep 110  loss 0.114  acc 72.69  best 72.96  tau 1.00  (3823s)
+  ep 120  loss 0.019  acc 77.25  best 77.25  tau 1.00  (4166s)
+  ep 130  loss 0.010  acc 78.29  best 78.37  tau 1.00  (4509s)
+  ep 140  loss 0.008  acc 78.26  best 78.37  tau 1.00  (4852s)
+  ep 149  loss 0.008  acc 78.24  best 78.42  tau 1.00  (5161s)
+[gap seed=4] final=78.24 best=78.42 -> results\stage3temp_w64_gap_seed4.json
+
+=== [6/12] gap --scope all --width 64 --num-kernels 4 --seed 5 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w64
+[cifar100 gap w64 K4 seed=5] device=cuda params=44.46M router=288.0K dyn_layers=16
+  ep   0  loss 4.243  acc 9.92  best 9.92  tau 30.00  (49s)
+  ep  10  loss 1.492  acc 51.30  best 51.30  tau 1.00  (393s)
+  ep  20  loss 1.138  acc 55.33  best 57.16  tau 1.00  (736s)
+  ep  30  loss 1.002  acc 57.60  best 61.59  tau 1.00  (1080s)
+  ep  40  loss 0.928  acc 61.79  best 61.79  tau 1.00  (1423s)
+  ep  50  loss 0.844  acc 63.47  best 63.47  tau 1.00  (1767s)
+  ep  60  loss 0.756  acc 64.76  best 64.76  tau 1.00  (2110s)
+  ep  70  loss 0.645  acc 63.69  best 65.76  tau 1.00  (2454s)
+  ep  80  loss 0.518  acc 65.10  best 65.76  tau 1.00  (2797s)
+  ep  90  loss 0.374  acc 66.85  best 66.85  tau 1.00  (3141s)
+  ep 100  loss 0.229  acc 70.25  best 70.25  tau 1.00  (3484s)
+  ep 110  loss 0.105  acc 71.52  best 72.37  tau 1.00  (3827s)
+  ep 120  loss 0.018  acc 76.84  best 76.84  tau 1.00  (4171s)
+  ep 130  loss 0.009  acc 77.94  best 78.07  tau 1.00  (4514s)
+  ep 140  loss 0.009  acc 78.30  best 78.30  tau 1.00  (4858s)
+  ep 149  loss 0.008  acc 78.18  best 78.30  tau 1.00  (5167s)
+[gap seed=5] final=78.18 best=78.30 -> results\stage3temp_w64_gap_seed5.json
+
+=== [7/12] gap --scope all --width 32 --num-kernels 4 --seed 0 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w32
+[cifar100 gap w32 K4 seed=0] device=cuda params=11.13M router=74.6K dyn_layers=16
+  ep   0  loss 4.319  acc 8.69  best 8.69  tau 30.00  (29s)
+  ep  10  loss 1.626  acc 49.82  best 49.82  tau 1.00  (181s)
+  ep  20  loss 1.315  acc 53.04  best 53.99  tau 1.00  (334s)
+  ep  30  loss 1.193  acc 55.36  best 57.99  tau 1.00  (483s)
+  ep  40  loss 1.110  acc 58.25  best 58.25  tau 1.00  (638s)
+  ep  50  loss 1.027  acc 54.99  best 59.39  tau 1.00  (788s)
+  ep  60  loss 0.940  acc 61.42  best 61.42  tau 1.00  (941s)
+  ep  70  loss 0.847  acc 61.65  best 62.29  tau 1.00  (1092s)
+  ep  80  loss 0.725  acc 63.31  best 64.70  tau 1.00  (1241s)
+  ep  90  loss 0.573  acc 63.45  best 66.40  tau 1.00  (1394s)
+  ep 100  loss 0.409  acc 67.56  best 67.96  tau 1.00  (1543s)
+  ep 110  loss 0.241  acc 70.24  best 70.24  tau 1.00  (1698s)
+  ep 120  loss 0.085  acc 72.78  best 72.78  tau 1.00  (1848s)
+  ep 130  loss 0.028  acc 75.07  best 75.07  tau 1.00  (2000s)
+  ep 140  loss 0.019  acc 75.48  best 75.60  tau 1.00  (2152s)
+  ep 149  loss 0.018  acc 75.60  best 75.60  tau 1.00  (2286s)
+[gap seed=0] final=75.60 best=75.60 -> results\stage3temp_w32_gap_seed0.json
+
+=== [8/12] gap --scope all --width 32 --num-kernels 4 --seed 1 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w32
+[cifar100 gap w32 K4 seed=1] device=cuda params=11.13M router=74.6K dyn_layers=16
+  ep   0  loss 4.317  acc 8.23  best 8.23  tau 30.00  (30s)
+  ep  10  loss 1.649  acc 47.88  best 47.88  tau 1.00  (190s)
+  ep  20  loss 1.308  acc 54.38  best 54.38  tau 1.00  (344s)
+  ep  30  loss 1.197  acc 56.27  best 58.02  tau 1.00  (504s)
+  ep  40  loss 1.104  acc 58.34  best 58.97  tau 1.00  (658s)
+  ep  50  loss 1.028  acc 57.52  best 58.97  tau 1.00  (817s)
+  ep  60  loss 0.938  acc 58.71  best 61.40  tau 1.00  (972s)
+  ep  70  loss 0.845  acc 63.10  best 63.10  tau 1.00  (1129s)
+  ep  80  loss 0.724  acc 64.29  best 64.85  tau 1.00  (1285s)
+  ep  90  loss 0.573  acc 65.32  best 66.19  tau 1.00  (1441s)
+  ep 100  loss 0.413  acc 65.21  best 67.36  tau 1.00  (1599s)
+  ep 110  loss 0.237  acc 70.28  best 70.28  tau 1.00  (1753s)
+  ep 120  loss 0.087  acc 72.08  best 72.38  tau 1.00  (1911s)
+  ep 130  loss 0.027  acc 74.01  best 74.23  tau 1.00  (2067s)
+  ep 140  loss 0.018  acc 74.89  best 75.11  tau 1.00  (2223s)
+  ep 149  loss 0.017  acc 75.01  best 75.12  tau 1.00  (2365s)
+[gap seed=1] final=75.01 best=75.12 -> results\stage3temp_w32_gap_seed1.json
+
+=== [9/12] gap --scope all --width 32 --num-kernels 4 --seed 2 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w32
+[cifar100 gap w32 K4 seed=2] device=cuda params=11.13M router=74.6K dyn_layers=16
+  ep   0  loss 4.318  acc 9.14  best 9.14  tau 30.00  (29s)
+  ep  10  loss 1.633  acc 48.10  best 48.10  tau 1.00  (180s)
+  ep  20  loss 1.308  acc 50.55  best 54.34  tau 1.00  (332s)
+  ep  30  loss 1.189  acc 55.10  best 56.35  tau 1.00  (479s)
+  ep  40  loss 1.108  acc 54.07  best 60.58  tau 1.00  (634s)
+  ep  50  loss 1.027  acc 58.95  best 60.58  tau 1.00  (784s)
+  ep  60  loss 0.944  acc 58.59  best 60.79  tau 1.00  (935s)
+  ep  70  loss 0.840  acc 61.40  best 62.94  tau 1.00  (1087s)
+  ep  80  loss 0.722  acc 64.83  best 64.83  tau 1.00  (1236s)
+  ep  90  loss 0.589  acc 64.48  best 67.95  tau 1.00  (1389s)
+  ep 100  loss 0.412  acc 67.99  best 67.99  tau 1.00  (1538s)
+  ep 110  loss 0.243  acc 70.65  best 70.65  tau 1.00  (1692s)
+  ep 120  loss 0.081  acc 72.68  best 73.18  tau 1.00  (1842s)
+  ep 130  loss 0.027  acc 75.13  best 75.13  tau 1.00  (1993s)
+  ep 140  loss 0.018  acc 75.43  best 75.52  tau 1.00  (2146s)
+  ep 149  loss 0.017  acc 75.61  best 75.61  tau 1.00  (2279s)
+[gap seed=2] final=75.61 best=75.61 -> results\stage3temp_w32_gap_seed2.json
+
+=== [10/12] gap --scope all --width 32 --num-kernels 4 --seed 3 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w32
+[cifar100 gap w32 K4 seed=3] device=cuda params=11.13M router=74.6K dyn_layers=16
+  ep   0  loss 4.309  acc 8.93  best 8.93  tau 30.00  (31s)
+  ep  10  loss 1.625  acc 47.72  best 47.72  tau 1.00  (184s)
+  ep  20  loss 1.312  acc 49.34  best 54.73  tau 1.00  (333s)
+  ep  30  loss 1.194  acc 54.94  best 58.17  tau 1.00  (486s)
+  ep  40  loss 1.108  acc 56.17  best 58.22  tau 1.00  (633s)
+  ep  50  loss 1.026  acc 59.55  best 59.56  tau 1.00  (784s)
+  ep  60  loss 0.940  acc 60.21  best 60.46  tau 1.00  (935s)
+  ep  70  loss 0.833  acc 60.67  best 62.47  tau 1.00  (1083s)
+  ep  80  loss 0.712  acc 64.06  best 64.76  tau 1.00  (1237s)
+  ep  90  loss 0.589  acc 65.49  best 65.49  tau 1.00  (1386s)
+  ep 100  loss 0.407  acc 65.84  best 68.16  tau 1.00  (1538s)
+  ep 110  loss 0.232  acc 69.97  best 69.97  tau 1.00  (1689s)
+  ep 120  loss 0.084  acc 73.17  best 73.17  tau 1.00  (1839s)
+  ep 130  loss 0.029  acc 74.52  best 74.56  tau 1.00  (1990s)
+  ep 140  loss 0.018  acc 75.19  best 75.32  tau 1.00  (2138s)
+  ep 149  loss 0.017  acc 75.25  best 75.43  tau 1.00  (2276s)
+[gap seed=3] final=75.25 best=75.43 -> results\stage3temp_w32_gap_seed3.json
+
+=== [11/12] gap --scope all --width 32 --num-kernels 4 --seed 4 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w32
+[cifar100 gap w32 K4 seed=4] device=cuda params=11.13M router=74.6K dyn_layers=16
+  ep   0  loss 4.307  acc 8.47  best 8.47  tau 30.00  (29s)
+  ep  10  loss 1.639  acc 50.97  best 50.97  tau 1.00  (183s)
+  ep  20  loss 1.314  acc 55.02  best 55.02  tau 1.00  (340s)
+  ep  30  loss 1.188  acc 56.40  best 57.58  tau 1.00  (495s)
+  ep  40  loss 1.109  acc 54.77  best 59.47  tau 1.00  (648s)
+  ep  50  loss 1.027  acc 59.54  best 59.91  tau 1.00  (806s)
+  ep  60  loss 0.944  acc 59.04  best 60.85  tau 1.00  (958s)
+  ep  70  loss 0.835  acc 61.97  best 62.31  tau 1.00  (1117s)
+  ep  80  loss 0.716  acc 63.89  best 64.30  tau 1.00  (1271s)
+  ep  90  loss 0.568  acc 63.92  best 65.27  tau 1.00  (1428s)
+  ep 100  loss 0.415  acc 66.99  best 67.06  tau 1.00  (1582s)
+  ep 110  loss 0.238  acc 69.55  best 69.55  tau 1.00  (1736s)
+  ep 120  loss 0.084  acc 72.76  best 72.76  tau 1.00  (1892s)
+  ep 130  loss 0.027  acc 74.68  best 74.68  tau 1.00  (2044s)
+  ep 140  loss 0.018  acc 75.06  best 75.09  tau 1.00  (2201s)
+  ep 149  loss 0.017  acc 75.18  best 75.24  tau 1.00  (2339s)
+[gap seed=4] final=75.18 best=75.24 -> results\stage3temp_w32_gap_seed4.json
+
+=== [12/12] gap --scope all --width 32 --num-kernels 4 --seed 5 --epochs 150 --temp-start 30 --temp-end 1 --temp-epochs 10 --tag stage3temp_w32
+[cifar100 gap w32 K4 seed=5] device=cuda params=11.13M router=74.6K dyn_layers=16
+  ep   0  loss 4.324  acc 8.42  best 8.42  tau 30.00  (29s)
+  ep  10  loss 1.641  acc 49.33  best 49.33  tau 1.00  (184s)
+  ep  20  loss 1.315  acc 54.25  best 54.25  tau 1.00  (333s)
+  ep  30  loss 1.197  acc 55.48  best 57.15  tau 1.00  (484s)
+  ep  40  loss 1.104  acc 54.95  best 58.47  tau 1.00  (637s)
+  ep  50  loss 1.026  acc 60.16  best 60.16  tau 1.00  (786s)
+  ep  60  loss 0.942  acc 60.82  best 61.80  tau 1.00  (941s)
+  ep  70  loss 0.831  acc 63.24  best 63.24  tau 1.00  (1090s)
+  ep  80  loss 0.717  acc 61.70  best 63.94  tau 1.00  (1244s)
+  ep  90  loss 0.573  acc 65.33  best 66.50  tau 1.00  (1395s)
+  ep 100  loss 0.419  acc 66.88  best 67.35  tau 1.00  (1544s)
+  ep 110  loss 0.238  acc 70.43  best 70.43  tau 1.00  (1698s)
+  ep 120  loss 0.083  acc 73.11  best 73.11  tau 1.00  (1845s)
+  ep 130  loss 0.028  acc 74.78  best 74.78  tau 1.00  (1998s)
+  ep 140  loss 0.018  acc 75.34  best 75.34  tau 1.00  (2148s)
+  ep 149  loss 0.017  acc 75.41  best 75.74  tau 1.00  (2282s)
+[gap seed=5] final=75.41 best=75.74 -> results\stage3temp_w32_gap_seed5.json
+
+done in 747.9 min
+
+now run:  python analyze_stage3.py
+
+==================================================================================
+PART 1  Does the decomposition replicate on Tiny-ImageNet?
+==================================================================================
+
+  cifar100, width 32
+    static    n=6   74.872 +/- 0.262
+    uniform   n=6   75.047 +/- 0.305
+    gap       n=6   76.025 +/- 0.156
+
+    bank    (uniform - static)          +0.175pp  [-0.146,+0.496]  p=0.22057  TOST=0.0242  EQUIVALENT
+    routing (gap - uniform)             +0.978pp  [+0.609,+1.347]  p=0.00104  TOST=0.9896  BEATS
+    total   (gap - static)              +1.153pp  [+0.940,+1.367]  p=0.00003  TOST=0.9997  BEATS
+
+  tinyimagenet w32: no uniform arm yet. Run: python run_stage3.py --part uniform
+
+==================================================================================
+PART 2  Does temperature annealing (tau 30 -> 1) change anything?
+==================================================================================
+  Without annealing the mixture is near one-hot from step 0 and most of
+  the bank is starved. DY-Conv reports annealing as necessary.
+
+  width 64
+    gap, tau=1 constant :  78.418 +/- 0.299
+    gap, tau 30 -> 1    :  78.370 +/- 0.231
+    annealed - constant                 -0.048pp  [-0.410,+0.313]  p=0.74493  TOST=0.0118  EQUIVALENT
+    annealed gap - static               +0.032pp  [-0.219,+0.283]  p=0.75894  TOST=0.0025  EQUIVALENT
+
+  width 32
+    gap, tau=1 constant :  76.025 +/- 0.156
+    gap, tau 30 -> 1    :  75.343 +/- 0.240
+    annealed - constant                 -0.682pp  [-0.968,-0.395]  p=0.00170  TOST=0.9179  WORSE
+    annealed gap - static               +0.472pp  [+0.068,+0.875]  p=0.02993  TOST=0.4319  BEATS
+
+  Read: if annealed gap still equals static at width 64, the null holds
+  under the published training recipe and the objection is closed. If it
+  beats static, the width-64 null was an artefact of tau=1 and the paper
+  must say so.
+
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute>  python analyze_stage3.py
+
+==================================================================================
+PART 1  Does the decomposition replicate on Tiny-ImageNet?
+==================================================================================
+
+  cifar100, width 32
+    static    n=6   74.872 +/- 0.262
+    uniform   n=6   75.047 +/- 0.305
+    gap       n=6   76.025 +/- 0.156
+
+    bank    (uniform - static)          +0.175pp  [-0.146,+0.496]  p=0.22057  TOST=0.0242  EQUIVALENT
+    routing (gap - uniform)             +0.978pp  [+0.609,+1.347]  p=0.00104  TOST=0.9896  BEATS
+    total   (gap - static)              +1.153pp  [+0.940,+1.367]  p=0.00003  TOST=0.9997  BEATS
+
+  tinyimagenet w32: no uniform arm yet. Run: python run_stage3.py --part uniform
+
+==================================================================================
+PART 2  Does temperature annealing (tau 30 -> 1) change anything?
+==================================================================================
+  Without annealing the mixture is near one-hot from step 0 and most of
+  the bank is starved. DY-Conv reports annealing as necessary.
+
+  width 64
+    gap, tau=1 constant :  78.418 +/- 0.299
+    gap, tau 30 -> 1    :  78.370 +/- 0.231
+    annealed - constant                 -0.048pp  [-0.410,+0.313]  p=0.74493  TOST=0.0118  EQUIVALENT
+    annealed gap - static               +0.032pp  [-0.219,+0.283]  p=0.75894  TOST=0.0025  EQUIVALENT
+
+  width 32
+    gap, tau=1 constant :  76.025 +/- 0.156
+    gap, tau 30 -> 1    :  75.343 +/- 0.240
+    annealed - constant                 -0.682pp  [-0.968,-0.395]  p=0.00170  TOST=0.9179  WORSE
+    annealed gap - static               +0.472pp  [+0.068,+0.875]  p=0.02993  TOST=0.4319  BEATS
+
+  Read: if annealed gap still equals static at width 64, the null holds
+  under the published training recipe and the objection is closed. If it
+  beats static, the width-64 null was an artefact of tau=1 and the paper
+  must say so.
+
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> 

@@ -1,0 +1,8 @@
+# Install torch separately first, matched to your CUDA build:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+torch>=2.2
+torchvision>=0.17
+numpy>=1.24
+scipy>=1.10
+# reports (report/): matplotlib, plus pdflatex on PATH
+matplotlib>=3.7

@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+data/
+results_models/
+report/out/
+ckpt/
+*.pt
+*.aux
+*.log
+!artifacts/**/*.log
+*.out
+.venv/

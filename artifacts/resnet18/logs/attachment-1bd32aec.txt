@@ -1,0 +1,84 @@
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> Copy-Item "$env:USERPROFILE\Downloads\analyze_capacity.py" . -Force
+>> Copy-Item "$env:USERPROFILE\Downloads\analyze_ksweep.py" . -Force
+>> Copy-Item "$env:USERPROFILE\Downloads\check_grid.py" . -Force
+>> python analyze_capacity.py
+>> python analyze_ksweep.py
+Copy-Item : Cannot find path 
+'C:\Users\ankit\Downloads\analyze_ksweep.py' because it does not 
+exist.
+At line:2 char:1
++ Copy-Item "$env:USERPROFILE\Downloads\analyze_ksweep.py" . -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\ankit\...aly 
+   ze_ksweep.py:String) [Copy-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Comm 
+   ands.CopyItemCommand
+ 
+Copy-Item : Cannot find path 
+'C:\Users\ankit\Downloads\check_grid.py' because it does not exist.
+At line:3 char:1
++ Copy-Item "$env:USERPROFILE\Downloads\check_grid.py" . -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\ankit\Downlo 
+   ads\check_grid.py:String) [Copy-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Comm 
+   ands.CopyItemCommand
+ 
+
+==========================================================================
+CAPACITY SWEEP: dynamic convolution vs plain ResNet-18
+==========================================================================
+
+--- width 16 ----------------------------------------------------------
+  static    n=6  69.995 +/- 0.246     0.71M   final train loss 0.1643
+  uniform   n=6  69.772 +/- 0.279     2.77M   final train loss 0.1653
+  gap       n=6  70.527 +/- 0.160     2.79M   final train loss 0.0638
+
+  uniform - static: -0.223pp  95% CI [-0.500, +0.054]  p=0.0931  TOST=0.0251  -> EQUIVALENT to static
+  gap - static: +0.532pp  95% CI [+0.292, +0.771]  p=0.0023  TOST=0.6260  -> BEATS static
+
+--- width 32 ----------------------------------------------------------
+  static    n=6  61.560 +/- 0.217     2.85M   final train loss 0.1194
+  uniform   n=6  75.047 +/- 0.305    11.06M   final train loss 0.0171
+  gap       n=6  63.745 +/- 0.260    11.16M   final train loss 0.0420
+
+  uniform - static: +13.487pp  95% CI [+13.181, +13.793]  p=0.0000  TOST=1.0000  -> BEATS static
+  gap - static: +2.185pp  95% CI [+1.781, +2.589]  p=0.0000  TOST=0.9999  -> BEATS static
+
+--- width 64 ----------------------------------------------------------
+  static    n=6  78.338 +/- 0.284    11.22M   final train loss 0.0081
+  uniform   n=6  78.387 +/- 0.202    44.18M   final train loss 0.0081
+  gap       n=6  78.418 +/- 0.299    44.46M   final train loss 0.0074
+
+  uniform - static: +0.048pp  95% CI [-0.332, +0.429]  p=0.7573  TOST=0.0142  -> EQUIVALENT to static
+  gap - static: +0.080pp  95% CI [-0.305, +0.465]  p=0.6158  TOST=0.0188  -> EQUIVALENT to static
+
+==========================================================================
+TREND: does the advantage grow as capacity shrinks?
+==========================================================================
+
+  uniform minus static, by width:
+    w16  -0.223pp  p=0.0931  ----
+    w32  +13.487pp  p=0.0000  ++++++++++++++++++++++++++++++++++++++++
+    w64  +0.048pp  p=0.7573  
+    Pearson r with log2(width) = +0.017 (3 points, df=1; no p-value reported, see note in source)
+    -> NON-MONOTONE. The effect peaks at w32 (+13.487pp), not at the smallest width.
+       w16 -0.223pp, w32 +13.487pp, w64 +0.048pp.
+       Do not describe this as a monotone capacity trend. The shape
+       is an inverted U and the peak width is itself a finding.
+
+  gap minus static, by width:
+    w16  +0.532pp  p=0.0023  ++++++++++
+    w32  +2.185pp  p=0.0000  ++++++++++++++++++++++++++++++++++++++++
+    w64  +0.080pp  p=0.6158  +
+    Pearson r with log2(width) = -0.204 (3 points, df=1; no p-value reported, see note in source)
+    -> NON-MONOTONE. The effect peaks at w32 (+2.185pp), not at the smallest width.
+       w16 +0.532pp, w32 +2.185pp, w64 +0.080pp.
+       Do not describe this as a monotone capacity trend. The shape
+       is an inverted U and the peak width is itself a finding.
+
+Saturation check: a final train loss near 0.008 means the model
+memorised the training set. A width where that no longer happens is
+the one that answers the reviewer's objection.
+
+(.venv) PS C:\Users\ankit\Downloads\idea\topoconv\kernelroute> 
