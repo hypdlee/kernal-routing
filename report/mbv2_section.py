@@ -213,7 +213,7 @@ def main(log_path, results_dir):
         ("Routing term significant", f"{sum(paired(r18(ds,w,'gap'),r18(ds,w,'uniform'))['p']<0.05 for ds,w in COND)} of 5", f"{nr} of 5", "holds on both"),
         ("$\\texttt{gap}-\\texttt{static}$, CIFAR-100 w64", f"{sg(r18_w64['mean'],2)} ({verdict(r18_w64)})", f"{sg(mb_w64['mean'],2)} ({verdict(mb_w64)})", "\\textbf{backbone-dependent}"),
         ("Plain $2c$ beats \\texttt{gap} $c$ (3 pairs)", f"{nsig_r18} of 3 ({lst(r18_pairs)})", f"{np2} of 3 ({lst(pairs)})", "\\textbf{backbone-dependent}"),
-        ("Annealed $-$ constant $\\tau$ (w16, 32, 64)", lst(r18_ann), lst(mb_ann), "holds on both (never higher)"),
+        ("Annealed $-$ constant $\\tau$ (w16, 32, 64)", lst(r18_ann), lst(mb_ann), "holds on both (never significantly higher)"),
         ("$\\texttt{frozen\\_random}-\\texttt{gap}$, w64", f"{sg(r18_frz['mean'],2)} (both null)", f"{sg(mb_frz['mean'],2)}; vs \\texttt{{uniform}} {sg(mb_frzu['mean'],2)}", "MobileNetV2 only"),
         ("$K=8$ vs $K=2$, CIFAR-100 w32", f"{sg(r18_k['mean'],2)} ({verdict(r18_k)})", f"{sg(q['mean'],2) if False else sg(paired(mb('cifar100',32,'gap',k=8),mb('cifar100',32,'gap',k=2))['mean'],2)} ({verdict(paired(mb('cifar100',32,'gap',k=8),mb('cifar100',32,'gap',k=2)))})", "holds on both"),
     ]

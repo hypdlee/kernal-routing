@@ -20,7 +20,8 @@ Private research repository of Ankit Kumar.
 | `GATES_*.md` | check ledgers with recorded evidence |
 | `README_MODELS.md`, `docs/KernelRoute_Run_Guide.pdf` | how to run the five-backbone program (PowerShell) |
 | `README_RESNET18.md` | the original ResNet-18 study README |
-| `artifacts/resnet18/` | 24 stage-1 result JSONs and the training logs shared during the study |
+| `artifacts/resnet18/` | 24 stage-1 result JSONs (CIFAR-100 width 64) and the training logs shared during the study. The other 108 ResNet-18 runs exist here only as per-run lines in the logs; the routing entropies of CIFAR-100 widths 16 and 32 and of the annealed groups have no source file in this archive |
+| `tools/audit_paper2.py` | independent audit of the paper: ResNet-18 accuracies against the logs and result files, MobileNetV2 headline statistics recomputed with scipy, method claims against the code, banned phrases. `python tools/audit_paper2.py` |
 | `artifacts/mobilenetv2/` | MobileNetV2 `train.log` and `runner.log` (all 132 runs), the per-seed CSV parsed from the log, and `results/`: the 132 result JSONs (accuracy, history, per-layer routing statistics), the 10 memory probes and the runner plan |
 | `docs/` | research ideology documents, day-1 notes, run guide source |
 | `artifacts/session_uploads/` | every file shared during the project: logs, crash traces, screenshots, the stage-1 results zip |

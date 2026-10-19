@@ -15,9 +15,9 @@
 \input{macros_mb.tex}
 
 \title{\vspace{-1.3cm}\textbf{Where Does the Gain in Dynamic Convolution Come From?}\\[3pt]
-\large A controlled study of routing, capacity and width on two backbones\thanks{Draft of 17 October 2026. ResNet-18 and MobileNetV2 are complete; the same program on VGG-16, ResNet-50 and ConvNeXt-Tiny is pre-registered and running.}}
+\large A controlled study of routing, capacity and width on two backbones\thanks{Draft of 19 October 2026. ResNet-18 and MobileNetV2 are complete; the same program on VGG-16, ResNet-50 and ConvNeXt-Tiny is pre-registered and running.}}
 \author{Ankit Kumar\\\small Mechatronics Department, University of Agder, Grimstad, Norway}
-\date{\small 24 September 2026; revised 17 October 2026}
+\date{\small 24 September 2026; revised 19 October 2026}
 
 \begin{document}
 \maketitle
@@ -46,14 +46,15 @@ frozen at random initialisation is not distinguishable from a trained
 one, while routing each image with another image's descriptor removes the
 benefit. (4) Banks larger than $K=2$ are not distinguishable from $K=2$.
 (5) Whether routing is worth its cost depends on the cost held fixed and
-on the backbone: at equal parameters a plain ResNet-18 of twice the width
-beats the routed one by 2.3 to \SI{4.3}{pp}, while on MobileNetV2 a plain
-network with \V{mbpinvlo} to \V{mbpinvhi} times the parameters wins only
-one of three pairs; at equal width, for at most \V{rbmacextra}\,\% more
+on the backbone: a plain ResNet-18 of twice the width, which has the same
+number of parameters as the routed one, beats it by 2.3 to
+\SI{4.3}{pp}, while on MobileNetV2, where twice the width means
+\V{mbpinvlo} to \V{mbpinvhi} times the parameters, the plain network wins
+only one of three pairs; at equal width, for at most \V{rbmacextra}\,\% more
 compute, routing beats the plain network in \V{rbeqmac} of five
 conditions on ResNet-18 and \V{mbeqmac} of five on MobileNetV2.
 (6) Annealing the softmax temperature, as DY-Conv recommends, never
-improved accuracy and lowered it in \V{nannlower} of six conditions.
+improved accuracy detectably and lowered it in \V{nannlower} of six conditions.
 (7) Routing entropy is not a reliable measure of whether routing helps:
 on CIFAR-100 at width 64 the trained routers of the two backbones have
 nearly the same entropy and improve on the constant mixture by
@@ -141,14 +142,17 @@ routed network's parameters wins one of three. At equal width, where
 routing adds at most \V{rbmacextra}\,\% to the multiply-accumulates,
 routing wins \V{rbeqmac} of five conditions on ResNet-18 and \V{mbeqmac} of
 five on MobileNetV2.
-\item \textbf{Annealing the softmax temperature never improved accuracy}
+\item \textbf{Annealing the softmax temperature never detectably improved
+accuracy}
 (both; Section~\ref{sec:temp}). It lowered accuracy in \V{nannlower} of six
 conditions, at all three MobileNetV2 widths by about \SI{1}{pp} and on
 ResNet-18 at width 32, and made no detectable difference in the other two.
 \item \textbf{Routing entropy is not a reliable measure of whether
-routing helps} (Section~\ref{sec:entropy}). Within ResNet-18 it does not
-order the benefit; within MobileNetV2 it does; across the two backbones the
-same entropy accompanies benefits of \V{rbguC} and \V{mbguC}\,pp. After
+routing helps} (Section~\ref{sec:entropy}). Within ResNet-18 it did not
+order the benefit reliably (rank correlation \V{rbrho}, not significant,
+and a counterexample at width 16); within MobileNetV2 it did (\V{mbrho});
+across the two backbones almost the same entropy accompanies benefits of
+\V{rbguC} and \V{mbguC}\,pp. After
 annealing, routers end close to uniform: on MobileNetV2 in \V{mbflatAmin}
 to \V{mbflatAmax} of its \V{mbnlayers} dynamic layers.
 \end{enumerate}
@@ -175,9 +179,9 @@ reported gains are large: for a ResNet-18 on ImageNet at four times the
 kernel parameters, \citet{li2024kernelwarehouse} report top-1
 improvements of \SI{3.38}{pp} for DY-Conv, \SI{4.01}{pp} for ODConv and
 \SI{5.61}{pp} for KernelWarehouse under their training recipe. FDConv
-\citep{chen2025fdconv} observes that the parallel kernels of DY-Conv tend
-toward highly similar frequency responses, so that the extra parameters
-buy little adaptability. SD-Conv \citep{he2023sdconv} prunes half the
+\citep{chen2025fdconv} observes that the four parallel kernels of ODConv
+have highly similar frequency responses, which it takes as limited
+diversity, and says the same of traditional dynamic convolution. SD-Conv \citep{he2023sdconv} prunes half the
 parameters of a trained dynamic network at a cost below \SI{1}{pp} on
 CIFAR-100, and \citet{li2021dcd} argue that the $K$ static kernels are
 redundant. To our knowledge none of these works isolates the bank from the
@@ -225,22 +229,27 @@ $\mu(F)\in\mathbb{R}^{C}$ for the channel-wise global average.
 \item[\texttt{uniform}] $g\equiv\mathbf{0}$, so $\zv=(1/K,\dots,1/K)$ for
 every input. The bank exists and is trained; nothing is routed.
 \item[\texttt{gap}] $\zv=\operatorname{softmax}(g(\mu(F))/\tau)$ with $g$
-trained. The standard layer.
+trained. The standard layer. $g$ is a two-layer perceptron with a ReLU and
+hidden width $\max(16,\lfloor C_{\text{in}}/4\rfloor)$, in PyTorch's default
+initialisation.
 \item[\texttt{shuffled}] As \texttt{gap}, but sample $i$ is routed with
 the descriptor of sample $\pi(i)$ for a permutation $\pi$ redrawn on every
 forward pass, at evaluation as well as training. The distribution of
 $\zv$ is preserved and the pairing between image and kernel is
 destroyed.
-\item[\texttt{frozen\_random}] As \texttt{gap}, with every weight of $g$
-frozen at its random initialisation. Routing varies with the input but
-is never optimised.
+\item[\texttt{frozen\_random}] As \texttt{gap} in shape, with every weight
+of $g$ held fixed and never optimised: Gaussian weights scaled by
+$1/\sqrt{\text{fan-in}}$ and zero biases. Routing varies with the input but
+is not trained. The weights are drawn from one fixed seed that does not
+depend on the run seed, so the six seeds of this arm share the same random
+router and the control tests one random router, not a distribution of them.
 \end{description}
 The five main conditions (CIFAR-100 at widths 16, 32 and 64,
 Tiny-ImageNet at widths 32 and 64) each have \texttt{static},
 \texttt{uniform} and \texttt{gap}. \texttt{shuffled} and
 \texttt{frozen\_random} were run on CIFAR-100 at width 64 only. The
-bank-size groups ($K=2$ and $K=8$) and the temperature groups run
-\texttt{gap} only, at CIFAR-100 widths.
+bank-size groups ($K=2$ and $K=8$, CIFAR-100 width 32 only) and the
+temperature groups (CIFAR-100, widths 16, 32 and 64) run \texttt{gap} only.
 
 \subsection{The constant mixture is a single kernel}
 
@@ -260,20 +269,28 @@ count of 11.22M. It spans the same function class as \texttt{static}, so
 any difference between the two is an effect of optimisation. That makes it
 the right control for the extra parameters of the bank.
 
-\subsection{Two exact implementations}
+\subsection{Three execution paths}
 
 Convolution is linear in its weights, so
 \begin{equation}
 F*\Big(\sum_k z_k\mathcal{W}_k\Big)=\sum_k z_k\,(F*\mathcal{W}_k).
 \label{eq:lin}
 \end{equation}
-The left side builds a per-sample kernel and runs one grouped
-convolution; on ResNet-18 at width 64 and batch 128 its aggregated weights
-alone take about \SI{1.2}{\giga\byte} per stage-4 layer. The right side
-runs $K$ ordinary convolutions and mixes the outputs, which costs $K$
-times the arithmetic but no per-sample weights. Every run uses the right
-side. The test suite asserts that the two agree to $10^{-10}$ in double
-precision across four routing signals.
+The left side builds a per-sample kernel and runs one grouped convolution
+(the \emph{combine} path); on ResNet-18 at width 64 and batch 128 its
+aggregated weights alone take about \SI{1.2}{\giga\byte} in single
+precision for each stage-4 convolution with 512 input and output channels.
+The right side runs $K$ ordinary convolutions and mixes the outputs (the
+\emph{blend} path), which costs $K$ times the arithmetic of the layer but
+holds no per-sample weights. A third path applies when the mixture is the
+same for every input: the bank is averaged once into a single kernel and
+one ordinary convolution runs. All training used \emph{blend} for the
+\texttt{gap}, \texttt{shuffled} and \texttt{frozen\_random} arms and the
+constant-mixture path for \texttt{uniform}; \texttt{static} has no bank.
+The test suite asserts that \emph{blend} and \emph{combine} agree to
+$10^{-10}$ in double precision for four routing signals, and that the
+constant-mixture path equals a convolution with the mean kernel to the same
+tolerance. \emph{Combine} was not used for any result.
 
 \subsection{Training protocol}
 
@@ -282,13 +299,14 @@ classes, at widths 16, 32 and 64. Tiny-ImageNet \citep{le2015tiny},
 $64\times64$, 200 classes, at widths 32 and 64. The stem is the same on
 both: a $3\times3$ stride-1 convolution with no max-pool. At
 $64\times64$ this leaves an $8\times8$ final feature map rather than
-$4\times4$ and roughly quadruples the cost of the deeper stages, but
+$4\times4$ and roughly quadruples the cost of every stage, but
 changing the stem would change the network between datasets. Crop
 padding is 4 pixels at 32 and 8 at 64.
 
 \paragraph{Recipe.} SGD with Nesterov momentum 0.9, learning rate 0.1,
-weight decay $5\times10^{-4}$, batch 128, five warm-up epochs then cosine
-decay over 150 epochs. Augmentation is random cropping and horizontal
+weight decay $5\times10^{-4}$, batch 128, 150 epochs: a linear warm-up over
+the first five, then cosine decay to zero over the remaining 145. The
+cross-entropy loss has no label smoothing. Augmentation is random cropping and horizontal
 flipping only. Mixed precision in bfloat16. Six seeds, 0 to 5, shared by
 every arm. $K=4$ unless stated. Both backbones use this recipe unchanged,
 and every group of both trained at batch 128 (on ResNet-18 at
@@ -297,12 +315,16 @@ Tiny-ImageNet widths are directly comparable).
 
 \paragraph{ResNet-18.} ResNet-18 \citep{he2016deep} in which all 16
 $3\times3$ convolutions inside residual blocks are dynamic; the stem and
-the $1\times1$ shortcuts stay static.
+the $1\times1$ shortcuts stay static. The last batch-norm scale of each
+block is initialised to zero.
 
 \paragraph{MobileNetV2.} MobileNetV2 \citep{sandler2018mobilenetv2},
 adapted to small inputs in the usual way: the stem and the second stage
-use stride 1. Width 64 is the standard network; widths 32 and 16 scale
-every channel count by $1/2$ and $1/4$, rounded to a multiple of 8. The
+use stride 1. Width 64 is the standard network; widths 32 and 16 scale the
+channel counts by $1/2$ and $1/4$, rounded to a multiple of 8, except that
+the final $1\times1$ convolution keeps its 1280 channels at every width (the
+usual rule for width multipliers below one; the pre-registration said
+``every channel count''). The
 rule that decides which layers are dynamic is the ResNet-18 rule without
 change: every $k\times k$ convolution with $k>1$ inside a block. In
 MobileNetV2 that is the 17 depthwise $3\times3$ convolutions; the stem,
@@ -311,7 +333,7 @@ static. The consequences differ from ResNet-18. At CIFAR-100 width 64 the
 bank adds \V{mbbankadd}M parameters to a \V{mbpstatic}M network, so only
 \V{mbdynshare}\,\% of the static parameters sit in dynamic layers, and the
 router of the \texttt{gap} arm (the ResNet-18 design, a two-layer
-perceptron of hidden width $C_{\text{in}}/4$) has \V{mbrouterK}K
+perceptron of hidden width $\max(16,C_{\text{in}}/4)$) has \V{mbrouterK}K
 parameters, \V{mbrouterpct}\,\% of the static network and more than the
 bank it routes. Static convolutions and every bank kernel share one
 initialisation, Kaiming-normal with fan-out.
@@ -327,7 +349,8 @@ uniform mixture and 0 for a one-hot one; we report $1-\tilde H$, the
 departure from uniform. Each run records it once, after training, on the
 last batch of the unshuffled test set, which is the same 16 images in
 every run on a dataset. A reported value is the mean over those images
-and over the dynamic layers. It was not recorded during training, and the
+and over the dynamic layers, stored to five decimals. It was not recorded
+during training, and the
 trained weights were not kept, so it cannot be recomputed on the full
 test set (Section~\ref{sec:threats}). No accuracy depends on it.
 
@@ -337,8 +360,9 @@ All \V{nruns} ResNet-18 runs and all \V{mbruns} MobileNetV2 runs finished;
 none diverged. The first MobileNetV2 run, a recorded gate, reached
 \V{mbgate}\,\% on CIFAR-100 against a floor of \SI{65}{\percent}. One
 MobileNetV2 run (Tiny-ImageNet, width 64, \texttt{gap}, seed 1, final
-accuracy \V{mbresumedacc}\,\%) was stopped by a GPU fault at epoch 125 and
-resumed from its checkpoint; without it, $\texttt{gap}-\texttt{static}$ in
+accuracy \V{mbresumedacc}\,\%) was stopped by a CUDA illegal-memory-access
+error shortly after epoch 120 and resumed from its checkpoint at epoch 125
+(a resumed run is not bit-identical to an uninterrupted one); without it, $\texttt{gap}-\texttt{static}$ in
 that condition is \V{mbsensTB}\,pp ($p=\V{mbsensTBp}$, $n=5$), so no
 conclusion depends on it. MobileNetV2 accuracies and training losses are
 parsed from the training log and checked against the \V{mbjsonn} result
@@ -365,8 +389,8 @@ difference lies within $\pm\delta$. We fixed $\delta=\SI{0.5}{pp}$ before
 the first run. The pre-registration justified this by reference to
 reported gains at CIFAR scale without citing a source. The nearest
 documented figures we have since found are the ImageNet ResNet-18 gains
-of 3.38 to \SI{5.61}{pp} quoted above, and the margin sits an
-order of magnitude below them.
+of 3.38 to \SI{5.61}{pp} quoted above, and the margin is seven to
+eleven times smaller than they are.
 
 \paragraph{Why six seeds.} The two-sided Wilcoxon signed-rank test
 \citep{wilcoxon1945} on $n$ pairs admits only $2^n$ equally likely sign
@@ -411,13 +435,16 @@ the five main conditions of each backbone.
 
 \paragraph{The bank term.} On ResNet-18 the bank term is equivalent to
 zero in all five conditions, with $p_{\text{TOST}}$ between 0.014 and
-0.025; the largest is \V{bankCB}\,pp (Table~\ref{tab:decomp}). On
+0.025; the largest in magnitude is \V{bankCA}\,pp, at CIFAR-100 width 16
+(Table~\ref{tab:decomp}). On
 MobileNetV2 it is never significantly different from zero
 (Table~\ref{tab:mbdecomp}). It is equivalent to zero on CIFAR-100 at
 widths 32 and 64 ($p_{\text{TOST}}=\V{mbbankCBT}$ and \V{mbbankCCT}). At
 CIFAR-100 width 16 and at both Tiny-ImageNet widths it is inconclusive:
-the point estimates (\V{mbbankCA}, \V{mbbankTA} and \V{mbbankTB}\,pp) lie
-inside the margin, but the confidence intervals do not. At CIFAR-100
+the point estimates are small (\V{mbbankCA}, \V{mbbankTA} and
+\V{mbbankTB}\,pp; the first lies just outside the margin) and the
+confidence intervals extend beyond it, so neither equivalence nor a
+difference is shown. At CIFAR-100
 width 16 the MobileNetV2 \texttt{static} arm itself is unusually variable
 across seeds (Table~\ref{tab:mballruns}). Over both backbones the bank
 term is significant in none of the ten pairs and equivalent to zero in
@@ -433,8 +460,8 @@ all five on MobileNetV2, where it ranges from \V{mbroutmin} to
 $\texttt{gap}-\texttt{static}$ is essentially the routing term: on
 ResNet-18 at Tiny-ImageNet width 64, for example, routing is
 \V{routTB}\,pp of a \V{effTB}\,pp total. At ResNet-18 CIFAR-100 width 16
-the bank term is slightly negative (\V{bankCA}\,pp, equivalent to zero)
-and the routing term therefore exceeds the total, which is why we report
+the bank term is slightly negative (the \V{bankCA}\,pp above) and the
+routing term therefore exceeds the total, which is why we report
 no percentage share.
 
 \paragraph{Where the effect appears.} On MobileNetV2 the total effect is
@@ -643,11 +670,13 @@ either ($p_{\text{TOST}}=\V{mbwfrozenrandomgapT}$), so the claim is that no
 difference was detected, not that none exists. Routing each image with
 another image's descriptor removes the benefit: \texttt{shuffled} is not
 distinguishable from \texttt{static} (\V{mbwshuffledstatic}\,pp,
-$p=\V{mbwshuffledstaticp}$) and falls below \texttt{gap} by
-\V{mbwshuffledgap}\,pp ($p=\V{mbwshuffledgapp}$). Read together, the
+$p=\V{mbwshuffledstaticp}$) and is lower than \texttt{gap}
+(\V{mbwshuffledgap}\,pp, $p=\V{mbwshuffledgapp}$). Read together, the
 benefit on MobileNetV2 requires that each image's own descriptor determine
 its mixture, and does not require the router to be trained: a fixed random
-map from descriptors to mixtures is enough. The frozen router's weights are
+map from descriptors to mixtures was enough. That map is a single random
+draw shared by all six seeds, so the result does not show that any random
+router would do. The frozen router's weights are
 held as buffers and are not trained, so the gain is not a product of the
 \V{mbrouterK}K trainable router parameters either.
 
@@ -668,8 +697,10 @@ over the network: its entropy reaches 0.9999 in only \V{mbeFrzFlat} of the
 carries no information about the image it routes, trains itself to
 near-uniform on both backbones ($1-\tilde H=\V{mbeShuf}$ on MobileNetV2,
 \V{rbeShuf} on ResNet-18). On ResNet-18 the trained router's entropy is
-below that of the controls (Figure~\ref{fig:w64}b), so it does vary with
-the input; at this width that variation changes nothing.
+below that of the controls (Figure~\ref{fig:w64}b), so it is further from
+uniform. Entropy alone does not show whether the mixture varies with the
+input, since a constant mixture that is not uniform would also have low
+entropy; at this width, whatever the router does changes no accuracy.
 
 \begin{table}[!htbp]\centering\small
 \caption{Routing controls on CIFAR-100 at width 64, both backbones,
@@ -789,7 +820,7 @@ $K=8$ network at width 32 stores 22.1M parameters, twice the plain
 width-64 network, and trails it by \V{k8vs64}\,pp.
 
 On MobileNetV2 the same pairs are not matched: so few parameters sit in
-dynamic layers that the routed network has only \V{mbmMAr} to \V{mbmMBr}
+dynamic layers that the routed network has only \V{mbmMBr} to \V{mbmMAr}
 times the parameters of the plain network at twice its width
 (Table~\ref{tab:mbmatched}, Figure~\ref{fig:mbmatched}). Even so, the
 plain network wins only at the smallest width (\V{mbmMA}\,pp,
@@ -846,7 +877,7 @@ dataset & routed & plain & routed & plain & $\Delta$ (pp) & \SI{95}{\percent} CI
 
 Dynamic convolution is usually advertised at equal compute, and there the
 picture is different (Table~\ref{tab:cost}). Doubling the width costs
-three to four times the multiply-accumulates of the routed network;
+roughly three to four times the multiply-accumulates of the routed network;
 routing at the same width costs at most \V{rbmacextra}\,\% more on
 ResNet-18 and \V{mbmacextra}\,\% more on MobileNetV2, counted for an
 implementation that aggregates the kernel per sample. At the same width,
@@ -903,14 +934,14 @@ for $K\in\{2,4,8\}$. \SI{95}{\percent} CIs.}
 \label{fig:mbtemp}
 \end{figure}
 
-With $\tau=1$ the softmax can be close to one-hot from the first step,
+With $\tau=1$ the softmax can move towards one-hot early in training,
 starving most of the bank of gradient. DY-Conv anneals $\tau$ from 30 to 1
 for this reason \citep{chen2020dynamic}. We repeated \texttt{gap} at all
 three CIFAR-100 widths with that schedule on both backbones
 (Tables~\ref{tab:temp} and~\ref{tab:mbtemp}, Figures~\ref{fig:temp}
 and~\ref{fig:mbtemp}a).
 
-\paragraph{Accuracy.} Annealing never raised accuracy. On MobileNetV2 it
+\paragraph{Accuracy.} Annealing never raised accuracy detectably. On MobileNetV2 it
 lowered \texttt{gap} at every width: \V{mbanA}\,pp at width 16
 ($p=\V{mbanAp}$), \V{mbanB}\,pp at width 32 ($p=\V{mbanBp}$) and
 \V{mbanC}\,pp at width 64 ($p=\V{mbanCp}$), and the annealed runs ended at a
@@ -919,8 +950,9 @@ higher training loss at every width (\V{mblaA}, \V{mblaB}, \V{mblaC} against
 32 (\V{anB}\,pp, $p=\V{anBp}$, again with a higher final training loss,
 \V{laB} against \V{lcB}) and made no detectable difference at width 16
 (\V{anA}\,pp, $p=\V{anAp}$) or width 64 (\V{anC}\,pp, $p=\V{anCp}$). Over the
-six conditions annealing is lower in \V{nannlower} and higher in
-\V{nannhigher}. Backbone, dataset, bank size and schedule length all differ
+six conditions annealing is significantly lower in \V{nannlower} and
+significantly higher in \V{nannhigher}; the width-16 ResNet-18 point
+estimate is positive but not distinguishable from zero. Backbone, dataset, bank size and schedule length all differ
 from the DY-Conv setting, so this is not evidence against their result.
 
 \paragraph{Annealed routers against the constant mixture.} Compared with
@@ -983,8 +1015,8 @@ $1-\tilde H$ for each dynamic layer, mean over six seeds.}
 \label{fig:mbent}
 \end{figure}
 
-Routing entropy (Section~\ref{sec:entdef}) is the statistic this
-literature reports to show that a router is doing something.
+Routing entropy (Section~\ref{sec:entdef}) is a natural statistic for
+showing that a router is doing something.
 Tables~\ref{tab:entben} and~\ref{tab:mbentben} set it against the benefit
 each router delivers over \texttt{uniform}. Entropy compresses the signal
 quadratically. Writing $z_k=1/K+\varepsilon_k$ with
@@ -1001,16 +1033,18 @@ reports that as 0.997. We call a layer \emph{flat} when
 $\tilde H\ge0.9999$, which allows a root-mean-square deviation from $1/K$
 of about 0.004, under \SI{2}{\percent} of $1/K$.
 
-\paragraph{Within ResNet-18, entropy does not order the benefit.} Across
-its six CIFAR-100 conditions the rank correlation between $1-\tilde H$ and
-the benefit over \texttt{uniform} is \V{rbrho} (Spearman, $p=\V{rbrhop}$).
-At width 16 the two schedules give a counterexample
+\paragraph{Within ResNet-18, entropy did not order the benefit reliably.}
+Across its six CIFAR-100 conditions the rank correlation between
+$1-\tilde H$ and the benefit over \texttt{uniform} is \V{rbrho} (Spearman,
+$p=\V{rbrhop}$), which with six points is neither a demonstrated ordering
+nor a demonstrated absence of one. The direct evidence is a counterexample.
+At width 16 the two schedules give it
 (Figure~\ref{fig:ent}): the constant router has $1-\tilde H=\V{hcA}$ and
 beats \texttt{uniform} by \V{bcA}\,pp, while the annealed router is
 \V{flA} times closer to uniform ($1-\tilde H=\V{haA}$) and beats it by
 \V{anuA}\,pp ($p=\V{anuAp}$).
 
-\paragraph{Within MobileNetV2, it does.} The same correlation is
+\paragraph{Within MobileNetV2, it did.} The same correlation is
 \V{mbrho} ($p=\V{mbrhop}$), and the width-16 counterexample does not recur:
 the annealed router is \V{mbflA} times closer to uniform and delivers less
 (\V{mbbaA}\,pp, $p=\V{mbbapA}$, against \V{mbbcA}\,pp). Inside the annealed
@@ -1045,8 +1079,8 @@ width 64 ends at $1-\tilde H=\V{mbhaC}$ and still beats \texttt{uniform} by
 benefit in one case and a significant benefit in the other.
 
 \paragraph{Conclusion.} Entropy can move with the benefit, as within
-MobileNetV2, but it did not within ResNet-18, and the same value
-accompanies very different benefits on the two backbones. A value of
+MobileNetV2, but it did not reliably within ResNet-18, and almost the same
+value accompanies very different benefits on the two backbones. A value of
 $\tilde H$ below one is not evidence that routing is useful, and a value
 near one is not evidence that it is not. These statements rest on 16
 images per run, measured once at the end of training
@@ -1159,7 +1193,7 @@ convolution in those layers, the size of the router relative to the bank,
 and how close the network comes to fitting its training set under this
 recipe. None was isolated here, so none of the backbone-dependent results
 can be attributed to one of them. The three remaining backbones vary these
-properties: VGG-16 keeps every parameter in full dynamic convolutions,
+properties: VGG-16 keeps nearly every parameter in full dynamic convolutions,
 ResNet-50 about half, and ConvNeXt-Tiny makes only its depthwise
 $7\times7$ layers dynamic.
 
@@ -1214,6 +1248,10 @@ conclusions concern dynamic convolution of this form.
 \paragraph{Global routing.} Every router here uses a global descriptor.
 Spatially resolved routing is not covered.
 
+\paragraph{One random router.} The \texttt{frozen\_random} control uses a
+single random draw, identical across seeds, in one condition. It shows that
+a random router can match a trained one on MobileNetV2, not how often.
+
 \paragraph{One annealing schedule.} Section~\ref{sec:temp} compares a
 constant temperature with one linear schedule.
 
@@ -1242,7 +1280,14 @@ analysis scripts were also found to over-read non-significant orderings on
 four occasions; this report relies on the per-comparison statistics only.
 The report generator was later rewritten to read the result files
 directly; on the 24 ResNet-18 width-64 result files checked it reproduces
-the transcribed accuracies and routing entropies exactly. An earlier
+the transcribed accuracies and routing entropies exactly. Every
+transcribed ResNet-18 accuracy was re-checked on 19 October 2026 against
+the per-run lines of the logs or against the result files, except those
+for Tiny-ImageNet at width 32 \texttt{static} and \texttt{gap}, which were
+checked against the printed means and standard deviations. The ResNet-18 routing entropies for
+CIFAR-100 widths 16 and 32 and for the three annealed groups were
+transcribed from result files that are not in the accompanying archive, so
+they cannot be re-derived from it; only the width-64 files are. An earlier
 version of this report printed stored parameter counts with a third
 decimal that had not been measured, and six of nineteen were off by up to
 \SI{0.005}{M} (for example \SI{0.708}{M} for \SI{0.713}{M}); the counts
@@ -1263,26 +1308,28 @@ as well as a trained one, provided each image was routed by its own
 descriptor.
 
 How much this is worth depends on the backbone and on the cost held
-fixed. At equal parameters, a plain ResNet-18 of twice the width did better
-by 2.3 to \SI{4.3}{pp}, while on MobileNetV2 a plain network with
-\V{mbpinvlo} to \V{mbpinvhi} times the parameters won only one of three
-pairs. At equal width, for a few percent more compute, routing won on both
-backbones wherever it had an effect. The one condition without an effect,
+fixed. A plain ResNet-18 of twice the width, which has the same number of
+parameters as the routed one, did better by 2.3 to \SI{4.3}{pp}, while on
+MobileNetV2, where twice the width means \V{mbpinvlo} to \V{mbpinvhi} times
+the parameters, the plain network won only one of three pairs. At equal width, for at most \V{rbmacextra}\,\% more compute, routing
+won on both backbones wherever it had an effect. The one condition without an effect,
 ResNet-18 on CIFAR-100 at width 64, remains unexplained.
 
 Two common practices did not help. Annealing the softmax temperature never
-raised accuracy and lowered it in \V{nannlower} of six conditions, leaving
+detectably raised accuracy and lowered it in \V{nannlower} of six conditions, leaving
 the routers close to uniform. Routing entropy did not reliably indicate
 whether routing helped: it ordered the benefit within MobileNetV2 but not
-within ResNet-18, and the same entropy accompanied benefits of \V{rbguC}
-and \V{mbguC}\,pp on the two backbones. Three of our four recorded
+reliably within ResNet-18, and almost the same entropy accompanied benefits
+of \V{rbguC} and \V{mbguC}\,pp on the two backbones. Three of our four recorded
 predictions failed.
 
 \paragraph{Reproducibility.} \V{totruns} runs (\V{nruns} ResNet-18,
 \V{mbruns} MobileNetV2), \V{totgpuh} GPU-hours, one RTX 4070 Ti. Code, the
 pre-registrations, the dated prediction, the gate ledgers with recorded
-evidence, every result file and every per-seed value accompany this
-report.
+evidence, the 132 MobileNetV2 result files, the 24 ResNet-18 result files
+of CIFAR-100 width 64 and every per-seed value accompany this report. The
+other 108 ResNet-18 runs are represented by the per-seed values transcribed
+from their logs (Section~\ref{sec:threats}).
 
 \FloatBarrier
 \begin{thebibliography}{99}\small
@@ -1351,13 +1398,14 @@ dataset & width & arm & s0 & s1 & s2 & s3 & s4 & s5 & mean & sd \\
 \caption{ResNet-18: paired comparisons against \texttt{static}, $n=6$. $p_W$ is the
 Wilcoxon signed-rank test, which cannot fall below 0.031 at this $n$.}
 \label{tab:vsstatic}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{l r l r l ll r l l}
 \toprule
 dataset & width & arm & $\Delta$ (pp) & \SI{95}{\percent} CI & $p_t$ & $p_W$ & $d_z$ & $p_{\text{TOST}}$ & verdict \\
 \midrule
 %%VSSTATIC%%
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \begin{table}[h]\centering\small
