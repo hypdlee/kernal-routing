@@ -30,7 +30,7 @@ plt.rcParams.update({"font.size": 8.5, "axes.grid": True, "grid.alpha": 0.25, "a
                      "axes.spines.right": False, "figure.dpi": 200, "savefig.bbox": "tight",
                      "font.family": "DejaVu Sans", "legend.frameon": False})
 C = {"static": "#444444", "uniform": "#1f77b4", "gap": "#d62728", "shuffled": "#2ca02c",
-     "frozen_random": "#9467bd", "ann": "#ff7f0e", "r18": "#7f7f7f", "mb": "#1f6fb4"}
+     "frozen_random": "#9467bd", "ann": "#ff7f0e", "r18": "#7f7f7f", "mb": "#1f6fb4", "vg": "#b8860b"}
 DSN = {"cifar100": "CIFAR-100", "tinyimagenet": "Tiny-ImageNet"}
 COND = [("cifar100", 16), ("cifar100", 32), ("cifar100", 64), ("tinyimagenet", 32), ("tinyimagenet", 64)]
 f = lambda x, n=3: "--" if x is None or (isinstance(x, float) and math.isnan(x)) else f"{x:.{n}f}"
@@ -50,10 +50,15 @@ def counted(model):
     return out
 
 
-def main(log_path, results_dir):
+def main(log_path, results_dir, vgg_log):
     R = mbv2_log.parse(log_path)
     assert len(R) == 132, len(R)
     PM = counted("mobilenetv2")
+    RV = mbv2_log.parse(vgg_log, "vgg16")
+    assert len(RV) == 132, len(RV)
+
+    def vg(ds, w, arm, k=4, rec="const", field="final"):
+        return np.array([RV[(ds, w, k, rec, arm, s)][field] for s in range(6)], dtype=float)
 
     def mb(ds, w, arm, k=4, rec="const", field="final"):
         return np.array([R[(ds, w, k, rec, arm, s)][field] for s in range(6)], dtype=float)
@@ -66,8 +71,10 @@ def main(log_path, results_dir):
     # ------------------------------------------------------------ headline numbers
     put("mbruns", str(len(R)))
     put("mbgpuh", f"{sum(r['minutes'] for r in R.values()) / 60:.0f}")
-    put("totruns", str(len(R) + P.n_runs()))
-    put("totgpuh", f"{sum(r['minutes'] for r in R.values()) / 60 + P.gpu_hours():.0f}")
+    put("totruns", str(len(R) + len(RV) + P.n_runs()))
+    put("totgpuh", f"{sum(r['minutes'] for r in R.values()) / 60 + sum(r['minutes'] for r in RV.values()) / 60 + P.gpu_hours():.0f}")
+    put("twogpuh", f"{sum(r['minutes'] for r in R.values()) / 60 + P.gpu_hours():.0f}")
+    vdec, vpairs = vgg_part(RV, vg, put)
     put("mbgate", f(R[("cifar100", 64, 4, "const", "static", 0)]["final"], 2))
     put("mbstatic", f(mb("cifar100", 64, "static").mean(), 2))
     put("mbpstatic", f(PM[("cifar100", 64, 4, "static")][0], 2))
@@ -121,13 +128,14 @@ def main(log_path, results_dir):
     # ------------------------------------------------------------ width 64 controls
     arms = ["static", "uniform", "gap", "shuffled", "frozen_random"]
     comps = [("uniform", "static"), ("gap", "static"), ("shuffled", "static"), ("frozen_random", "static"),
-             ("frozen_random", "gap"), ("shuffled", "gap"), ("frozen_random", "uniform")]
+             ("frozen_random", "gap"), ("shuffled", "gap"), ("frozen_random", "uniform"), ("gap", "uniform")]
     rows = []
     for a, b_ in comps:
         qm = paired(mb("cifar100", 64, a), mb("cifar100", 64, b_))
         qr = paired(r18("cifar100", 64, a), r18("cifar100", 64, b_))
-        rows.append(f"{tt(a)} $-$ {tt(b_)} & {sg(qr['mean'])} & {verdict(qr)} & {sg(qm['mean'])} & "
-                    f"[{sg(qm['lo'])}, {sg(qm['hi'])}] & {pv(qm['p'])} & {pv(qm['tost'])} & {verdict(qm)} \\\\")
+        qv = paired(vg("cifar100", 64, a), vg("cifar100", 64, b_))
+        rows.append(f"{tt(a)} $-$ {tt(b_)} & {sg(qr['mean'])} & {pv(qr['p'])} & {verdict(qr)} & {sg(qm['mean'])} & "
+                    f"{pv(qm['p'])} & {verdict(qm)} & {sg(qv['mean'])} & {pv(qv['p'])} & {verdict(qv)} \\\\")
         key = (a + b_).replace("_", "")
         put(f"mbw{key}", sg(qm["mean"])); put(f"mbw{key}lo", sg(qm["lo"])); put(f"mbw{key}hi", sg(qm["hi"]))
         put(f"mbw{key}p", pv(qm["p"])); put(f"mbw{key}T", f(qm["tost"], 4))
@@ -194,44 +202,78 @@ def main(log_path, results_dir):
         f"P2 & \\texttt{{static}} at width $2c$ is more accurate than \\texttt{{gap}} at width $c$ in each of the three pairs & {np2} of 3 & {'held' if np2 == 3 else 'failed'} \\\\\n"
         f"P3 & The routing term is positive with $p<0.05$ in at least three of the five conditions & {nr} of 5 & {'held' if nr >= 3 else 'failed'} \\\\\n")
 
-    # ------------------------------------------------------------ the contradiction table
+    # ------------------------------------------------------------ the result-by-result table (three backbones)
     rbank = sum(verdict(b) == "equivalent" for b in r18bank)
     r18_w64 = paired(r18("cifar100", 64, "gap"), r18("cifar100", 64, "static"))
     mb_w64 = dec[("cifar100", 64)][2]
+    vg_w64 = vdec[("cifar100", 64)][2]
     r18_pairs = [paired(r18(ds, ws, "static"), r18(ds, wg, "gap")) for ds, wg, ws in
                  [("cifar100", 16, 32), ("cifar100", 32, 64), ("tinyimagenet", 32, 64)]]
     r18_ann = [paired(r18("cifar100", w, "gap", rec="anneal"), r18("cifar100", w, "gap")) for w in (16, 32, 64)]
     mb_ann = [paired(mb("cifar100", w, "gap", rec="anneal"), mb("cifar100", w, "gap")) for w in (16, 32, 64)]
-    r18_frz = paired(r18("cifar100", 64, "frozen_random"), r18("cifar100", 64, "gap"))
-    mb_frz = paired(mb("cifar100", 64, "frozen_random"), mb("cifar100", 64, "gap"))
-    mb_frzu = paired(mb("cifar100", 64, "frozen_random"), mb("cifar100", 64, "uniform"))
-    r18_k = paired(r18("cifar100", 32, "gap", k=8), r18("cifar100", 32, "gap", k=2))
+    vg_ann = [paired(vg("cifar100", w, "gap", rec="anneal"), vg("cifar100", w, "gap")) for w in (16, 32, 64)]
+    W = lambda g, a, b_: paired(g("cifar100", 64, a), g("cifar100", 64, b_))
+    k82 = lambda g: paired(g("cifar100", 32, "gap", k=8), g("cifar100", 32, "gap", k=2))
     nsig_r18 = sum(q["p"] < 0.05 and q["mean"] > 0 for q in r18_pairs)
+    nsig_vg = sum(q["p"] < 0.05 and q["mean"] > 0 for q in vpairs)
     lst = lambda qs: ", ".join(sg(q["mean"], 2) for q in qs)
+    vnb = sum(verdict(b) == "equivalent" for b, _, _ in vdec.values())
+    vnr = sum(r["p"] < 0.05 and r["mean"] > 0 for _, r, _ in vdec.values())
+    largest = lambda d: f"{max((b['mean'] for b, _, _ in d.values()), key=abs):+.2f}"
+    ctl = lambda g: f"{sg(W(g, 'gap', 'uniform')['mean'], 2)} / {sg(W(g, 'frozen_random', 'uniform')['mean'], 2)} ({verdict(W(g, 'gap', 'uniform'))} / {verdict(W(g, 'frozen_random', 'uniform'))})"
     contra = [
-        ("Bank term ($\\texttt{uniform}-\\texttt{static}$)", f"equivalent in {rbank} of 5", f"equivalent in {nb} of 5; never significant (largest {max((b['mean'] for b,_,_ in dec.values()), key=abs):+.2f})", "holds on both (weaker on MobileNetV2)"),
-        ("Routing term significant", f"{sum(paired(r18(ds,w,'gap'),r18(ds,w,'uniform'))['p']<0.05 for ds,w in COND)} of 5", f"{nr} of 5", "holds on both"),
-        ("$\\texttt{gap}-\\texttt{static}$, CIFAR-100 w64", f"{sg(r18_w64['mean'],2)} ({verdict(r18_w64)})", f"{sg(mb_w64['mean'],2)} ({verdict(mb_w64)})", "\\textbf{backbone-dependent}"),
-        ("Plain $2c$ beats \\texttt{gap} $c$ (3 pairs)", f"{nsig_r18} of 3 ({lst(r18_pairs)})", f"{np2} of 3 ({lst(pairs)})", "\\textbf{backbone-dependent}"),
-        ("Annealed $-$ constant $\\tau$ (w16, 32, 64)", lst(r18_ann), lst(mb_ann), "holds on both (never significantly higher)"),
-        ("$\\texttt{frozen\\_random}-\\texttt{gap}$, w64", f"{sg(r18_frz['mean'],2)} (both null)", f"{sg(mb_frz['mean'],2)}; vs \\texttt{{uniform}} {sg(mb_frzu['mean'],2)}", "MobileNetV2 only"),
-        ("$K=8$ vs $K=2$, CIFAR-100 w32", f"{sg(r18_k['mean'],2)} ({verdict(r18_k)})", f"{sg(q['mean'],2) if False else sg(paired(mb('cifar100',32,'gap',k=8),mb('cifar100',32,'gap',k=2))['mean'],2)} ({verdict(paired(mb('cifar100',32,'gap',k=8),mb('cifar100',32,'gap',k=2)))})", "holds on both"),
+        ("Bank term ($\\texttt{uniform}-\\texttt{static}$)", f"equivalent in {rbank} of 5",
+         f"equivalent in {nb} of 5; never significant (largest {largest(dec)})",
+         f"equivalent in {vnb} of 5; never significant (largest {largest(vdec)})", "holds on all three (weaker on MobileNetV2 and VGG-16)"),
+        ("Routing term significant", f"{sum(paired(r18(ds,w,'gap'),r18(ds,w,'uniform'))['p']<0.05 for ds,w in COND)} of 5", f"{nr} of 5",
+         f"{vnr} of 5", "holds on all three"),
+        ("$\\texttt{gap}-\\texttt{static}$, CIFAR-100 w64", f"{sg(r18_w64['mean'],2)} ({verdict(r18_w64)})", f"{sg(mb_w64['mean'],2)} ({verdict(mb_w64)})",
+         f"{sg(vg_w64['mean'],2)} ({verdict(vg_w64)})", "\\textbf{backbone-dependent}"),
+        ("Plain $2c$ beats \\texttt{gap} $c$ (3 pairs)", f"{nsig_r18} of 3 ({lst(r18_pairs)})", f"{np2} of 3 ({lst(pairs)})",
+         f"{nsig_vg} of 3 ({lst(vpairs)})", "\\textbf{backbone-dependent}"),
+        ("Annealed $-$ constant $\\tau$ (w16, 32, 64)", lst(r18_ann), lst(mb_ann), lst(vg_ann), "holds on all three (never significantly higher)"),
+        ("\\texttt{gap} / \\texttt{frozen\\_random} $-$ \\texttt{uniform}, w64", ctl(r18), ctl(mb), ctl(vg), "\\textbf{backbone-dependent}"),
+        ("$K=8$ vs $K=2$, CIFAR-100 w32", f"{sg(k82(r18)['mean'],2)} ({verdict(k82(r18))})", f"{sg(k82(mb)['mean'],2)} ({verdict(k82(mb))})",
+         f"{sg(k82(vg)['mean'],2)} ({verdict(k82(vg))})", "holds on all three"),
     ]
-    pathlib.Path("tab_CONTRA.tex").write_text("\n".join(f"{a} & {b} & {c} & {d} \\\\" for a, b, c, d in contra) + "\n")
-    put("rbmpairs", lst(r18_pairs)); put("mbmpairs", lst(pairs))
+    pathlib.Path("tab_CONTRA.tex").write_text("\n".join(f"{a} & {b} & {c} & {d} & {e} \\\\" for a, b, c, d, e in contra) + "\n")
+    put("rbmpairs", lst(r18_pairs)); put("mbmpairs", lst(pairs)); put("vgmpairs", lst(vpairs))
     put("rbanlist", lst(r18_ann)); put("mbanlist", lst(mb_ann))
     put("nannlower", str(sum(q["p"] < 0.05 and q["mean"] < 0 for q in r18_ann + mb_ann)))
     put("nannhigher", str(sum(q["p"] < 0.05 and q["mean"] > 0 for q in r18_ann + mb_ann)))
+    put("allannlower", str(sum(q["p"] < 0.05 and q["mean"] < 0 for q in r18_ann + mb_ann + vg_ann)))
+    put("allannhigher", str(sum(q["p"] < 0.05 and q["mean"] > 0 for q in r18_ann + mb_ann + vg_ann)))
+    put("vgannlower", str(sum(q["p"] < 0.05 and q["mean"] < 0 for q in vg_ann)))
     rbn = sum(paired(r18(ds, w, 'gap'), r18(ds, w, 'uniform'))['p'] < 0.05 for ds, w in COND)
-    put("rbnrout", str(rbn)); put("bothrout", str(rbn + nr))
+    put("rbnrout", str(rbn)); put("bothrout", str(rbn + nr)); put("allrout", str(rbn + nr + vnr))
     put("rbnbanksig", str(sum(b["p"] < 0.05 for b in r18bank)))
     put("bothbanksig", str(sum(b["p"] < 0.05 for b in r18bank) + sum(b["p"] < 0.05 for b, _, _ in dec.values())))
+    put("allbanksig", str(sum(b["p"] < 0.05 for b in r18bank) + sum(b["p"] < 0.05 for b, _, _ in dec.values())
+                          + sum(b["p"] < 0.05 for b, _, _ in vdec.values())))
+    put("allbankeq", str(rbank + nb + vnb))
+    put("allP2", str(nsig_r18 + nsig_vg))
+    # pairs with an effect over static, and whether the routing term is significant in them
+    effpairs = ([(paired(r18(ds, w, "gap"), r18(ds, w, "static")), paired(r18(ds, w, "gap"), r18(ds, w, "uniform"))) for ds, w in COND]
+                + [(t_, r_) for _, r_, t_ in dec.values()] + [(t_, r_) for _, r_, t_ in vdec.values()])
+    eff = [(t_, r_) for t_, r_ in effpairs if t_["p"] < 0.05 and t_["mean"] > 0]
+    put("alleff", str(len(eff))); put("alleffrout", str(sum(r_["p"] < 0.05 and r_["mean"] > 0 for _, r_ in eff)))
+    put("allnull", str(len(effpairs) - len(eff)))
+    eqp = [q["mean"] for q in r18_pairs + vpairs]
+    put("eqpmin", f(min(eqp), 1)); put("eqpmax", f(max(eqp), 1))
+    q = W(r18, "shuffled", "gap"); put("rbwshuffledgap", sg(q["mean"])); put("rbwshuffledgapv", verdict(q))
+    # predictions recorded before the runs that test them
+    r18tb = paired(r18("tinyimagenet", 64, "gap"), r18("tinyimagenet", 64, "static"))
+    outcomes = ([verdict(r18tb) == "equivalent"] + [nb == 5, np2 == 3, nr >= 3]
+                + [vnb == 5, nsig_vg == 3, vnr >= 3])
+    put("allpred", str(len(outcomes))); put("allpredfail", str(sum(not o for o in outcomes)))
+    put("allpredheld", str(sum(outcomes)))
 
     # ------------------------------------------------------------ loss vs effect (both backbones)
     pts = []
     for ds, w in COND:
         pts.append(("ResNet-18", ds, w, P.LOSS[(ds, w, 4, "const")]["static"], paired(r18(ds, w, "gap"), r18(ds, w, "static"))))
         pts.append(("MobileNetV2", ds, w, mb(ds, w, "static", field="loss").mean(), dec[(ds, w)][2]))
+        pts.append(("VGG-16", ds, w, vg(ds, w, "static", field="loss").mean(), vdec[(ds, w)][2]))
     put("mblossCC", f(mb("cifar100", 64, "static", field="loss").mean(), 3))
     put("mblossmin", f(min(p[3] for p in pts if p[0] == "MobileNetV2"), 3))
     put("rblossCC", f(P.LOSS[("cifar100", 64, 4, "const")]["static"], 4))
@@ -282,22 +324,22 @@ def main(log_path, results_dir):
                     capsize=3, **k)
 
     # G1: decomposition, both backbones
-    fig, axs = plt.subplots(1, 2, figsize=(7.6, 2.8), sharey=True)
+    fig, axs = plt.subplots(1, 3, figsize=(7.9, 2.8), sharey=True)
     xs = np.arange(5); bw = .36
     labels = ["C100\nw16", "C100\nw32", "C100\nw64", "TIN\nw32", "TIN\nw64"]
-    for ax, name, getter in [(axs[0], "(a) ResNet-18", r18), (axs[1], "(b) MobileNetV2", mb)]:
+    for ax, name, getter in [(axs[0], "(a) ResNet-18", r18), (axs[1], "(b) MobileNetV2", mb), (axs[2], "(c) VGG-16", vg)]:
         for j, (lbl, fn, col) in enumerate([("bank (uniform $-$ static)", lambda d, w: paired(getter(d, w, "uniform"), getter(d, w, "static")), C["uniform"]),
                                             ("routing (gap $-$ uniform)", lambda d, w: paired(getter(d, w, "gap"), getter(d, w, "uniform")), C["gap"])]):
             qs = [fn(d, w) for d, w in COND]
             ax.bar(xs + (j - .5) * bw, [q["mean"] for q in qs], bw, color=col, label=lbl,
                    yerr=[[q["mean"] - q["lo"] for q in qs], [q["hi"] - q["mean"] for q in qs]], capsize=2.5, error_kw=dict(lw=.9))
         ax.axhline(0, color="k", lw=.8); ax.axhspan(-.5, .5, color="grey", alpha=.10)
-        ax.set_xticks(xs); ax.set_xticklabels(labels, fontsize=7); ax.set_title(name, fontsize=9)
+        ax.set_xticks(xs); ax.set_xticklabels(labels, fontsize=6.5); ax.set_title(name, fontsize=9)
     axs[0].set_ylabel("$\\Delta$ accuracy (pp)"); axs[0].legend(fontsize=7, loc="upper left")
     plt.savefig("fig/g1_decomp_both.pdf"); plt.close()
 
     # G2: MobileNetV2 width 64, five arms; and controls on both backbones
-    fig, ax = plt.subplots(1, 2, figsize=(7.6, 2.9), gridspec_kw=dict(width_ratios=[1, 1.15]))
+    fig, ax = plt.subplots(1, 2, figsize=(7.6, 3.2), gridspec_kw=dict(width_ratios=[1, 1.15]))
     for i, a in enumerate(arms):
         v = mb("cifar100", 64, a)
         ax[0].scatter([i] * 6, v, s=22, color=C[a], alpha=.85, zorder=3)
@@ -305,23 +347,25 @@ def main(log_path, results_dir):
     s0 = mb("cifar100", 64, "static").mean(); ax[0].axhspan(s0 - .5, s0 + .5, color="grey", alpha=.13)
     ax[0].set_xticks(range(5)); ax[0].set_xticklabels(arms, rotation=35, ha="right", fontsize=7)
     ax[0].set_ylabel("top-1 accuracy (%)"); ax[0].set_title("(a) MobileNetV2, CIFAR-100, width 64", fontsize=9)
-    cl = [("gap", "static"), ("frozen_random", "static"), ("shuffled", "static"), ("frozen_random", "gap"), ("shuffled", "gap")]
-    for j, (name, getter, col) in enumerate([("ResNet-18", r18, C["r18"]), ("MobileNetV2", mb, C["mb"])]):
+    cl = [("gap", "static"), ("frozen_random", "static"), ("shuffled", "static"), ("gap", "uniform"), ("frozen_random", "uniform"),
+          ("frozen_random", "gap"), ("shuffled", "gap")]
+    for j, (name, getter, col) in enumerate([("ResNet-18", r18, C["r18"]), ("MobileNetV2", mb, C["mb"]), ("VGG-16", vg, C["vg"])]):
         qs = [paired(getter("cifar100", 64, a), getter("cifar100", 64, b_)) for a, b_ in cl]
-        y = np.arange(len(cl)) + (j - .5) * .3
+        y = np.arange(len(cl)) + (j - 1) * .25
         ax[1].errorbar([q["mean"] for q in qs], y, xerr=[[q["mean"] - q["lo"] for q in qs], [q["hi"] - q["mean"] for q in qs]],
                        fmt="o", ms=4, capsize=2.5, color=col, label=name)
     ax[1].axvline(0, color="k", lw=.8); ax[1].axvspan(-.5, .5, color="grey", alpha=.13)
     ax[1].set_yticks(range(len(cl))); ax[1].set_yticklabels([f"{a} $-$ {b_}" for a, b_ in cl], fontsize=7)
     ax[1].invert_yaxis(); ax[1].set_xlabel("$\\Delta$ (pp), 95% CI"); ax[1].legend(fontsize=7, loc="lower right")
-    ax[1].set_title("(b) routing controls, width 64", fontsize=9)
+    ax[1].set_title("(b) routing controls, three backbones", fontsize=9)
     plt.savefig("fig/g2_mb_w64.pdf"); plt.close()
 
     # G3: gap - static by width, both backbones, both datasets
     fig, ax = plt.subplots(1, 2, figsize=(7.4, 2.7))
     for k_, (ds, ws, ttl) in enumerate([("cifar100", [16, 32, 64], "(a) CIFAR-100"), ("tinyimagenet", [32, 64], "(b) Tiny-ImageNet")]):
-        for name, getter, col, mk in [("ResNet-18", r18, C["r18"], "s"), ("MobileNetV2", mb, C["mb"], "o")]:
-            eb(ax[k_], ws, [paired(getter(ds, w, "gap"), getter(ds, w, "static")) for w in ws], marker=mk, ms=4.5, lw=1.4,
+        for name, getter, col, mk, off in [("ResNet-18", r18, C["r18"], "s", .96), ("MobileNetV2", mb, C["mb"], "o", 1.0),
+                                           ("VGG-16", vg, C["vg"], "^", 1.04)]:
+            eb(ax[k_], np.array(ws) * off, [paired(getter(ds, w, "gap"), getter(ds, w, "static")) for w in ws], marker=mk, ms=4.5, lw=1.4,
                color=col, label=name)
         ax[k_].axhline(0, color="k", lw=.8); ax[k_].axhspan(-.5, .5, color="grey", alpha=.13)
         ax[k_].set_xscale("log", base=2); ax[k_].set_xticks([16, 32, 64]); ax[k_].set_xticklabels([16, 32, 64])
@@ -349,8 +393,9 @@ def main(log_path, results_dir):
     plt.savefig("fig/g4_mb_matched.pdf"); plt.close()
 
     # G5: temperature and bank size, both backbones
-    fig, ax = plt.subplots(1, 2, figsize=(7.4, 2.6))
-    for name, getter, col, mk, off in [("ResNet-18", r18, C["r18"], "s", .96), ("MobileNetV2", mb, C["mb"], "o", 1.04)]:
+    fig, ax = plt.subplots(1, 2, figsize=(7.4, 2.8))
+    for name, getter, col, mk, off in [("ResNet-18", r18, C["r18"], "s", .95), ("MobileNetV2", mb, C["mb"], "o", 1.0),
+                                       ("VGG-16", vg, C["vg"], "^", 1.05)]:
         eb(ax[0], np.array([16, 32, 64]) * off, [paired(getter("cifar100", w, "gap", rec="anneal"), getter("cifar100", w, "gap")) for w in (16, 32, 64)],
            marker=mk, ms=4.5, lw=1.3, color=col, label=name)
         eb(ax[1], np.array([2, 4, 8]) * off, [paired(getter("cifar100", 32, "gap", k=kk), getter("cifar100", 32, "static")) for kk in (2, 4, 8)],
@@ -371,7 +416,7 @@ def main(log_path, results_dir):
                    label=f"{'CIFAR' if ds == 'cifar100' else 'TIN'} w{w} {a}")
     ax[0].set_yscale("log"); ax[0].set_xlabel("epoch"); ax[0].set_ylabel("training loss (log)")
     ax[0].legend(fontsize=6.3); ax[0].set_title("(a) MobileNetV2 training loss, seed 0", fontsize=9)
-    for name, col, mk in [("ResNet-18", C["r18"], "s"), ("MobileNetV2", C["mb"], "o")]:
+    for name, col, mk in [("ResNet-18", C["r18"], "s"), ("MobileNetV2", C["mb"], "o"), ("VGG-16", C["vg"], "^")]:
         sel = [p for p in pts if p[0] == name]
         ax[1].errorbar([p[3] for p in sel], [p[4]["mean"] for p in sel],
                        yerr=[[p[4]["mean"] - p[4]["lo"] for p in sel], [p[4]["hi"] - p[4]["mean"] for p in sel]],
@@ -381,7 +426,7 @@ def main(log_path, results_dir):
                            textcoords="offset points", fontsize=6)
     ax[1].axhline(0, color="k", lw=.8); ax[1].set_xscale("log"); ax[1].legend(fontsize=7, loc="upper left")
     ax[1].set_xlabel("static arm final training loss (log)"); ax[1].set_ylabel("gap $-$ static (pp)")
-    ax[1].set_title("(b) effect against training loss, 10 conditions", fontsize=9)
+    ax[1].set_title("(b) effect against training loss, 15 conditions", fontsize=9)
     plt.savefig("fig/g6_loss_effect.pdf"); plt.close()
 
     # G7 (appendix): every MobileNetV2 run at K=4, tau=1
@@ -405,11 +450,12 @@ def main(log_path, results_dir):
     macs = {}
     for l in (ROOT / "COMPUTE_ESTIMATE.md").read_text().splitlines():
         x = [c.strip() for c in l.split("|")[1:-1]]
-        if len(x) == 6 and x[0] in ("resnet18", "mobilenetv2"):
+        if len(x) == 6 and x[0] in ("resnet18", "mobilenetv2", "vgg16"):
             macs[(x[0], x[1], int(x[2]), int(x[3]), x[4])] = float(x[5])
     PR = counted("resnet18")
     rows = []
-    for name, model, getter, PP in [("ResNet-18", "resnet18", r18, PR), ("MobileNetV2", "mobilenetv2", mb, PM)]:
+    for name, model, getter, PP in [("ResNet-18", "resnet18", r18, PR), ("MobileNetV2", "mobilenetv2", mb, PM),
+                                    ("VGG-16", "vgg16", vg, counted("vgg16"))]:
         for ds, wg, ws in [("cifar100", 16, 32), ("cifar100", 32, 64), ("tinyimagenet", 32, 64)]:
             q2 = paired(getter(ds, ws, "static"), getter(ds, wg, "gap"))
             q1 = paired(getter(ds, wg, "gap"), getter(ds, wg, "static"))
@@ -425,6 +471,10 @@ def main(log_path, results_dir):
                        + sum(t["p"] < 0.05 and t["mean"] > 0 for _, _, t in dec.values())))
     put("mbeqmac", str(sum(t["p"] < 0.05 and t["mean"] > 0 for _, _, t in dec.values())))
     put("rbmacextra", f"{100 * max(macs[('resnet18', ds, w, 4, 'gap')] / macs[('resnet18', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
+    put("vgmacextra", f"{100 * max(macs[('vgg16', ds, w, 4, 'gap')] / macs[('vgg16', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
+    put("vgeqmac", str(sum(t["p"] < 0.05 and t["mean"] > 0 for _, _, t in vdec.values())))
+    allmac = [macs[(m_, ds, w, 4, 'gap')] / macs[(m_, ds, w, 4, 'static')] - 1 for m_ in ("resnet18", "mobilenetv2", "vgg16") for ds, w in COND]
+    put("allmacextra", f"{100 * max(allmac):.0f}")
     put("mbmacextra", f"{100 * max(macs[('mobilenetv2', ds, w, 4, 'gap')] / macs[('mobilenetv2', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
 
     entropy(results_dir, R, mb, r18, put)
@@ -545,25 +595,28 @@ def entropy(results_dir, R, mb, r18, put):
     pathlib.Path("tab_MBLAYER.tex").write_text("\n".join(rows) + "\n")
 
     # ---------------- contradiction rows for the transfer table
+    NA = "not available (no result files)"
     extra = [
         ("Entropy counterexample, CIFAR-100 w16",
          f"annealed {P_fl(HR)}$\\times$ flatter, larger benefit ({sg(paired(r18('cifar100',16,'gap',rec='anneal'),r18('cifar100',16,'uniform'))['mean'],2)} vs "
          f"{sg(paired(r18('cifar100',16,'gap'),r18('cifar100',16,'uniform'))['mean'],2)})",
          f"annealed {H('cifar100',16)/H('cifar100',16,'anneal'):.1f}$\\times$ flatter, smaller benefit "
-         f"({sg(BEN[('cifar100',16,'anneal')]['mean'],2)} vs {sg(BEN[('cifar100',16,'const')]['mean'],2)})", "\\textbf{backbone-dependent}"),
+         f"({sg(BEN[('cifar100',16,'anneal')]['mean'],2)} vs {sg(BEN[('cifar100',16,'const')]['mean'],2)})", NA, "\\textbf{backbone-dependent} (two backbones)"),
         ("Constant-$\\tau$ $1-\\tilde H$ as width grows (w16, 32, 64)",
          ", ".join(f(HR(w, "const"), 4) for w in (16, 32, 64)) + " (flattens)",
-         ", ".join(f(H("cifar100", w), 4) for w in (16, 32, 64)) + " (sharpens)", "\\textbf{backbone-dependent}"),
+         ", ".join(f(H("cifar100", w), 4) for w in (16, 32, 64)) + " (sharpens)", NA, "\\textbf{backbone-dependent} (two backbones)"),
         ("Same $1-\\tilde H$, CIFAR-100 w64, \\texttt{gap}$-$\\texttt{uniform}",
          f"{f(HR(64,'const'),4)}: {sg(r18w64['mean'],2)} ({verdict(r18w64)})",
-         f"{f(H('cifar100',64),4)}: {sg(BEN[('cifar100',64,'const')]['mean'],2)} ({verdict(BEN[('cifar100',64,'const')])})", "across backbones"),
+         f"{f(H('cifar100',64),4)}: {sg(BEN[('cifar100',64,'const')]['mean'],2)} ({verdict(BEN[('cifar100',64,'const')])})", NA, "across backbones"),
     ]
     with open("tab_CONTRA.tex", "a") as fh:
-        fh.write("\n".join(f"{a} & {b} & {c} & {d} \\\\" for a, b, c, d in extra) + "\n")
+        fh.write("\n".join(f"{a} & {b} & {c} & {d} & {e} \\\\" for a, b, c, d, e in extra) + "\n")
     status = [l.rsplit("&", 1)[1] for l in pathlib.Path("tab_CONTRA.tex").read_text().splitlines() if l.strip()]
     put("ncontra", str(len(status)))
     put("ncontraBD", str(sum("backbone-dependent" in x for x in status)))
-    put("ncontraHold", str(sum("holds on both" in x for x in status)))
+    put("ncontraHold", str(sum("holds on all three" in x for x in status)))
+    put("ncontraMB", str(sum("MobileNetV2 only" in x for x in status)))
+    put("ncontraX", str(sum("across backbones" in x for x in status)))
 
     # ---------------- figure G8
     fig, ax = plt.subplots(1, 3, figsize=(7.9, 3.0), gridspec_kw=dict(width_ratios=[1, 1.15, 1.2]))
@@ -610,3 +663,195 @@ if __name__ == "__main__":
     M = main(sys.argv[1], sys.argv[2])
     for k, v in M.items():
         print(f"{k:16} {v}")
+
+
+# =========================================================================== VGG-16
+def counted_layers(model):
+    out, cur = {}, None
+    for l in (ROOT / "PARAMS_EXPECTED.md").read_text().splitlines():
+        if l.startswith("## "):
+            cur = l[3:].strip()
+        x = [c.strip() for c in l.split("|")[1:-1]]
+        if cur == model and len(x) == 8 and x[0] in ("cifar100", "tinyimagenet"):
+            out[(x[0], int(x[1]), int(x[2]), x[3])] = int(x[7])
+    return out
+
+
+def vgg_part(RV, vg, put):
+    """Every VGG-16 number, table and appendix figure. Records come from the
+    VGG-16 train.log (mbv2_log.parse with model='vgg16'); parameter counts
+    from PARAMS_EXPECTED.md, checked against the counts the log prints."""
+    PV = counted("vgg16")
+    for k, r in RV.items():
+        pc, rk = PV[(k[0], k[1], k[2], k[4])]
+        if abs(r["params"] - round(pc, 2)) > 1e-9 or abs(r["router_k"] - round(rk, 1)) > 1e-9:
+            raise SystemExit(f"VGG-16 parameter count in the log differs from PARAMS_EXPECTED.md for {k}")
+    arms = ["static", "uniform", "gap", "shuffled", "frozen_random"]
+    put("vgruns", str(len(RV)))
+    put("vggpuh", f"{sum(r['minutes'] for r in RV.values()) / 60:.0f}")
+    put("vggate", f(RV[("cifar100", 64, 4, "const", "static", 0)]["final"], 2))
+    put("vgpstatic", f(PV[("cifar100", 64, 4, "static")][0], 2))
+    put("vgrouterK", f(PV[("cifar100", 64, 4, "gap")][1], 0))
+    put("vgrouterpct", f(100 * PV[("cifar100", 64, 4, "gap")][1] / 1e3 / PV[("cifar100", 64, 4, "static")][0], 1))
+    put("vgbankadd", f(PV[("cifar100", 64, 4, "uniform")][0] - PV[("cifar100", 64, 4, "static")][0], 2))
+    put("vgdynshare", f"{100 * (PV[('cifar100', 64, 4, 'uniform')][0] - PV[('cifar100', 64, 4, 'static')][0]) / (3 * PV[('cifar100', 64, 4, 'static')][0]):.0f}")
+    put("vgnlayers", str(counted_layers("vgg16")[("cifar100", 64, 4, "gap")]))
+    put("vgmicro", ", ".join(sorted({str(r["micro"]) for r in RV.values()})))
+
+    # decomposition
+    dec, rows = {}, []
+    tag = {("cifar100", 16): "CA", ("cifar100", 32): "CB", ("cifar100", 64): "CC",
+           ("tinyimagenet", 32): "TA", ("tinyimagenet", 64): "TB"}
+    for ds, w in COND:
+        b = paired(vg(ds, w, "uniform"), vg(ds, w, "static"))
+        r = paired(vg(ds, w, "gap"), vg(ds, w, "uniform"))
+        t = paired(vg(ds, w, "gap"), vg(ds, w, "static"))
+        dec[(ds, w)] = (b, r, t)
+        rows.append(f"{DSN[ds]} & {w} & {sg(b['mean'])} & {pv(b['tost'])} & {verdict(b)} & {sg(r['mean'])} & "
+                    f"{pv(r['p'])} & {sg(t['mean'])} & {pv(t['p'])} \\\\")
+        k = tag[(ds, w)]
+        put(f"vgbank{k}", sg(b["mean"])); put(f"vgbank{k}T", f(b["tost"], 4)); put(f"vgbank{k}v", verdict(b))
+        put(f"vgrout{k}", sg(r["mean"])); put(f"vgrout{k}p", pv(r["p"])); put(f"vgrout{k}v", verdict(r))
+        put(f"vgeff{k}", sg(t["mean"])); put(f"vgeff{k}lo", sg(t["lo"])); put(f"vgeff{k}hi", sg(t["hi"]))
+        put(f"vgeff{k}p", pv(t["p"])); put(f"vgeff{k}T", f(t["tost"], 4)); put(f"vgeff{k}v", verdict(t))
+    pathlib.Path("tab_VGDECOMP.tex").write_text("\n".join(rows) + "\n")
+    put("vgnbankeq", str(sum(verdict(b) == "equivalent" for b, _, _ in dec.values())))
+    put("vgnbanksig", str(sum(b["p"] < 0.05 for b, _, _ in dec.values())))
+    put("vgnrout", str(sum(r["p"] < 0.05 and r["mean"] > 0 for _, r, _ in dec.values())))
+    put("vgneff", str(sum(t["p"] < 0.05 and t["mean"] > 0 for _, _, t in dec.values())))
+    put("vgbankmax", sg(max((b["mean"] for b, _, _ in dec.values()), key=abs), 2))
+
+    # resumed run
+    res = [k for k, v in RV.items() if v["resumed"]]
+    put("vgnresumed", str(len(res)))
+    assert len(res) == 1 and res[0][:5] == ("cifar100", 64, 4, "const", "shuffled"), res
+    k = res[0]
+    keep = [s for s in range(6) if s != k[5]]
+    put("vgresumedseed", str(k[5])); put("vgresumedacc", f(RV[k]["final"], 2))
+    for other, nm in [("static", "S"), ("gap", "G")]:
+        q = paired(vg("cifar100", 64, "shuffled")[keep], vg("cifar100", 64, other)[keep])
+        put(f"vgsens{nm}", sg(q["mean"])); put(f"vgsens{nm}p", pv(q["p"])); put(f"vgsens{nm}v", verdict(q).split(" (")[0])
+
+    # width-64 controls
+    comps = [("uniform", "static"), ("gap", "static"), ("shuffled", "static"), ("frozen_random", "static"),
+             ("frozen_random", "gap"), ("shuffled", "gap"), ("frozen_random", "uniform"), ("gap", "uniform")]
+    for a, b_ in comps:
+        q = paired(vg("cifar100", 64, a), vg("cifar100", 64, b_))
+        key = (a + b_).replace("_", "")
+        put(f"vgw{key}", sg(q["mean"])); put(f"vgw{key}lo", sg(q["lo"])); put(f"vgw{key}hi", sg(q["hi"]))
+        put(f"vgw{key}p", pv(q["p"])); put(f"vgw{key}T", f(q["tost"], 4)); put(f"vgw{key}v", verdict(q))
+    F_, p_ = stats.f_oneway(*[vg("cifar100", 64, a) for a in arms])
+    put("vganovaF", f(F_, 2)); put("vganovaP", f(p_, 3))
+    means = [vg("cifar100", 64, a).mean() for a in arms]
+    put("vgspread64", f(max(means) - min(means), 3))
+
+    # twice the width
+    rows, inv, pairs = [], [], []
+    for ds, wg, ws, kk in [("cifar100", 16, 32, "MA"), ("cifar100", 32, 64, "MB"), ("tinyimagenet", 32, 64, "MC")]:
+        q = paired(vg(ds, ws, "static"), vg(ds, wg, "gap")); pairs.append(q)
+        pg, ps = PV[(ds, wg, 4, "gap")][0], PV[(ds, ws, 4, "static")][0]
+        inv.append(ps / pg)
+        rows.append(f"{DSN[ds]} & {tt('gap')} w{wg} ({f(pg, 2)}M) & {tt('static')} w{ws} ({f(ps, 2)}M) & "
+                    f"{f(vg(ds, wg, 'gap').mean())} & {f(vg(ds, ws, 'static').mean())} & {sg(q['mean'])} & "
+                    f"[{sg(q['lo'])}, {sg(q['hi'])}] & {pv(q['p'])} & {verdict(q)} & {pg / ps:.2f} \\\\")
+        put(f"vgm{kk}", sg(q["mean"])); put(f"vgm{kk}p", pv(q["p"])); put(f"vgm{kk}r", f"{pg / ps:.2f}")
+    pathlib.Path("tab_VGMATCHED.tex").write_text("\n".join(rows) + "\n")
+    put("vgmmin", f(min(q["mean"] for q in pairs), 1)); put("vgmmax", f(max(q["mean"] for q in pairs), 1))
+    put("vgrlo", f(min(1 / x for x in inv), 2)); put("vgrhi", f(max(1 / x for x in inv), 2))
+
+    # bank size
+    rows = []
+    nk = 0
+    for kk in (2, 4, 8):
+        v = vg("cifar100", 32, "gap", k=kk); q = paired(v, vg("cifar100", 32, "static"))
+        nk += q["p"] < 0.05 and q["mean"] > 0
+        rows.append(f"{kk} & {f(v.mean())} & {f(v.std(ddof=1))} & {sg(q['mean'])} & [{sg(q['lo'])}, {sg(q['hi'])}] & "
+                    f"{pv(q['p'])} & {f(PV[('cifar100', 32, kk, 'gap')][0], 2)} & {f(vg('cifar100', 32, 'gap', k=kk, field='minutes').mean(), 1)} \\\\")
+        put(f"vgk{kk}s", sg(q["mean"])); put(f"vgk{kk}sp", pv(q["p"]))
+    v = vg("cifar100", 32, "static")
+    rows.append(f"\\midrule {tt('static')} & {f(v.mean())} & {f(v.std(ddof=1))} & -- & -- & -- & "
+                f"{f(PV[('cifar100', 32, 4, 'static')][0], 2)} & {f(vg('cifar100', 32, 'static', field='minutes').mean(), 1)} \\\\")
+    pathlib.Path("tab_VGK.tex").write_text("\n".join(rows) + "\n")
+    put("vgnkbeat", str(nk))
+    q = paired(vg("cifar100", 32, "gap", k=8), vg("cifar100", 32, "gap", k=2))
+    put("vgk82", sg(q["mean"])); put("vgk82p", pv(q["p"])); put("vgk82v", verdict(q)); put("vgk82T", f(q["tost"], 4))
+
+    # temperature
+    rows = []
+    for w, kk in [(16, "A"), (32, "B"), (64, "C")]:
+        c = vg("cifar100", w, "gap"); an = vg("cifar100", w, "gap", rec="anneal")
+        a1 = paired(an, c); s1 = paired(c, vg("cifar100", w, "static")); s2 = paired(an, vg("cifar100", w, "static"))
+        u2 = paired(an, vg("cifar100", w, "uniform"))
+        rows.append(f"{w} & {f(c.mean())} & {f(an.mean())} & {sg(a1['mean'])} & {pv(a1['p'])} & {sg(s1['mean'])} & "
+                    f"{sg(s2['mean'])} & {pv(s2['p'])} & {sg(u2['mean'])} & {verdict(u2)} \\\\")
+        put(f"vgan{kk}", sg(a1["mean"])); put(f"vgan{kk}p", pv(a1["p"]))
+        put(f"vganu{kk}", sg(u2["mean"])); put(f"vganu{kk}v", verdict(u2)); put(f"vganu{kk}p", pv(u2["p"]))
+        put(f"vgans{kk}", sg(s2["mean"])); put(f"vgans{kk}v", verdict(s2)); put(f"vgans{kk}T", f(s2["tost"], 4))
+        put(f"vgla{kk}", f(vg("cifar100", w, "gap", rec="anneal", field="loss").mean(), 4))
+        put(f"vglc{kk}", f(vg("cifar100", w, "gap", field="loss").mean(), 4))
+    pathlib.Path("tab_VGTEMP.tex").write_text("\n".join(rows) + "\n")
+
+    # predictions
+    nb = sum(b["tost"] < 0.05 for b, _, _ in dec.values())
+    np2 = sum(q["p"] < 0.05 and q["mean"] > 0 for q in pairs)
+    nr = sum(r["p"] < 0.05 and r["mean"] > 0 for _, r, _ in dec.values())
+    put("vgP1", str(nb)); put("vgP2", str(np2)); put("vgP3", str(nr))
+    put("vgP1o", "held" if nb == 5 else "failed"); put("vgP2o", "held" if np2 == 3 else "failed"); put("vgP3o", "held" if nr >= 3 else "failed")
+    pathlib.Path("tab_VGPREREG.tex").write_text(
+        f"P1 & The bank term (\\texttt{{uniform}}$-$\\texttt{{static}}) is equivalent to zero (TOST, $\\pm$\\SI{{0.5}}{{pp}}) in each of the five conditions & {nb} of 5 & {'held' if nb == 5 else 'failed'} \\\\\n"
+        f"P2 & \\texttt{{static}} at width $2c$ is more accurate than \\texttt{{gap}} at width $c$ in each of the three pairs & {np2} of 3 & {'held' if np2 == 3 else 'failed'} \\\\\n"
+        f"P3 & The routing term is positive with $p<0.05$ in at least three of the five conditions & {nr} of 5 & {'held' if nr >= 3 else 'failed'} \\\\\n")
+
+    # losses (saturation)
+    for ds, w in COND:
+        put(f"vgloss{tag[(ds, w)]}", f(vg(ds, w, "static", field="loss").mean(), 4))
+
+    # appendix tables
+    rows = []
+    for ds, ws in [("cifar100", [16, 32, 64]), ("tinyimagenet", [32, 64])]:
+        for w in ws:
+            for a in (arms if (ds, w) == ("cifar100", 64) else ["static", "uniform", "gap"]):
+                v = vg(ds, w, a)
+                mark = ["$^\\dagger$" if RV[(ds, w, 4, "const", a, s)]["resumed"] else "" for s in range(6)]
+                rows.append(f"{DSN[ds]} & {w} & {tt(a)} & " + " & ".join(f"{x:.2f}{m}" for x, m in zip(v, mark)) +
+                            f" & {f(v.mean())} & {f(v.std(ddof=1))} \\\\")
+    pathlib.Path("tab_VGALLRUNS.tex").write_text("\n".join(rows) + "\n")
+    rows = []
+    for ds, w in COND:
+        for a in (["uniform", "gap", "shuffled", "frozen_random"] if (ds, w) == ("cifar100", 64) else ["uniform", "gap"]):
+            q = paired(vg(ds, w, a), vg(ds, w, "static"))
+            rows.append(f"{DSN[ds]} & {w} & {tt(a)} & {sg(q['mean'])} & [{sg(q['lo'])}, {sg(q['hi'])}] & {pv(q['p'])} & "
+                        f"{pv(q['wil'])} & {sg(q['dz'], 2)} & {pv(q['tost'])} & {verdict(q)} \\\\")
+    pathlib.Path("tab_VGVSSTATIC.tex").write_text("\n".join(rows) + "\n")
+    rows = []
+    for ds, ws in [("cifar100", [16, 32, 64]), ("tinyimagenet", [32, 64])]:
+        for w in ws:
+            for a in (arms if (ds, w) == ("cifar100", 64) else ["static", "uniform", "gap"]):
+                p_, rk = PV[(ds, w, 4, a)]
+                rows.append(f"{DSN[ds]} & {w} & {tt(a)} & {f(p_, 2)} & {f(rk, 1)} & {f(vg(ds, w, a, field='loss').mean(), 4)} & "
+                            f"{f(vg(ds, w, a, field='minutes').mean(), 1)} \\\\")
+    pathlib.Path("tab_VGCONFIG.tex").write_text("\n".join(rows) + "\n")
+    rows, tot, hrs = [], 0, 0.0
+    groups = sorted({k[:4] for k in RV}, key=lambda g: S.DISPLAY_ORDER.index(g))
+    for g in groups:
+        ks = [k for k in RV if k[:4] == g]
+        armset = [a for a in arms if any(k[4] == a for k in ks)]
+        h = sum(RV[k]["minutes"] for k in ks) / 60
+        tot += len(ks); hrs += h
+        rows.append(f"{DSN[g[0]]} & {g[1]} & {g[2]} & {'constant' if g[3] == 'const' else 'annealed'} & "
+                    f"{', '.join(tt(a) for a in armset)} & {len(ks)} & {f(h, 1)} \\\\")
+    rows.append(f"\\midrule \\multicolumn{{5}}{{l}}{{total}} & {tot} & {f(hrs, 1)} \\\\")
+    pathlib.Path("tab_VGINVENT.tex").write_text("\n".join(rows) + "\n")
+
+    # appendix figure: every VGG-16 run at K=4, tau=1
+    fig, axs = plt.subplots(1, 5, figsize=(7.8, 2.5), gridspec_kw=dict(width_ratios=[3, 3, 5, 3, 3]))
+    for k_, (ds, w) in enumerate(COND):
+        aa = arms if (ds, w) == ("cifar100", 64) else ["static", "uniform", "gap"]
+        for i, a in enumerate(aa):
+            v = vg(ds, w, a); axs[k_].scatter([i] * 6, v, s=14, color=C[a], alpha=.85, zorder=3)
+            axs[k_].hlines(v.mean(), i - .3, i + .3, color="k", lw=1.3, zorder=4)
+        axs[k_].set_xticks(range(len(aa))); axs[k_].set_xticklabels(aa, rotation=45, ha="right", fontsize=6)
+        axs[k_].set_title(f"{'C100' if ds == 'cifar100' else 'TIN'} w{w}", fontsize=8); axs[k_].tick_params(labelsize=6)
+    axs[0].set_ylabel("top-1 accuracy (%)")
+    plt.tight_layout(); plt.savefig("fig/g9_vg_allruns.pdf"); plt.close()
+    return dec, pairs

@@ -139,7 +139,7 @@ ratios = [M[("tinyimagenet", 32, 4, "const")]["gap"] / M[("cifar100", 32, 4, "co
           M[("tinyimagenet", 64, 4, "const")]["gap"] / M[("cifar100", 64, 4, "const")]["gap"],
           mm("tinyimagenet", 32, 4, "const", "gap") / mm("cifar100", 32, 4, "const", "gap"),
           mm("tinyimagenet", 64, 4, "const", "gap") / mm("cifar100", 64, 4, "const", "gap")]
-check(f"Tiny-ImageNet/CIFAR-100 gap run cost 7 to 10x ({min(ratios):.2f} to {max(ratios):.2f})", 6.5 <= min(ratios) and max(ratios) <= 10.5)
+check(f"ResNet-18/MobileNetV2 Tiny-ImageNet/CIFAR-100 gap run cost 7 to 10x ({min(ratios):.2f} to {max(ratios):.2f})", 6.5 <= min(ratios) and max(ratios) <= 10.5)
 # CIFAR-only groups repeated on Tiny-ImageNet, scaled by the width's gap ratio
 def extra(rb_c, rb_t32, rb_t64, c32, c64, k2, k8, a32, a64, fr, sh):
     return 6 * (k2 * rb_t32 / c32 + k8 * rb_t32 / c32 + rb_t32 + rb_t64 + (fr + sh) * rb_t64 / c64) / 60
@@ -152,11 +152,81 @@ mb = extra(None, mm("tinyimagenet", 32, 4, "const", "gap"), mm("tinyimagenet", 6
            mm("cifar100", 32, 2, "const", "gap"), mm("cifar100", 32, 8, "const", "gap"), 0, 0,
            mm("cifar100", 64, 4, "const", "frozen_random"), mm("cifar100", 64, 4, "const", "shuffled"))
 total = sum(sum(v) for v in mins.values()) / 60 + sum(6 * x for g in M.values() for x in g.values()) / 60
-check(f"repeating the ablations on Tiny-ImageNet ~{rb + mb:.0f} GPU-h vs {total:.0f} for the study: 1.3 to 1.7x", 1.3 <= (rb + mb) / total <= 1.7)
+check(f"repeating the ablations on Tiny-ImageNet ~{rb + mb:.0f} GPU-h vs {total:.0f} for ResNet-18 and MobileNetV2: 1.3 to 1.7x", 1.3 <= (rb + mb) / total <= 1.7)
+
+# 6. VGG-16: an independent parse of its logs, recomputed with scipy, against the built macros
+import re as _re
+def macros(path):
+    tx = pathlib.Path(path).read_text(); out = {}
+    for m in _re.finditer(r"\\expandafter\\def\\csname v(\w+)\\endcsname\{", tx):
+        i = m.end(); d = 1; j = i
+        while d:
+            d += {"{": 1, "}": -1}.get(tx[j], 0); j += 1
+        out[m.group(1)] = tx[i:j - 1]
+    return out
+built = ROOT / "report/out/paper2"
+if not (built / "macros_mb.tex").exists():
+    check("built macros present (run report/build_paper2.py first)", False)
+else:
+    MAC = {**macros(built / "macros.tex"), **macros(built / "macros_mb.tex")}
+    V = collections.defaultdict(dict)
+    log = (ROOT / "artifacts/vgg16/train.log").read_text(errors="replace")
+    for m in _re.finditer(r"final=([\d.]+) best=[\d.]+ -> \S*?vgg16__(\w+?)__w(\d+)__K(\d+)__(const|anneal)_(\w+?)_seed(\d)\.json", log):
+        V[(m.group(2), int(m.group(3)), int(m.group(4)), m.group(5), m.group(6))][int(m.group(7))] = float(m.group(1))
+    check("VGG-16: 132 final lines in train.log", sum(len(v) for v in V.values()) == 132)
+    run = (ROOT / "artifacts/vgg16/runner.log").read_text()
+    fins = [float(x) for x in _re.findall(r"finished in [\d.]+ min, final ([\d.]+)", run)]
+    check("VGG-16: runner log has 132 finished runs with the same finals as train.log",
+          sorted(fins) == sorted(x for v in V.values() for x in v.values()))
+    def vp(a, b):
+        ss = sorted(set(V[a]) & set(V[b])); d = np.array([V[a][s] - V[b][s] for s in ss]); n = len(d)
+        m = d.mean(); se = d.std(ddof=1) / np.sqrt(n)
+        return m, 2 * stats.t.sf(abs(m / se), n - 1), max(stats.t.sf((m + .5) / se, n - 1), stats.t.cdf((m - .5) / se, n - 1))
+    G = lambda ds, w, arm, k=4, r="const": (ds, w, k, r, arm)
+    num = lambda s: float(s.replace("$<10^{-4}$", "0").replace("+", ""))
+    tags = {("cifar100", 16): "CA", ("cifar100", 32): "CB", ("cifar100", 64): "CC", ("tinyimagenet", 32): "TA", ("tinyimagenet", 64): "TB"}
+    for (ds, w), tg in tags.items():
+        mb_, pb, tb = vp(G(ds, w, "uniform"), G(ds, w, "static"))
+        mr, pr, _ = vp(G(ds, w, "gap"), G(ds, w, "uniform"))
+        me, pe, _ = vp(G(ds, w, "gap"), G(ds, w, "static"))
+        ok = (abs(mb_ - num(MAC[f"vgbank{tg}"])) < 6e-4 and abs(tb - num(MAC[f"vgbank{tg}T"])) < 6e-5
+              and abs(mr - num(MAC[f"vgrout{tg}"])) < 6e-4 and abs(me - num(MAC[f"vgeff{tg}"])) < 6e-4
+              and (MAC[f"vgrout{tg}p"] == "$<10^{-4}$" and pr < 1e-4 or abs(pr - num(MAC[f"vgrout{tg}p"])) < 6e-5))
+        check(f"VGG-16 {ds} w{w}: bank {mb_:+.3f}, routing {mr:+.3f}, total {me:+.3f} match the macros", ok)
+    for a, b, key in [("frozen_random", "gap", "frozenrandomgap"), ("frozen_random", "uniform", "frozenrandomuniform"),
+                      ("gap", "uniform", "gapuniform"), ("shuffled", "gap", "shuffledgap"), ("shuffled", "static", "shuffledstatic")]:
+        m_, p_, t_ = vp(G("cifar100", 64, a), G("cifar100", 64, b))
+        check(f"VGG-16 w64 {a}-{b} {m_:+.3f} (p {p_:.4f}) matches", abs(m_ - num(MAC[f"vgw{key}"])) < 6e-4 and abs(p_ - num(MAC[f"vgw{key}p"])) < 6e-5)
+    eff = []
+    for w in (16, 32, 64):
+        m_, p_, _ = vp(G("cifar100", w, "gap", 4, "anneal"), G("cifar100", w, "gap"))
+        eff.append(p_ < .05 and m_ < 0)
+    check("VGG-16 annealing lower at all three widths", all(eff) and MAC["vgannlower"] == "3")
+    pp = [vp(G(ds, ws, "static"), G(ds, wg, "gap")) for ds, wg, ws in [("cifar100", 16, 32), ("cifar100", 32, 64), ("tinyimagenet", 32, 64)]]
+    check("VGG-16 plain 2c beats gap c in 3 of 3, each p < 1e-4 (text says 'in each')", all(q[0] > 0 and q[1] < 1e-4 for q in pp))
+    m_, p_, _ = vp(G("cifar100", 32, "gap", 8), G("cifar100", 32, "gap", 2))
+    check(f"VGG-16 K8-K2 {m_:+.3f} inconclusive", abs(m_ - num(MAC["vgk82"])) < 6e-4 and MAC["vgk82v"] == "inconclusive")
+    m_, p_, _ = vp(G("cifar100", 32, "gap", 2), G("cifar100", 32, "static"))
+    check(f"VGG-16 K2-static {m_:+.3f} not significant (p {p_:.3f})", p_ >= .05)
+    check("VGG-16 gate >= 65", V[G("cifar100", 64, "static")][0] >= 65)
+    # cost ratio for the scope paragraph, VGG-16 from the runner log minutes
+    vmins = collections.defaultdict(list); cur = None
+    for l in run.splitlines():
+        mm_ = _re.search(r"\[\d+/132\] vgg16__(\w+?)__w(\d+)__K(\d+)__(const|anneal) (\w+) seed", l)
+        if mm_: cur = (mm_.group(1), int(mm_.group(2)), int(mm_.group(3)), mm_.group(4), mm_.group(5))
+        mm_ = _re.search(r"finished in ([\d.]+) min", l)
+        if mm_: vmins[cur].append(float(mm_.group(1)))
+    vrat = [np.mean(vmins[("tinyimagenet", w, 4, "const", "gap")]) / np.mean(vmins[("cifar100", w, 4, "const", "gap")]) for w in (32, 64)]
+    allrat = ratios + vrat
+    check(f"Tiny-ImageNet/CIFAR-100 gap run cost over three backbones 4 to 10x ({min(allrat):.2f} to {max(allrat):.2f})", 3.5 <= min(allrat) and max(allrat) <= 10.5)
+    for k_, v_ in [("allbankeq", "9"), ("allbanksig", "0"), ("alleff", "13"), ("alleffrout", "12"), ("allannlower", "7"),
+                   ("allannhigher", "0"), ("allpred", "7"), ("allpredfail", "4"), ("totruns", "396"), ("ncontraX", "1"),
+                   ("ncontra", "10"), ("ncontraHold", "4"), ("ncontraBD", "5"), ("vgP1", "2"), ("vgP2", "3"), ("vgP3", "4")]:
+        check(f"macro {k_} = {v_} (ledger docs/FINDINGS_PAPER3.md)", MAC[k_] == v_)
 
 # 5. phrases that must not return -------------------------------------------------
 tex = (ROOT / "report/paper2_template.tex").read_text()
-banned = ["Every run uses the right", "order of magnitude below", "GPU fault", "deeper stages",
+banned = ["Every run uses the right", "order of magnitude below", "GPU fault", "GPU\nfault", "on both backbones", "of ten conditions", "holds on both", "deeper stages",
           "so it does vary with", "every channel count by", "a few percent more compute",
           "five warm-up epochs then cosine decay over 150", "this literature reports", "close to one-hot from the first step", "At equal parameters, width wins",
           "—", "---"]

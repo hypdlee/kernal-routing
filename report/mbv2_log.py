@@ -17,15 +17,22 @@ import csv, re, sys
 from pathlib import Path
 
 EP_RE = re.compile(r"\s+ep\s+(\d+)\s+loss ([\d.]+)\s+acc ([\d.]+)\s+best ([\d.]+).*\((\d+)s\)")
-FINAL_RE = re.compile(r"final=([\d.]+) best=([\d.]+) -> .*?(mobilenetv2__(\w+?)__w(\d+)__K(\d+)__(const|anneal)_(\w+?)_seed(\d))\.json")
-HEAD_RE = re.compile(r"^\[mobilenetv2 (\w+) (\w+) w(\d+) K(\d+) seed=(\d)\] device=(\w+) .*micro_batch=(\d+) accum=(\d+)")
+def _res(model):
+    final = re.compile(r"final=([\d.]+) best=([\d.]+) -> .*?(" + model + r"__(\w+?)__w(\d+)__K(\d+)__(const|anneal)_(\w+?)_seed(\d))\.json")
+    head = re.compile(r"^\[" + model + r" (\w+) (\w+) w(\d+) K(\d+) seed=(\d)\] device=(\w+) params=([\d.]+)M router=([\d.]+)K"
+                      r" .*micro_batch=(\d+) accum=(\d+)")
+    return final, head
 
 
-def parse(path):
+FINAL_RE, HEAD_RE = _res("mobilenetv2")
+
+
+def parse(path, model="mobilenetv2"):
     """Returns {(dataset, width, K, recipe, arm, seed): record}. A run that
     crashed and was resumed appears with the epochs from both attempts; the
     record keeps the last value seen for each epoch, which is what the
     resumed run continued from."""
+    FINAL_RE, HEAD_RE = _res(model)
     recs, curve, head, resumed = {}, {}, None, False
     for line in Path(path).read_text(encoding="utf-8", errors="replace").splitlines():
         h = HEAD_RE.match(line)
@@ -45,10 +52,16 @@ def parse(path):
             key = (m.group(4), int(m.group(5)), int(m.group(6)), m.group(7), m.group(8), int(m.group(9)))
             if key in recs:
                 raise SystemExit(f"two final lines for {key}")
+            if head is None or (head.group(1), head.group(2), int(head.group(3)), int(head.group(4)), int(head.group(5))) != \
+                    (key[0], key[4], key[1], key[2], key[5]):
+                raise SystemExit(f"configuration line does not match the final line for {key}")
             last = curve[max(curve)]
             recs[key] = dict(final=float(m.group(1)), best=float(m.group(2)), loss=last["loss"],
                              minutes=last["secs"] / 60, resumed=resumed, curve=dict(curve),
-                             micro=int(head.group(7)) if head else None)
+                             micro=int(head.group(9)) if head else None,
+                             accum=int(head.group(10)) if head else None,
+                             params=float(head.group(7)) if head else None,
+                             router_k=float(head.group(8)) if head else None)
             curve, resumed = {}, False
     return recs
 

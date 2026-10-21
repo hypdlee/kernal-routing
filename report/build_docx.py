@@ -108,6 +108,9 @@ def build(src, out):
     # tables: plain arm names, unbreakable dataset names, text dagger (narrow columns wrap otherwise)
     def tidy_table(m):
         b = m.group(0)
+        # math that only joins arm names ($\texttt{gap}-\texttt{static}$) becomes text
+        b = re.sub(r"\$((?:\\texttt\{[^}]*\}|[-\s])+)\$",
+                   lambda m: m.group(1).replace("-", " \u2212 ").replace("  ", " "), b)
         b = re.sub(r"\\texttt\{([^}]*)\}", r"\1", b)
         b = b.replace("CIFAR-100", "CIFAR\u2011100").replace("Tiny-ImageNet", "Tiny\u2011ImageNet")
         return b
