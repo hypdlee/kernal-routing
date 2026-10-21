@@ -391,7 +391,8 @@ CIFAR-100 at width 64, is a well-powered null that we could not explain.
 (3) On MobileNetV2 the mixing does not have to be learned: a router
 frozen at random initialisation is not distinguishable from a trained
 one, while routing each image with another image's descriptor removes the
-benefit. (4) Banks larger than $K=2$ are not distinguishable from $K=2$.
+benefit. (4) On CIFAR-100 at width 32, banks larger than $K=2$ are not
+distinguishable from $K=2$.
 (5) Whether routing is worth its cost depends on the cost held fixed and
 on the backbone: a plain ResNet-18 of twice the width, which has the same
 number of parameters as the routed one, beats it by 2.3 to
@@ -401,7 +402,8 @@ only one of three pairs; at equal width, for at most \V{rbmacextra}\,\% more
 compute, routing beats the plain network in \V{rbeqmac} of five
 conditions on ResNet-18 and \V{mbeqmac} of five on MobileNetV2.
 (6) Annealing the softmax temperature, as DY-Conv recommends, never
-improved accuracy detectably and lowered it in \V{nannlower} of six conditions.
+improved accuracy detectably and lowered it in \V{nannlower} of six
+conditions (CIFAR-100, three widths, two backbones).
 (7) Routing entropy is not a reliable measure of whether routing helps:
 on CIFAR-100 at width 64 the trained routers of the two backbones have
 nearly the same entropy and improve on the constant mixture by
@@ -479,24 +481,25 @@ each image with another image's descriptor removes the benefit. On
 ResNet-18 the test is uninformative, because in the one condition where
 it was run no arm differs from the plain network.
 \item \textbf{Banks larger than $K=2$ are not distinguishable from $K=2$}
-(both; Section~\ref{sec:ksize}). On ResNet-18 they are equivalent to it;
+(both backbones; CIFAR-100 at width 32 only; Section~\ref{sec:ksize}). On ResNet-18 they are equivalent to it;
 on MobileNetV2 the comparison is inconclusive.
 \item \textbf{Whether routing is worth its cost depends on the cost held
-fixed and on the backbone} (Section~\ref{sec:cost}). At equal parameters a
-plain ResNet-18 of twice the width beats the routed one in all three
-pairs; a plain MobileNetV2 with \V{mbpinvlo} to \V{mbpinvhi} times the
-routed network's parameters wins one of three. At equal width, where
+fixed and on the backbone} (Section~\ref{sec:cost}). A plain ResNet-18 of
+twice the width, which has the same number of parameters as the routed
+one, beats it in all three pairs; a plain MobileNetV2 of twice the width,
+which has \V{mbpinvlo} to \V{mbpinvhi} times the routed network's
+parameters, wins one of three. At equal width, where
 routing adds at most \V{rbmacextra}\,\% to the multiply-accumulates,
 routing wins \V{rbeqmac} of five conditions on ResNet-18 and \V{mbeqmac} of
 five on MobileNetV2.
 \item \textbf{Annealing the softmax temperature never detectably improved
 accuracy}
-(both; Section~\ref{sec:temp}). It lowered accuracy in \V{nannlower} of six
-conditions, at all three MobileNetV2 widths by about \SI{1}{pp} and on
+(both backbones; CIFAR-100 only; Section~\ref{sec:temp}). It lowered
+accuracy in \V{nannlower} of six conditions, at all three MobileNetV2 widths by about \SI{1}{pp} and on
 ResNet-18 at width 32, and made no detectable difference in the other two.
 \item \textbf{Routing entropy is not a reliable measure of whether
-routing helps} (Section~\ref{sec:entropy}). Within ResNet-18 it did not
-order the benefit reliably (rank correlation \V{rbrho}, not significant,
+routing helps} (Section~\ref{sec:entropy}). Across the CIFAR-100
+conditions of ResNet-18 it did not order the benefit reliably (rank correlation \V{rbrho}, not significant,
 and a counterexample at width 16); within MobileNetV2 it did (\V{mbrho});
 across the two backbones almost the same entropy accompanies benefits of
 \V{rbguC} and \V{mbguC}\,pp. After
@@ -1174,7 +1177,7 @@ $K$ & accuracy & sd & $\Delta$ (pp) & \SI{95}{\percent} CI & $p$ & params (M) & 
 
 The answer depends on what is held fixed.
 
-\subsection{Equal parameters}\label{sec:matched}
+\subsection{Twice the width: equal parameters on ResNet-18}\label{sec:matched}
 
 \begin{figure}[!htbp]\centering
 \includegraphics[width=\textwidth]{fig/f5_matched.pdf}
@@ -1269,9 +1272,10 @@ wall-clock time than either count suggests (Tables~\ref{tab:config}
 and~\ref{tab:mbconfig}); that is a property of the implementation, not of
 the layer.
 
-\paragraph{Summary.} At equal parameters, width wins on ResNet-18 in all
-three pairs and on MobileNetV2 in one of three, against a plain network
-with \V{mbpinvlo} to \V{mbpinvhi} times the parameters. At equal width,
+\paragraph{Summary.} Against a plain network of twice the width, routing
+loses on ResNet-18 in all three pairs, where the two have the same number
+of parameters, and on MobileNetV2 in one of three, where the plain network
+has \V{mbpinvlo} to \V{mbpinvhi} times the parameters. At equal width,
 routing wins on both backbones wherever it has an effect. Whether dynamic
 convolution is worth its cost therefore depends on the cost held fixed and
 on the backbone.
@@ -1665,12 +1669,24 @@ Spatially resolved routing is not covered.
 single random draw, identical across seeds, in one condition. It shows that
 a random router can match a trained one on MobileNetV2, not how often.
 
+\paragraph{Scope of the ablations.} The bank-size, temperature and
+routing-control groups were run on CIFAR-100 only, and each of their
+results is stated as a CIFAR-100 result. On ResNet-18 these groups were
+added in stages; for MobileNetV2 the same program, including this scope, was
+fixed in the pre-registration before any run. A
+Tiny-ImageNet run of the routed network costs 7 to 10 times a CIFAR-100
+run at the same width (Tables~\ref{tab:config} and~\ref{tab:mbconfig}), and
+repeating these groups on Tiny-ImageNet would take roughly one and a half
+times the GPU time of the whole study. Tiny-ImageNet has a different role
+in the design: it tests whether the split into bank and routing terms holds
+on a harder dataset, and it tests the recorded saturation prediction.
+
 \paragraph{One annealing schedule.} Section~\ref{sec:temp} compares a
 constant temperature with one linear schedule.
 
 \paragraph{Stored and effective parameters.} By
 Proposition~\ref{prop:collapse} the \texttt{uniform} arm has the effective
-capacity of a plain network. The equal-parameter comparisons of
+capacity of a plain network. The twice-the-width comparisons of
 Section~\ref{sec:matched} use stored parameters; the equal-compute
 comparison of Section~\ref{sec:cost} favours routing on both backbones.
 
@@ -1714,8 +1730,8 @@ dynamic convolution does not come from its kernel bank. A uniformly mixed
 bank was never significantly better or worse than a plain network, and was
 equivalent to one in \V{bothbankeq} of ten conditions. Wherever dynamic
 convolution beat the plain network, which happened in \V{botheff} of ten
-conditions, input-dependent mixing carried the effect, and banks larger
-than $K=2$ added nothing that we could detect. On MobileNetV2 that mixing
+conditions, input-dependent mixing carried the effect, and on CIFAR-100 at
+width 32 banks larger than $K=2$ added nothing that we could detect. On MobileNetV2 that mixing
 did not have to be learned: a router frozen at random initialisation did
 as well as a trained one, provided each image was routed by its own
 descriptor.
@@ -1728,8 +1744,9 @@ the parameters, the plain network won only one of three pairs. At equal width, f
 won on both backbones wherever it had an effect. The one condition without an effect,
 ResNet-18 on CIFAR-100 at width 64, remains unexplained.
 
-Two common practices did not help. Annealing the softmax temperature never
-detectably raised accuracy and lowered it in \V{nannlower} of six conditions, leaving
+Two common practices did not help. On CIFAR-100, annealing the softmax
+temperature never detectably raised accuracy and lowered it in
+\V{nannlower} of six conditions, leaving
 the routers close to uniform. Routing entropy did not reliably indicate
 whether routing helped: it ordered the benefit within MobileNetV2 but not
 reliably within ResNet-18, and almost the same entropy accompanied benefits

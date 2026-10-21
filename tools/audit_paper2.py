@@ -128,11 +128,37 @@ check("every MBv2 run: batch 128, no accumulation, 150 epochs, bf16", all(
     (r["accum"], r["config"]["batch_size"], r["config"]["epochs"], r["config"]["amp"]) == (1, 128, 150, "bf16")
     for f in glob.glob(str(ROOT / "artifacts/mobilenetv2/results/mobilenetv2__*.json")) for r in [json.load(open(f))]))
 
+# 4b. cost numbers in the scope paragraph -------------------------------------
+mins = collections.defaultdict(list)
+for f in glob.glob(str(ROOT / "artifacts/mobilenetv2/results/mobilenetv2__*.json")):
+    r = json.load(open(f)); c = r["config"]
+    mins[(c["dataset"], c["width"], c["num_kernels"], "ann" if c.get("temp_start") else "const", r["arm"])].append(r["minutes"])
+mm = lambda *k: float(np.mean(mins[k]))
+M = P.MINS
+ratios = [M[("tinyimagenet", 32, 4, "const")]["gap"] / M[("cifar100", 32, 4, "const")]["gap"],
+          M[("tinyimagenet", 64, 4, "const")]["gap"] / M[("cifar100", 64, 4, "const")]["gap"],
+          mm("tinyimagenet", 32, 4, "const", "gap") / mm("cifar100", 32, 4, "const", "gap"),
+          mm("tinyimagenet", 64, 4, "const", "gap") / mm("cifar100", 64, 4, "const", "gap")]
+check(f"Tiny-ImageNet/CIFAR-100 gap run cost 7 to 10x ({min(ratios):.2f} to {max(ratios):.2f})", 6.5 <= min(ratios) and max(ratios) <= 10.5)
+# CIFAR-only groups repeated on Tiny-ImageNet, scaled by the width's gap ratio
+def extra(rb_c, rb_t32, rb_t64, c32, c64, k2, k8, a32, a64, fr, sh):
+    return 6 * (k2 * rb_t32 / c32 + k8 * rb_t32 / c32 + rb_t32 + rb_t64 + (fr + sh) * rb_t64 / c64) / 60
+rb = extra(None, M[("tinyimagenet", 32, 4, "const")]["gap"], M[("tinyimagenet", 64, 4, "const")]["gap"],
+           M[("cifar100", 32, 4, "const")]["gap"], M[("cifar100", 64, 4, "const")]["gap"],
+           M[("cifar100", 32, 2, "const")]["gap"], M[("cifar100", 32, 8, "const")]["gap"], 0, 0,
+           M[("cifar100", 64, 4, "const")]["frozen_random"], M[("cifar100", 64, 4, "const")]["shuffled"])
+mb = extra(None, mm("tinyimagenet", 32, 4, "const", "gap"), mm("tinyimagenet", 64, 4, "const", "gap"),
+           mm("cifar100", 32, 4, "const", "gap"), mm("cifar100", 64, 4, "const", "gap"),
+           mm("cifar100", 32, 2, "const", "gap"), mm("cifar100", 32, 8, "const", "gap"), 0, 0,
+           mm("cifar100", 64, 4, "const", "frozen_random"), mm("cifar100", 64, 4, "const", "shuffled"))
+total = sum(sum(v) for v in mins.values()) / 60 + sum(6 * x for g in M.values() for x in g.values()) / 60
+check(f"repeating the ablations on Tiny-ImageNet ~{rb + mb:.0f} GPU-h vs {total:.0f} for the study: 1.3 to 1.7x", 1.3 <= (rb + mb) / total <= 1.7)
+
 # 5. phrases that must not return -------------------------------------------------
 tex = (ROOT / "report/paper2_template.tex").read_text()
 banned = ["Every run uses the right", "order of magnitude below", "GPU fault", "deeper stages",
           "so it does vary with", "every channel count by", "a few percent more compute",
-          "five warm-up epochs then cosine decay over 150", "this literature reports", "close to one-hot from the first step",
+          "five warm-up epochs then cosine decay over 150", "this literature reports", "close to one-hot from the first step", "At equal parameters, width wins",
           "—", "---"]
 for b in banned:
     check(f"template does not contain {b!r}", b not in tex)

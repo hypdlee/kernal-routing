@@ -35,6 +35,8 @@ Private research repository of Ankit Kumar.
 pip install -r requirements.txt
 python tests\test_analysis.py all
 python report\build_paper2.py --r18-fixture --mb-log artifacts\mobilenetv2\train.log --mb-results artifacts\mobilenetv2\results
+python report\build_docx.py      # Word version from the same build: paper\two_backbones\KernelRoute_paper.docx
+python tools\audit_paper2.py      # independent checks; must print no FAIL
 ```
 
 `--r18-fixture` rebuilds ResNet-18 from the per-seed values printed in the
