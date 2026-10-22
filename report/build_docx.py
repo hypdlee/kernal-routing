@@ -91,7 +91,8 @@ def build(src, out):
     assert not left, left
 
     # proposition and proof
-    s = s.replace("\\begin{proposition}\\label{prop:collapse}", "\\textbf{Proposition " + labels["prop:collapse"] + ".} \\emph{")
+    s = re.sub(r"\\begin\{proposition\}(?:\[\{(.*?)\}\])?\\label\{prop:collapse\}",
+               lambda m: "\\textbf{Proposition " + labels["prop:collapse"] + "}" + (" (" + m.group(1) + ")" if m.group(1) else "") + ". \\emph{", s)
     s = s.replace("\\end{proposition}", "}\n")
     s = s.replace("\\begin{proof}", "\\emph{Proof.} ").replace("\\end{proof}", " $\\square$\n")
 
@@ -158,6 +159,9 @@ def build(src, out):
                 parts.append(f"{a}, {', '.join(ys)}"); i = j
             return "(" + "; ".join(parts) + ")"
         return "; ".join(f"{bib[k][0]} ({bib[k][1]})" for k in ks)
+    s = re.sub(r"\\citep\[([^\]]+)\]\{([^}]+)\}", lambda m: cite(m.group(2), True)[:-1] + ", " + m.group(1) + ")", s)
+    s = re.sub(r"\\citealp\[([^\]]+)\]\{([^}]+)\}", lambda m: cite(m.group(2), True)[1:-1] + ", " + m.group(1), s)
+    s = re.sub(r"\\citealp\{([^}]+)\}", lambda m: cite(m.group(1), True)[1:-1], s)
     s = re.sub(r"\\citep\{([^}]+)\}", lambda m: cite(m.group(1), True), s)
     s = re.sub(r"\\citet\{([^}]+)\}", lambda m: cite(m.group(1), False), s)
     assert "\\cite" not in s
@@ -288,7 +292,7 @@ def post_process(path):
         # column widths from the longest entry in each column, so no number or name wraps
         grid = t._tbl.tblGrid
         ncols = len(grid.findall(qn("w:gridCol")))
-        longest = [3] * ncols
+        longest = [3] * ncols; word = [3] * ncols
         for tr in t._tbl.findall(qn("w:tr")):
             c = 0
             for tc in tr.findall(qn("w:tc")):
@@ -297,11 +301,25 @@ def post_process(path):
                 txt = "".join(x.text or "" for x in tc.iter(qn("w:t")))
                 txt += "".join(x.text or "" for x in tc.iter("{http://schemas.openxmlformats.org/officeDocument/2006/math}t"))
                 if n == 1 and c < ncols:
-                    longest[c] = max(longest[c], min(len(txt), 40))
+                    longest[c] = max(longest[c], len(txt))
+                    # numbers and intervals never break; words may
+                    numeric = re.fullmatch(r"[\s\d.,+\-\u2212\[\]<>\u00d7%()/]*", txt) is not None
+                    word[c] = max([word[c], len(txt) if numeric else 0] + [len(x) for x in txt.split()])
                 c += n
+        # width each column needs for its longest entry on one line, and the least it
+        # can have (its longest word); text columns wrap first, numbers never
         total = 9400
-        weights = [x + 1.5 for x in longest]
-        widths = [int(total * w / sum(weights)) for w in weights]
+        pt_ = 7.5 if ncols >= 9 else 8 if ncols >= 7 else 9
+        cw, pad = pt_ * 0.52 * 20, 240
+        need = [x * cw + pad for x in longest]; least = [x * cw + pad for x in word]
+        if sum(need) <= total:
+            widths = [int(x + (total - sum(need)) * x / sum(need)) for x in need]
+        else:
+            slack = [a - b for a, b in zip(need, least)]; deficit = sum(need) - total
+            if sum(slack) >= deficit:
+                widths = [int(a - deficit * s / sum(slack)) for a, s in zip(need, slack)]
+            else:
+                widths = [int(total * x / sum(least)) for x in least]
         for gc, w in zip(grid.findall(qn("w:gridCol")), widths):
             gc.set(qn("w:w"), str(w))
         for el in tblPr.findall(qn("w:tblW")) + tblPr.findall(qn("w:tblLayout")):

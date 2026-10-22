@@ -224,12 +224,56 @@ else:
                    ("ncontra", "10"), ("ncontraHold", "4"), ("ncontraBD", "5"), ("vgP1", "2"), ("vgP2", "3"), ("vgP3", "4")]:
         check(f"macro {k_} = {v_} (ledger docs/FINDINGS_PAPER3.md)", MAC[k_] == v_)
 
+# 7. pooled estimates and Holm counts: tools/reviewer_stats.py against the built macros
+import runpy, io, contextlib
+with contextlib.redirect_stdout(io.StringIO()):
+    RS = runpy.run_path(str(ROOT / "tools/reviewer_stats.py"))
+if (built / "macros_mb.tex").exists():
+    close = lambda a, key: abs(a - num(MAC[key])) < 6e-4
+    for nm, ds_, pre in [("bank", RS["bank"], "poolbank"), ("routing", RS["rout"], "poolrout")]:
+        re_, c95, c90, q = RS["pool"](ds_)
+        ok = close(re_, pre) and close(c95[0], pre + "lo") and close(c95[1], pre + "hi") and close(c90[0], pre + "lonine") and close(c90[1], pre + "hinine")
+        ok = ok and (MAC[pre + "Qp"] == "$<10^{-4}$" and q < 1e-4 or abs(q - num(MAC[pre + "Qp"])) < 6e-4)
+        check(f"pooled {nm} term {re_:+.3f} [{c95[0]:+.3f}, {c95[1]:+.3f}], heterogeneity p {q:.4f} matches the macros", ok)
+    for nm, ds_, key in [("routing", RS["rout"], "multrout"), ("total", RS["tot"], "multtot")]:
+        ps = np.array([RS["pt"](d) for d in ds_]); pos = np.array([d.mean() > 0 for d in ds_])
+        raw, h = int(((ps < .05) & pos).sum()), int((RS["holm"](ps) & pos).sum())
+        check(f"Holm {nm}: {raw} uncorrected, {h} corrected, exactly one lost (text says 'the one lost')",
+              MAC[key + "raw"] == str(raw) and MAC[key + "holm"] == str(h) and raw - h == 1)
+    for m_, tg in [(.25, "A"), (.5, "B"), (.75, "C"), (1.0, "D")]:
+        ps = np.array([RS["tost"](d, m_) for d in RS["bank"]])
+        check(f"bank equivalences at +/-{m_}: {(ps < .05).sum()} / {RS['holm'](ps).sum()} match",
+              MAC[f"multbank{tg}raw"] == str((ps < .05).sum()) and MAC[f"multbank{tg}holm"] == str(RS["holm"](ps).sum()))
+    check("routing positive count in Section 5 (allrout) equals the uncorrected Holm-table count", MAC["allrout"] == MAC["multroutraw"])
+    re_, c95, c90, q = RS["pool"](RS["bank"]); mg = num(MAC["poolbankmargin"])
+    check(f"pooled bank 90% interval inside +/-{mg} and not inside +/-{mg - .05:.2f}", -mg < c90[0] and c90[1] < mg and not (-(mg - .05) < c90[0] and c90[1] < mg - .05))
+    check("pooled bank margin is five times tighter than 0.5 pp (text says 'five times')", abs(0.5 / mg - 5) < 1e-9)
+    worst = num(MAC["poolbankworst"])
+    for i, b in enumerate(RS["BB"]):
+        ds_ = RS["bank"][5 * i:5 * i + 5]
+        m = np.array([d.mean() for d in ds_]); w = 1 / np.array([d.var(ddof=1) / len(d) for d in ds_])
+        est = (w * m).sum() / w.sum(); se = np.sqrt(1 / w.sum()); pre = {"ResNet-18": "rb", "MobileNetV2": "mb", "VGG-16": "vg"}[b]
+        check(f"{b} fixed-effect bank {est:+.3f}, 90% [{est - 1.645 * se:+.3f}, {est + 1.645 * se:+.3f}] matches and lies inside +/-{worst}",
+              close(est, pre + "poolbank") and close(est - 1.645 * se, pre + "poolbanklonine") and close(est + 1.645 * se, pre + "poolbankhinine")
+              and -worst < est - 1.645 * se and est + 1.645 * se < worst)
+    check(f"plain ResNet-18 CIFAR-100 w64 {MAC['rbstaticCC']} is more than ten points above SD-Conv's 67.6 (text)", num(MAC["rbstaticCC"]) - 67.6 > 10)
+    check("Tiny-ImageNet w64 ResNet-18 effect within 0.5 pp of DY-Conv's 2.3 ('of the published size')", abs(num(MAC["effTB"]) - 2.3) < 0.5)
+    for k_ in ["rbstaticCC", "rbgapCC", "vgstaticCC", "vggapCC", "mbstaticCC", "mbgapCC", "rbstaticTB", "rbgapTB"]:
+        check(f"macro {k_} present", k_ in MAC)
+    six = [RS["get"](b, ds, ws, "static") - RS["get"](b, ds, wg, "gap") for b in ("ResNet-18", "VGG-16")
+           for ds, wg, ws in [("cifar100", 16, 32), ("cifar100", 32, 64), ("tinyimagenet", 32, 64)]]
+    check("plain 2c beats gap c in all six ResNet-18 and VGG-16 pairs ('six of six pairs')", all(d.mean() > 0 and RS["pt"](d) < .05 for d in six))
+
 # 5. phrases that must not return -------------------------------------------------
 tex = (ROOT / "report/paper2_template.tex").read_text()
 banned = ["Every run uses the right", "order of magnitude below", "GPU fault", "GPU\nfault", "on both backbones", "of ten conditions", "holds on both", "deeper stages",
           "so it does vary with", "every channel count by", "a few percent more compute",
           "five warm-up epochs then cosine decay over 150", "this literature reports", "close to one-hot from the first step", "At equal parameters, width wins",
-          "—", "---"]
+          "—", "---", "Moreover", "Furthermore", "Additionally", "Notably", "It is worth noting", "worth noting", "it is important to note"]
+ai_words = ["robust", "comprehensive", "crucial", "delve", "leverag", "pivotal", "seamless", "meticulous", "underscore", "showcas",
+            "landscape", "tapestry", "realm", "paradigm", "testament", "intricate", "holistic", "utiliz", "in order to", "genuinely", "truly"]
+for b in ai_words:
+    check(f"template avoids {b!r} (avoid-ai-writing pass)", b not in tex.lower())
 for b in banned:
     check(f"template does not contain {b!r}", b not in tex)
 sys.exit(1 if fails else 0)

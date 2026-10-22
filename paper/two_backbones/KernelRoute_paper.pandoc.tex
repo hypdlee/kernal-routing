@@ -7,54 +7,50 @@
 
 Ankit Kumar, Mechatronics Department, University of Agder, Grimstad, Norway
 
-24 September 2026; revised 21 October 2026
+24 September 2026; revised 22 October 2026
 
-\emph{Draft of 21 October 2026. ResNet-18, MobileNetV2 and VGG-16 are complete; the same program on ResNet-50 and ConvNeXt-Tiny is pre-registered and running.}
+\emph{Draft of 22 October 2026. ResNet-18, MobileNetV2 and VGG-16 are complete; the same program on ResNet-50 and ConvNeXt-Tiny is pre-registered and running.}
 
 \section*{Abstract}
 
 
-Dynamic convolution replaces one kernel with a bank of $K$ kernels mixed
-by input-dependent weights. Its gains are usually credited to
-input-adaptive kernel selection, but published comparisons set it against
-a network with $K$ times fewer parameters, so routing and capacity are
-confounded. We separate them with a constant mixture of the same bank, a
-router fed another image's descriptor and a router frozen at random
-initialisation, on ResNet-18, MobileNetV2 and VGG-16, CIFAR-100 and
-Tiny-ImageNet, across 396 training runs with six seeds each and
-equivalence tests at a $\pm$0.5 pp margin. Seven findings. (1) The
-kernel bank on its own adds nothing measurable: a uniformly mixed bank is
-never significantly different from a plain network in the fifteen
-backbone and condition pairs, and is equivalent to one in 9;
-the other six, three on MobileNetV2 and three on VGG-16, are
-inconclusive. (2) Dynamic convolution beats the plain network in
-13 of the fifteen pairs; the bank term is never significant, and
-the routing term is significant in 12 of these 13. The
-two pairs without an effect are CIFAR-100 at width 64 on ResNet-18 and on
-VGG-16, where dynamic convolution is equivalent to the plain network, a
-null that we could not explain; MobileNetV2 shows an effect there. (3) Whether the router has to be trained depends on the
-backbone: on MobileNetV2 a router frozen at random initialisation is not
-distinguishable from a trained one, while on VGG-16 the trained router
-beats the constant mixture and the frozen one is equivalent to it. (4) On
-CIFAR-100 at width 32, banks larger than $K=2$ are not distinguishable
-from $K=2$ on any backbone. (5) Whether routing is worth its cost depends
-on the cost held fixed and on the backbone: a plain network of twice the
-width, which on ResNet-18 and VGG-16 has the same number of parameters as
-the routed one, beats it in all six pairs there by 2.3 to
-5.2\,pp, while on MobileNetV2, where twice the width means
-1.7 to 2.0 times the parameters, it wins one of three;
-at equal width, for at most 8, 2 and
-19\,\% more compute, routing beats the plain network in
-4, 5 and 4 of five conditions on ResNet-18,
-MobileNetV2 and VGG-16. (6) On CIFAR-100, annealing the softmax
-temperature, as DY-Conv recommends, never improved accuracy detectably
-and lowered it in 7 of nine conditions. (7) Routing entropy,
-measured on ResNet-18 and MobileNetV2, is not a reliable measure of
-whether routing helps: on CIFAR-100 at width 64 the trained routers of
-the two backbones have nearly the same entropy and improve on the
-constant mixture by +0.03 and +1.47\,pp. Of 7
-predictions recorded before the experiments that test them,
-4 failed; we report each one.
+Dynamic convolution mixes a bank of $K$ kernels with weights computed from
+the input. Its gains are credited to input-adaptive kernels, but published
+comparisons set it against a network with $K$ times fewer parameters, so
+routing and capacity are confounded. We separate them with three controls,
+each trained from scratch: a constant mixture of the same bank, a router
+fed another image's descriptor, and a router frozen at random
+initialisation. The study covers ResNet-18, MobileNetV2 and VGG-16 on
+CIFAR-100 and Tiny-ImageNet, 396 training runs with six paired
+seeds per arm, and tests null results for equivalence at a
+$\pm$0.5 pp margin. We report seven findings. (1) The kernel bank
+adds nothing on its own: pooled over the fifteen backbone and condition
+pairs, a constant mixture of the bank differs from the plain network by
+-0.007\,pp (95\% CI [-0.098, +0.084]).
+(2) Dynamic convolution beats the plain network in 13 of the
+fifteen pairs (12 after Holm correction), and routing carries
+the gain: the pooled routing term is +1.234\,pp. The two pairs
+without an effect, CIFAR-100 at width 64 on ResNet-18 and on VGG-16, are
+equivalent to the plain network, and we could not explain them. (3)
+Whether the router has to be trained depends on the backbone: on
+MobileNetV2 a router frozen at random initialisation is not
+distinguishable from a trained one, while on VGG-16 only the trained
+router beats the constant mixture. (4) On CIFAR-100 at width 32, banks
+larger than $K=2$ are not distinguishable from $K=2$ on any backbone. (5)
+The cost question has two answers. A plain network of twice the width,
+which on ResNet-18 and VGG-16 has as many parameters as the routed one,
+beats it in all six pairs there by 2.3 to 5.2\,pp; on
+MobileNetV2, where twice the width means 1.7 to 2.0 times
+the parameters, it wins one of three. At equal width, for 2 to
+19\,\% more multiply-accumulates, routing beats the plain
+network in 13 of fifteen conditions. (6) On CIFAR-100, annealing
+the softmax temperature, as DY-Conv recommends, never improved accuracy
+detectably and lowered it in 7 of nine conditions. (7)
+Routing entropy, measured on ResNet-18 and MobileNetV2, does not reliably
+indicate whether routing helps: at CIFAR-100 width 64 the two backbones'
+routers have nearly the same entropy and beat the constant mixture by
++0.03 and +1.47\,pp. Of 7 predictions recorded before the
+runs that test them, 4 failed.
 
 
 \section*{1 Introduction}
@@ -70,27 +66,39 @@ perceptron and $\tau$ is a softmax temperature. Nearly every published
 variant sets $\phi$ to global average pooling
 (Yang et al., 2019; Chen et al., 2020).
 
-The usual account of why this helps is that $\mathbf{z}$ adapts the kernel to
-the input. A second account is available and is rarely tested. The bank
-multiplies the stored convolution parameters by $K$, and published
-comparisons are made against a network with $K$ times fewer parameters.
-Under that comparison, a gain from routing and a gain from extra
-capacity look identical.
+The usual explanation of the gain is that $\mathbf{z}$ adapts the kernel to the
+input. There is a second explanation. The bank multiplies the stored
+convolution parameters by $K$, and published comparisons are made against
+a network with $K$ times fewer parameters. Under that comparison a gain
+from routing and a gain from extra capacity look the same.
 
-This report separates the two. We compare the standard routed layer
-against a constant mixture that has the same bank and no routing, a
-router fed a different image's descriptor, a router frozen at random
-initialisation, and a plain network. The comparison spans three widths,
-three bank sizes, two temperature schedules, two datasets and three
-backbones: ResNet-18 and VGG-16, where almost every parameter sits in a
-dynamic layer and VGG-16 has no residual connections, and MobileNetV2,
-where the dynamic layers are depthwise and hold 3\,\% of the
-parameters. That is 396 training runs and 564 GPU-hours on
-one RTX 4070 Ti. Every comparison is paired by seed and tested for
-equivalence as well as for difference, so that a null result is a claim
-with a stated margin rather than a failure to reject. The three backbones
-run the same program, and the MobileNetV2 and VGG-16 predictions were
-recorded, dated, before the first run of either.
+The closest existing test is an ablation in the DY-Conv paper
+(Chen et al., 2020, Table 3): changing the kernel aggregation of a
+DY-MobileNetV2 trained with attention to an average of the kernels lowers
+ImageNet top-1 accuracy from 69.4\% to 36.0\%,
+below the 65.4\% of the plain network. The paper does not say
+whether the variant was retrained. A constant mixture trained as such is a
+single kernel (Yang et al., 2019, Section 3) and would be expected
+near the plain network, so the 36.0\% indicates that it was
+not. The ablation shows that a network trained with attention depends on
+it. It does not show that attention is why the dynamic network beats the
+plain one; that needs a constant mixture trained from scratch and compared
+with both, which was not done. We do it.
+
+We compare the standard routed layer against a constant mixture of the
+same bank, a router fed another image's descriptor, a router frozen at
+random initialisation, and the plain network, each trained from scratch.
+The comparison spans three widths, three bank sizes, two temperature
+schedules, two datasets and three backbones: ResNet-18 and VGG-16, where
+almost every parameter sits in a dynamic layer and VGG-16 has no residual
+connections, and MobileNetV2, where the dynamic layers are depthwise and
+hold 3\,\% of the parameters. That is 396 training
+runs and 564 GPU-hours on one RTX 4070 Ti. Every comparison is
+paired by seed and tested for equivalence as well as for difference, so a
+null result is a claim with a stated margin rather than a failure to
+reject. The three backbones run the same program, and the MobileNetV2 and
+VGG-16 predictions were written down, dated, before the first run of
+either.
 
 \textbf{Terms.}  Throughout, \emph{routing} means that the mixing
 weights $\mathbf{z}$ depend on the input image, whether or not the function that
@@ -101,26 +109,26 @@ no routing; the \emph{routing term} is $\texttt{gap}-\texttt{uniform}$,
 the effect of routing the same bank. A \emph{pair} is one backbone in one
 of the five main conditions, fifteen in all.
 
-\textbf{What we find.}  Each result section reports the three backbones
-side by side, and Section~13 collects the results in one
-table.
+\textbf{Findings.}  Each result section reports the three backbones side
+by side; Section~13 collects the results in one table and
+Section~14 states what they mean in practice.
 \begin{enumerate}
-\item \textbf{The kernel bank on its own adds nothing measurable} (all
-three backbones; Section~5). The bank term is not
-significant in any of the fifteen pairs, and is equivalent to zero in
-9 of them: 5 of five on ResNet-18, 2 on
-MobileNetV2 and 2 on VGG-16. The other six are inconclusive.
+\item \textbf{The kernel bank adds nothing on its own} (all three
+backbones; Section~5). Pooled over the fifteen pairs the bank
+term is -0.007\,pp (95\% CI [-0.098,
++0.084]), equivalent to zero at a margin of
+0.1\,pp. It is significant in none of the pairs taken
+singly.
 \item \textbf{Where dynamic convolution helps, the gain comes from
-routing, not from the bank; where it helps depends on the backbone}
-(Sections~5 and~6). Dynamic convolution beats
-the plain network in 13 of fifteen pairs. In all of them the bank
-term is not significant, and in 12 of them the routing term is
-significant; in the remaining one, VGG-16 on CIFAR-100 at width 32, the
-routing term is +0.627\,pp with $p=0.0569$. The two pairs
-without an effect are CIFAR-100 at width 64 on ResNet-18 and on VGG-16,
-where no arm beats the plain network. The null is a positive equivalence
-on both, the two explanations we tested do not account for it, and
-MobileNetV2 shows +1.360\,pp in the same condition.
+routing; where it helps depends on the backbone} (Sections~5
+and~6). Dynamic convolution beats the plain network in
+13 of fifteen pairs, and in 12 of these the routing
+term is significant on its own; the remaining one is VGG-16 on CIFAR-100
+at width 32 (+0.627\,pp, $p=0.0569$). The two pairs without
+an effect are CIFAR-100 at width 64 on ResNet-18 and on VGG-16, where no
+arm beats the plain network. The null is an equivalence on both, the two
+explanations we tested do not account for it, and MobileNetV2 shows
++1.360\,pp in the same condition.
 \item \textbf{Whether the router has to be trained depends on the
 backbone} (CIFAR-100 at width 64 only; Section~7). On
 MobileNetV2 a router frozen at random initialisation is not
@@ -136,14 +144,13 @@ Section~8). On ResNet-18 they are equivalent to it; on
 MobileNetV2 and VGG-16 the comparison is inconclusive.
 \item \textbf{Whether routing is worth its cost depends on the cost held
 fixed and on the backbone} (Section~9). A plain network of
-twice the width, which on ResNet-18 and VGG-16 has the same number of
-parameters as the routed one, beats it in all six pairs on those two
-backbones; on MobileNetV2, where it has 1.7 to 2.0 times
-the routed network's parameters, it wins one of three. At equal width,
-where routing adds at most 8, 2 and
-19\,\% to the multiply-accumulates, routing wins 4,
-5 and 4 of five conditions on ResNet-18, MobileNetV2
-and VGG-16.
+twice the width, which on ResNet-18 and VGG-16 has as many parameters as
+the routed one, beats it in all six pairs on those two backbones; on
+MobileNetV2, where it has 1.7 to 2.0 times the routed
+network's parameters, it wins one of three. At equal width, where routing
+adds at most 8, 2 and 19\,\% to the
+multiply-accumulates, routing wins 4, 5 and 4
+of five conditions on ResNet-18, MobileNetV2 and VGG-16.
 \item \textbf{Annealing the softmax temperature never detectably improved
 accuracy} (all three backbones; CIFAR-100 only; Section~10).
 It lowered accuracy in 7 of nine conditions: at all three
@@ -174,28 +181,52 @@ MobileNetV2 and held on VGG-16, and P3 held on both. P1 failed because
 inconclusive bank terms count against it, not because any bank term is
 significant, so it does not contradict finding~1.
 
+\textbf{Scope.}  The study is about dynamic convolution of the CondConv
+and DY-Conv form in image classifiers trained from scratch on
+low-resolution data. Transformers, pretrained models, detection and
+segmentation are outside it.
+
 \section*{2 Related work}
 
 \textbf{Dynamic convolution.}  CondConv (Yang et al., 2019) and
 DY-Conv (Chen et al., 2020) introduced input-dependent mixtures of
-kernels. ODConv (Li et al., 2022) extends the attention across several
-kernel dimensions, and KernelWarehouse (Li and Yao, 2024)
-reorganises the bank so that far larger $K$ becomes affordable. The
-reported gains are large: for a ResNet-18 on ImageNet at four times the
-kernel parameters, Li and Yao (2024) report top-1
-improvements of 3.38 pp for DY-Conv, 4.01 pp for ODConv and
-5.61 pp for KernelWarehouse under their training recipe. FDConv
-(Chen et al., 2025) observes that the four parallel kernels of ODConv
-have highly similar frequency responses, which it takes as limited
-diversity, and says the same of traditional dynamic convolution. SD-Conv (He et al., 2023) prunes half the
-parameters of a trained dynamic network at a cost below 1 pp on
+kernels; Han et al. (2022) survey dynamic networks more broadly.
+ODConv (Li et al., 2022) extends the attention across several kernel
+dimensions, and KernelWarehouse (Li and Yao, 2024) reorganises
+the bank so that far larger $K$ becomes affordable. The reported gains are
+large: for a ResNet-18 on ImageNet at four times the kernel parameters,
+Li and Yao (2024) report top-1 improvements of 3.38 pp
+for DY-Conv, 4.01 pp for ODConv and 5.61 pp for KernelWarehouse
+under their training recipe. FDConv (Chen et al., 2025) observes that
+the four parallel kernels of ODConv have highly similar frequency
+responses, which it takes as limited diversity, and says the same of
+traditional dynamic convolution. SD-Conv (He et al., 2023) prunes half
+the parameters of a trained dynamic network at a cost below 1 pp on
 CIFAR-100, and Li et al. (2021) argue that the $K$ static kernels are
-redundant. To our knowledge none of these works isolates the bank from the
-routing with a constant mixture of the same bank. Our finding that the
-bank contributes nothing on its own is consistent with these
-observations. Spatially resolved variants
-such as DRConv (Chen et al., 2021) route on local rather than global
-signals and fall outside the controls used here.
+redundant. Spatially resolved variants such as DRConv
+(Chen et al., 2021) route on local rather than global signals and fall
+outside the controls used here.
+
+\textbf{Earlier tests of the routing.}  CondConv observes that a layer
+whose routing is constant for all examples has the capacity of a single
+static convolution (Yang et al., 2019, Section 3); this is our
+Proposition~1, and CondConv states it as an argument
+without an experiment. DY-Conv tests the attention by changing the kernel
+aggregation of a DY-MobileNetV2 trained with attention
+(Chen et al., 2020, Table 3): an average of the kernels gives
+36.0\% top-1, the attention of another image
+27.3\% and the full attention 69.4\%, against
+65.4\% for the plain network. The paper does not say whether
+the variants were retrained; an average-kernel network far below the plain
+one indicates they were not, since a constant mixture trained as such is a
+single kernel. That ablation shows that a network trained with attention
+relies on it. Our \texttt{uniform}, \texttt{shuffled} and
+\texttt{frozen\_random} arms ask a different question, whether the
+attention is what makes the dynamic network better than the plain one,
+and answer it by training each control from scratch. To our knowledge no
+earlier work isolates the bank from the routing in this way. Our finding
+that the bank contributes nothing on its own is consistent with the
+redundancy observations above.
 
 \textbf{Optimisation difficulty.}  Li et al. (2021) identify the joint
 optimisation of dynamic attention and static kernels as the central
@@ -209,18 +240,21 @@ linear re-parameterisation of a single kernel. Such re-parameterisations
 can change optimisation without changing the function class
 (Arora et al., 2018), and ACNet and RepVGG exploit this by
 training a richer block and merging it into one kernel at inference
-(Ding et al., 2019, 2021). Our \texttt{uniform} arm is exactly
-such a mergeable block.
+(Ding et al., 2019, 2021). Our \texttt{uniform} arm is such a
+mergeable block.
 
 \textbf{Memorisation.}  Networks of the size used here can fit their
 training sets completely, even under random labels (Zhang et al., 2017).
 That motivated the saturation hypothesis tested in Section~6.
 
-\textbf{Equivalence testing.}  The two one-sided tests procedure
-(Schuirmann, 1987) asserts that a difference lies within a stated
-margin; Lakens (2017) give a practical treatment. It is standard in
-bioequivalence studies and rare in this literature, where a large
-$p$-value from a difference test is often read as evidence of no effect.
+\textbf{Equivalence testing and multiplicity.}  The two one-sided tests
+procedure (Schuirmann, 1987) asserts that a difference lies within a
+stated margin; Lakens (2017) gives a practical treatment. It is
+standard in bioequivalence studies and rare in this literature, where a
+large $p$-value from a difference test is often read as evidence of no
+effect. We correct families of tests with Holm's procedure (Holm, 1979)
+and pool effects across conditions with the random-effects estimator of
+DerSimonian and Laird (1986).
 
 \section*{3 Method}
 
@@ -237,7 +271,10 @@ every input. The bank exists and is trained; nothing is routed.
 \item[\texttt{gap}] $\mathbf{z}=\operatorname{softmax}(g(\mu(F))/\tau)$ with $g$
 trained. The standard layer. $g$ is a two-layer perceptron with a ReLU and
 hidden width $\max(16,\lfloor C_{\text{in}}/4\rfloor)$, in PyTorch's default
-initialisation.
+initialisation. This is the attention branch of DY-Conv (Chen et al., 2020):
+global average pooling, two fully connected layers with a ReLU between them,
+the first reducing the dimension by four, and a softmax over $K=4$ kernels;
+the floor of 16 hidden units is ours.
 \item[\texttt{shuffled}] As \texttt{gap}, but sample $i$ is routed with
 the descriptor of sample $\pi(i)$ for a permutation $\pi$ redrawn on every
 forward pass, at evaluation as well as training. The distribution of
@@ -259,7 +296,7 @@ temperature groups (CIFAR-100, widths 16, 32 and 64) run \texttt{gap} only.
 
 \subsection*{3.2 The constant mixture is a single kernel}
 
-\textbf{Proposition 1.} \emph{
+\textbf{Proposition 1} (Yang et al., 2019, Section 3). \emph{
 If $\mathbf{z}=(1/K,\dots,1/K)$ for every input, the layer computes
 $F*\bar{\mathcal{W}}$ with $\bar{\mathcal{W}}=\tfrac1K\sum_k\mathcal{W}_k$,
 and its effective parameter count equals that of one static kernel.
@@ -271,7 +308,9 @@ $\mathcal{W}_{\text{dyn}}=\bar{\mathcal{W}}$ for every $F$.
  $\square$
 
 
-At inference \texttt{uniform} is therefore the plain network. On
+The statement is CondConv's, made there as an argument; here it defines a
+control that is trained and compared. At inference \texttt{uniform} is
+therefore the plain network. On
 ResNet-18 at width 64 it stores 44.18M parameters and has an effective
 count of 11.22M. It spans the same function class as \texttt{static}, so
 any difference between the two is an effect of optimisation. That makes it
@@ -335,7 +374,13 @@ rule that decides which layers are dynamic is the ResNet-18 rule without
 change: every $k\times k$ convolution with $k>1$ inside a block. In
 MobileNetV2 that is the 17 depthwise $3\times3$ convolutions; the stem,
 every $1\times1$ expansion and projection, and the classifier stay
-static. The consequences differ from ResNet-18. At CIFAR-100 width 64 the
+static. DY-Conv places dynamic convolution differently: in its
+DY-MobileNetV2 every convolution except the first is dynamic
+(Chen et al., 2020, Section 5.1), the $1\times1$ layers included. We kept
+the ResNet-18 rule, fixed in the pre-registration before any MobileNetV2
+run, so that one rule decides the placement on every backbone; our
+MobileNetV2 results are therefore about dynamic depthwise layers, not about
+DY-MobileNetV2. The consequences differ from ResNet-18. At CIFAR-100 width 64 the
 bank adds 0.19M parameters to a 2.35M network, so only
 3\,\% of the static parameters sit in dynamic layers, and the
 router of the \texttt{gap} arm (the ResNet-18 design, a two-layer
@@ -373,7 +418,7 @@ every run on a dataset. A reported value is the mean over those images
 and over the dynamic layers, stored to five decimals. It was not recorded
 during training, and the
 trained weights were not kept, so it cannot be recomputed on the full
-test set (Section~14). No accuracy depends on it.
+test set (Section~15). No accuracy depends on it.
 
 \subsection*{3.6 Coverage and provenance}
 
@@ -403,10 +448,10 @@ prints equal those counted from the model definition. The VGG-16 result
 files, which hold the routing entropies, were not available for this
 draft, so no VGG-16 entropy is reported. The appendix lists every run
 (Figures~17, 18 and~19,
-Tables~24, 29, 34,
-28, 33 and~37) and every
-comparison against \texttt{static} (Tables~25,
-30 and~35).
+Tables~27, 32, 37,
+31, 36 and~40) and every
+comparison against \texttt{static} (Tables~28,
+33 and~38).
 
 \section*{4 Statistical protocol}
 
@@ -422,7 +467,9 @@ the first run. The pre-registration justified this by reference to
 reported gains at CIFAR scale without citing a source. The nearest
 documented figures we have since found are the ImageNet ResNet-18 gains
 of 3.38 to 5.61 pp quoted above, and the margin is seven to
-eleven times smaller than they are.
+eleven times smaller than they are. Because the choice is not anchored in
+a source, Table~2 also reports the bank-term equivalences at
+margins of 0.25, 0.75 and 1 pp.
 
 \textbf{Why six seeds.}  The two-sided Wilcoxon signed-rank test
 (Wilcoxon, 1945) on $n$ pairs admits only $2^n$ equally likely sign
@@ -438,6 +485,24 @@ power ($2\times10^5$ draws) is 48.5\,\% for a true effect of
 100.0\,\% at 1.0 pp. The ResNet-18 null on CIFAR-100 at width 64
 (Section~6) is not a power artefact.
 
+\textbf{Multiplicity and pooling.}  Each main finding rests on a family
+of fifteen tests, one per backbone and condition pair, and the paper
+reports many more. The per-pair verdicts in the tables are uncorrected and
+describe each pair. Where a finding is one claim across pairs, we test it
+once, on a pooled estimate: the fifteen per-pair mean differences are
+combined with the random-effects estimator of
+DerSimonian and Laird (1986), each weighted by the inverse of its squared
+standard error plus a between-pair variance estimated from Cochran's $Q$.
+The pairs use disjoint runs, so their estimates are independent.
+Equivalence of a pooled estimate at a margin $\delta$ is read from its
+90\% interval, the interval that the two one-sided tests use.
+Within one backbone, five conditions are too few to estimate the
+between-condition variance, and we pool with fixed inverse-variance
+weights. For counts of significant pairs we also report how many survive
+Holm's step-down correction (Holm, 1979) over the fifteen pairs of the
+family. The pooling and the correction were added after all runs had
+finished and were not part of the pre-registration.
+
 \textbf{Pre-registration.}  Arms, recipe, primary metric, seeds, margin
 and the decision table were written down before the first run finished.
 The primary metric is final-epoch top-1 accuracy, since best-epoch
@@ -449,7 +514,10 @@ less weight. For MobileNetV2 and VGG-16, three predictions each and a gate
 each (the first static run had to reach 65\% on CIFAR-100
 before the other 131 runs of that backbone were spent) were recorded on 30
 September 2026, before any run of either backbone
-(Section~12).
+(Section~12). All of these records are dated documents in
+the project repository, not entries in a public registry, and the
+repository's public history begins after they were written, so their dates
+cannot be checked independently of us.
 
 \section*{5 The bank adds nothing; routing carries the effect}
 
@@ -464,10 +532,83 @@ shaded band is the $\pm$0.5 pp margin.}
 
 Figure~1 splits the total effect
 $\texttt{gap}-\texttt{static}$ into the bank term and the routing term in
-the five main conditions of each backbone (Tables~1,
-2 and~3).
+the five main conditions of each backbone. The per-backbone tables for this
+and the following sections are in Appendix~A
+(here Tables~8, 9 and~10).
 
-\textbf{The bank term.}  On ResNet-18 the bank term is equivalent to
+\textbf{Pooled over the fifteen pairs.}  Finding~1 is one claim, and we
+test it once (Table~1). Pooled over the fifteen pairs, the
+bank term is -0.007\,pp (95\% CI [-0.098,
++0.084]). Its 90\% interval, [-0.083,
++0.070], lies inside $\pm$0.1\,pp, so the bank
+term is equivalent to zero at a margin five times tighter than the
+pre-registered one. The pairs do not disagree detectably (heterogeneity
+$p=0.146$), and pooled within each backbone the 90\%
+interval lies inside $\pm$0.25\,pp on all three
+(+0.005, -0.098 and +0.019\,pp on ResNet-18,
+MobileNetV2 and VGG-16). The routing term pooled the same way is
++1.234\,pp (95\% CI [+0.827, +1.640]),
+but it varies strongly between pairs (heterogeneity $p$\,< 10\textsuperscript{−4},
+between-pair standard deviation 0.78\,pp). That pooled value
+is an average over different effects, which is the content of finding~2:
+routing helps, by an amount that depends on the backbone and the
+condition.
+
+\textbf{Correction for multiple tests.}  Table~2 counts the
+significant pairs before and after Holm correction. The routing term is
+positive in 13 pairs, 12 after correction (the
+one lost is VGG-16 on CIFAR-100 at width 16); dynamic convolution beats the plain network
+in 13, 12 after correction (the one lost is
+MobileNetV2 on CIFAR-100 at width 16). The per-pair equivalences of the bank term do not
+survive: 9 of fifteen at $\pm$0.5 pp uncorrected,
+0 after correction, 9 at
+$\pm$0.75 pp and 14 at $\pm$1 pp. Six seeds give
+a single pair too little precision for a corrected equivalence at the
+pre-registered margin. The claim that the bank adds nothing therefore rests
+on the pooled estimate, and the per-pair verdicts below describe the
+pairs.
+
+\begin{table}
+\caption{Table 1: Pooled bank and routing terms (pp). The first row pools the
+fifteen backbone and condition pairs with random effects; the others pool
+the five conditions of one backbone with fixed weights. Equivalence at a
+margin $\delta$ holds when the 90\% interval lies inside
+$\pm\delta$.}
+
+\begin{tabular}{l rll rl}
+\toprule
+& \multicolumn{3}{c}{bank (uniform − static)}
+& \multicolumn{2}{c}{routing (gap − uniform)} \\
+
+pooled over & estimate & 95\% CI & 90\% CI & estimate & 95\% CI \\
+\midrule
+all three, 15 pairs (random effects) & -0.007 & [-0.098, +0.084] & [-0.083, +0.070] & +1.234 & [+0.827, +1.640] \\
+ResNet-18, 5 conditions (fixed effect) & +0.005 & [-0.111, +0.121] & [-0.092, +0.102] & +1.238 & [+1.133, +1.342] \\
+MobileNetV2, 5 conditions (fixed effect) & -0.098 & [-0.269, +0.073] & [-0.242, +0.046] & +1.491 & [+1.346, +1.637] \\
+VGG-16, 5 conditions (fixed effect) & +0.019 & [-0.095, +0.133] & [-0.077, +0.114] & +0.622 & [+0.512, +0.732] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 2: Number of the fifteen backbone and condition pairs significant at
+the 5\,\% level before and after Holm correction within each family.}
+
+\begin{tabular}{l rr}
+\toprule
+family of fifteen tests & uncorrected & Holm \\
+\midrule
+routing term positive (gap − uniform) & 13 & 12 \\
+dynamic beats plain (gap − static) & 13 & 12 \\
+bank term equivalent at $\pm$0.25\,pp (TOST) & 0 & 0 \\
+bank term equivalent at $\pm$0.5\,pp (TOST) & 9 & 0 \\
+bank term equivalent at $\pm$0.75\,pp (TOST) & 14 & 9 \\
+bank term equivalent at $\pm$1\,pp (TOST) & 14 & 14 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{The bank term, pair by pair.}  On ResNet-18 the bank term is equivalent to
 zero in all five conditions, with $p_{\text{TOST}}$ between 0.014 and
 0.025; the largest in magnitude is -0.223\,pp, at CIFAR-100 width 16.
 On MobileNetV2 it is never significantly different from zero. It is
@@ -478,19 +619,19 @@ are small (+0.593, -0.193 and -0.175\,pp; the first lies
 just outside the margin) and the confidence intervals extend beyond it, so
 neither equivalence nor a difference is shown. At CIFAR-100 width 16 the
 MobileNetV2 \texttt{static} arm itself is unusually variable across seeds
-(Table~29). On VGG-16 it is also never significantly
+(Table~32). On VGG-16 it is also never significantly
 different from zero. It is equivalent to zero on CIFAR-100 at width 64 and
 on Tiny-ImageNet at width 32 ($p_{\text{TOST}}=0.0147$ and
 0.0039) and inconclusive in the other three conditions, where every
 point estimate lies inside the margin (the largest in magnitude is
 +0.25\,pp) but the confidence interval does not. Over the three
-backbones the bank term is significant in none of the fifteen pairs and
-equivalent to zero in 9. On MobileNetV2 and VGG-16 static and
+backbones the bank term is significant in none of the fifteen pairs and,
+uncorrected, equivalent to zero in 9. On MobileNetV2 and VGG-16 static and
 bank kernels share one initialisation, so their bank terms are free of
 the initialisation mismatch that affects the ResNet-18 bank term
-(Section~14), and they give the same answer.
+(Section~15), and they give the same answer.
 
-\textbf{The routing term.}  The routing term is positive with $p<0.05$
+\textbf{The routing term, pair by pair.}  The routing term is positive with $p<0.05$
 in 13 of the fifteen pairs: in 4 of five on ResNet-18,
 in all five on MobileNetV2, where it ranges from 1.32 to
 1.89\,pp, and in 4 of five on VGG-16. The VGG-16
@@ -525,63 +666,37 @@ the VGG-16 condition above. Figures~15 and~16
 in the appendix show the ResNet-18 accuracies and decomposition
 separately.
 
-\begin{table}
-\caption{Table 1: ResNet-18: bank and routing terms, paired by seed. The bank
-term is equivalent to zero in all five conditions.}
-
-\begin{tabular}{l r rll rl rl}
-\toprule
-& & \multicolumn{3}{c}{bank (uniform − static)}
-& \multicolumn{2}{c}{routing (gap − uniform)}
-& \multicolumn{2}{c}{total} \\
-
-dataset & width & $\Delta$ (pp) & $p_{\text{TOST}}$ & verdict & $\Delta$ (pp) & $p$ & $\Delta$ (pp) & $p$ \\
-\midrule
-CIFAR‑100 & 16 & -0.223 & 0.0251 & equivalent & +0.755 & 0.0023 & +0.532 & 0.0023 \\
-CIFAR‑100 & 32 & +0.175 & 0.0242 & equivalent & +0.978 & 0.0010 & +1.153 & < 10\textsuperscript{−4} \\
-CIFAR‑100 & 64 & +0.048 & 0.0142 & equivalent & +0.032 & 0.7752 & +0.080 & 0.6158 \\
-Tiny‑ImageNet & 32 & +0.107 & 0.0218 & equivalent & +2.078 & < 10\textsuperscript{−4} & +2.185 & < 10\textsuperscript{−4} \\
-Tiny‑ImageNet & 64 & +0.053 & 0.0157 & equivalent & +2.228 & < 10\textsuperscript{−4} & +2.282 & < 10\textsuperscript{−4} \\
-\bottomrule
-\end{tabular}
-\end{table}
+\textbf{Against published numbers.}  On CIFAR-100 our effects are
+smaller than the published one, and our plain network is stronger
+(Table~3). SD-Conv reports a plain ResNet-18 on CIFAR-100 at
+67.6\% and its DY-Conv counterpart at 72.4\%
+(He et al., 2023, Table 1). Our plain ResNet-18 at width 64, the
+standard ResNet-18 width, reaches 78.34\,\%, more than ten points
+higher, and the routed one 78.42\,\%. The recipes differ, so the
+comparison does not say why the published gain is larger. It does show
+that our routed layer was not measured against a weak plain network, and
+where the layer has an effect, the effect is of the published size:
++2.282\,pp on ResNet-18 at Tiny-ImageNet width 64, against
+2.3 pp for ResNet-18 on ImageNet in DY-Conv
+(Chen et al., 2020, Table 8).
 
 \begin{table}
-\caption{Table 2: MobileNetV2: bank and routing terms, paired by seed.}
+\caption{Table 3: Plain and dynamic top-1 accuracy (\%) in published work and
+here. Published rows are single numbers as reported; ours are means over
+six seeds.}
 
-\begin{tabular}{l r rll rl rl}
+\begin{tabular}{l l l rrr}
 \toprule
-& & \multicolumn{3}{c}{bank (uniform − static)}
-& \multicolumn{2}{c}{routing (gap − uniform)}
-& \multicolumn{2}{c}{total} \\
-
-dataset & width & $\Delta$ (pp) & $p_{\text{TOST}}$ & verdict & $\Delta$ (pp) & $p$ & $\Delta$ (pp) & $p$ \\
+source & network & data & plain & dynamic & gain (pp) \\
 \midrule
-CIFAR‑100 & 16 & +0.593 & 0.5884 & inconclusive & +1.322 & 0.0011 & +1.915 & 0.0225 \\
-CIFAR‑100 & 32 & -0.102 & 0.0269 & equivalent & +1.408 & 0.0002 & +1.307 & 0.0015 \\
-CIFAR‑100 & 64 & -0.113 & 0.0275 & equivalent & +1.473 & < 10\textsuperscript{−4} & +1.360 & 0.0002 \\
-Tiny‑ImageNet & 32 & -0.193 & 0.1393 & inconclusive & +1.888 & 0.0008 & +1.695 & 0.0028 \\
-Tiny‑ImageNet & 64 & -0.175 & 0.0742 & inconclusive & +1.807 & 0.0014 & +1.632 & 0.0002 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Table 3: VGG-16: bank and routing terms, paired by seed.}
-
-\begin{tabular}{l r rll rl rl}
-\toprule
-& & \multicolumn{3}{c}{bank (uniform − static)}
-& \multicolumn{2}{c}{routing (gap − uniform)}
-& \multicolumn{2}{c}{total} \\
-
-dataset & width & $\Delta$ (pp) & $p_{\text{TOST}}$ & verdict & $\Delta$ (pp) & $p$ & $\Delta$ (pp) & $p$ \\
+SD-Conv (He et al., 2023, Table 1) & ResNet-18 & CIFAR‑100 & 67.6 & 72.4 & +4.8 \\
+DY-Conv (Chen et al., 2020, Table 8) & ResNet-18 & ImageNet & 70.4 & 72.7 & +2.3 \\
+DY-Conv (Chen et al., 2020, Table 6) & MobileNetV2 $\times0.5$ & ImageNet & 65.4 & 69.9 & +4.5 \\
 \midrule
-CIFAR‑100 & 16 & +0.145 & 0.0621 & inconclusive & +0.718 & 0.0375 & +0.863 & 0.0020 \\
-CIFAR‑100 & 32 & -0.148 & 0.0834 & inconclusive & +0.627 & 0.0569 & +0.478 & 0.0077 \\
-CIFAR‑100 & 64 & -0.188 & 0.0147 & equivalent & +0.373 & 0.0025 & +0.185 & 0.0766 \\
-Tiny‑ImageNet & 32 & +0.128 & 0.0039 & equivalent & +1.637 & 0.0001 & +1.765 & < 10\textsuperscript{−4} \\
-Tiny‑ImageNet & 64 & +0.250 & 0.1458 & inconclusive & +1.230 & 0.0055 & +1.480 & 0.0023 \\
+this paper & ResNet-18, width 64 & CIFAR‑100 & 78.34 & 78.42 & +0.080 \\
+this paper & VGG-16, width 64 & CIFAR‑100 & 74.81 & 74.99 & +0.185 \\
+this paper & MobileNetV2, width 64 & CIFAR‑100 & 72.39 & 73.76 & +1.360 \\
+this paper & ResNet-18, width 64 & Tiny‑ImageNet & 66.27 & 68.55 & +2.282 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -606,7 +721,7 @@ arm means and the shaded band is $\pm$0.5 pp around
 \end{figure}
 
 On ResNet-18 at CIFAR-100 width 64 every arm is equivalent to the plain
-network (Table~25, Figure~3). The largest gap
+network (Table~28, Figure~3). The largest gap
 between arm means is 0.250\,pp, against a median within-arm seed
 standard deviation of 0.238\,pp, and a one-way ANOVA across the five
 arms gives $F(4,25)=0.954$, $p=0.450$. The null is not a power
@@ -616,7 +731,7 @@ every other: the five arms differ ($F=42.8$, $p<10^{-4}$) and
 $\texttt{gap}-\texttt{static}$ is +1.360\,pp (95\% CI
 [+0.986, +1.734], $p=0.0002$).
 
-VGG-16 reproduces the ResNet-18 null (Table~6). No arm beats
+VGG-16 reproduces the ResNet-18 null (Table~5). No arm beats
 the plain network: $\texttt{gap}-\texttt{static}$ is +0.185\,pp
 (95\% CI [-0.029, +0.399],
 $p_{\text{TOST}}=0.0064$, equivalent), \texttt{uniform} and
@@ -651,16 +766,8 @@ arm would train to a loss below 0.05, and the effect would then fall below
 0.5 pp and be equivalent to zero. The loss condition held
 (0.0210) and the effect did not vanish:
 $\texttt{gap}-\texttt{static}=+2.282$\,pp, 95\% CI
-[+1.952, +2.611], $p=1.0\times10^{-5}$ (Figure~4). The
+[+1.952, +2.611], $p=1.0\times10^{-5}$ (Figure~8). The
 prediction failed.
-
-\begin{figure}
-\includegraphics[width=6.3in]{fig/f7_tin.png}
-\caption{Figure 4: ResNet-18. (a) All 36 Tiny-ImageNet runs. (b) $\texttt{gap}-\texttt{static}$
-by width on both datasets, 95\% CIs. The CIFAR-100
-width-64 null does not appear on Tiny-ImageNet.}
-
-\end{figure}
 
 \begin{table}
 \caption{Table 4: ResNet-18: the prediction recorded before the Tiny-ImageNet width-64 runs,
@@ -677,13 +784,13 @@ and the outcome. Both conditions were stated as required.}
 \end{table}
 
 \textbf{Training loss does not order the effect.}  Ordered by the
-static arm's final training loss (Table~5,
-Figure~5b), the ResNet-18 effects do not follow:
+static arm's final training loss (Table~11,
+Figure~9b), the ResNet-18 effects do not follow:
 Tiny-ImageNet at width 64 trains to a loss close to CIFAR-100 at width 32
 and shows twice the effect, and CIFAR-100 at width 16 trains to the
 highest loss and shows one of the smallest. MobileNetV2 is consistent
 with the saturation account but cannot rescue it
-(Figure~6): none of its static arms trains below
+(Figure~4): none of its static arms trains below
 0.248 under this recipe, and every MobileNetV2 condition has an
 effect. VGG-16 repeats the ResNet-18 pattern without a recorded
 prediction: its null coincides with its lowest static training loss
@@ -696,34 +803,8 @@ threshold chosen after seeing them would not be evidence. We do not adopt
 it.
 
 \begin{figure}
-\includegraphics[width=6.3in]{fig/f8_prediction.png}
-\caption{Figure 5: ResNet-18. (a) Training loss of static and gap arms, seed 0, log scale.
-(b) Routing effect against the final training loss of the static arm in
-all five conditions. The shaded band is the region the prediction
-associated with a null.}
-
-\end{figure}
-
-\begin{table}
-\caption{Table 5: ResNet-18: five conditions ordered by the final training loss of the
-static arm.}
-
-\begin{tabular}{l r r rl l}
-\toprule
-dataset & width & static train loss & gap − static (pp) & 95\% CI & verdict \\
-\midrule
-CIFAR‑100 & 64 & 0.0080 & +0.080 & [-0.305, +0.465] & equivalent \\
-CIFAR‑100 & 32 & 0.0170 & +1.153 & [+0.940, +1.367] & higher \\
-Tiny‑ImageNet & 64 & 0.0210 & +2.282 & [+1.952, +2.611] & higher \\
-Tiny‑ImageNet & 32 & 0.1194 & +2.185 & [+1.781, +2.589] & higher \\
-CIFAR‑100 & 16 & 0.1643 & +0.532 & [+0.292, +0.771] & higher \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}
 \includegraphics[width=6.3in]{fig/g6_loss_effect.png}
-\caption{Figure 6: (a) MobileNetV2 training loss, seed 0, log scale. (b)
+\caption{Figure 4: (a) MobileNetV2 training loss, seed 0, log scale. (b)
 $\texttt{gap}-\texttt{static}$ against the static arm's final training
 loss for the three backbones and all five conditions, 95\%
 CIs.}
@@ -756,7 +837,7 @@ remains unexplained.
 
 \begin{figure}
 \includegraphics[width=6.3in]{fig/g2_mb_w64.png}
-\caption{Figure 7: CIFAR-100, width 64. (a) Every MobileNetV2 run of the five arms;
+\caption{Figure 5: CIFAR-100, width 64. (a) Every MobileNetV2 run of the five arms;
 bars are arm means, the band is $\pm$0.5 pp around \texttt{static}.
 (b) The routing controls on the three backbones, 95\%
 CIs.}
@@ -764,8 +845,8 @@ CIs.}
 \end{figure}
 
 The controls \texttt{shuffled} and \texttt{frozen\_random} were run on
-CIFAR-100 at width 64 on every backbone (Table~6,
-Figure~7). They can only answer this question where routing
+CIFAR-100 at width 64 on every backbone (Table~5,
+Figure~5). They can only answer this question where routing
 has an effect to explain: against the plain network on MobileNetV2, and
 against the constant mixture on VGG-16.
 
@@ -822,7 +903,7 @@ on ResNet-18 the question cannot be tested. All of this rests on one condition, 
 on one random draw of the frozen router.
 
 \textbf{What the routers output.}  The trained router is the furthest
-from uniform on ResNet-18 and MobileNetV2 (Table~7; the
+from uniform on ResNet-18 and MobileNetV2 (Table~12; the
 measurement is described in Section~3.5). On MobileNetV2 the
 frozen router is 4.5 times closer to uniform
 ($1-\tilde H=0.0029$ against 0.0132), but its departure is spread
@@ -839,7 +920,7 @@ VGG-16 entropies are in its result files, which were not available for
 this draft.
 
 \begin{table}
-\caption{Table 6: Routing controls on CIFAR-100 at width 64, three backbones,
+\caption{Table 5: Routing controls on CIFAR-100 at width 64, three backbones,
 paired by seed.}
 
 \begin{tabular}{l rll rll rll}
@@ -860,109 +941,20 @@ gap  −  uniform & +0.032 & 0.7752 & equivalent & +1.473 & < 10\textsuperscript
 \end{tabular}
 \end{table}
 
-\begin{table}
-\caption{Table 7: Routing entropy by arm, CIFAR-100 width 64, per-seed means over
-the recorded images and layers. Flat layers: the number of the
-17 MobileNetV2 dynamic layers with $\tilde H\ge0.9999$, range
-over seeds.}
-
-\begin{tabular}{l rr rrrr r}
-\toprule
-& \multicolumn{2}{c}{ResNet-18} & \multicolumn{5}{c}{MobileNetV2} \\
-
-arm & mean $\tilde H$ & $1-\tilde H$ & mean $\tilde H$ & min & max & $1-\tilde H$ & flat layers \\
-\midrule
-uniform & 1.0000 & 0.00000 & 1.00000 & 1.00000 & 1.00000 & 0.00000 & 17 \\
-gap & 0.9885 & 0.01147 & 0.98680 & 0.98272 & 0.98955 & 0.01320 & 2--4 \\
-frozen\_random & 0.9971 & 0.00287 & 0.99706 & 0.99649 & 0.99736 & 0.00294 & 0--2 \\
-shuffled & 0.9996 & 0.00040 & 0.99995 & 0.99992 & 0.99996 & 0.00005 & 14--16 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \section*{8 Bank size}
 
-\begin{figure}
-\includegraphics[width=6.3in]{fig/f6_k.png}
-\caption{Figure 8: ResNet-18, CIFAR-100, width 32. (a) Effect over \texttt{static} for
-$K\in\{2,4,8\}$, 95\% CIs. (b) Stored parameters and
-training time.}
-
-\end{figure}
-
 At CIFAR-100 width 32 all three bank sizes beat \texttt{static} on
-ResNet-18 and MobileNetV2 (Tables~8 and~10,
-Figure~12b); on VGG-16 $K=4$ and $K=8$ do and $K=2$ is not
+ResNet-18 and MobileNetV2 (Tables~13 and~15,
+Figure~6b); on VGG-16 $K=4$ and $K=8$ do and $K=2$ is not
 distinguishable from \texttt{static} (+0.258\,pp, $p=0.2978$;
-Table~11). On ResNet-18 no pair of sizes is distinguishable and
-every pair is equivalent (Table~9): $K=8$ over $K=2$ is
+Table~16). On ResNet-18 no pair of sizes is distinguishable and
+every pair is equivalent (Table~14): $K=8$ over $K=2$ is
 +0.098\,pp ($p=0.409$). Going from $K=2$ to $K=8$ multiplies stored
-parameters by 3.9 and training time by 2.5 (Figure~8).
+parameters by 3.9 and training time by 2.5 (Figure~10).
 On MobileNetV2 $K=8$ over $K=2$ is +0.112\,pp ($p=0.5929$) and on
 VGG-16 +0.197\,pp ($p=0.3928$): not distinguishable, but not
 equivalent at our margin either. On all three backbones, then, nothing
 beyond $K=2$ was detected.
-
-\begin{table}
-\caption{Table 8: ResNet-18: bank size at CIFAR-100 width 32. Differences are against the
-\texttt{static} row.}
-
-\begin{tabular}{l rr rl l rr}
-\toprule
-$K$ & accuracy & sd & $\Delta$ (pp) & 95\% CI & $p$ & params (M) & min/run \\
-\midrule
-2 & 75.950 & 0.148 & +1.078 & [+0.758, +1.399] & 0.0003 & 5.64 & 27.9 \\
-4 & 76.025 & 0.156 & +1.153 & [+0.940, +1.367] & < 10\textsuperscript{−4} & 11.13 & 39.2 \\
-8 & 76.048 & 0.242 & +1.177 & [+0.749, +1.604] & 0.0009 & 22.12 & 69.3 \\
-\midrule static & 74.872 & 0.262 & -- & -- & -- & 2.82 & 8.6 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Table 9: ResNet-18: pairwise comparisons between bank sizes, CIFAR-100
-width 32.}
-
-\begin{tabular}{l rl ll l}
-\toprule
-comparison & $\Delta$ (pp) & 95\% CI & $p$ & $p_{\text{TOST}}$ & verdict \\
-\midrule
-$K=4$ vs $K=2$ & +0.075 & [-0.087, +0.237] & 0.2878 & 0.0005 & equivalent \\
-$K=8$ vs $K=4$ & +0.023 & [-0.286, +0.332] & 0.8538 & 0.0053 & equivalent \\
-$K=8$ vs $K=2$ & +0.098 & [-0.182, +0.379] & 0.4091 & 0.0072 & equivalent \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Table 10: MobileNetV2: bank size at CIFAR-100 width 32.}
-
-\begin{tabular}{l rr rl l rr}
-\toprule
-$K$ & accuracy & sd & $\Delta$ (pp) & 95\% CI & $p$ & params (M) & min/run \\
-\midrule
-2 & 71.773 & 0.490 & +0.998 & [+0.487, +1.510] & 0.0041 & 1.14 & 51.6 \\
-4 & 72.082 & 0.356 & +1.307 & [+0.771, +1.843] & 0.0015 & 1.20 & 47.3 \\
-8 & 71.885 & 0.400 & +1.110 & [+0.647, +1.573] & 0.0016 & 1.34 & 98.8 \\
-\midrule static & 70.775 & 0.217 & -- & -- & -- & 0.82 & 18.0 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Table 11: VGG-16: bank size at CIFAR-100 width 32.}
-
-\begin{tabular}{l rr rl l rr}
-\toprule
-$K$ & accuracy & sd & $\Delta$ (pp) & 95\% CI & $p$ & params (M) & min/run \\
-\midrule
-2 & 71.577 & 0.355 & +0.258 & [-0.313, +0.830] & 0.2978 & 7.48 & 19.9 \\
-4 & 71.797 & 0.303 & +0.478 & [+0.193, +0.764] & 0.0077 & 14.84 & 26.0 \\
-8 & 71.773 & 0.224 & +0.455 & [+0.113, +0.797] & 0.0189 & 29.55 & 40.9 \\
-\midrule static & 71.318 & 0.228 & -- & -- & -- & 3.71 & 6.9 \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \section*{9 Is routing worth its cost?}
 
@@ -970,19 +962,11 @@ The answer depends on what is held fixed.
 
 \subsection*{9.1 Twice the width: equal parameters on ResNet-18 and VGG-16}
 
-\begin{figure}
-\includegraphics[width=6.3in]{fig/f5_matched.png}
-\caption{Figure 9: ResNet-18: accuracy against stored parameters. Dotted arrows join routed
-and plain networks matched to within 1\% on parameter
-count.}
-
-\end{figure}
-
 On ResNet-18 the widths differ by a factor of two and the bank multiplies
 convolution parameters by four, so a routed network at one width stores
 almost exactly as many parameters as a plain network at the next width
 up. That gives three matched comparisons without any extra runs
-(Table~12, Figure~9). The plain network
+(Table~17, Figure~11). The plain network
 wins all three: by +4.345\,pp at 2.8M parameters and +2.313\,pp at 11.2M
 on CIFAR-100, and by +2.520\,pp at 11.2M on Tiny-ImageNet. It also trains
 faster in each case; on Tiny-ImageNet, 129.0\,min per run against
@@ -992,14 +976,14 @@ width-64 network, and trails it by 2.29\,pp.
 
 VGG-16 has the same arithmetic, since nearly all of its parameters are in
 dynamic layers: the parameter ratio is 1.00 in all three pairs
-(Table~13). The plain network wins all three as well, by
+(Table~18). The plain network wins all three as well, by
 +5.237 and +3.010\,pp on CIFAR-100 and +2.487\,pp on
 Tiny-ImageNet ($p$\,< 10\textsuperscript{−4} in each).
 
 On MobileNetV2 the same pairs are not matched: so few parameters sit in
 dynamic layers that the routed network has only 0.51 to 0.60
 times the parameters of the plain network at twice its width
-(Table~14, Figure~10). Even so, the
+(Table~19, Figure~12). Even so, the
 plain network wins only at the smallest width (+2.503\,pp,
 $p=0.0001$). On CIFAR-100 at width 32 and on Tiny-ImageNet the two are
 not distinguishable (+0.313\,pp, $p=0.1111$; +0.155\,pp,
@@ -1009,80 +993,24 @@ network ahead in all three cases (static minus routed: -0.298,
 -0.713 and -1.037\,pp); that comparison is an interpolation and has
 no confidence interval.
 
-\begin{table}
-\caption{Table 12: ResNet-18: routed against plain networks at matched parameter counts,
-paired by seed. Minutes are routed / plain per run. The last column is
-the routed network's stored parameters divided by the plain one's; a pair
-is called matched only within 10\,\%.}
-
-\begin{tabular}{l l l rr rl l r l}
-\toprule
-dataset & routed & plain & routed & plain & $\Delta$ (pp) & 95\% CI & $p$ & min/run & param ratio \\
-\midrule
-CIFAR‑100 & gap w16 (2.79M) & static w32 (2.82M) & 70.527 & 74.872 & +4.345 & [+4.103, +4.587] & < 10\textsuperscript{−4} & 33.7 / 8.6 & 0.99 (matched) \\
-CIFAR‑100 & gap w32 (11.13M) & static w64 (11.22M) & 76.025 & 78.338 & +2.313 & [+1.870, +2.757] & < 10\textsuperscript{−4} & 39.2 / 18.8 & 0.99 (matched) \\
-Tiny‑ImageNet & gap w32 (11.16M) & static w64 (11.27M) & 63.745 & 66.265 & +2.520 & [+2.311, +2.729] & < 10\textsuperscript{−4} & 284.2 / 129.0 & 0.99 (matched) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Table 13: VGG-16: \texttt{gap} at width $c$ against \texttt{static} at
-width $2c$, paired by seed. $\Delta$ is plain minus routed; the ratio is
-the routed network's stored parameters over the plain one's.}
-
-\begin{tabular}{l l l rr rl l l r}
-\toprule
-dataset & routed & plain & routed & plain & $\Delta$ (pp) & 95\% CI & $p$ & verdict & ratio \\
-\midrule
-CIFAR‑100 & gap w16 (3.72M) & static w32 (3.71M) & 66.082 & 71.318 & +5.237 & [+4.826, +5.648] & < 10\textsuperscript{−4} & higher & 1.00 \\
-CIFAR‑100 & gap w32 (14.84M) & static w64 (14.77M) & 71.797 & 74.807 & +3.010 & [+2.740, +3.280] & < 10\textsuperscript{−4} & higher & 1.00 \\
-Tiny‑ImageNet & gap w32 (14.86M) & static w64 (14.82M) & 60.813 & 63.300 & +2.487 & [+1.936, +3.037] & < 10\textsuperscript{−4} & higher & 1.00 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}
-\includegraphics[width=6.3in]{fig/g4_mb_matched.png}
-\caption{Figure 10: MobileNetV2: accuracy against stored parameters. Arrows join
-\texttt{gap} at width $c$ to \texttt{static} at width $2c$; labels give
-the accuracy difference and the parameter ratio.}
-
-\end{figure}
-
-\begin{table}
-\caption{Table 14: MobileNetV2: \texttt{gap} at width $c$ against \texttt{static} at
-width $2c$, paired by seed. $\Delta$ is plain minus routed. The ratio is
-the routed network's stored parameters over the plain one's; none of
-these pairs is matched. The last column compares \texttt{gap} with the
-static curve interpolated to its parameter count.}
-
-\begin{tabular}{l l l rr rl l l r r}
-\toprule
-dataset & routed & plain & routed & plain & $\Delta$ (pp) & 95\% CI & $p$ & verdict & ratio & $\Delta$ equal params \\
-\midrule
-CIFAR‑100 & gap w16 (0.49M) & static w32 (0.82M) & 68.272 & 70.775 & +2.503 & [+1.927, +3.080] & 0.0001 & higher & 0.60 & -0.298 \\
-CIFAR‑100 & gap w32 (1.20M) & static w64 (2.35M) & 72.082 & 72.395 & +0.313 & [-0.103, +0.730] & 0.1111 & inconclusive & 0.51 & -0.713 \\
-Tiny‑ImageNet & gap w32 (1.33M) & static w64 (2.48M) & 58.662 & 58.817 & +0.155 & [-0.520, +0.830] & 0.5806 & inconclusive & 0.54 & -1.037 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \subsection*{9.2 Equal compute}
 
 Dynamic convolution is usually advertised at equal compute, and there the
-picture is different (Table~15). Doubling the width costs
+picture is different (Table~6). Doubling the width costs
 roughly three to four times the multiply-accumulates of the routed network;
 routing at the same width costs at most 8\,\% more on
 ResNet-18, 2\,\% more on MobileNetV2 and 19\,\%
 more on VGG-16, counted for an implementation that aggregates the kernel
 per sample (on VGG-16 the per-sample mixing of large kernels at small
-feature maps is a larger share of the cost). At the same width, routing
+feature maps is a larger share of the cost). These are counted operations,
+not measurements: we did not time a per-sample implementation, and on a
+GPU counted operations need not predict latency. DY-Conv also reports
+counted operations. At the same width, routing
 beats the plain network in 4 of five conditions on ResNet-18,
 5 on MobileNetV2 and 4 on VGG-16. Our training
 implementation computes $K$ convolutions per dynamic layer and is slower in
-wall-clock time than either count suggests (Tables~26,
-32 and~36); that is a property of the
+wall-clock time than either count suggests (Tables~29,
+35 and~39); that is a property of the
 implementation, not of the layer.
 
 \textbf{Summary.}  Against a plain network of twice the width, routing
@@ -1094,7 +1022,7 @@ Whether dynamic convolution is worth its cost therefore depends on the
 cost held fixed and on the backbone.
 
 \begin{table}
-\caption{Table 15: The routed network under two cost views. Left: \texttt{static}
+\caption{Table 6: The routed network under two cost views. Left: \texttt{static}
 at width $2c$ minus \texttt{gap} at width $c$, with the parameter ratio
 routed/plain and the multiply-accumulate (MAC) ratio plain/routed.
 Right: \texttt{gap} minus \texttt{static} at the same width, with the MAC
@@ -1123,17 +1051,8 @@ VGG-16 & Tiny‑ImageNet w32 & 1.00 & 3.8$\times$ & +2.49 (higher) & 1.05$\times
 \section*{10 Temperature annealing}
 
 \begin{figure}
-\includegraphics[width=6.3in]{fig/f9_temp.png}
-\caption{Figure 11: ResNet-18, CIFAR-100. (a) Routing effect under a constant and an annealed
-temperature, 95\% CIs. (b) Router flatness. (c) Flatness
-against benefit over \texttt{uniform}; the two schedules do not lie on
-one curve.}
-
-\end{figure}
-
-\begin{figure}
 \includegraphics[width=6.3in]{fig/g5_temp_k.png}
-\caption{Figure 12: All three backbones, CIFAR-100. (a) Annealed minus constant
+\caption{Figure 6: All three backbones, CIFAR-100. (a) Annealed minus constant
 temperature for \texttt{gap}. (b) $\texttt{gap}-\texttt{static}$ at width 32
 for $K\in\{2,4,8\}$. 95\% CIs.}
 
@@ -1143,8 +1062,8 @@ With $\tau=1$ the softmax can move towards one-hot early in training,
 starving most of the bank of gradient. DY-Conv anneals $\tau$ from 30 to 1
 for this reason (Chen et al., 2020). We repeated \texttt{gap} at all
 three CIFAR-100 widths with that schedule on all three backbones
-(Tables~16, 17 and~18,
-Figures~11 and~12a).
+(Tables~20, 21 and~22,
+Figures~13 and~6a).
 
 \textbf{Accuracy.}  Annealing never raised accuracy detectably. On MobileNetV2 it
 lowered \texttt{gap} at every width: -1.160\,pp at width 16
@@ -1162,9 +1081,19 @@ with a slightly higher final training loss at every width (0.1003,
 0.0147, 0.0058 against 0.0935, 0.0145, 0.0057). Over the nine
 conditions annealing is significantly lower in 7 and
 significantly higher in 0; the width-16 ResNet-18 point
-estimate is positive but not distinguishable from zero. Backbone, dataset,
-bank size and schedule length all differ from the DY-Conv setting, so this
-is not evidence against their result.
+estimate is positive but not distinguishable from zero.
+
+\textbf{Against DY-Conv.}  The evidence for annealing in DY-Conv is its
+Table 6 (Chen et al., 2020), on MobileNetV2 $\times0.5$ on ImageNet:
+annealing from 30 to 1 over the first ten epochs, the schedule we use,
+gives 69.9\% against 69.4\% for a constant
+$\tau=30$, single runs with no seed variation reported, and a constant
+$\tau=1$ gives 64.8\%, below the 65.4\% of the
+plain network. Our constant-temperature routers use $\tau=1$ and beat the
+plain network in 13 of fifteen pairs, so in our setting $\tau=1$ is
+not the failure that annealing repairs in DY-Conv. The backbones and the
+dataset differ from theirs, so this is not evidence against their
+result.
 
 \textbf{Annealed routers against the constant mixture.}  Compared with
 \texttt{uniform}, the annealed router is equivalent to it on ResNet-18 at
@@ -1184,64 +1113,11 @@ leaves a router little to choose between. We did not test this, and
 entropy was recorded only at the end of training, so we cannot say when
 any router became flat.
 
-\begin{table}
-\caption{Table 16: ResNet-18: temperature ablation on CIFAR-100, \texttt{gap} arm. The last
-two columns test whether the annealed router behaves like the constant
-mixture.}
-
-\begin{tabular}{r rr rl r rl rl}
-\toprule
-& \multicolumn{2}{c}{accuracy} & \multicolumn{2}{c}{annealed  −  constant}
-& \multicolumn{3}{c}{vs static} & \multicolumn{2}{c}{annealed vs uniform} \\
-
-width & $\tau=1$ & annealed & $\Delta$ & $p$ & $\tau=1$ & annealed & $p_{\text{TOST}}$ & $\Delta$ & verdict \\
-\midrule
-16 & 70.527 & 70.642 & +0.115 & 0.4313 & +0.532 & +0.647 & 0.8259 & +0.870 & higher \\
-32 & 76.025 & 75.343 & -0.682 & 0.0017 & +1.153 & +0.472 & 0.4319 & +0.297 & inconclusive \\
-64 & 78.418 & 78.370 & -0.048 & 0.7449 & +0.080 & +0.032 & 0.0025 & -0.017 & equivalent \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Table 17: MobileNetV2: temperature ablation on CIFAR-100, \texttt{gap} arm.}
-
-\begin{tabular}{r rr rl r rl rl}
-\toprule
-& \multicolumn{2}{c}{accuracy} & \multicolumn{2}{c}{annealed  −  constant}
-& \multicolumn{3}{c}{vs static} & \multicolumn{2}{c}{annealed vs uniform} \\
-
-width & $\tau=1$ & annealed & $\Delta$ & $p$ & $\tau=1$ & annealed & $p$ & $\Delta$ & verdict \\
-\midrule
-16 & 68.272 & 67.112 & -1.160 & 0.0352 & +1.915 & +0.755 & 0.3286 & +0.162 & inconclusive \\
-32 & 72.082 & 70.805 & -1.277 & 0.0014 & +1.307 & +0.030 & 0.8534 & +0.132 & equivalent \\
-64 & 73.755 & 72.833 & -0.922 & 0.0011 & +1.360 & +0.438 & 0.0051 & +0.552 & higher \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Table 18: VGG-16: temperature ablation on CIFAR-100, \texttt{gap} arm.}
-
-\begin{tabular}{r rr rl r rl rl}
-\toprule
-& \multicolumn{2}{c}{accuracy} & \multicolumn{2}{c}{annealed  −  constant}
-& \multicolumn{3}{c}{vs static} & \multicolumn{2}{c}{annealed vs uniform} \\
-
-width & $\tau=1$ & annealed & $\Delta$ & $p$ & $\tau=1$ & annealed & $p$ & $\Delta$ & verdict \\
-\midrule
-16 & 66.082 & 65.473 & -0.608 & 0.0075 & +0.863 & +0.255 & 0.0623 & +0.110 & inconclusive \\
-32 & 71.797 & 71.308 & -0.488 & 0.0409 & +0.478 & -0.010 & 0.9274 & +0.138 & equivalent \\
-64 & 74.992 & 74.790 & -0.202 & 0.0482 & +0.185 & -0.017 & 0.8955 & +0.172 & higher \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \section*{11 Routing entropy}
 
 \begin{figure}
 \includegraphics[width=6.3in]{fig/g8_entropy.png}
-\caption{Figure 13: Routing entropy on ResNet-18 and MobileNetV2. (a) Departure from uniform,
+\caption{Figure 7: Routing entropy on ResNet-18 and MobileNetV2. (a) Departure from uniform,
 $1-\tilde H$, against width on CIFAR-100; open markers and dashed lines are
 the annealed schedule. (b) $1-\tilde H$ against the benefit over
 \texttt{uniform} in the six CIFAR-100 conditions of each backbone; ``a''
@@ -1254,7 +1130,7 @@ Routing entropy (Section~3.5) is a natural statistic for
 showing that a router is doing something. This section covers ResNet-18
 and MobileNetV2 only: the VGG-16 entropies are stored in its result files,
 which were not available for this draft.
-Tables~19 and~20 set it against the benefit
+Tables~23 and~24 set it against the benefit
 each router delivers over \texttt{uniform}. Entropy compresses the signal
 quadratically. Writing $z_k=1/K+\varepsilon_k$ with
 $\sum_k\varepsilon_k=0$ and expanding to second order,
@@ -1295,14 +1171,14 @@ ResNet-18, 0.0132 on MobileNetV2). The ResNet-18 router is equivalent to
 +1.47\,pp ($p$\,< 10\textsuperscript{−4}). The width trends are opposite: from width
 16 to 64 the ResNet-18 router moves towards uniform (0.0398 to
 0.0115) and the MobileNetV2 router away from it (0.0084 to
-0.0132; Figure~13a).
+0.0132; Figure~7a).
 
 \textbf{After annealing, routers end close to uniform.}  Under the
 annealed schedule the MobileNetV2 router is flat in 15 to
 16 of its 17 dynamic layers, in every seed at every
 width; across all eighteen annealed runs the only layers that are ever not
 flat are layers 1, 2 and 4, counted from the input
-(Figure~13c, Table~31). Under a constant
+(Figure~7c, Table~34). Under a constant
 temperature 2 to 7 layers are flat. The
 temperature reaches 1 at epoch 10, so these routers end close to uniform
 after 140 epochs at the same temperature as the constant ones. On
@@ -1320,63 +1196,12 @@ near one is not evidence that it is not. These statements rest on 16
 images per run, measured once at the end of training
 (Section~3.5).
 
-\begin{figure}
-\includegraphics[width=6.3in]{fig/f10_entropy.png}
-\caption{Figure 14: ResNet-18, CIFAR-100, width 16. The annealed router is 14
-times closer to uniform by entropy and delivers the larger benefit over
-\texttt{uniform}. On MobileNetV2 the order reverses
-(Table~20).}
-
-\end{figure}
-
-\begin{table}
-\caption{Table 19: ResNet-18: routing entropy against the benefit it is taken to
-indicate, CIFAR-100. RMS dev is the root-mean-square deviation of the mixing
-weights from $1/K$, recovered from Eq.~(4).}
-
-\begin{tabular}{r l rrr rl}
-\toprule
-width & $\tau$ & $\tilde H$ & $1-\tilde H$ & RMS dev & gap − uniform (pp) & $p$ \\
-\midrule
-16 & $1$ & 0.96017 & 0.03983 & 0.0831 & +0.755 & 0.0023 \\
-16 & $30\!\to\!1$ & 0.99718 & 0.00282 & 0.0221 & +0.870 & 0.0044 \\
-32 & $1$ & 0.97868 & 0.02132 & 0.0608 & +0.978 & 0.0010 \\
-32 & $30\!\to\!1$ & 0.99927 & 0.00073 & 0.0113 & +0.297 & 0.0810 \\
-64 & $1$ & 0.98853 & 0.01147 & 0.0446 & +0.032 & 0.7752 \\
-64 & $30\!\to\!1$ & 0.99982 & 0.00018 & 0.0056 & -0.017 & 0.8369 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Table 20: MobileNetV2: routing entropy against the benefit over
-\texttt{uniform}, for every \texttt{gap} group that has a \texttt{uniform}
-arm. RMS dev is recovered from Eq.~(4) as in
-Table~19. Flat layers: dynamic layers (of 17)
-with $\tilde H\ge0.9999$, range over seeds.}
-
-\begin{tabular}{l r l rrr r rll}
-\toprule
-dataset & width & $\tau$ & $\tilde H$ & $1-\tilde H$ & RMS dev & flat layers & gap − uniform (pp) & $p$ & verdict \\
-\midrule
-CIFAR‑100 & 16 & $1$ & 0.99159 & 0.00841 & 0.0382 & 6--7 & +1.322 & 0.0011 & higher \\
-CIFAR‑100 & 16 & $30\!\to\!1$ & 0.99888 & 0.00112 & 0.0139 & 15--16 & +0.162 & 0.7242 & inconclusive \\
-CIFAR‑100 & 32 & $1$ & 0.98906 & 0.01094 & 0.0435 & 4--7 & +1.408 & 0.0002 & higher \\
-CIFAR‑100 & 32 & $30\!\to\!1$ & 0.99916 & 0.00084 & 0.0120 & 15 & +0.132 & 0.4319 & equivalent \\
-CIFAR‑100 & 64 & $1$ & 0.98680 & 0.01320 & 0.0478 & 2--4 & +1.473 & < 10\textsuperscript{−4} & higher \\
-CIFAR‑100 & 64 & $30\!\to\!1$ & 0.99931 & 0.00069 & 0.0110 & 15--16 & +0.552 & 0.0133 & higher \\
-Tiny‑ImageNet & 32 & $1$ & 0.99267 & 0.00733 & 0.0356 & 3--5 & +1.888 & 0.0008 & higher \\
-Tiny‑ImageNet & 64 & $1$ & 0.99160 & 0.00840 & 0.0382 & 2--5 & +1.807 & 0.0014 & higher \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \section*{12 The pre-registered predictions}
 
 Of the 7 predictions recorded, dated, before the runs that test
 them, 4 failed. The ResNet-18 prediction that the effect
 would vanish on Tiny-ImageNet at width 64 failed (Table~4,
-Section~6). Tables~21 and~22
+Section~6). Tables~25 and~26
 give the three predictions made for each of MobileNetV2 and VGG-16,
 recorded on 30 September 2026 before any run of either.
 
@@ -1384,8 +1209,9 @@ recorded on 30 September 2026 before any run of either.
 conditions.}  It failed on both: the bank term was equivalent to zero in
 2 of five conditions on MobileNetV2 and 2 of five on VGG-16.
 The inconclusive conditions are not evidence of a bank effect, since none
-is significant, and finding~1 claims only that no bank effect was
-detected; but the prediction was equivalence, and we score it as stated.
+is significant, and finding~1 rests on the pooled estimate, which is
+equivalent to zero (Section~5); but the prediction was
+equivalence in every condition, and we score it as stated.
 
 \textbf{P2, the plain network of twice the width beats the routed one
 in all three pairs.}  It failed on MobileNetV2, holding in 1 of three
@@ -1400,46 +1226,16 @@ The two gates, which required the first static run of each backbone to
 reach 65\% on CIFAR-100, were passed (72.66 and
 74.68\,\%).
 
-\begin{table}
-\caption{Table 21: MobileNetV2: predictions recorded on 30 September 2026, before
-any MobileNetV2 run, and the outcomes.}
-
-\begin{tabular}{l p{8.2cm} l l}
-\toprule
-& prediction & measured & outcome \\
-\midrule
-P1 & The bank term (uniform − static) is equivalent to zero (TOST, $\pm$0.5 pp) in each of the five conditions & 2 of 5 & failed \\
-P2 & static at width $2c$ is more accurate than gap at width $c$ in each of the three pairs & 1 of 3 & failed \\
-P3 & The routing term is positive with $p<0.05$ in at least three of the five conditions & 5 of 5 & held \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Table 22: VGG-16: predictions recorded on 30 September 2026, before any
-VGG-16 run, and the outcomes.}
-
-\begin{tabular}{l p{8.2cm} l l}
-\toprule
-& prediction & measured & outcome \\
-\midrule
-P1 & The bank term (uniform − static) is equivalent to zero (TOST, $\pm$0.5 pp) in each of the five conditions & 2 of 5 & failed \\
-P2 & static at width $2c$ is more accurate than gap at width $c$ in each of the three pairs & 3 of 3 & held \\
-P3 & The routing term is positive with $p<0.05$ in at least three of the five conditions & 4 of 5 & held \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \section*{13 Result by result}
 
-Table~23 lists the main results on the three backbones. Of
+Table~7 lists the main results on the three backbones. Of
 its 10 rows, 4 hold on all three backbones,
 5 depend on the backbone (two of them measured on ResNet-18 and
 MobileNetV2 only, because the VGG-16 entropies are not available), and
 the last compares backbones directly.
 
 \begin{table}
-\caption{Table 23: The main results on the three backbones. Differences are in pp
+\caption{Table 7: The main results on the three backbones. Differences are in pp
 and paired by seed. Status: \emph{holds on all three},
 \emph{backbone-dependent} or \emph{across backbones} (a comparison
 between them).}
@@ -1448,7 +1244,7 @@ between them).}
 \toprule
 result & ResNet-18 & MobileNetV2 & VGG-16 & status \\
 \midrule
-Bank term (uniform − static) & equivalent in 5 of 5 & equivalent in 2 of 5; never significant (largest +0.59) & equivalent in 2 of 5; never significant (largest +0.25) & holds on all three (weaker on MobileNetV2 and VGG-16) \\
+Bank term (uniform − static) & equivalent in 5 of 5 & equivalent in 2 of 5; never significant (largest +0.59) & equivalent in 2 of 5; never significant (largest +0.25) & holds on all three (pooled, equivalent to zero; per pair weaker on MobileNetV2 and VGG-16) \\
 Routing term significant & 4 of 5 & 5 of 5 & 4 of 5 & holds on all three \\
 gap − static, CIFAR‑100 w64 & +0.08 (equivalent) & +1.36 (higher) & +0.18 (equivalent) & \textbf{backbone-dependent} \\
 Plain $2c$ beats gap $c$ (3 pairs) & 3 of 3 (+4.35, +2.31, +2.52) & 1 of 3 (+2.50, +0.31, +0.15) & 3 of 3 (+5.24, +3.01, +2.49) & \textbf{backbone-dependent} \\
@@ -1490,14 +1286,49 @@ The two remaining backbones vary them further: ResNet-50 keeps about half
 its parameters in full dynamic convolutions, and ConvNeXt-Tiny makes only
 its depthwise $7\times7$ layers dynamic.
 
-\section*{14 Threats to validity}
+\section*{14 What this means in practice}
+
+The results translate into six recommendations for someone deciding
+whether to use dynamic convolution of this form in a CNN. Each holds within
+the scope of Section~15.
+\begin{enumerate}
+\item Do not expect extra kernels to help unless they are routed. Pooled
+over three backbones and fifteen pairs, a constant mixture of the bank
+differs from the plain network by -0.007\,pp.
+\item Where dynamic convolution helps, the routing does the work: the
+routing term is positive in 12 of fifteen pairs after Holm
+correction. It does not always help, as CIFAR-100 at width 64 on ResNet-18
+and VGG-16 shows, so measure it against a plain network trained with the
+same recipe, and include a constant-mixture arm (\texttt{uniform}), which
+separates routing from capacity for the price of one more run per seed.
+\item Start with $K=2$. On CIFAR-100 at width 32, no larger bank was
+distinguishable from it on any backbone, and on ResNet-18 going from $K=2$
+to $K=8$ multiplied stored parameters by 3.9 and training time by
+2.5.
+\item Do not anneal the temperature by default. On CIFAR-100 it was never
+detectably better and was lower in 7 of nine conditions.
+\item Decide by the budget. If parameters are the budget and most of them
+sit in the dynamic layers, as in ResNet-18 and VGG-16, a plain network of
+twice the width is the better use of them (six of six pairs). If compute
+is the budget, routing at equal width won 13 of fifteen pairs for
+at most 19\,\% more counted multiply-accumulates.
+\item Do not read a routing entropy below one as evidence that routing
+works; compare against the constant mixture instead.
+\end{enumerate}
+
+\section*{15 Threats to validity}
 
 \textbf{Scale.}  Both datasets are low-resolution and every run fits on
 one consumer GPU. Behaviour at ImageNet scale is untested and cannot be
 tested on this hardware.
 
+\textbf{CNNs only.}  Dynamic convolution is a convolutional layer, and
+the backbones are residual (ResNet-18), plain (VGG-16) and depthwise
+(MobileNetV2) CNNs. Input-dependent attention in transformers, pretrained
+models, and detection and segmentation are outside the study.
+
 \textbf{Three backbones.}  The backbones disagree on 5 of the
-10 results in Table~23, so what holds on all three
+10 results in Table~7, so what holds on all three
 is the minimum that can be claimed. The same program on ResNet-50 and
 ConvNeXt-Tiny was pre-registered on 30 September 2026 and is running; its
 results will be added as they complete, whatever they show.
@@ -1505,8 +1336,9 @@ results will be added as they complete, whatever they show.
 \textbf{Placement and router size on MobileNetV2.}  Copying the
 ResNet-18 rule makes only the depthwise layers of MobileNetV2 dynamic,
 3\,\% of its parameters, and its router is larger than the
-bank. A different rule, such as making every convolution but the stem
-dynamic, could change the MobileNetV2 results. The frozen-router control
+bank. DY-MobileNetV2 makes every convolution but the first dynamic
+(Chen et al., 2020), and that placement could change the MobileNetV2
+results; it was not run. The frozen-router control
 shows that the trainable router parameters do not produce the gain there.
 
 \textbf{Entropy sample.}  The routing statistics are overwritten at each
@@ -1514,7 +1346,7 @@ test batch, so every recorded entropy, on ResNet-18 and MobileNetV2,
 describes the last batch of the unshuffled test set: the same 16 images in
 every run on a dataset. Comparisons between arms, widths and schedules are
 therefore made on identical inputs, and the spread across seeds is small
-(Tables~27 and~7), but no entropy here is a
+(Tables~30 and~12), but no entropy here is a
 test-set average. The trained weights were not kept, so the entropies
 cannot be recomputed on the full test set. No accuracy is affected. The
 VGG-16 entropies, recorded the same way, are in result files that were not
@@ -1554,8 +1386,8 @@ results is stated as a CIFAR-100 result. On ResNet-18 these groups were
 added in stages; for MobileNetV2 and VGG-16 the same program, including
 this scope, was fixed in the pre-registration before any run. A
 Tiny-ImageNet run of the routed network costs 4 to 10 times a CIFAR-100
-run at the same width (Tables~26, 32
-and~36); for ResNet-18 and MobileNetV2 alone, repeating
+run at the same width (Tables~29, 35
+and~39); for ResNet-18 and MobileNetV2 alone, repeating
 these groups on Tiny-ImageNet would take roughly one and a half times the
 GPU time those two backbones used. Tiny-ImageNet has a different role in
 the design: it tests whether the split into bank and routing terms holds
@@ -1563,6 +1395,19 @@ on a harder dataset, and it tests the recorded saturation prediction.
 
 \textbf{One annealing schedule.}  Section~10 compares a
 constant temperature with one linear schedule.
+
+\textbf{Verifiability of the predictions.}  The predictions and gates
+were recorded in dated documents in the project repository, not in a
+public registry, and the repository's public history begins after they
+were written. A reader cannot confirm their dates independently.
+
+\textbf{Counted compute.}  The equal-compute comparison uses counted
+multiply-accumulates for a per-sample implementation that was not timed
+(Section~9).
+
+\textbf{Analyses added after the runs.}  The pooled estimates and the
+Holm correction of Section~5 were chosen after all runs had
+finished. The per-pair tests and the margin were fixed before.
 
 \textbf{Stored and effective parameters.}  By
 Proposition~1 the \texttt{uniform} arm has the effective
@@ -1607,15 +1452,16 @@ of nineteen were off by up to 0.005 M (for example 0.708 M for
 agree with the training logs to the two decimals they print. No comparison
 changes.
 
-\section*{15 Conclusion}
+\section*{16 Conclusion}
 
 Across three backbones, two datasets and 396 runs, the gain of
 dynamic convolution does not come from its kernel bank. A uniformly mixed
-bank was never significantly better or worse than a plain network, and was
-equivalent to one in 9 of fifteen backbone and condition pairs.
-Dynamic convolution beat the plain network in 13 of the fifteen,
-and in 12 of those the routing term was significant on its
-own; on CIFAR-100 at width 32, banks larger than $K=2$ added nothing that
+bank was never significantly better or worse than a plain network in any of
+the fifteen backbone and condition pairs, and pooled over them it differed
+from the plain network by -0.007\,pp, equivalent to zero at a margin
+of 0.1\,pp. Dynamic convolution beat the plain network in
+13 of the fifteen (12 after Holm correction), and in
+12 of those the routing term was significant on its own; on CIFAR-100 at width 32, banks larger than $K=2$ added nothing that
 we could detect on any backbone. Whether the router had to be trained
 depended on the backbone: on MobileNetV2 a router frozen at random
 initialisation did as well as a trained one, provided each image was
@@ -1640,7 +1486,8 @@ and MobileNetV2, did not reliably indicate whether routing helped: it
 ordered the benefit within MobileNetV2 but not reliably within ResNet-18,
 and almost the same entropy accompanied benefits of +0.03 and
 +1.47\,pp on the two backbones. Of our 7 recorded
-predictions, 4 failed.
+predictions, 4 failed. Section~14 turns these
+results into recommendations.
 
 \textbf{Reproducibility.}  396 runs (132 ResNet-18,
 132 MobileNetV2, 132 VGG-16), 564 GPU-hours, one
@@ -1650,7 +1497,7 @@ ResNet-18 result files of CIFAR-100 width 64, the VGG-16 training and
 runner logs and every per-seed value accompany this report. The other 108
 ResNet-18 runs are represented by the per-seed values transcribed from
 their logs, and the 132 VGG-16 runs by their logs, whose result files were
-not available for this draft (Section~14).
+not available for this draft (Section~15).
 
 
 \section*{References}
@@ -1663,13 +1510,19 @@ L.~Chen, L.~Gu, L.~Li, C.~Yan, and Y.~Fu. Frequency dynamic convolution for dens
 
 Y.~Chen, X.~Dai, M.~Liu, D.~Chen, L.~Yuan, and Z.~Liu. Dynamic convolution: Attention over convolution kernels. In \emph{CVPR}, pages 11030--11039, 2020.
 
+R.~DerSimonian and N.~Laird. Meta-analysis in clinical trials. \emph{Controlled Clinical Trials}, 7(3):177--188, 1986.
+
 X.~Ding, Y.~Guo, G.~Ding, and J.~Han. ACNet: Strengthening the kernel skeletons for powerful CNN via asymmetric convolution blocks. In \emph{ICCV}, 2019.
 
 X.~Ding, X.~Zhang, N.~Ma, J.~Han, G.~Ding, and J.~Sun. RepVGG: Making VGG-style ConvNets great again. In \emph{CVPR}, 2021.
 
+Y.~Han, G.~Huang, S.~Song, L.~Yang, H.~Wang, and Y.~Wang. Dynamic neural networks: A survey. \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 2022.
+
 S.~He, C.~Jiang, D.~Dong, and L.~Ding. SD-Conv: Towards the parameter-efficiency of dynamic convolution. In \emph{WACV}, 2023.
 
 K.~He, X.~Zhang, S.~Ren, and J.~Sun. Deep residual learning for image recognition. In \emph{CVPR}, 2016.
+
+S.~Holm. A simple sequentially rejective multiple test procedure. \emph{Scandinavian Journal of Statistics}, 6(2):65--70, 1979.
 
 A.~Krizhevsky. Learning multiple layers of features from tiny images. Technical report, University of Toronto, 2009.
 
@@ -1699,7 +1552,440 @@ C.~Zhang, S.~Bengio, M.~Hardt, B.~Recht, and O.~Vinyals. Understanding deep lear
 
 
 
-\section*{A Complete results: ResNet-18}
+\section*{A Detailed tables and figures}
+
+This appendix holds the per-backbone tables and the ResNet-18 figures
+that the main sections refer to, in the order of those sections.
+
+\subsection*{A.1 Bank and routing terms (Section~5)}
+
+\begin{table}
+\caption{Table 8: ResNet-18: bank and routing terms, paired by seed. The bank
+term is equivalent to zero in all five conditions.}
+
+\begin{tabular}{l r rll rl rl}
+\toprule
+& & \multicolumn{3}{c}{bank (uniform − static)}
+& \multicolumn{2}{c}{routing (gap − uniform)}
+& \multicolumn{2}{c}{total} \\
+
+dataset & width & $\Delta$ (pp) & $p_{\text{TOST}}$ & verdict & $\Delta$ (pp) & $p$ & $\Delta$ (pp) & $p$ \\
+\midrule
+CIFAR‑100 & 16 & -0.223 & 0.0251 & equivalent & +0.755 & 0.0023 & +0.532 & 0.0023 \\
+CIFAR‑100 & 32 & +0.175 & 0.0242 & equivalent & +0.978 & 0.0010 & +1.153 & < 10\textsuperscript{−4} \\
+CIFAR‑100 & 64 & +0.048 & 0.0142 & equivalent & +0.032 & 0.7752 & +0.080 & 0.6158 \\
+Tiny‑ImageNet & 32 & +0.107 & 0.0218 & equivalent & +2.078 & < 10\textsuperscript{−4} & +2.185 & < 10\textsuperscript{−4} \\
+Tiny‑ImageNet & 64 & +0.053 & 0.0157 & equivalent & +2.228 & < 10\textsuperscript{−4} & +2.282 & < 10\textsuperscript{−4} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 9: MobileNetV2: bank and routing terms, paired by seed.}
+
+\begin{tabular}{l r rll rl rl}
+\toprule
+& & \multicolumn{3}{c}{bank (uniform − static)}
+& \multicolumn{2}{c}{routing (gap − uniform)}
+& \multicolumn{2}{c}{total} \\
+
+dataset & width & $\Delta$ (pp) & $p_{\text{TOST}}$ & verdict & $\Delta$ (pp) & $p$ & $\Delta$ (pp) & $p$ \\
+\midrule
+CIFAR‑100 & 16 & +0.593 & 0.5884 & inconclusive & +1.322 & 0.0011 & +1.915 & 0.0225 \\
+CIFAR‑100 & 32 & -0.102 & 0.0269 & equivalent & +1.408 & 0.0002 & +1.307 & 0.0015 \\
+CIFAR‑100 & 64 & -0.113 & 0.0275 & equivalent & +1.473 & < 10\textsuperscript{−4} & +1.360 & 0.0002 \\
+Tiny‑ImageNet & 32 & -0.193 & 0.1393 & inconclusive & +1.888 & 0.0008 & +1.695 & 0.0028 \\
+Tiny‑ImageNet & 64 & -0.175 & 0.0742 & inconclusive & +1.807 & 0.0014 & +1.632 & 0.0002 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 10: VGG-16: bank and routing terms, paired by seed.}
+
+\begin{tabular}{l r rll rl rl}
+\toprule
+& & \multicolumn{3}{c}{bank (uniform − static)}
+& \multicolumn{2}{c}{routing (gap − uniform)}
+& \multicolumn{2}{c}{total} \\
+
+dataset & width & $\Delta$ (pp) & $p_{\text{TOST}}$ & verdict & $\Delta$ (pp) & $p$ & $\Delta$ (pp) & $p$ \\
+\midrule
+CIFAR‑100 & 16 & +0.145 & 0.0621 & inconclusive & +0.718 & 0.0375 & +0.863 & 0.0020 \\
+CIFAR‑100 & 32 & -0.148 & 0.0834 & inconclusive & +0.627 & 0.0569 & +0.478 & 0.0077 \\
+CIFAR‑100 & 64 & -0.188 & 0.0147 & equivalent & +0.373 & 0.0025 & +0.185 & 0.0766 \\
+Tiny‑ImageNet & 32 & +0.128 & 0.0039 & equivalent & +1.637 & 0.0001 & +1.765 & < 10\textsuperscript{−4} \\
+Tiny‑ImageNet & 64 & +0.250 & 0.1458 & inconclusive & +1.230 & 0.0055 & +1.480 & 0.0023 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection*{A.2 The CIFAR-100 width-64 null (Section~6)}
+
+\begin{figure}
+\includegraphics[width=6.3in]{fig/f7_tin.png}
+\caption{Figure 8: ResNet-18. (a) All 36 Tiny-ImageNet runs. (b) $\texttt{gap}-\texttt{static}$
+by width on both datasets, 95\% CIs. The CIFAR-100
+width-64 null does not appear on Tiny-ImageNet.}
+
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=6.3in]{fig/f8_prediction.png}
+\caption{Figure 9: ResNet-18. (a) Training loss of static and gap arms, seed 0, log scale.
+(b) Routing effect against the final training loss of the static arm in
+all five conditions. The shaded band is the region the prediction
+associated with a null.}
+
+\end{figure}
+
+\begin{table}
+\caption{Table 11: ResNet-18: five conditions ordered by the final training loss of the
+static arm.}
+
+\begin{tabular}{l r r rl l}
+\toprule
+dataset & width & static train loss & gap − static (pp) & 95\% CI & verdict \\
+\midrule
+CIFAR‑100 & 64 & 0.0080 & +0.080 & [-0.305, +0.465] & equivalent \\
+CIFAR‑100 & 32 & 0.0170 & +1.153 & [+0.940, +1.367] & higher \\
+Tiny‑ImageNet & 64 & 0.0210 & +2.282 & [+1.952, +2.611] & higher \\
+Tiny‑ImageNet & 32 & 0.1194 & +2.185 & [+1.781, +2.589] & higher \\
+CIFAR‑100 & 16 & 0.1643 & +0.532 & [+0.292, +0.771] & higher \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection*{A.3 Routing controls (Section~7)}
+
+\begin{table}
+\caption{Table 12: Routing entropy by arm, CIFAR-100 width 64, per-seed means over
+the recorded images and layers. Flat layers: the number of the
+17 MobileNetV2 dynamic layers with $\tilde H\ge0.9999$, range
+over seeds.}
+
+\begin{tabular}{l rr rrrr r}
+\toprule
+& \multicolumn{2}{c}{ResNet-18} & \multicolumn{5}{c}{MobileNetV2} \\
+
+arm & mean $\tilde H$ & $1-\tilde H$ & mean $\tilde H$ & min & max & $1-\tilde H$ & flat layers \\
+\midrule
+uniform & 1.0000 & 0.00000 & 1.00000 & 1.00000 & 1.00000 & 0.00000 & 17 \\
+gap & 0.9885 & 0.01147 & 0.98680 & 0.98272 & 0.98955 & 0.01320 & 2--4 \\
+frozen\_random & 0.9971 & 0.00287 & 0.99706 & 0.99649 & 0.99736 & 0.00294 & 0--2 \\
+shuffled & 0.9996 & 0.00040 & 0.99995 & 0.99992 & 0.99996 & 0.00005 & 14--16 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection*{A.4 Bank size (Section~8)}
+
+\begin{figure}
+\includegraphics[width=6.3in]{fig/f6_k.png}
+\caption{Figure 10: ResNet-18, CIFAR-100, width 32. (a) Effect over \texttt{static} for
+$K\in\{2,4,8\}$, 95\% CIs. (b) Stored parameters and
+training time.}
+
+\end{figure}
+
+\begin{table}
+\caption{Table 13: ResNet-18: bank size at CIFAR-100 width 32. Differences are against the
+\texttt{static} row.}
+
+\begin{tabular}{l rr rl l rr}
+\toprule
+$K$ & accuracy & sd & $\Delta$ (pp) & 95\% CI & $p$ & params (M) & min/run \\
+\midrule
+2 & 75.950 & 0.148 & +1.078 & [+0.758, +1.399] & 0.0003 & 5.64 & 27.9 \\
+4 & 76.025 & 0.156 & +1.153 & [+0.940, +1.367] & < 10\textsuperscript{−4} & 11.13 & 39.2 \\
+8 & 76.048 & 0.242 & +1.177 & [+0.749, +1.604] & 0.0009 & 22.12 & 69.3 \\
+\midrule static & 74.872 & 0.262 & -- & -- & -- & 2.82 & 8.6 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 14: ResNet-18: pairwise comparisons between bank sizes, CIFAR-100
+width 32.}
+
+\begin{tabular}{l rl ll l}
+\toprule
+comparison & $\Delta$ (pp) & 95\% CI & $p$ & $p_{\text{TOST}}$ & verdict \\
+\midrule
+$K=4$ vs $K=2$ & +0.075 & [-0.087, +0.237] & 0.2878 & 0.0005 & equivalent \\
+$K=8$ vs $K=4$ & +0.023 & [-0.286, +0.332] & 0.8538 & 0.0053 & equivalent \\
+$K=8$ vs $K=2$ & +0.098 & [-0.182, +0.379] & 0.4091 & 0.0072 & equivalent \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 15: MobileNetV2: bank size at CIFAR-100 width 32.}
+
+\begin{tabular}{l rr rl l rr}
+\toprule
+$K$ & accuracy & sd & $\Delta$ (pp) & 95\% CI & $p$ & params (M) & min/run \\
+\midrule
+2 & 71.773 & 0.490 & +0.998 & [+0.487, +1.510] & 0.0041 & 1.14 & 51.6 \\
+4 & 72.082 & 0.356 & +1.307 & [+0.771, +1.843] & 0.0015 & 1.20 & 47.3 \\
+8 & 71.885 & 0.400 & +1.110 & [+0.647, +1.573] & 0.0016 & 1.34 & 98.8 \\
+\midrule static & 70.775 & 0.217 & -- & -- & -- & 0.82 & 18.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 16: VGG-16: bank size at CIFAR-100 width 32.}
+
+\begin{tabular}{l rr rl l rr}
+\toprule
+$K$ & accuracy & sd & $\Delta$ (pp) & 95\% CI & $p$ & params (M) & min/run \\
+\midrule
+2 & 71.577 & 0.355 & +0.258 & [-0.313, +0.830] & 0.2978 & 7.48 & 19.9 \\
+4 & 71.797 & 0.303 & +0.478 & [+0.193, +0.764] & 0.0077 & 14.84 & 26.0 \\
+8 & 71.773 & 0.224 & +0.455 & [+0.113, +0.797] & 0.0189 & 29.55 & 40.9 \\
+\midrule static & 71.318 & 0.228 & -- & -- & -- & 3.71 & 6.9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection*{A.5 Twice the width (Section~9.1)}
+
+\begin{figure}
+\includegraphics[width=6.3in]{fig/f5_matched.png}
+\caption{Figure 11: ResNet-18: accuracy against stored parameters. Dotted arrows join routed
+and plain networks matched to within 1\% on parameter
+count.}
+
+\end{figure}
+
+\begin{table}
+\caption{Table 17: ResNet-18: routed against plain networks at matched parameter counts,
+paired by seed. Minutes are routed / plain per run. The last column is
+the routed network's stored parameters divided by the plain one's; a pair
+is called matched only within 10\,\%.}
+
+\begin{tabular}{l l l rr rl l r l}
+\toprule
+dataset & routed & plain & routed & plain & $\Delta$ (pp) & 95\% CI & $p$ & min/run & param ratio \\
+\midrule
+CIFAR‑100 & gap w16 (2.79M) & static w32 (2.82M) & 70.527 & 74.872 & +4.345 & [+4.103, +4.587] & < 10\textsuperscript{−4} & 33.7 / 8.6 & 0.99 (matched) \\
+CIFAR‑100 & gap w32 (11.13M) & static w64 (11.22M) & 76.025 & 78.338 & +2.313 & [+1.870, +2.757] & < 10\textsuperscript{−4} & 39.2 / 18.8 & 0.99 (matched) \\
+Tiny‑ImageNet & gap w32 (11.16M) & static w64 (11.27M) & 63.745 & 66.265 & +2.520 & [+2.311, +2.729] & < 10\textsuperscript{−4} & 284.2 / 129.0 & 0.99 (matched) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 18: VGG-16: \texttt{gap} at width $c$ against \texttt{static} at
+width $2c$, paired by seed. $\Delta$ is plain minus routed; the ratio is
+the routed network's stored parameters over the plain one's.}
+
+\begin{tabular}{l l l rr rl l l r}
+\toprule
+dataset & routed & plain & routed & plain & $\Delta$ (pp) & 95\% CI & $p$ & verdict & ratio \\
+\midrule
+CIFAR‑100 & gap w16 (3.72M) & static w32 (3.71M) & 66.082 & 71.318 & +5.237 & [+4.826, +5.648] & < 10\textsuperscript{−4} & higher & 1.00 \\
+CIFAR‑100 & gap w32 (14.84M) & static w64 (14.77M) & 71.797 & 74.807 & +3.010 & [+2.740, +3.280] & < 10\textsuperscript{−4} & higher & 1.00 \\
+Tiny‑ImageNet & gap w32 (14.86M) & static w64 (14.82M) & 60.813 & 63.300 & +2.487 & [+1.936, +3.037] & < 10\textsuperscript{−4} & higher & 1.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}
+\includegraphics[width=6.3in]{fig/g4_mb_matched.png}
+\caption{Figure 12: MobileNetV2: accuracy against stored parameters. Arrows join
+\texttt{gap} at width $c$ to \texttt{static} at width $2c$; labels give
+the accuracy difference and the parameter ratio.}
+
+\end{figure}
+
+\begin{table}
+\caption{Table 19: MobileNetV2: \texttt{gap} at width $c$ against \texttt{static} at
+width $2c$, paired by seed. $\Delta$ is plain minus routed. The ratio is
+the routed network's stored parameters over the plain one's; none of
+these pairs is matched. The last column compares \texttt{gap} with the
+static curve interpolated to its parameter count.}
+
+\begin{tabular}{l l l rr rl l l r r}
+\toprule
+dataset & routed & plain & routed & plain & $\Delta$ (pp) & 95\% CI & $p$ & verdict & ratio & $\Delta$ equal params \\
+\midrule
+CIFAR‑100 & gap w16 (0.49M) & static w32 (0.82M) & 68.272 & 70.775 & +2.503 & [+1.927, +3.080] & 0.0001 & higher & 0.60 & -0.298 \\
+CIFAR‑100 & gap w32 (1.20M) & static w64 (2.35M) & 72.082 & 72.395 & +0.313 & [-0.103, +0.730] & 0.1111 & inconclusive & 0.51 & -0.713 \\
+Tiny‑ImageNet & gap w32 (1.33M) & static w64 (2.48M) & 58.662 & 58.817 & +0.155 & [-0.520, +0.830] & 0.5806 & inconclusive & 0.54 & -1.037 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection*{A.6 Temperature (Section~10)}
+
+\begin{figure}
+\includegraphics[width=6.3in]{fig/f9_temp.png}
+\caption{Figure 13: ResNet-18, CIFAR-100. (a) Routing effect under a constant and an annealed
+temperature, 95\% CIs. (b) Router flatness. (c) Flatness
+against benefit over \texttt{uniform}; the two schedules do not lie on
+one curve.}
+
+\end{figure}
+
+\begin{table}
+\caption{Table 20: ResNet-18: temperature ablation on CIFAR-100, \texttt{gap} arm. The last
+two columns test whether the annealed router behaves like the constant
+mixture.}
+
+\begin{tabular}{r rr rl r rl rl}
+\toprule
+& \multicolumn{2}{c}{accuracy} & \multicolumn{2}{c}{annealed  −  constant}
+& \multicolumn{3}{c}{vs static} & \multicolumn{2}{c}{annealed vs uniform} \\
+
+width & $\tau=1$ & annealed & $\Delta$ & $p$ & $\tau=1$ & annealed & $p_{\text{TOST}}$ & $\Delta$ & verdict \\
+\midrule
+16 & 70.527 & 70.642 & +0.115 & 0.4313 & +0.532 & +0.647 & 0.8259 & +0.870 & higher \\
+32 & 76.025 & 75.343 & -0.682 & 0.0017 & +1.153 & +0.472 & 0.4319 & +0.297 & inconclusive \\
+64 & 78.418 & 78.370 & -0.048 & 0.7449 & +0.080 & +0.032 & 0.0025 & -0.017 & equivalent \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 21: MobileNetV2: temperature ablation on CIFAR-100, \texttt{gap} arm.}
+
+\begin{tabular}{r rr rl r rl rl}
+\toprule
+& \multicolumn{2}{c}{accuracy} & \multicolumn{2}{c}{annealed  −  constant}
+& \multicolumn{3}{c}{vs static} & \multicolumn{2}{c}{annealed vs uniform} \\
+
+width & $\tau=1$ & annealed & $\Delta$ & $p$ & $\tau=1$ & annealed & $p$ & $\Delta$ & verdict \\
+\midrule
+16 & 68.272 & 67.112 & -1.160 & 0.0352 & +1.915 & +0.755 & 0.3286 & +0.162 & inconclusive \\
+32 & 72.082 & 70.805 & -1.277 & 0.0014 & +1.307 & +0.030 & 0.8534 & +0.132 & equivalent \\
+64 & 73.755 & 72.833 & -0.922 & 0.0011 & +1.360 & +0.438 & 0.0051 & +0.552 & higher \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 22: VGG-16: temperature ablation on CIFAR-100, \texttt{gap} arm.}
+
+\begin{tabular}{r rr rl r rl rl}
+\toprule
+& \multicolumn{2}{c}{accuracy} & \multicolumn{2}{c}{annealed  −  constant}
+& \multicolumn{3}{c}{vs static} & \multicolumn{2}{c}{annealed vs uniform} \\
+
+width & $\tau=1$ & annealed & $\Delta$ & $p$ & $\tau=1$ & annealed & $p$ & $\Delta$ & verdict \\
+\midrule
+16 & 66.082 & 65.473 & -0.608 & 0.0075 & +0.863 & +0.255 & 0.0623 & +0.110 & inconclusive \\
+32 & 71.797 & 71.308 & -0.488 & 0.0409 & +0.478 & -0.010 & 0.9274 & +0.138 & equivalent \\
+64 & 74.992 & 74.790 & -0.202 & 0.0482 & +0.185 & -0.017 & 0.8955 & +0.172 & higher \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection*{A.7 Routing entropy (Section~11)}
+
+\begin{figure}
+\includegraphics[width=6.3in]{fig/f10_entropy.png}
+\caption{Figure 14: ResNet-18, CIFAR-100, width 16. The annealed router is 14
+times closer to uniform by entropy and delivers the larger benefit over
+\texttt{uniform}. On MobileNetV2 the order reverses
+(Table~24).}
+
+\end{figure}
+
+\begin{table}
+\caption{Table 23: ResNet-18: routing entropy against the benefit it is taken to
+indicate, CIFAR-100. RMS dev is the root-mean-square deviation of the mixing
+weights from $1/K$, recovered from Eq.~(4).}
+
+\begin{tabular}{r l rrr rl}
+\toprule
+width & $\tau$ & $\tilde H$ & $1-\tilde H$ & RMS dev & gap − uniform (pp) & $p$ \\
+\midrule
+16 & $1$ & 0.96017 & 0.03983 & 0.0831 & +0.755 & 0.0023 \\
+16 & $30\!\to\!1$ & 0.99718 & 0.00282 & 0.0221 & +0.870 & 0.0044 \\
+32 & $1$ & 0.97868 & 0.02132 & 0.0608 & +0.978 & 0.0010 \\
+32 & $30\!\to\!1$ & 0.99927 & 0.00073 & 0.0113 & +0.297 & 0.0810 \\
+64 & $1$ & 0.98853 & 0.01147 & 0.0446 & +0.032 & 0.7752 \\
+64 & $30\!\to\!1$ & 0.99982 & 0.00018 & 0.0056 & -0.017 & 0.8369 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 24: MobileNetV2: routing entropy against the benefit over
+\texttt{uniform}, for every \texttt{gap} group that has a \texttt{uniform}
+arm. RMS dev is recovered from Eq.~(4) as in
+Table~23. Flat layers: dynamic layers (of 17)
+with $\tilde H\ge0.9999$, range over seeds.}
+
+\begin{tabular}{l r l rrr r rll}
+\toprule
+dataset & width & $\tau$ & $\tilde H$ & $1-\tilde H$ & RMS dev & flat layers & gap − uniform (pp) & $p$ & verdict \\
+\midrule
+CIFAR‑100 & 16 & $1$ & 0.99159 & 0.00841 & 0.0382 & 6--7 & +1.322 & 0.0011 & higher \\
+CIFAR‑100 & 16 & $30\!\to\!1$ & 0.99888 & 0.00112 & 0.0139 & 15--16 & +0.162 & 0.7242 & inconclusive \\
+CIFAR‑100 & 32 & $1$ & 0.98906 & 0.01094 & 0.0435 & 4--7 & +1.408 & 0.0002 & higher \\
+CIFAR‑100 & 32 & $30\!\to\!1$ & 0.99916 & 0.00084 & 0.0120 & 15 & +0.132 & 0.4319 & equivalent \\
+CIFAR‑100 & 64 & $1$ & 0.98680 & 0.01320 & 0.0478 & 2--4 & +1.473 & < 10\textsuperscript{−4} & higher \\
+CIFAR‑100 & 64 & $30\!\to\!1$ & 0.99931 & 0.00069 & 0.0110 & 15--16 & +0.552 & 0.0133 & higher \\
+Tiny‑ImageNet & 32 & $1$ & 0.99267 & 0.00733 & 0.0356 & 3--5 & +1.888 & 0.0008 & higher \\
+Tiny‑ImageNet & 64 & $1$ & 0.99160 & 0.00840 & 0.0382 & 2--5 & +1.807 & 0.0014 & higher \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection*{A.8 Predictions for MobileNetV2 and VGG-16 (Section~12)}
+
+\begin{table}
+\caption{Table 25: MobileNetV2: predictions recorded on 30 September 2026, before
+any MobileNetV2 run, and the outcomes.}
+
+\begin{tabular}{l p{8.2cm} l l}
+\toprule
+& prediction & measured & outcome \\
+\midrule
+P1 & The bank term (uniform − static) is equivalent to zero (TOST, $\pm$0.5 pp) in each of the five conditions & 2 of 5 & failed \\
+P2 & static at width $2c$ is more accurate than gap at width $c$ in each of the three pairs & 1 of 3 & failed \\
+P3 & The routing term is positive with $p<0.05$ in at least three of the five conditions & 5 of 5 & held \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Table 26: VGG-16: predictions recorded on 30 September 2026, before any
+VGG-16 run, and the outcomes.}
+
+\begin{tabular}{l p{8.2cm} l l}
+\toprule
+& prediction & measured & outcome \\
+\midrule
+P1 & The bank term (uniform − static) is equivalent to zero (TOST, $\pm$0.5 pp) in each of the five conditions & 2 of 5 & failed \\
+P2 & static at width $2c$ is more accurate than gap at width $c$ in each of the three pairs & 3 of 3 & held \\
+P3 & The routing term is positive with $p<0.05$ in at least three of the five conditions & 4 of 5 & held \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+
+\section*{B Complete results: ResNet-18}
 
 \begin{figure}
 \includegraphics[width=6.3in]{fig/f1_sweep.png}
@@ -1725,7 +2011,7 @@ CIs.}
 \end{figure}
 
 \begin{table}
-\caption{Table 24: ResNet-18: every run at $K=4$ and $\tau=1$: final-epoch top-1 accuracy
+\caption{Table 27: ResNet-18: every run at $K=4$ and $\tau=1$: final-epoch top-1 accuracy
 (\%) for each seed, with mean and sample standard deviation.}
 
 \begin{tabular}{l r l rrrrrr rr}
@@ -1754,7 +2040,7 @@ Tiny‑ImageNet & 64 & gap & 68.73 & 68.35 & 68.42 & 68.55 & 68.71 & 68.52 & 68.
 \end{table}
 
 \begin{table}
-\caption{Table 25: ResNet-18: paired comparisons against \texttt{static}, $n=6$. $p_W$ is the
+\caption{Table 28: ResNet-18: paired comparisons against \texttt{static}, $n=6$. $p_W$ is the
 Wilcoxon signed-rank test, which cannot fall below 0.031 at this $n$.}
 
 \begin{tabular}{l r l r l ll r l l}
@@ -1778,7 +2064,7 @@ Tiny‑ImageNet & 64 & gap & +2.282 & [+1.952, +2.611] & < 10\textsuperscript{�
 \end{table}
 
 \begin{table}
-\caption{Table 26: ResNet-18: configuration and cost. Router parameters are in thousands and
+\caption{Table 29: ResNet-18: configuration and cost. Router parameters are in thousands and
 are included in the stored total. Training loss is the final-epoch mean
 over six seeds.}
 
@@ -1808,7 +2094,7 @@ Tiny‑ImageNet & 64 & gap & 44.52 & 288.0 & 0.0190 & 687.2 \\
 \end{table}
 
 \begin{table}
-\caption{Table 27: ResNet-18: routing entropy by arm, CIFAR-100 width 64, per-seed
+\caption{Table 30: ResNet-18: routing entropy by arm, CIFAR-100 width 64, per-seed
 means.}
 
 \begin{tabular}{l rrr r}
@@ -1824,7 +2110,7 @@ frozen\_random & 0.9971 & 0.9967 & 0.9977 & 0.00287 \\
 \end{table}
 
 \begin{table}
-\caption{Table 28: Every ResNet-18 run. GPU-hours are from logged wall-clock
+\caption{Table 31: Every ResNet-18 run. GPU-hours are from logged wall-clock
 time.}
 
 \begin{tabular}{l r r l l r r}
@@ -1849,7 +2135,7 @@ Tiny‑ImageNet & 64 & 4 & constant & static, uniform, gap & 18 & 95.7 \\
 
 
 
-\section*{B Complete results: MobileNetV2}
+\section*{C Complete results: MobileNetV2}
 
 \begin{figure}
 \includegraphics[width=6.3in]{fig/g7_mb_allruns.png}
@@ -1858,7 +2144,7 @@ Tiny‑ImageNet & 64 & 4 & constant & static, uniform, gap & 18 & 95.7 \\
 \end{figure}
 
 \begin{table}
-\caption{Table 29: MobileNetV2, every run at $K=4$ and $\tau=1$: final-epoch top-1
+\caption{Table 32: MobileNetV2, every run at $K=4$ and $\tau=1$: final-epoch top-1
 accuracy (\%). \textsuperscript{†} marks the run resumed after a CUDA
 error.}
 
@@ -1888,7 +2174,7 @@ Tiny‑ImageNet & 64 & gap & 60.45 & 61.15\textsuperscript{†} & 60.04 & 60.62 
 \end{table}
 
 \begin{table}
-\caption{Table 30: MobileNetV2: paired comparisons against \texttt{static}, $n=6$.}
+\caption{Table 33: MobileNetV2: paired comparisons against \texttt{static}, $n=6$.}
 
 \begin{tabular}{l r l r l ll r l l}
 \toprule
@@ -1911,7 +2197,7 @@ Tiny‑ImageNet & 64 & gap & +1.632 & [+1.201, +2.062] & 0.0002 & 0.0312 & +3.98
 \end{table}
 
 \begin{table}
-\caption{Table 31: MobileNetV2: departure of each dynamic layer's router from
+\caption{Table 34: MobileNetV2: departure of each dynamic layer's router from
 uniform, $10^3\,(1-\tilde H)$, mean over six seeds, $K=4$. Layers are
 numbered from the input; a value of 0.00 is below $5\times10^{-6}$.}
 
@@ -1944,7 +2230,7 @@ layer & gap & gap ann. & frozen\_random & shuffled & gap & gap ann. & gap \\
 \end{table}
 
 \begin{table}
-\caption{Table 32: MobileNetV2: configuration and cost. Parameters are counted from
+\caption{Table 35: MobileNetV2: configuration and cost. Parameters are counted from
 the model definition; router parameters are in thousands (the frozen
 router is held as buffers and not counted). Training loss is the
 final-epoch mean over six seeds; minutes are logged wall-clock time.}
@@ -1975,7 +2261,7 @@ Tiny‑ImageNet & 64 & gap & 3.81 & 1137.3 & 0.995 & 792.5 \\
 \end{table}
 
 \begin{table}
-\caption{Table 33: Every MobileNetV2 run. GPU-hours are from logged wall-clock time.}
+\caption{Table 36: Every MobileNetV2 run. GPU-hours are from logged wall-clock time.}
 
 \begin{tabular}{l r r l l r r}
 \toprule
@@ -1997,7 +2283,7 @@ Tiny‑ImageNet & 64 & 4 & constant & static, uniform, gap & 18 & 117.1 \\
 \end{table}
 
 
-\section*{C Complete results: VGG-16}
+\section*{D Complete results: VGG-16}
 
 \begin{figure}
 \includegraphics[width=6.3in]{fig/g9_vg_allruns.png}
@@ -2006,7 +2292,7 @@ Tiny‑ImageNet & 64 & 4 & constant & static, uniform, gap & 18 & 117.1 \\
 \end{figure}
 
 \begin{table}
-\caption{Table 34: VGG-16, every run at $K=4$ and $\tau=1$: final-epoch top-1
+\caption{Table 37: VGG-16, every run at $K=4$ and $\tau=1$: final-epoch top-1
 accuracy (\%). \textsuperscript{†} marks the run resumed after an
 interruption.}
 
@@ -2036,7 +2322,7 @@ Tiny‑ImageNet & 64 & gap & 64.87 & 64.60 & 65.52 & 64.95 & 64.04 & 64.70 & 64.
 \end{table}
 
 \begin{table}
-\caption{Table 35: VGG-16: paired comparisons against \texttt{static}, $n=6$.}
+\caption{Table 38: VGG-16: paired comparisons against \texttt{static}, $n=6$.}
 
 \begin{tabular}{l r l r l ll r l l}
 \toprule
@@ -2059,7 +2345,7 @@ Tiny‑ImageNet & 64 & gap & +1.480 & [+0.812, +2.148] & 0.0023 & 0.0312 & +2.32
 \end{table}
 
 \begin{table}
-\caption{Table 36: VGG-16: configuration and cost. Parameters are counted from the
+\caption{Table 39: VGG-16: configuration and cost. Parameters are counted from the
 model definition and equal the counts the training log prints; router
 parameters are in thousands (the frozen router is held as buffers and not
 counted). Training loss is the final-epoch mean over six seeds; minutes
@@ -2091,7 +2377,7 @@ Tiny‑ImageNet & 64 & gap & 59.34 & 391.8 & 0.0110 & 307.3 \\
 \end{table}
 
 \begin{table}
-\caption{Table 37: Every VGG-16 run. GPU-hours are from logged wall-clock time.}
+\caption{Table 40: Every VGG-16 run. GPU-hours are from logged wall-clock time.}
 
 \begin{tabular}{l r r l l r r}
 \toprule

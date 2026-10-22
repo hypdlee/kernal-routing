@@ -224,7 +224,7 @@ def main(log_path, results_dir, vgg_log):
     contra = [
         ("Bank term ($\\texttt{uniform}-\\texttt{static}$)", f"equivalent in {rbank} of 5",
          f"equivalent in {nb} of 5; never significant (largest {largest(dec)})",
-         f"equivalent in {vnb} of 5; never significant (largest {largest(vdec)})", "holds on all three (weaker on MobileNetV2 and VGG-16)"),
+         f"equivalent in {vnb} of 5; never significant (largest {largest(vdec)})", "holds on all three (pooled, equivalent to zero; per pair weaker on MobileNetV2 and VGG-16)"),
         ("Routing term significant", f"{sum(paired(r18(ds,w,'gap'),r18(ds,w,'uniform'))['p']<0.05 for ds,w in COND)} of 5", f"{nr} of 5",
          f"{vnr} of 5", "holds on all three"),
         ("$\\texttt{gap}-\\texttt{static}$, CIFAR-100 w64", f"{sg(r18_w64['mean'],2)} ({verdict(r18_w64)})", f"{sg(mb_w64['mean'],2)} ({verdict(mb_w64)})",
@@ -477,6 +477,7 @@ def main(log_path, results_dir, vgg_log):
     put("allmacextra", f"{100 * max(allmac):.0f}")
     put("mbmacextra", f"{100 * max(macs[('mobilenetv2', ds, w, 4, 'gap')] / macs[('mobilenetv2', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
 
+    pooled_part(r18, mb, vg, put)
     entropy(results_dir, R, mb, r18, put)
 
     out = [f"\\expandafter\\def\\csname v{k}\\endcsname{{{v}}}" for k, v in M.items()]
@@ -855,3 +856,86 @@ def vgg_part(RV, vg, put):
     axs[0].set_ylabel("top-1 accuracy (%)")
     plt.tight_layout(); plt.savefig("fig/g9_vg_allruns.pdf"); plt.close()
     return dec, pairs
+
+
+# =========================================================================== pooled estimates and multiplicity
+def _holm(ps, alpha=0.05):
+    o = np.argsort(ps); r = np.zeros(len(ps), bool)
+    for i, j in enumerate(o):
+        if ps[j] < alpha / (len(ps) - i):
+            r[j] = True
+        else:
+            break
+    return r
+
+
+def _pool(diffs):
+    """DerSimonian-Laird random-effects pool of per-pair mean differences."""
+    m = np.array([d.mean() for d in diffs]); v = np.array([d.var(ddof=1) / len(d) for d in diffs]); w = 1 / v
+    fe = (w * m).sum() / w.sum(); Q = (w * (m - fe) ** 2).sum(); k = len(m)
+    t2 = max(0.0, (Q - (k - 1)) / (w.sum() - (w ** 2).sum() / w.sum())); w2 = 1 / (v + t2)
+    re = (w2 * m).sum() / w2.sum(); se = math.sqrt(1 / w2.sum())
+    return dict(est=re, lo=re - 1.96 * se, hi=re + 1.96 * se, lo90=re - 1.645 * se, hi90=re + 1.645 * se,
+                Qp=float(stats.chi2.sf(Q, k - 1)), tau=math.sqrt(t2))
+
+
+def _fixed(diffs):
+    m = np.array([d.mean() for d in diffs]); v = np.array([d.var(ddof=1) / len(d) for d in diffs]); w = 1 / v
+    est = (w * m).sum() / w.sum(); se = math.sqrt(1 / w.sum())
+    return dict(est=est, lo90=est - 1.645 * se, hi90=est + 1.645 * se, lo=est - 1.96 * se, hi=est + 1.96 * se)
+
+
+def pooled_part(r18, mb, vg, put):
+    BB = [("ResNet-18", r18, "rb"), ("MobileNetV2", mb, "mb"), ("VGG-16", vg, "vg")]
+    names = {("cifar100", 16): "CIFAR-100 at width 16", ("cifar100", 32): "CIFAR-100 at width 32",
+             ("cifar100", 64): "CIFAR-100 at width 64", ("tinyimagenet", 32): "Tiny-ImageNet at width 32",
+             ("tinyimagenet", 64): "Tiny-ImageNet at width 64"}
+    labels, bank, rout, tot = [], [], [], []
+    for name, g, _ in BB:
+        for ds, w in COND:
+            labels.append(f"{name} on {names[(ds, w)]}")
+            bank.append(np.asarray(g(ds, w, "uniform"), float) - np.asarray(g(ds, w, "static"), float))
+            rout.append(np.asarray(g(ds, w, "gap"), float) - np.asarray(g(ds, w, "uniform"), float))
+            tot.append(np.asarray(g(ds, w, "gap"), float) - np.asarray(g(ds, w, "static"), float))
+    # multiplicity: Holm over the 15 pairs of each family
+    rows = []
+    for key, txt, diffs in [("rout", "routing term positive ($\\texttt{gap}-\\texttt{uniform}$)", rout),
+                            ("tot", "dynamic beats plain ($\\texttt{gap}-\\texttt{static}$)", tot)]:
+        q = [paired(d + 0, np.zeros_like(d)) for d in diffs]
+        ps = np.array([x["p"] for x in q]); pos = np.array([x["mean"] > 0 for x in q])
+        raw = (ps < 0.05) & pos; h = _holm(ps) & pos
+        drop = [labels[i] for i in range(len(ps)) if raw[i] and not h[i]]
+        put(f"mult{key}raw", str(raw.sum())); put(f"mult{key}holm", str(h.sum()))
+        put(f"mult{key}drop", " and ".join(drop) if drop else "none")
+        rows.append(f"{txt} & {raw.sum()} & {h.sum()} \\\\")
+    for m_, tag in [(0.25, "A"), (0.5, "B"), (0.75, "C"), (1.0, "D")]:
+        ps = np.array([paired(d + 0, np.zeros_like(d), margin=m_)["tost"] for d in bank])
+        raw = ps < 0.05; h = _holm(ps)
+        put(f"multbank{tag}raw", str(raw.sum())); put(f"multbank{tag}holm", str(h.sum()))
+        rows.append(f"bank term equivalent at $\\pm${m_:g}\\,pp (TOST) & {raw.sum()} & {h.sum()} \\\\")
+    pathlib.Path("tab_MULT.tex").write_text("\n".join(rows) + "\n")
+    # pooled estimates
+    pb, pr = _pool(bank), _pool(rout)
+    for k, p_ in [("poolbank", pb), ("poolrout", pr)]:
+        put(k, sg(p_["est"])); put(k + "lo", sg(p_["lo"])); put(k + "hi", sg(p_["hi"]))
+        put(k + "lonine", sg(p_["lo90"])); put(k + "hinine", sg(p_["hi90"]))
+        put(k + "Qp", "$<10^{-4}$" if p_["Qp"] < 1e-4 else f(p_["Qp"], 3)); put(k + "tau", f(p_["tau"], 2))
+    marg = next(m_ for m_ in np.arange(0.05, 1.01, 0.05) if pb["lo90"] > -m_ and pb["hi90"] < m_)
+    put("poolbankmargin", f"{marg:.2f}".rstrip("0").rstrip("."))
+    rows = [f"all three, 15 pairs (random effects) & {sg(pb['est'])} & [{sg(pb['lo'])}, {sg(pb['hi'])}] & "
+            f"[{sg(pb['lo90'])}, {sg(pb['hi90'])}] & {sg(pr['est'])} & [{sg(pr['lo'])}, {sg(pr['hi'])}] \\\\"]
+    worst = 0.0
+    for i, (name, g, pre) in enumerate(BB):
+        fb = _fixed(bank[5 * i:5 * i + 5]); fr = _fixed(rout[5 * i:5 * i + 5])
+        worst = max(worst, abs(fb["lo90"]), abs(fb["hi90"]))
+        put(f"{pre}poolbank", sg(fb["est"])); put(f"{pre}poolbanklonine", sg(fb["lo90"])); put(f"{pre}poolbankhinine", sg(fb["hi90"]))
+        rows.append(f"{name}, 5 conditions (fixed effect) & {sg(fb['est'])} & [{sg(fb['lo'])}, {sg(fb['hi'])}] & "
+                    f"[{sg(fb['lo90'])}, {sg(fb['hi90'])}] & {sg(fr['est'])} & [{sg(fr['lo'])}, {sg(fr['hi'])}] \\\\")
+    # smallest margin on a 0.05 pp grid that contains every backbone's 90 % interval
+    wm = next(m_ for m_ in np.arange(0.05, 1.01, 0.05) if worst < m_)
+    put("poolbankworst", f"{wm:.2f}".rstrip("0").rstrip("."))
+    put("rbstaticCC", f(np.mean(r18("cifar100", 64, "static")), 2)); put("rbgapCC", f(np.mean(r18("cifar100", 64, "gap")), 2))
+    put("vgstaticCC", f(np.mean(vg("cifar100", 64, "static")), 2)); put("mbstaticCC", f(np.mean(mb("cifar100", 64, "static")), 2))
+    put("vggapCC", f(np.mean(vg("cifar100", 64, "gap")), 2)); put("mbgapCC", f(np.mean(mb("cifar100", 64, "gap")), 2))
+    put("rbstaticTB", f(np.mean(r18("tinyimagenet", 64, "static")), 2)); put("rbgapTB", f(np.mean(r18("tinyimagenet", 64, "gap")), 2))
+    pathlib.Path("tab_POOL.tex").write_text("\n".join(rows) + "\n")
