@@ -57,10 +57,10 @@ the parameters, it wins one of three. At equal width, for \V{mbmacextra} to
 network in \V{alleff} of fifteen conditions. (6) On CIFAR-100, annealing
 the softmax temperature, as DY-Conv recommends, never improved accuracy
 detectably and lowered it in \V{allannlower} of nine conditions. (7)
-Routing entropy, measured on ResNet-18 and MobileNetV2, does not reliably
-indicate whether routing helps: at CIFAR-100 width 64 the two backbones'
-routers have nearly the same entropy and beat the constant mixture by
-\V{rbguC} and \V{mbguC}\,pp. Of \V{allpred} predictions recorded before the
+Routing entropy does not reliably indicate whether routing helps: at
+CIFAR-100 width 64 the trained routers of the three backbones have nearly
+the same entropy, and their benefit over the constant mixture is
+\V{rbguC}\,pp (equivalent to zero), \V{mbguC}\,pp and \V{vgguC}\,pp. Of \V{allpred} predictions recorded before the
 runs that test them, \V{allpredfail} failed.
 \end{abstract}
 
@@ -171,15 +171,17 @@ It lowered accuracy in \V{allannlower} of nine conditions: at all three
 widths on MobileNetV2 and on VGG-16, and on ResNet-18 at width 32. It made
 no detectable difference in the other two.
 \item \textbf{Routing entropy is not a reliable measure of whether
-routing helps} (ResNet-18 and MobileNetV2; Section~\ref{sec:entropy}).
-Across the CIFAR-100 conditions of ResNet-18 it did not order the benefit
-reliably (rank correlation \V{rbrho}, not significant, and a
-counterexample at width 16); within MobileNetV2 it did (\V{mbrho}); across
-the two backbones almost the same entropy accompanies benefits of
-\V{rbguC} and \V{mbguC}\,pp. After annealing, routers end close to
-uniform: on MobileNetV2 in \V{mbflatAmin} to \V{mbflatAmax} of its
-\V{mbnlayers} dynamic layers. The VGG-16 entropies are stored in its result
-files, which were not available for this draft.
+routing helps} (all three backbones; CIFAR-100; Section~\ref{sec:entropy}).
+Across the six CIFAR-100 conditions of each backbone it did not order the
+benefit reliably on ResNet-18 (rank correlation \V{rbrho}, not significant,
+and a counterexample at width 16), ordered it on MobileNetV2 (\V{mbrho})
+and pointed the same way without reaching significance on VGG-16
+(\V{vgrho}).
+Across the backbones almost the same entropy accompanies benefits of
+\V{rbguC}, \V{mbguC} and \V{vgguC}\,pp. After annealing, routers end close
+to uniform: flat in \V{mbflatAmin} to \V{mbflatAmax} of the \V{mbnlayers}
+dynamic layers of MobileNetV2 and in \V{vgflatAmin} to \V{vgflatAmax} of the
+\V{vgnlayers} of VGG-16.
 \end{enumerate}
 
 \paragraph{Predictions.} We recorded \V{allpred} predictions before running
@@ -459,9 +461,17 @@ the log, and resumed from its checkpoint at epoch 58; without it
 \V{vgsensGv}: the same verdicts as with it. VGG-16 accuracies and
 training losses are parsed from its training log; every final accuracy
 equals the one its runner log records, and the parameter counts the log
-prints equal those counted from the model definition. The VGG-16 result
-files, which hold the routing entropies, were not available for this
-draft, so no VGG-16 entropy is reported. The appendix lists every run
+prints equal those counted from the model definition. Its routing
+entropies are read from its \V{vgjsonn} result files, after every final
+accuracy in them has been found identical to the log's, every final
+training loss equal to the log's three decimals and every parameter count
+equal to the log's. ResNet-18 values are read from its \V{nruns} result
+files. Earlier drafts used per-seed values transcribed from its training
+logs; every transcribed final accuracy is identical to the result file, and
+every transcribed routing entropy equals the file's value to the four
+decimals transcribed. Training losses and entropies now carry the files'
+extra decimals, which moves some of them in the fourth and fifth decimal
+respectively; no accuracy, $p$-value or verdict changes. The appendix lists every run
 (Figures~\ref{fig:allruns}, \ref{fig:mballruns} and~\ref{fig:vgallruns},
 Tables~\ref{tab:allruns}, \ref{tab:mballruns}, \ref{tab:vgallruns},
 \ref{tab:invent}, \ref{tab:mbinvent} and~\ref{tab:vginvent}) and every
@@ -912,22 +922,28 @@ one; on VGG-16 only the trained router departs from the constant mixture;
 on ResNet-18 the question cannot be tested. All of this rests on one condition, CIFAR-100 at width 64, and
 on one random draw of the frozen router.
 
-\paragraph{What the routers output.} The trained router is the furthest
-from uniform on ResNet-18 and MobileNetV2 (Table~\ref{tab:mbentw64}; the
-measurement is described in Section~\ref{sec:entdef}). On MobileNetV2 the
-frozen router is \V{mbeFrzRatio} times closer to uniform
-($1-\tilde H=\V{mbeFrz}$ against \V{mbeGap}), but its departure is spread
-over the network: its entropy reaches 0.9999 in only \V{mbeFrzFlat} of the
-\V{mbnlayers} dynamic layers. The \texttt{shuffled} router, whose input
-carries no information about the image it routes, trains itself to
-near-uniform on both ($1-\tilde H=\V{mbeShuf}$ on MobileNetV2,
-\V{rbeShuf} on ResNet-18). On ResNet-18 the trained router's entropy is
-below that of the controls (Figure~\ref{fig:w64}b), so it is further from
-uniform. Entropy alone does not show whether the mixture varies with the
-input, since a constant mixture that is not uniform would also have low
-entropy; at this width, whatever the router does changes no accuracy. The
-VGG-16 entropies are in its result files, which were not available for
-this draft.
+\paragraph{What the routers output.} On all three backbones the trained
+router is the furthest from uniform (Tables~\ref{tab:mbentw64}
+and~\ref{tab:vgentw64}; the measurement is described in
+Section~\ref{sec:entdef}). On MobileNetV2 the frozen router is
+\V{mbeFrzRatio} times closer to uniform ($1-\tilde H=\V{mbeFrz}$ against
+\V{mbeGap}), but its departure is spread over the network: its entropy
+reaches 0.9999 in only \V{mbeFrzFlat} of the \V{mbnlayers} dynamic layers.
+On VGG-16 it is \V{vgeFrzRatio} times closer to uniform (\V{vgeFrz} against
+\V{vgeGap}) and flat in \V{vgeFrzFlat} of the \V{vgnlayers} dynamic layers.
+The \texttt{shuffled} router, whose input carries no information about the
+image it routes, trains itself to near-uniform on ResNet-18 and MobileNetV2
+($1-\tilde H=\V{rbeShuf}$ and \V{mbeShuf}) but not on VGG-16, where it ends
+as far from uniform as the frozen router (\V{vgeShuf}), \V{vgeShufOverRb}
+and \V{vgeShufOverMb} times further than on the other two. On ResNet-18 the
+trained router's entropy is below that of the controls
+(Figure~\ref{fig:w64}b), although at this width no ResNet-18 arm differs
+from another in accuracy. On VGG-16 the one router that departs from the
+constant mixture in accuracy is also the one furthest from uniform; on
+MobileNetV2 the frozen router departs in accuracy as far as the trained
+one while being \V{mbeFrzRatio} times closer to uniform. Entropy alone does
+not show whether the mixture varies with the input, since a constant
+mixture that is not uniform would also have low entropy.
 
 \begin{table}[!htbp]\centering\small
 \caption{Routing controls on CIFAR-100 at width 64, three backbones,
@@ -1101,9 +1117,8 @@ remains above \texttt{uniform} on ResNet-18 at width 16 (\V{anuA}\,pp,
 $p=\V{anuAp}$) and on MobileNetV2 at width 64 (\V{mbanuC}\,pp). On VGG-16
 it is inconclusive at width 16 (\V{vganuA}\,pp), equivalent at width 32
 (\V{vganuB}\,pp) and above \texttt{uniform} at width 64 (\V{vganuC}\,pp,
-$p=\V{vganuCp}$). On ResNet-18 and MobileNetV2 the annealed routers end
-close to uniform by entropy (Section~\ref{sec:entropy}); the VGG-16
-entropies are not available. One reading follows from
+$p=\V{vganuCp}$). On all three backbones the annealed routers end close
+to uniform by entropy (Section~\ref{sec:entropy}). One reading follows from
 Proposition~\ref{prop:collapse}: a nearly constant mixture trains every
 kernel toward a common update and so makes the bank homogeneous, which
 leaves a router little to choose between. We did not test this, and
@@ -1114,7 +1129,7 @@ any router became flat.
 
 \begin{figure}[!htbp]\centering
 \includegraphics[width=\textwidth]{fig/g8_entropy.pdf}
-\caption{Routing entropy on ResNet-18 and MobileNetV2. (a) Departure from uniform,
+\caption{Routing entropy on the three backbones. (a) Departure from uniform,
 $1-\tilde H$, against width on CIFAR-100; open markers and dashed lines are
 the annealed schedule. (b) $1-\tilde H$ against the benefit over
 \texttt{uniform} in the six CIFAR-100 conditions of each backbone; ``a''
@@ -1124,11 +1139,9 @@ $1-\tilde H$ for each dynamic layer, mean over six seeds.}
 \end{figure}
 
 Routing entropy (Section~\ref{sec:entdef}) is a natural statistic for
-showing that a router is doing something. This section covers ResNet-18
-and MobileNetV2 only: the VGG-16 entropies are stored in its result files,
-which were not available for this draft.
-Tables~\ref{tab:entben} and~\ref{tab:mbentben} set it against the benefit
-each router delivers over \texttt{uniform}. Entropy compresses the signal
+showing that a router is doing something.
+Tables~\ref{tab:entben}, \ref{tab:mbentben} and~\ref{tab:vgentben} set it
+against the benefit each router delivers over \texttt{uniform}. Entropy compresses the signal
 quadratically. Writing $z_k=1/K+\varepsilon_k$ with
 $\sum_k\varepsilon_k=0$ and expanding to second order,
 \begin{equation}
@@ -1163,15 +1176,26 @@ schedule the order is reversed: the router closest to uniform, at width
 $p=\V{mbbapC}$, against \V{mbbaA} and \V{mbbaB}\,pp at widths 16 and 32);
 the differences between these three benefits were not tested.
 
+\paragraph{Within VGG-16, it pointed the same way without reaching
+significance.} The correlation is \V{vgrho} ($p=\V{vgrhop}$). The width-16
+counterexample does not recur here either: the annealed router is
+\V{vgflA} times closer to uniform and delivers less (\V{vgbaA}\,pp,
+$p=\V{vgbapA}$, against \V{vgbcA}\,pp). Inside the annealed schedule
+VGG-16 shows the same reversal as MobileNetV2: the router closest to
+uniform, at width 64, is the only annealed one whose benefit is
+significant (\V{vgbaC}\,pp, $p=\V{vgbapC}$, against \V{vgbaA} and
+\V{vgbaB}\,pp at widths 16 and 32).
+
 \paragraph{Across backbones, the same entropy, a different benefit.} On
-CIFAR-100 at width 64 the constant-temperature routers of the two
+CIFAR-100 at width 64 the constant-temperature routers of the three
 backbones are almost equally far from uniform ($1-\tilde H=\V{rbhcC}$ on
-ResNet-18, \V{mbhcC} on MobileNetV2). The ResNet-18 router is equivalent to
-\texttt{uniform} (\V{rbguC}\,pp); the MobileNetV2 router beats it by
-\V{mbguC}\,pp ($p$\,\V{mbguCp}). The width trends are opposite: from width
-16 to 64 the ResNet-18 router moves towards uniform (\V{rbhcA} to
-\V{rbhcC}) and the MobileNetV2 router away from it (\V{mbhcA} to
-\V{mbhcC}; Figure~\ref{fig:mbent}a).
+ResNet-18, \V{mbhcC} on MobileNetV2, \V{vghcC} on VGG-16). The ResNet-18
+router is equivalent to \texttt{uniform} (\V{rbguC}\,pp); the MobileNetV2
+router beats it by \V{mbguC}\,pp ($p$\,\V{mbguCp}) and the VGG-16 router
+by \V{vgguC}\,pp ($p=\V{vgguCp}$). The width trends differ as well: from
+width 16 to 64 the ResNet-18 and VGG-16 routers move towards uniform
+(\V{rbhcA} to \V{rbhcC}, \V{vghcA} to \V{vghcC}) and the MobileNetV2 router
+away from it (\V{mbhcA} to \V{mbhcC}; Figure~\ref{fig:mbent}a).
 
 \paragraph{After annealing, routers end close to uniform.} Under the
 annealed schedule the MobileNetV2 router is flat in \V{mbflatAmin} to
@@ -1179,18 +1203,23 @@ annealed schedule the MobileNetV2 router is flat in \V{mbflatAmin} to
 width; across all eighteen annealed runs the only layers that are ever not
 flat are layers \V{mbannlayers}, counted from the input
 (Figure~\ref{fig:mbent}c, Table~\ref{tab:mblayer}). Under a constant
-temperature \V{mbflatCmin} to \V{mbflatCmax} layers are flat. The
+temperature \V{mbflatCmin} to \V{mbflatCmax} layers are flat. The VGG-16
+router is flat in \V{vgflatAmin} to \V{vgflatAmax} of its \V{vgnlayers}
+dynamic layers under the annealed schedule, where only layers
+\V{vgannlayers} are ever not flat (Table~\ref{tab:vglayer}), and in
+\V{vgflatCmin} to \V{vgflatCmax} under a constant temperature. The
 temperature reaches 1 at epoch 10, so these routers end close to uniform
-after 140 epochs at the same temperature as the constant ones. On
-ResNet-18 the annealed router at width 64 ends at $1-\tilde H=\V{haC}$ and
-is equivalent to \texttt{uniform}; on MobileNetV2 the annealed router at
-width 64 ends at $1-\tilde H=\V{mbhaC}$ and still beats \texttt{uniform} by
-\V{mbbaC}\,pp. A very low departure from uniform thus accompanied no
-benefit in one case and a significant benefit in the other.
+after 140 epochs at the same temperature as the constant ones. At width
+64 the annealed router ends at $1-\tilde H=\V{haC}$ on ResNet-18 and is
+equivalent to \texttt{uniform}; it ends at \V{mbhaC} on MobileNetV2 and
+\V{vghaC} on VGG-16 and still beats \texttt{uniform}, by \V{mbbaC} and
+\V{vgbaC}\,pp. A very low departure from uniform thus accompanied no
+benefit on one backbone and a significant benefit on the other two.
 
 \paragraph{Conclusion.} Entropy can move with the benefit, as within
-MobileNetV2, but it did not reliably within ResNet-18, and almost the same
-value accompanies very different benefits on the two backbones. A value of
+MobileNetV2, but it did not reliably within ResNet-18 or significantly
+within VGG-16, and almost the same value accompanies very different
+benefits on the three backbones. A value of
 $\tilde H$ below one is not evidence that routing is useful, and a value
 near one is not evidence that it is not. These statements rest on 16
 images per run, measured once at the end of training
@@ -1230,9 +1259,8 @@ reach \SI{65}{\percent} on CIFAR-100, were passed (\V{mbgate} and
 
 Table~\ref{tab:contra} lists the main results on the three backbones. Of
 its \V{ncontra} rows, \V{ncontraHold} hold on all three backbones,
-\V{ncontraBD} depend on the backbone (two of them measured on ResNet-18 and
-MobileNetV2 only, because the VGG-16 entropies are not available), and
-the last compares backbones directly.
+\V{ncontraBD} depend on the backbone, and the last compares backbones
+directly.
 
 \begin{table}[!htbp]\centering\small
 \caption{The main results on the three backbones. Differences are in pp
@@ -1265,7 +1293,11 @@ to test the reading, and we state it as an interpretation only.
 each other and differ from MobileNetV2 on two of the three
 backbone-dependent accuracy results: the null at CIFAR-100 width 64, and
 the plain network of twice the width winning every pair. On the third, the
-routing controls, each backbone gives a different pattern. Several
+routing controls, each backbone gives a different pattern. Of the two
+backbone-dependent entropy results, the width trend again groups ResNet-18
+with VGG-16 (routers move towards uniform as width grows) against
+MobileNetV2, while the width-16 counterexample sets ResNet-18 apart from
+the other two. Several
 properties separate ResNet-18 and VGG-16 from MobileNetV2 at once: the share of parameters in dynamic layers (nearly all
 against \V{mbdynshare}\,\%), full against depthwise convolution in those
 layers, the size of the router relative to the bank (\V{vgrouterpct}\,\% of
@@ -1334,15 +1366,15 @@ results; it was not run. The frozen-router control
 shows that the trainable router parameters do not produce the gain there.
 
 \paragraph{Entropy sample.} The routing statistics are overwritten at each
-test batch, so every recorded entropy, on ResNet-18 and MobileNetV2,
-describes the last batch of the unshuffled test set: the same 16 images in
-every run on a dataset. Comparisons between arms, widths and schedules are
-therefore made on identical inputs, and the spread across seeds is small
-(Tables~\ref{tab:entw64} and~\ref{tab:mbentw64}), but no entropy here is a
-test-set average. The trained weights were not kept, so the entropies
-cannot be recomputed on the full test set. No accuracy is affected. The
-VGG-16 entropies, recorded the same way, are in result files that were not
-available for this draft.
+test batch, so every recorded entropy, on all three backbones, describes
+the last batch of the unshuffled test set: the same 16 images in every run
+on a dataset (the build checks that every VGG-16 routing record counts 16
+images). Comparisons between arms, widths and schedules are therefore made
+on identical inputs, and the spread across seeds is small
+(Tables~\ref{tab:entw64}, \ref{tab:mbentw64} and~\ref{tab:vgentw64}), but no
+entropy here is a test-set average. The trained weights were not kept, so
+the entropies cannot be recomputed on the full test set. No accuracy is
+affected.
 
 \paragraph{One recipe.} All three backbones use the same recipe. The
 MobileNetV2 static arms never approach zero training loss under it, and a
@@ -1414,12 +1446,12 @@ and does not depend on the temperature schedule, its stated explanation
 failed a recorded test, and it does not appear on MobileNetV2
 (Section~\ref{sec:null}).
 
-\paragraph{Provenance and corrections.} ResNet-18 final accuracies were
-transcribed from the training logs, which print them verbatim, and every
-figure and table is generated from those per-seed values; MobileNetV2
-values are parsed from its log and checked against its result files, and
-VGG-16 values are parsed from its log and checked against its runner log
-(Section~\ref{sec:method}). During the ResNet-18 analysis, three scripts
+\paragraph{Provenance and corrections.} ResNet-18 values are read from
+its 132 result files; MobileNetV2 and VGG-16 accuracies and losses are
+parsed from their training logs and checked against their result files,
+and the VGG-16 values also against its runner log
+(Section~\ref{sec:method}). Every figure and table is generated from the
+per-seed values. During the ResNet-18 analysis, three scripts
 grouped results by width alone, which merged runs from the two datasets and
 from different bank sizes; this was detected when a comparison paired one
 dataset's \texttt{uniform} arm with the other's \texttt{static} arm, and
@@ -1427,17 +1459,14 @@ every number in this report was recomputed from per-seed values keyed on
 dataset, width, bank size and schedule. Summary sentences printed by the
 analysis scripts were also found to over-read non-significant orderings on
 four occasions; this report relies on the per-comparison statistics only.
-The report generator was later rewritten to read the result files
-directly; on the 24 ResNet-18 width-64 result files checked it reproduces
-the transcribed accuracies and routing entropies exactly. Every
-transcribed ResNet-18 accuracy was re-checked on 19 October 2026 against
-the per-run lines of the logs or against the result files, except those
-for Tiny-ImageNet at width 32 \texttt{static} and \texttt{gap}, which were
-checked against the printed means and standard deviations. The ResNet-18
-routing entropies for CIFAR-100 widths 16 and 32 and for the three annealed
-groups were transcribed from result files that are not in the
-accompanying archive, so they cannot be re-derived from it; only the
-width-64 files are. An earlier version of this report printed stored
+Earlier drafts were built from ResNet-18 values transcribed from the
+training logs, with the result files of CIFAR-100 width 64 as the only
+ones in the archive; thirty routing entropies (CIFAR-100 widths 16 and 32
+and the three annealed groups) could not be re-derived from it. All 132
+ResNet-18 result files are now in the archive. Every transcribed final
+accuracy is identical to its file, every transcribed routing entropy,
+those thirty included, equals its file's value to the four decimals
+transcribed, and the build stops if either check fails. An earlier version of this report printed stored
 parameter counts with a third decimal that had not been measured, and six
 of nineteen were off by up to \SI{0.005}{M} (for example \SI{0.708}{M} for
 \SI{0.713}{M}); the counts here are counted from the model definition and
@@ -1473,23 +1502,20 @@ VGG-16, remain unexplained.
 
 Two common practices did not help. On CIFAR-100, annealing the softmax
 temperature never detectably raised accuracy and lowered it in
-\V{allannlower} of nine conditions. Routing entropy, measured on ResNet-18
-and MobileNetV2, did not reliably indicate whether routing helped: it
-ordered the benefit within MobileNetV2 but not reliably within ResNet-18,
-and almost the same entropy accompanied benefits of \V{rbguC} and
-\V{mbguC}\,pp on the two backbones. Of our \V{allpred} recorded
+\V{allannlower} of nine conditions. Routing entropy did not reliably
+indicate whether routing helped: it ordered the benefit within MobileNetV2,
+not reliably within ResNet-18 and not significantly within VGG-16, and
+almost the same entropy accompanied benefits of \V{rbguC}, \V{mbguC} and
+\V{vgguC}\,pp on the three backbones. Of our \V{allpred} recorded
 predictions, \V{allpredfail} failed. Section~\ref{sec:practice} turns these
 results into recommendations.
 
 \paragraph{Reproducibility.} \V{totruns} runs (\V{nruns} ResNet-18,
 \V{mbruns} MobileNetV2, \V{vgruns} VGG-16), \V{totgpuh} GPU-hours, one
 RTX 4070 Ti. Code, the pre-registrations, the dated prediction, the gate
-ledgers with recorded evidence, the 132 MobileNetV2 result files, the 24
-ResNet-18 result files of CIFAR-100 width 64, the VGG-16 training and
-runner logs and every per-seed value accompany this report. The other 108
-ResNet-18 runs are represented by the per-seed values transcribed from
-their logs, and the 132 VGG-16 runs by their logs, whose result files were
-not available for this draft (Section~\ref{sec:threats}).
+ledgers with recorded evidence, the result files of all \V{totruns} runs,
+the MobileNetV2 and VGG-16 training and runner logs, and every per-seed
+value accompany this report.
 
 \FloatBarrier
 \begin{thebibliography}{99}\small
@@ -1627,6 +1653,20 @@ over seeds.}
 arm & mean $\tilde H$ & $1-\tilde H$ & mean $\tilde H$ & min & max & $1-\tilde H$ & flat layers \\
 \midrule
 %%MBENTW64%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]\centering\small
+\caption{VGG-16: routing entropy by arm, CIFAR-100 width 64, per-seed
+means over the recorded images and layers. Flat layers: the number of the
+\V{vgnlayers} dynamic layers with $\tilde H\ge0.9999$, range over seeds.}
+\label{tab:vgentw64}
+\begin{tabular}{l rrrr r}
+\toprule
+arm & mean $\tilde H$ & min & max & $1-\tilde H$ & flat layers \\
+\midrule
+%%VGENTW64%%
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1861,6 +1901,23 @@ with $\tilde H\ge0.9999$, range over seeds.}
 dataset & width & $\tau$ & $\tilde H$ & $1-\tilde H$ & RMS dev & flat layers & \texttt{gap}$-$\texttt{uniform} (pp) & $p$ & verdict \\
 \midrule
 %%MBENTBEN%%
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[!htbp]\centering\small
+\caption{VGG-16: routing entropy against the benefit over
+\texttt{uniform}, for every \texttt{gap} group that has a \texttt{uniform}
+arm. RMS dev is recovered from Eq.~\eqref{eq:ent} as in
+Table~\ref{tab:entben}. Flat layers: dynamic layers (of \V{vgnlayers})
+with $\tilde H\ge0.9999$, range over seeds.}
+\label{tab:vgentben}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l r l rrr r rll}
+\toprule
+dataset & width & $\tau$ & $\tilde H$ & $1-\tilde H$ & RMS dev & flat layers & \texttt{gap}$-$\texttt{uniform} (pp) & $p$ & verdict \\
+\midrule
+%%VGENTBEN%%
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -2106,6 +2163,22 @@ dataset & width & arm & $\Delta$ (pp) & \SI{95}{\percent} CI & $p_t$ & $p_W$ & $
 %%VGVSSTATIC%%
 \bottomrule
 \end{tabular}}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{VGG-16: departure of each dynamic layer's router from uniform,
+$10^3\,(1-\tilde H)$, mean over six seeds, $K=4$. Layers are numbered from
+the input; a value of 0.00 is below $5\times10^{-6}$.}
+\label{tab:vglayer}
+\begin{tabular}{r rrrr rr r}
+\toprule
+& \multicolumn{4}{c}{CIFAR-100, width 64} & \multicolumn{2}{c}{CIFAR-100, width 16} & TIN w64 \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-7}\cmidrule(lr){8-8}
+layer & \texttt{gap} & \texttt{gap} ann. & \texttt{frozen\_random} & \texttt{shuffled} & \texttt{gap} & \texttt{gap} ann. & \texttt{gap} \\
+\midrule
+%%VGLAYER%%
+\bottomrule
+\end{tabular}
 \end{table}
 
 \begin{table}[h]\centering\small

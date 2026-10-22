@@ -17,7 +17,7 @@ static; routing term = gap - uniform.
 | F4 | On CIFAR-100 at width 32, banks larger than K=2 are not distinguishable from K=2. | all three (CIFAR-100 w32 only) | K8-K2: R18 +0.098 equivalent; MBv2 +0.112 inconclusive; VGG +0.197 inconclusive. On VGG K=2 is not distinguishable from static (+0.258, p 0.30); K=4 and K=8 beat it. |
 | F5 | Whether routing is worth its cost depends on the cost held fixed. | backbone-dependent | twice the width: equal parameters on R18 (0.99) and VGG (1.00): plain wins 6 of 6 (+2.3 to +5.2); MBv2 (plain 1.7-2.0x params) wins 1 of 3. Equal width, at most 8 / 2 / 19 % more MACs (R18 / MBv2 / VGG): routing beats plain in 4 / 5 / 4 of 5. |
 | F6 | On CIFAR-100, annealing the temperature never detectably improved accuracy. | all three (CIFAR-100 only) | significantly lower in 7 of 9 (MBv2 3/3, VGG 3/3, R18 w32); never significantly higher; R18 w16 +0.115 n.s. |
-| F7 | Routing entropy is not a reliable measure of whether routing helps. | ResNet-18 and MobileNetV2 only (VGG-16 result files, which hold the entropies, not available) | unchanged from the two-backbone ledger (Spearman 0.60 / 0.83; 0.0115 vs 0.0132 with +0.03 vs +1.47; annealed MBv2 flat in 15-16 of 17 layers). |
+| F7 | Routing entropy is not a reliable measure of whether routing helps. | all three backbones (VGG-16 added 22 Oct from its 132 result files) | within backbones: R18 rho 0.60 (p 0.208) with the w16 counterexample (annealed 14x flatter, larger benefit +0.87 vs +0.76); MBv2 rho 0.83 (p 0.042), no counterexample (7.5x flatter, smaller +0.16 vs +1.32); VGG rho 0.77 (p 0.072), no counterexample (6.7x flatter, smaller +0.11 vs +0.72). Across backbones at C100 w64: 1-H 0.0115 / 0.0132 / 0.0133 with gap-uniform +0.03 (equivalent) / +1.47 / +0.37 (both higher). Width trend (const): R18 flattens, MBv2 sharpens, VGG flattens (0.0215, 0.0181, 0.0133). After annealing: MBv2 flat in 15-16 of 17 layers, VGG 10-12 of 12 (non-flat only layers 1 and 2); annealed w64: MBv2 1-H 0.00069 with +0.55 higher, VGG 0.00014 with +0.17 higher, R18 0.00018 equivalent. Router outputs at C100 w64: trained router furthest from uniform on all three; frozen 4.5x (MBv2) and 6.6x (VGG) closer; shuffled near-uniform on R18 (0.0004) and MBv2 (0.00005) but not on VGG (0.0020, same as frozen). Table 7 entropy rows: counterexample backbone-dependent (R18 vs MBv2 and VGG); width trend backbone-dependent (R18 and VGG vs MBv2); same-entropy row across backbones. Counts unchanged: ncontra 10, Hold 4, BD 5, X 1. |
 | P | Seven predictions recorded before the runs that test them; four failed. | | R18 TIN w64 saturation (failed); MBv2 P1 failed (2/5), P2 failed (1/3), P3 held (5/5); VGG P1 failed (2/5), P2 held (3/3), P3 held (4/5). Gates: MBv2 72.66, VGG 74.68 (floors 65). |
 
 Provenance: VGG-16 values parsed from its train.log; every final equals the
@@ -25,3 +25,11 @@ runner log's; parameter counts in the log equal PARAMS_EXPECTED.md; batch
 128 without accumulation in all 132 runs; one run resumed (shuffled, seed
 0, CIFAR-100 w64, at epoch 58); without it shuffled-static -0.254
 (inconclusive) and shuffled-gap -0.474 (lower), same verdicts.
+
+ResNet-18 result files (22 Oct 2026): all 132 present; every per-seed final
+accuracy identical to the transcription; every transcribed routing entropy
+(including the 30 that had no source file) equals the file value rounded to
+the four decimals transcribed. The build now reads ResNet-18 from the files:
+training losses move in the fourth decimal (transcribed means were of 3-dp
+log prints), entropies in the fifth decimal, Tiny-ImageNet w64 gap minutes
+687.2 -> 687.4; no accuracy, p-value or verdict changes.

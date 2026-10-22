@@ -49,7 +49,13 @@ def counted(model):
     return out
 
 
-def main(log_path, results_dir, vgg_log):
+def main(log_path, results_dir, vgg_log, vgg_results=None, r18_data=None):
+    """r18_data: the report's data module after loading the 132 ResNet-18
+    result files; when given it replaces the transcribed values of
+    paper_r18_data.py, which the build has already checked against it."""
+    global P
+    if r18_data is not None:
+        P = r18_data
     R = mbv2_log.parse(log_path)
     assert len(R) == 132, len(R)
     PM = counted("mobilenetv2")
@@ -482,7 +488,9 @@ def main(log_path, results_dir, vgg_log):
     put("mbmacextra", f"{100 * max(macs[('mobilenetv2', ds, w, 4, 'gap')] / macs[('mobilenetv2', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
 
     pooled_part(r18, mb, vg, put)
-    entropy(results_dir, R, mb, r18, put)
+    if vgg_results is None:
+        raise SystemExit("--vgg-results is required: the VGG-16 routing entropies are in its result files")
+    entropy(results_dir, R, mb, r18, put, vgg_results, RV, vg)
 
     out = [f"\\expandafter\\def\\csname v{k}\\endcsname{{{v}}}" for k, v in M.items()]
     pathlib.Path("macros_mb.tex").write_text("\n".join(out) + "\n")
@@ -492,7 +500,46 @@ def main(log_path, results_dir, vgg_log):
 FLAT = 0.9999   # a layer is "flat" when its normalised entropy is at least this
 
 
-def entropy(results_dir, R, mb, r18, put):
+def vgg_layers(vgg_results, RV):
+    """The 132 VGG-16 result files, loaded with the strict loader (one recipe,
+    no duplicate, parameter counts as counted from the model definition),
+    then checked run by run against the training log: final accuracy
+    identical, final training loss equal to the log's three decimals,
+    parameter count equal to the log's two decimals, and every routing record
+    taken on the same 16 test images. Returns the per-layer entropies and the
+    loader holding the per-seed entropy arrays."""
+    import json
+    spec = importlib.util.spec_from_file_location("kr_vgg", HERE / "data.py")
+    SV = importlib.util.module_from_spec(spec); spec.loader.exec_module(SV)
+    errs = SV.load("vgg16", [vgg_results])
+    if errs or SV.n_runs() != 132 or SV.MISSING:
+        raise SystemExit(f"VGG-16 result files: errors {errs}, runs {SV.n_runs()}, missing {len(SV.MISSING)}")
+    files = sorted(pathlib.Path(vgg_results).glob("vgg16__*_seed[0-9].json"))
+    if len(files) != 132:
+        raise SystemExit(f"{len(files)} VGG-16 result files")
+    layers = {}
+    for fp in files:
+        j = json.loads(fp.read_text())
+        _, key, arm, seed = SV.cell_of(j)
+        k = key + (arm, seed)
+        if k not in RV:
+            raise SystemExit(f"{fp.name}: not in the VGG-16 log")
+        if (j["final_acc"] != RV[k]["final"] or abs(j["history"][-1]["loss"] - RV[k]["loss"]) > 5e-4 + 1e-9
+                or round(j["params"]["total"] / 1e6, 2) != RV[k]["params"]):
+            raise SystemExit(f"{fp.name}: result file and log disagree")
+        if j.get("routing"):
+            if any(sum(l["argmax_counts"]) != 16 for l in j["routing"]):
+                raise SystemExit(f"{fp.name}: routing not recorded on 16 images")
+            layers[k] = np.array([l["z_entropy_norm"] for l in j["routing"]])
+    return layers, SV, len(files)
+
+
+def trend(Hf):
+    v = [Hf("cifar100", w) for w in (16, 32, 64)]
+    return " (flattens)" if v[0] > v[1] > v[2] else " (sharpens)" if v[0] < v[1] < v[2] else " (no monotone trend)"
+
+
+def entropy(results_dir, R, mb, r18, put, vgg_results, RV, vg):
     """Routing-entropy analyses for MobileNetV2, from the result files.
 
     The result files are loaded with the strict loader (duplicates, recipe
@@ -599,20 +646,83 @@ def entropy(results_dir, R, mb, r18, put):
     rows.append("\\midrule mean & " + " & ".join(f"{1e3 * mat[c].mean():.2f}" for c in cols) + " \\\\")
     pathlib.Path("tab_MBLAYER.tex").write_text("\n".join(rows) + "\n")
 
+    # ---------------- VGG-16, from its result files
+    VL, SV, nvj = vgg_layers(vgg_results, RV)
+    put("vgjsonn", str(nvj))
+    vnl = len(VL[("cifar100", 64, 4, "const", "gap", 0)])
+    if vnl != counted_layers("vgg16")[("cifar100", 64, 4, "gap")]:
+        raise SystemExit("VGG-16 routing records and dynamic-layer count disagree")
+    VE = lambda ds, w, rec="const": SV.ENT[(ds, w, rec)]
+    VH = lambda ds, w, rec="const": 1 - VE(ds, w, rec).mean()
+    vflat = lambda ds, w, arm, rec="const", k=4: np.array([(VL[(ds, w, k, rec, arm, s)] >= FLAT).sum() for s in range(6)])
+    rows = []
+    for a in ["uniform", "gap", "frozen_random", "shuffled"]:
+        e = SV.ENT_W64[a]
+        rows.append(f"{tt(a)} & {f(e.mean(), 5)} & {f(e.min(), 5)} & {f(e.max(), 5)} & {f(1 - e.mean(), 5)} & "
+                    f"{rng(vflat('cifar100', 64, a))} \\\\")
+    pathlib.Path("tab_VGENTW64.tex").write_text("\n".join(rows) + "\n")
+    put("vgeGap", f(VH("cifar100", 64), 4)); put("vgeFrz", f(1 - SV.ENT_W64["frozen_random"].mean(), 4))
+    put("vgeShuf", f(1 - SV.ENT_W64["shuffled"].mean(), 4))
+    put("vgeFrzRatio", f"{VH('cifar100', 64) / (1 - SV.ENT_W64['frozen_random'].mean()):.1f}")
+    put("vgeShufRatio", f"{VH('cifar100', 64) / (1 - SV.ENT_W64['shuffled'].mean()):.1f}")
+    put("vgeShufFlat", rng(vflat("cifar100", 64, "shuffled"))); put("vgeFrzFlat", rng(vflat("cifar100", 64, "frozen_random")))
+    put("vgeGapFlat", rng(vflat("cifar100", 64, "gap")))
+    put("vgeShufOverMb", f"{(1 - SV.ENT_W64['shuffled'].mean()) / (1 - S.ENT_W64['shuffled'].mean()):.0f}")
+    put("vgeShufOverRb", f"{(1 - SV.ENT_W64['shuffled'].mean()) / (1 - P.ENT_W64['shuffled'].mean()):.0f}")
+    rows, sixvg, VBEN = [], [], {}
+    for ds, w, rec in conds:
+        d = VH(ds, w, rec)
+        q = paired(vg(ds, w, "gap", rec=rec), vg(ds, w, "uniform")); VBEN[(ds, w, rec)] = q
+        taul = "$1$" if rec == "const" else "$30\\!\\to\\!1$"
+        rows.append(f"{DSN[ds]} & {w} & {taul} & {f(VE(ds, w, rec).mean(), 5)} & "
+                    f"{f(d, 5)} & {f(rmsdev(d), 4)} & {rng(vflat(ds, w, 'gap', rec))} & {sg(q['mean'])} & {pv(q['p'])} & {verdict(q)} \\\\")
+        if ds == "cifar100":
+            sixvg.append((d, q["mean"]))
+    pathlib.Path("tab_VGENTBEN.tex").write_text("\n".join(rows) + "\n")
+    rho_v = stats.spearmanr(*zip(*sixvg))
+    put("vgrho", f"{rho_v.statistic:.2f}"); put("vgrhop", f"{rho_v.pvalue:.3f}")
+    for w, tag in [(16, "A"), (32, "B"), (64, "C")]:
+        put(f"vghc{tag}", f(VH("cifar100", w), 4)); put(f"vgha{tag}", f(VH("cifar100", w, "anneal"), 5))
+        put(f"vgfl{tag}", f"{VH('cifar100', w) / VH('cifar100', w, 'anneal'):.1f}")
+        put(f"vgbc{tag}", sg(VBEN[("cifar100", w, "const")]["mean"], 2)); put(f"vgba{tag}", sg(VBEN[("cifar100", w, "anneal")]["mean"], 2))
+        put(f"vgbcp{tag}", pv(VBEN[("cifar100", w, "const")]["p"])); put(f"vgbap{tag}", pv(VBEN[("cifar100", w, "anneal")]["p"]))
+        put(f"vgbav{tag}", verdict(VBEN[("cifar100", w, "anneal")]))
+    put("vgflatAmin", str(min(vflat("cifar100", w, "gap", "anneal").min() for w in (16, 32, 64))))
+    put("vgflatAmax", str(max(vflat("cifar100", w, "gap", "anneal").max() for w in (16, 32, 64))))
+    put("vgflatCmin", str(min(vflat("cifar100", w, "gap").min() for w in (16, 32, 64))))
+    put("vgflatCmax", str(max(vflat("cifar100", w, "gap").max() for w in (16, 32, 64))))
+    vann = np.array([VL[("cifar100", w, 4, "anneal", "gap", s)] for w in (16, 32, 64) for s in range(6)])
+    vnonflat = sorted({int(i) for row in vann for i in np.where(row < FLAT)[0]})
+    vnames = [str(i + 1) for i in vnonflat]
+    put("vgannlayers", vnames[0] if len(vnames) == 1 else ", ".join(vnames[:-1]) + " and " + vnames[-1])
+    vcols = [("cifar100", 64, "const", "gap"), ("cifar100", 64, "anneal", "gap"), ("cifar100", 64, "const", "frozen_random"),
+             ("cifar100", 64, "const", "shuffled"), ("cifar100", 16, "const", "gap"), ("cifar100", 16, "anneal", "gap"),
+             ("tinyimagenet", 64, "const", "gap")]
+    vmat = {c: np.mean([1 - VL[(c[0], c[1], 4, c[2], c[3], s)] for s in range(6)], axis=0) for c in vcols}
+    rows = [f"{i + 1} & " + " & ".join(f"{1e3 * vmat[c][i]:.2f}" for c in vcols) + " \\\\" for i in range(vnl)]
+    rows.append("\\midrule mean & " + " & ".join(f"{1e3 * vmat[c].mean():.2f}" for c in vcols) + " \\\\")
+    pathlib.Path("tab_VGLAYER.tex").write_text("\n".join(rows) + "\n")
+    vgw64 = VBEN[("cifar100", 64, "const")]
+    put("vgguC", sg(vgw64["mean"], 2)); put("vgguCp", pv(vgw64["p"])); put("vgguCv", verdict(vgw64))
+
     # ---------------- contradiction rows for the transfer table
-    NA = "not available (no result files)"
     extra = [
         ("Entropy counterexample, CIFAR-100 w16",
          f"annealed {P_fl(HR)}$\\times$ flatter, larger benefit ({sg(paired(r18('cifar100',16,'gap',rec='anneal'),r18('cifar100',16,'uniform'))['mean'],2)} vs "
          f"{sg(paired(r18('cifar100',16,'gap'),r18('cifar100',16,'uniform'))['mean'],2)})",
          f"annealed {H('cifar100',16)/H('cifar100',16,'anneal'):.1f}$\\times$ flatter, smaller benefit "
-         f"({sg(BEN[('cifar100',16,'anneal')]['mean'],2)} vs {sg(BEN[('cifar100',16,'const')]['mean'],2)})", NA, "\\textbf{backbone-dependent} (two backbones)"),
+         f"({sg(BEN[('cifar100',16,'anneal')]['mean'],2)} vs {sg(BEN[('cifar100',16,'const')]['mean'],2)})",
+         f"annealed {VH('cifar100',16)/VH('cifar100',16,'anneal'):.1f}$\\times$ flatter, "
+         f"{'smaller' if VBEN[('cifar100',16,'anneal')]['mean'] < VBEN[('cifar100',16,'const')]['mean'] else 'larger'} benefit "
+         f"({sg(VBEN[('cifar100',16,'anneal')]['mean'],2)} vs {sg(VBEN[('cifar100',16,'const')]['mean'],2)})", "\\textbf{backbone-dependent}"),
         ("Constant-$\\tau$ $1-\\tilde H$ as width grows (w16, 32, 64)",
-         ", ".join(f(HR(w, "const"), 4) for w in (16, 32, 64)) + " (flattens)",
-         ", ".join(f(H("cifar100", w), 4) for w in (16, 32, 64)) + " (sharpens)", NA, "\\textbf{backbone-dependent} (two backbones)"),
+         ", ".join(f(HR(w, "const"), 4) for w in (16, 32, 64)) + trend(lambda ds, w: HR(w, "const")),
+         ", ".join(f(H("cifar100", w), 4) for w in (16, 32, 64)) + trend(H),
+         ", ".join(f(VH("cifar100", w), 4) for w in (16, 32, 64)) + trend(VH), "\\textbf{backbone-dependent}"),
         ("Same $1-\\tilde H$, CIFAR-100 w64, \\texttt{gap}$-$\\texttt{uniform}",
          f"{f(HR(64,'const'),4)}: {sg(r18w64['mean'],2)} ({verdict(r18w64)})",
-         f"{f(H('cifar100',64),4)}: {sg(BEN[('cifar100',64,'const')]['mean'],2)} ({verdict(BEN[('cifar100',64,'const')])})", NA, "across backbones"),
+         f"{f(H('cifar100',64),4)}: {sg(BEN[('cifar100',64,'const')]['mean'],2)} ({verdict(BEN[('cifar100',64,'const')])})",
+         f"{f(VH('cifar100',64),4)}: {sg(vgw64['mean'],2)} ({verdict(vgw64)})", "across backbones"),
     ]
     with open("tab_CONTRA.tex", "a") as fh:
         fh.write("\n".join(f"{a} & {b} & {c} & {d} & {e} \\\\" for a, b, c, d, e in extra) + "\n")
@@ -624,9 +734,10 @@ def entropy(results_dir, R, mb, r18, put):
     put("ncontraX", str(sum("across backbones" in x for x in status)))
 
     # ---------------- figure G8
-    fig, ax = plt.subplots(1, 3, figsize=(7.9, 3.0), gridspec_kw=dict(width_ratios=[1, 1.15, 1.2]))
+    fig, ax = plt.subplots(1, 3, figsize=(7.9, 3.3), gridspec_kw=dict(width_ratios=[1, 1.15, 1.2]))
     W = [16, 32, 64]
-    for name, hf, col, mk in [("ResNet-18", lambda w, rec: HR(w, rec), C["r18"], "s"), ("MobileNetV2", lambda w, rec: H("cifar100", w, rec), C["mb"], "o")]:
+    for name, hf, col, mk in [("ResNet-18", lambda w, rec: HR(w, rec), C["r18"], "s"), ("MobileNetV2", lambda w, rec: H("cifar100", w, rec), C["mb"], "o"),
+                              ("VGG-16", lambda w, rec: VH("cifar100", w, rec), C["vg"], "^")]:
         ax[0].plot(W, [hf(w, "const") for w in W], marker=mk, ms=4.5, lw=1.3, color=col, label=f"{name}, $\\tau=1$")
         ax[0].plot(W, [hf(w, "anneal") for w in W], marker=mk, ms=4.5, lw=1.3, ls="--", color=col, mfc="white",
                    label=f"{name}, $\\tau:30\\to1$")
@@ -634,7 +745,7 @@ def entropy(results_dir, R, mb, r18, put):
     ax[0].set_xlabel("base width $c$"); ax[0].set_ylabel("$1-\\tilde H$ (log)")
     ax[0].set_title("(a) router flatness, CIFAR-100")
     lab8 = []
-    for name, pts_, col, mk in [("ResNet-18", sixr18, C["r18"], "s"), ("MobileNetV2", sixmb, C["mb"], "o")]:
+    for name, pts_, col, mk in [("ResNet-18", sixr18, C["r18"], "s"), ("MobileNetV2", sixmb, C["mb"], "o"), ("VGG-16", sixvg, C["vg"], "^")]:
         for (x, y), (w, rec) in zip(pts_, [(w, r) for w in W for r in ("const", "anneal")]):
             ax[1].scatter(x, y, marker=mk, s=30, color=col if rec == "const" else "white", edgecolor=col, zorder=3,
                           label=name if (w, rec) == (16, "const") else None)

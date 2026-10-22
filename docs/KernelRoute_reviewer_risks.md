@@ -281,6 +281,10 @@ about 8 more GPU-hours.
 
 # 7. The entropy evidence is thin
 
+**Status (22 Oct 2026): partly addressed.** VGG-16 entropies are now in the
+paper (three backbones). The 16-image sample remains; option 2 below still
+needs GPU time.
+
 **Severity: Medium.** Finding 7 rests on entropy measured once, on the
 last 16 test images; 30 of the ResNet-18 entropy values have no source
 file in the archive; VGG-16 has no entropy at all in this draft.
@@ -429,6 +433,12 @@ about 57 GPU-hours. It makes finding 3 testable on ResNet-18, where it is
 currently uninformative.
 
 # 17. "Results were transcribed from logs; result files are missing"
+
+**Status (22 Oct 2026): closed.** All 132 ResNet-18 and 132 VGG-16 result
+files are in artifacts/. Every transcribed ResNet-18 accuracy is identical to
+its file and every transcribed entropy (the 30 without a source included)
+equals its file to four decimals; the build reads ResNet-18 from the files
+and stops on any mismatch.
 
 **Severity: Medium.** The archive has the result files for MobileNetV2
 (132) and ResNet-18 CIFAR-100 width 64 (24) only. The other 108 ResNet-18

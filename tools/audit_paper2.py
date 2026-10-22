@@ -62,16 +62,35 @@ for a, (m, sd) in {"static": (61.560, 0.217), "gap": (63.745, 0.260)}.items():
     v = np.array(P.ACC[("tinyimagenet", 32, 4, "const")][a])
     check(f"R18 TIN w32 {a} mean/sd vs printed summary", abs(v.mean() - m) < 5e-4 and abs(v.std(ddof=1) - sd) < 5e-4)
 key = ("cifar100", 64, 4, "const")
-res = ROOT / "artifacts/resnet18/stage1_results"
+res = ROOT / "artifacts/resnet18/results"
 bad = [(a, s) for a in ("uniform", "gap", "shuffled", "frozen_random") for s in range(6)
        if abs(json.load(open(res / f"stage1_{a}_seed{s}.json"))["final_acc"] - P.ACC[key][a][s]) > 1e-9]
 check("R18 CIFAR-100 w64 accuracies vs 24 result files", not bad, str(bad[:3]))
 
-# 2. entropies ---------------------------------------------------------------
-for a in ("gap", "shuffled", "frozen_random"):
-    vals = [np.mean([l["z_entropy_norm"] for l in json.load(open(res / f"stage1_{a}_seed{s}.json"))["routing"]]) for s in range(6)]
-    check(f"R18 w64 {a} entropy vs result files", np.allclose(vals, P.ENT_W64[a], atol=6e-5))
-print("note  R18 entropies for CIFAR-100 w16, w32 and the three annealed groups (30 values) have no source file in the archive")
+# 2. all 132 ResNet-18 result files against the transcription ----------------
+rfiles = sorted((ROOT / "artifacts/resnet18/results").glob("*_seed[0-5].json"))
+check("R18: 132 result files", len(rfiles) == 132)
+R18F = {}
+fname = re.compile(r"^(stage1|stage1b|stage1c_w(16|32)|stage2k_K(2|8)|stage3temp_w(16|32|64)|tin_w(32|64))_(static|uniform|gap|shuffled|frozen_random)_seed(\d)\.json$")
+for fp in rfiles:
+    m = fname.match(fp.name); j = json.load(open(fp))
+    tag, arm, s = m.group(1), m.group(6), int(m.group(7))
+    if tag in ("stage1", "stage1b"): key = ("cifar100", 64, 4, "const")
+    elif tag.startswith("stage1c"): key = ("cifar100", int(m.group(2)), 4, "const")
+    elif tag.startswith("stage2k"): key = ("cifar100", 32, int(m.group(3)), "const")
+    elif tag.startswith("stage3temp"): key = ("cifar100", int(m.group(4)), 4, "anneal")
+    else: key = ("tinyimagenet", int(m.group(5)), 4, "const")
+    ent = np.mean([l["z_entropy_norm"] for l in j["routing"]]) if j["routing"] else None
+    R18F[(key, arm, s)] = (j["final_acc"], ent)
+check("R18: every program cell has exactly one result file", len(R18F) == 132 and
+      all((k, a, s) in R18F for k, arms in P.ACC.items() for a in arms for s in range(6)))
+check("R18: every transcribed final accuracy equals its result file",
+      all(R18F[(k, a, s)][0] == P.ACC[k][a][s] for k, arms in P.ACC.items() for a in arms for s in range(6)))
+ok = all(round(R18F[(("cifar100", w, 4, rec), "gap", s)][1], 4) == P.ENT[("cifar100", w, rec)][s]
+         for w in (16, 32, 64) for rec in ("const", "anneal") for s in range(6))
+ok = ok and all(round(R18F[(("cifar100", 64, 4, "const"), a, s)][1], 4) == P.ENT_W64[a][s]
+                for a in ("uniform", "gap", "shuffled", "frozen_random") for s in range(6))
+check("R18: every transcribed routing entropy (the 30 earlier without a source included) equals its file to 4 decimals", ok)
 
 # 3. MobileNetV2 independent recompute ----------------------------------------
 R = collections.defaultdict(dict)
@@ -264,12 +283,66 @@ if (built / "macros_mb.tex").exists():
            for ds, wg, ws in [("cifar100", 16, 32), ("cifar100", 32, 64), ("tinyimagenet", 32, 64)]]
     check("plain 2c beats gap c in all six ResNet-18 and VGG-16 pairs ('six of six pairs')", all(d.mean() > 0 and RS["pt"](d) < .05 for d in six))
 
+# 8. VGG-16 routing entropies: its result files, parsed here, against the log and the built macros
+vfiles = sorted((ROOT / "artifacts/vgg16/results").glob("vgg16__*_seed[0-5].json"))
+check("VGG-16: 132 result files", len(vfiles) == 132)
+VF = {}
+for fp in vfiles:
+    m = _re.match(r"vgg16__(\w+?)__w(\d+)__K(\d)__(const|anneal)_(\w+)_seed(\d)\.json", fp.name); j = json.load(open(fp))
+    VF[(m.group(1), int(m.group(2)), int(m.group(3)), m.group(4), m.group(5), int(m.group(6)))] = j
+check("VGG-16: every result file's final accuracy equals train.log",
+      all(VF[k]["final_acc"] == V[k[:5]][k[5]] for k in VF) and len(VF) == 132)
+check("VGG-16: every routing record counts the same 16 test images",
+      all(sum(l["argmax_counts"]) == 16 for j in VF.values() for l in j["routing"]))
+VEn = lambda ds, w, a="gap", rec="const": np.array([np.mean([l["z_entropy_norm"] for l in VF[(ds, w, 4, rec, a, s)]["routing"]]) for s in range(6)])
+VHh = lambda ds, w, a="gap", rec="const": 1 - VEn(ds, w, a, rec).mean()
+if (built / "macros_mb.tex").exists():
+    nm = lambda k: float(MAC[k])
+    ok = all(abs(VHh("cifar100", w) - nm(f"vghc{t_}")) < 6e-5 and abs(VHh("cifar100", w, rec="anneal") - nm(f"vgha{t_}")) < 6e-6
+             for w, t_ in [(16, "A"), (32, "B"), (64, "C")])
+    check("VGG-16 constant and annealed 1-H at widths 16, 32, 64 match the macros", ok)
+    check("VGG-16 w64 frozen and shuffled 1-H match the macros",
+          abs(VHh("cifar100", 64, "frozen_random") - nm("vgeFrz")) < 6e-5 and abs(VHh("cifar100", 64, "shuffled") - nm("vgeShuf")) < 6e-5)
+    six = [(VHh("cifar100", w, rec=r), np.mean([V[("cifar100", w, 4, r, "gap")][s] - V[("cifar100", w, 4, "const", "uniform")][s] for s in range(6)]))
+           for w in (16, 32, 64) for r in ("const", "anneal")]
+    rho = stats.spearmanr(*zip(*six))
+    check(f"VGG-16 rank correlation {rho.statistic:.2f} (p {rho.pvalue:.3f}) matches, not significant (text)",
+          abs(rho.statistic - nm("vgrho")) < 6e-3 and abs(rho.pvalue - nm("vgrhop")) < 6e-4 and rho.pvalue >= .05)
+    ann_p = [vp(("cifar100", w, 4, "anneal", "gap"), ("cifar100", w, 4, "const", "uniform"))[1] for w in (16, 32, 64)]
+    check("VGG-16: annealed router closest to uniform (w64) is the only annealed one with a significant benefit (text)",
+          VHh("cifar100", 64, rec="anneal") < min(VHh("cifar100", w, rec="anneal") for w in (16, 32)) and ann_p[2] < .05 and min(ann_p[:2]) >= .05)
+    b16c = vp(("cifar100", 16, 4, "const", "gap"), ("cifar100", 16, 4, "const", "uniform"))[0]
+    b16a = vp(("cifar100", 16, 4, "anneal", "gap"), ("cifar100", 16, 4, "const", "uniform"))[0]
+    check("VGG-16 w16: annealed router flatter and smaller benefit, so no counterexample (text)",
+          VHh("cifar100", 16, rec="anneal") < VHh("cifar100", 16) and b16a < b16c)
+    check("VGG-16 constant-tau routers move towards uniform as width grows (text: like ResNet-18)",
+          VHh("cifar100", 16) > VHh("cifar100", 32) > VHh("cifar100", 64))
+    flat = lambda w, rec: [int(sum(l["z_entropy_norm"] >= 0.9999 for l in VF[("cifar100", w, 4, rec, "gap", s)]["routing"])) for s in range(6)]
+    fa = [x for w in (16, 32, 64) for x in flat(w, "anneal")]; fc = [x for w in (16, 32, 64) for x in flat(w, "const")]
+    check(f"VGG-16 flat layers annealed {min(fa)}-{max(fa)}, constant {min(fc)}-{max(fc)} match",
+          (str(min(fa)), str(max(fa)), str(min(fc)), str(max(fc))) == (MAC["vgflatAmin"], MAC["vgflatAmax"], MAC["vgflatCmin"], MAC["vgflatCmax"]))
+    # cross-backbone claims of Section 7 and 11
+    mbfile = lambda a: np.mean([np.mean([l["z_entropy_norm"] for l in json.load(open(ROOT / f"artifacts/mobilenetv2/results/mobilenetv2__cifar100__w64__K4__const_{a}_seed{s}.json"))["routing"]]) for s in range(6)])
+    r18e = lambda a: np.mean([R18F[(("cifar100", 64, 4, "const"), a, s)][1] for s in range(6)])
+    ok = all(1 - f_("gap") > max(1 - f_("frozen_random"), 1 - f_("shuffled"), 1 - f_("uniform")) for f_ in (mbfile, r18e))
+    ok = ok and VHh("cifar100", 64) > max(VHh("cifar100", 64, a) for a in ("frozen_random", "shuffled", "uniform"))
+    check("trained router furthest from uniform at C100 w64 on all three backbones (text)", ok)
+    check("shuffled router near-uniform (1-H < 0.001) on ResNet-18 and MobileNetV2, not on VGG-16 (text)",
+          1 - r18e("shuffled") < 1e-3 and 1 - mbfile("shuffled") < 1e-3 and VHh("cifar100", 64, "shuffled") > 1e-3)
+    check("VGG-16 shuffled within 5% of frozen ('as far from uniform as the frozen router')",
+          abs(VHh("cifar100", 64, "shuffled") / VHh("cifar100", 64, "frozen_random") - 1) < .05)
+    hs = [1 - r18e("gap"), 1 - mbfile("gap"), VHh("cifar100", 64)]
+    check(f"C100 w64 trained-router 1-H on the three backbones within a factor 1.2 ('almost the same'): {[round(h, 4) for h in hs]}",
+          max(hs) / min(hs) < 1.2)
+    check("ResNet-18 annealed w64 router equivalent to uniform; MobileNetV2 and VGG-16 annealed w64 routers higher (text)",
+          MAC["vgbavC"] == "higher" and MAC["mbbavC"] == "higher")
+
 # 5. phrases that must not return -------------------------------------------------
 tex = (ROOT / "report/paper2_template.tex").read_text()
 banned = ["Every run uses the right", "order of magnitude below", "GPU fault", "GPU\nfault", "on both backbones", "of ten conditions", "holds on both", "deeper stages",
           "so it does vary with", "every channel count by", "a few percent more compute",
           "five warm-up epochs then cosine decay over 150", "this literature reports", "close to one-hot from the first step", "At equal parameters, width wins",
-          "—", "---", "Moreover", "Furthermore", "Additionally", "Notably", "It is worth noting", "worth noting", "it is important to note"]
+          "not available (no result files)", "were not available for this", "two of them measured", "—", "---", "Moreover", "Furthermore", "Additionally", "Notably", "It is worth noting", "worth noting", "it is important to note"]
 ai_words = ["robust", "comprehensive", "crucial", "delve", "leverag", "pivotal", "seamless", "meticulous", "underscore", "showcas",
             "landscape", "tapestry", "realm", "paradigm", "testament", "intricate", "holistic", "utiliz", "in order to", "genuinely", "truly"]
 for b in ai_words:
