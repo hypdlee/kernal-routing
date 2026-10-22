@@ -92,7 +92,32 @@ def train_cmd(a, model, g, arm, fs, draw, seed, accum, d: Path):
     return cmd
 
 
+def probing(execute):
+    """Wrap an executor so a probe that fails for a reason other than running
+    out of memory (exit 5) stops with that fact, instead of climbing the
+    micro-batch ladder and ending in a false 'out of memory'. Typical cause on
+    Windows: WinError 1114 while importing torch (page file / commit memory
+    exhausted, or a broken torch install)."""
+    def run(cmd, logfile=None):
+        rc = execute(cmd, logfile)
+        if logfile is None and rc not in (0, 5):
+            try:
+                out = Path(cmd[cmd.index("--probe-out") + 1])
+            except (ValueError, IndexError):
+                out = None
+            if out is None or not out.exists():
+                raise SystemExit(
+                    f"The memory probe crashed (exit code {rc}) before it could measure anything. "
+                    "This is not a GPU out-of-memory. Check that  python -c \"import torch; "
+                    "print(torch.cuda.is_available())\"  works in this window. On WinError 1114 "
+                    "(c10.dll) raise the Windows page file or close other torch jobs, then rerun. "
+                    "To skip the probe use --skip-probe (batch 128 is then assumed to fit).")
+        return rc
+    return run
+
+
 def run_model(a, model, execute=default_exec):
+    execute = probing(execute)
     d = Path(a.out) / model
     d.mkdir(parents=True, exist_ok=True)
     plan = json.loads((d / "plan.json").read_text()) if (d / "plan.json").exists() else {}
