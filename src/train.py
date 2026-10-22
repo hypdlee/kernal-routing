@@ -204,7 +204,15 @@ def _main():
     ap.add_argument("--tag", default="stage1")
     ap.add_argument("--deterministic", action="store_true")
     ap.add_argument("--fake-data", action="store_true", help="smoke test, no download")
+    ap.add_argument("--frozen-seed", type=int, default=None,
+                    help="seed of the frozen_random router's weights. Omit to use the fixed "
+                         "seed every earlier run used (routers.FROZEN_SEED = 20260908), which "
+                         "reproduces every result before this flag existed. A different value "
+                         "draws a different random router; it is recorded in the result.")
     args = ap.parse_args()
+    if args.frozen_seed is not None:
+        from . import routers as _routers
+        _routers.FROZEN_SEED = args.frozen_seed
     if args.batch_size % args.accum:
         ap.error("--batch-size must be divisible by --accum")
     micro = args.batch_size // args.accum
