@@ -4,7 +4,7 @@
 and commit this file (and upload it to OSF Registries or AsPredicted) before
 the first run of `run_controls.py` finishes.**
 
-Date recorded: ____________ (before any run of `run_controls.py`)
+Date recorded: 2026-10-22 (before any run of `run_controls.py`)
 
 ## Why these runs
 
