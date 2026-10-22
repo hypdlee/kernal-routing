@@ -68,6 +68,10 @@ def test_resnet18_values():
         s = subprocess.run(["pdftotext", "-layout", str(p), "-"], capture_output=True, text=True).stdout
         txt[k] = collections.Counter(re.findall(r"[+\-]?\d+\.\d+", s.replace("\u2212", "-")))
     lost = sorted((txt["old"] - txt["new"]).elements())
+    # axis tick labels of the old figures that the plain-matplotlib restyle of
+    # 22 Oct 2026 no longer prints (not results): 0.5 (twice) and 1.50, 1.75
+    ticks = collections.Counter({"0.5": 2, "1.50": 1, "1.75": 1})
+    lost = sorted((collections.Counter(lost) - ticks).elements())
     assert lost == ["44.47", "44.47"], lost
     added = sorted((txt["new"] - txt["old"]).elements())
     print(f"  {sum(txt['old'].values())} decimal numbers in the delivered paper; all present in the rebuild except "

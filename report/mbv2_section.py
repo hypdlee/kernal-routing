@@ -26,9 +26,8 @@ _spec = importlib.util.spec_from_file_location("kr_stats", HERE / "data.py")
 S = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(S)
 paired, verdict = S.paired, S.verdict
 
-plt.rcParams.update({"font.size": 8.5, "axes.grid": True, "grid.alpha": 0.25, "axes.spines.top": False,
-                     "axes.spines.right": False, "figure.dpi": 200, "savefig.bbox": "tight",
-                     "font.family": "DejaVu Sans", "legend.frameon": False})
+import plotstyle as PS
+PS.apply()
 C = {"static": "#444444", "uniform": "#1f77b4", "gap": "#d62728", "shuffled": "#2ca02c",
      "frozen_random": "#9467bd", "ann": "#ff7f0e", "r18": "#7f7f7f", "mb": "#1f6fb4", "vg": "#b8860b"}
 DSN = {"cifar100": "CIFAR-100", "tinyimagenet": "Tiny-ImageNet"}
@@ -334,9 +333,10 @@ def main(log_path, results_dir, vgg_log):
             ax.bar(xs + (j - .5) * bw, [q["mean"] for q in qs], bw, color=col, label=lbl,
                    yerr=[[q["mean"] - q["lo"] for q in qs], [q["hi"] - q["mean"] for q in qs]], capsize=2.5, error_kw=dict(lw=.9))
         ax.axhline(0, color="k", lw=.8); ax.axhspan(-.5, .5, color="grey", alpha=.10)
-        ax.set_xticks(xs); ax.set_xticklabels(labels, fontsize=6.5); ax.set_title(name, fontsize=9)
-    axs[0].set_ylabel("$\\Delta$ accuracy (pp)"); axs[0].legend(fontsize=7, loc="upper left")
-    plt.savefig("fig/g1_decomp_both.pdf"); plt.close()
+        ax.set_xticks(xs); ax.set_xticklabels(labels, fontsize=6.5); ax.set_title(name)
+    axs[0].set_ylabel("$\\Delta$ accuracy (pp)")
+    plt.tight_layout(); PS.place_legend(axs[0])
+    PS.save("fig/g1_decomp_both.pdf"); plt.close()
 
     # G2: MobileNetV2 width 64, five arms; and controls on both backbones
     fig, ax = plt.subplots(1, 2, figsize=(7.6, 3.2), gridspec_kw=dict(width_ratios=[1, 1.15]))
@@ -346,7 +346,7 @@ def main(log_path, results_dir, vgg_log):
         ax[0].hlines(v.mean(), i - .3, i + .3, color="k", lw=1.5, zorder=4)
     s0 = mb("cifar100", 64, "static").mean(); ax[0].axhspan(s0 - .5, s0 + .5, color="grey", alpha=.13)
     ax[0].set_xticks(range(5)); ax[0].set_xticklabels(arms, rotation=35, ha="right", fontsize=7)
-    ax[0].set_ylabel("top-1 accuracy (%)"); ax[0].set_title("(a) MobileNetV2, CIFAR-100, width 64", fontsize=9)
+    ax[0].set_ylabel("top-1 accuracy (%)"); ax[0].set_title("(a) MobileNetV2, CIFAR-100, width 64")
     cl = [("gap", "static"), ("frozen_random", "static"), ("shuffled", "static"), ("gap", "uniform"), ("frozen_random", "uniform"),
           ("frozen_random", "gap"), ("shuffled", "gap")]
     for j, (name, getter, col) in enumerate([("ResNet-18", r18, C["r18"]), ("MobileNetV2", mb, C["mb"]), ("VGG-16", vg, C["vg"])]):
@@ -356,9 +356,10 @@ def main(log_path, results_dir, vgg_log):
                        fmt="o", ms=4, capsize=2.5, color=col, label=name)
     ax[1].axvline(0, color="k", lw=.8); ax[1].axvspan(-.5, .5, color="grey", alpha=.13)
     ax[1].set_yticks(range(len(cl))); ax[1].set_yticklabels([f"{a} $-$ {b_}" for a, b_ in cl], fontsize=7)
-    ax[1].invert_yaxis(); ax[1].set_xlabel("$\\Delta$ (pp), 95% CI"); ax[1].legend(fontsize=7, loc="lower right")
-    ax[1].set_title("(b) routing controls, three backbones", fontsize=9)
-    plt.savefig("fig/g2_mb_w64.pdf"); plt.close()
+    ax[1].invert_yaxis(); ax[1].set_xlabel("$\\Delta$ (pp), 95% CI")
+    ax[1].set_title("(b) routing controls, three backbones")
+    plt.tight_layout(w_pad=1.0); PS.place_legend(ax[1])
+    PS.save("fig/g2_mb_w64.pdf"); plt.close()
 
     # G3: gap - static by width, both backbones, both datasets
     fig, ax = plt.subplots(1, 2, figsize=(7.4, 2.7))
@@ -369,28 +370,30 @@ def main(log_path, results_dir, vgg_log):
                color=col, label=name)
         ax[k_].axhline(0, color="k", lw=.8); ax[k_].axhspan(-.5, .5, color="grey", alpha=.13)
         ax[k_].set_xscale("log", base=2); ax[k_].set_xticks([16, 32, 64]); ax[k_].set_xticklabels([16, 32, 64])
-        ax[k_].set_xlabel("base width $c$"); ax[k_].set_title(ttl, fontsize=9)
-    ax[0].set_ylabel("gap $-$ static (pp)"); ax[0].legend(fontsize=7)
-    plt.savefig("fig/g3_width_both.pdf"); plt.close()
+        ax[k_].set_xlabel("base width $c$"); ax[k_].set_title(ttl)
+    ax[0].set_ylabel("gap $-$ static (pp)")
+    plt.tight_layout(); PS.place_legend(ax[0])
+    PS.save("fig/g3_width_both.pdf"); plt.close()
 
     # G4: matched budgets, MobileNetV2
-    fig, ax = plt.subplots(1, 2, figsize=(7.4, 2.8))
+    fig, ax = plt.subplots(1, 2, figsize=(7.4, 3.0))
+    lab4 = [[], []]
     for k_, (ds, ws, ttl) in enumerate([("cifar100", [16, 32, 64], "(a) CIFAR-100"), ("tinyimagenet", [32, 64], "(b) Tiny-ImageNet")]):
         for a in ["static", "uniform", "gap"]:
             p_ = [PM[(ds, w, 4, a)][0] for w in ws]; m_ = [mb(ds, w, a).mean() for w in ws]
             ax[k_].plot(p_, m_, marker="o", ms=4, lw=1.3, color=C[a], label=a)
-            for w, pp, mm in zip(ws, p_, m_):
-                ax[k_].annotate(f"w{w}", (pp, mm), fontsize=6, xytext=(3, -8), textcoords="offset points")
+            lab4[k_] += [(pp, mm, f"w{w}") for w, pp, mm in zip(ws, p_, m_)]
         for wg, wsx in ([(16, 32), (32, 64)] if ds == "cifar100" else [(32, 64)]):
             xg, yg = PM[(ds, wg, 4, "gap")][0], mb(ds, wg, "gap").mean()
             xs_, ys_ = PM[(ds, wsx, 4, "static")][0], mb(ds, wsx, "static").mean()
-            ax[k_].annotate("", xy=(xs_, ys_), xytext=(xg, yg), arrowprops=dict(arrowstyle="->", lw=1, ls=":"))
-            ax[k_].annotate(f"${ys_ - yg:+.2f}$ (params $\\times{xg / xs_:.2f}$)", ((xg + xs_) / 2, (yg + ys_) / 2), fontsize=6.3,
-                            ha="center", bbox=dict(fc="white", ec="none", alpha=.85, pad=1))
-        ax[k_].set_xscale("log"); ax[k_].set_xlabel("stored parameters (M, log)"); ax[k_].set_title(ttl, fontsize=9)
-        ax[k_].legend(fontsize=7)
+            ax[k_].plot([xg, xs_], [yg, ys_], ls=":", color="k", lw=1)
+            lab4[k_].append((math.sqrt(xg * xs_), (yg + ys_) / 2, f"${ys_ - yg:+.2f}$\n(params $\\times{xg / xs_:.2f}$)"))
+        ax[k_].set_xscale("log"); ax[k_].set_xlabel("stored parameters (M, log)"); ax[k_].set_title(ttl)
     ax[0].set_ylabel("top-1 accuracy (%)")
-    plt.savefig("fig/g4_mb_matched.pdf"); plt.close()
+    plt.tight_layout()
+    for k_ in range(2):
+        PS.place_legend(ax[k_]); PS.place_labels(ax[k_], lab4[k_])
+    PS.save("fig/g4_mb_matched.pdf"); plt.close()
 
     # G5: temperature and bank size, both backbones
     fig, ax = plt.subplots(1, 2, figsize=(7.4, 2.8))
@@ -401,10 +404,11 @@ def main(log_path, results_dir, vgg_log):
         eb(ax[1], np.array([2, 4, 8]) * off, [paired(getter("cifar100", 32, "gap", k=kk), getter("cifar100", 32, "static")) for kk in (2, 4, 8)],
            marker=mk, ms=4.5, lw=1.3, color=col, label=name)
     for a_, xl, tl in [(ax[0], "base width $c$", "(a) annealed $-$ constant $\\tau$, gap"), (ax[1], "bank size $K$", "(b) gap $-$ static, CIFAR-100 w32")]:
-        a_.axhline(0, color="k", lw=.8); a_.set_xscale("log", base=2); a_.set_xlabel(xl); a_.set_title(tl, fontsize=9)
+        a_.axhline(0, color="k", lw=.8); a_.set_xscale("log", base=2); a_.set_xlabel(xl); a_.set_title(tl)
     ax[0].set_xticks([16, 32, 64]); ax[0].set_xticklabels([16, 32, 64]); ax[1].set_xticks([2, 4, 8]); ax[1].set_xticklabels([2, 4, 8])
-    ax[0].set_ylabel("$\\Delta$ (pp)"); ax[0].legend(fontsize=7)
-    plt.savefig("fig/g5_temp_k.pdf"); plt.close()
+    ax[0].set_ylabel("$\\Delta$ (pp)")
+    plt.tight_layout(); PS.place_legend(ax[0])
+    PS.save("fig/g5_temp_k.pdf"); plt.close()
 
     # G6: training loss and the saturation scatter, both backbones
     fig, ax = plt.subplots(1, 2, figsize=(7.4, 2.8))
@@ -415,19 +419,19 @@ def main(log_path, results_dir, vgg_log):
         ax[0].plot(EP, [cv[e]["loss"] for e in EP], ls=ls, color=C["mb"] if ds == "cifar100" else "#e377c2", lw=1.3,
                    label=f"{'CIFAR' if ds == 'cifar100' else 'TIN'} w{w} {a}")
     ax[0].set_yscale("log"); ax[0].set_xlabel("epoch"); ax[0].set_ylabel("training loss (log)")
-    ax[0].legend(fontsize=6.3); ax[0].set_title("(a) MobileNetV2 training loss, seed 0", fontsize=9)
+    ax[0].set_title("(a) MobileNetV2 training loss, seed 0")
+    lab6 = []
     for name, col, mk in [("ResNet-18", C["r18"], "s"), ("MobileNetV2", C["mb"], "o"), ("VGG-16", C["vg"], "^")]:
         sel = [p for p in pts if p[0] == name]
         ax[1].errorbar([p[3] for p in sel], [p[4]["mean"] for p in sel],
                        yerr=[[p[4]["mean"] - p[4]["lo"] for p in sel], [p[4]["hi"] - p[4]["mean"] for p in sel]],
                        fmt=mk, ms=4.5, capsize=3, color=col, label=name)
-        for p in sel:
-            ax[1].annotate(f"{'T' if p[1] == 'tinyimagenet' else 'C'}{p[2]}", (p[3], p[4]["mean"]), xytext=(4, -3),
-                           textcoords="offset points", fontsize=6)
-    ax[1].axhline(0, color="k", lw=.8); ax[1].set_xscale("log"); ax[1].legend(fontsize=7, loc="upper left")
+        lab6 += [(p[3], p[4]["mean"], f"{'T' if p[1] == 'tinyimagenet' else 'C'}{p[2]}") for p in sel]
+    ax[1].axhline(0, color="k", lw=.8); ax[1].set_xscale("log")
     ax[1].set_xlabel("static arm final training loss (log)"); ax[1].set_ylabel("gap $-$ static (pp)")
-    ax[1].set_title("(b) effect against training loss, 15 conditions", fontsize=9)
-    plt.savefig("fig/g6_loss_effect.pdf"); plt.close()
+    ax[1].set_title("(b) effect against training loss, 15 conditions")
+    plt.tight_layout(); PS.place_legend(ax[0]); PS.place_legend(ax[1]); PS.place_labels(ax[1], lab6, fontsize=5.8)
+    PS.save("fig/g6_loss_effect.pdf"); plt.close()
 
     # G7 (appendix): every MobileNetV2 run at K=4, tau=1
     fig, axs = plt.subplots(1, 5, figsize=(7.8, 2.5), gridspec_kw=dict(width_ratios=[3, 3, 5, 3, 3]))
@@ -439,7 +443,7 @@ def main(log_path, results_dir, vgg_log):
         axs[k_].set_xticks(range(len(aa))); axs[k_].set_xticklabels(aa, rotation=45, ha="right", fontsize=6)
         axs[k_].set_title(f"{'C100' if ds == 'cifar100' else 'TIN'} w{w}", fontsize=8); axs[k_].tick_params(labelsize=6)
     axs[0].set_ylabel("top-1 accuracy (%)")
-    plt.tight_layout(); plt.savefig("fig/g7_mb_allruns.pdf"); plt.close()
+    plt.tight_layout(); PS.save("fig/g7_mb_allruns.pdf"); plt.close()
 
     # ------------------------------------------------------------ two cost views
     # MACs per image counted from the model definitions (tools/flops.py,
@@ -627,23 +631,17 @@ def entropy(results_dir, R, mb, r18, put):
         ax[0].plot(W, [hf(w, "anneal") for w in W], marker=mk, ms=4.5, lw=1.3, ls="--", color=col, mfc="white",
                    label=f"{name}, $\\tau:30\\to1$")
     ax[0].set_yscale("log"); ax[0].set_xscale("log", base=2); ax[0].set_xticks(W); ax[0].set_xticklabels(W)
-    ax[0].set_xlabel("base width $c$"); ax[0].set_ylabel("$1-\\tilde H$ (log)"); ax[0].legend(fontsize=5.6, loc="upper right", handlelength=2.2)
-    ax[0].set_ylim(top=ax[0].get_ylim()[1] * 6)
-    ax[0].set_title("(a) router flatness, CIFAR-100", fontsize=9)
-    # label offsets (points) chosen so that labels of neighbouring markers do not overlap
-    OFF = {("MobileNetV2", 16, "const"): (-5, -2), ("MobileNetV2", 32, "const"): (-5, 1), ("MobileNetV2", 64, "const"): (4, 2),
-           ("MobileNetV2", 16, "anneal"): (4, 1), ("MobileNetV2", 32, "anneal"): (-5, -5), ("MobileNetV2", 64, "anneal"): (-5, 2),
-           ("ResNet-18", 64, "anneal"): (4, 3), ("ResNet-18", 64, "const"): (4, 3)}
+    ax[0].set_xlabel("base width $c$"); ax[0].set_ylabel("$1-\\tilde H$ (log)")
+    ax[0].set_title("(a) router flatness, CIFAR-100")
+    lab8 = []
     for name, pts_, col, mk in [("ResNet-18", sixr18, C["r18"], "s"), ("MobileNetV2", sixmb, C["mb"], "o")]:
         for (x, y), (w, rec) in zip(pts_, [(w, r) for w in W for r in ("const", "anneal")]):
             ax[1].scatter(x, y, marker=mk, s=30, color=col if rec == "const" else "white", edgecolor=col, zorder=3,
                           label=name if (w, rec) == (16, "const") else None)
-            off = OFF.get((name, w, rec), (4, -2))
-            ax[1].annotate(f"w{w}{'' if rec == 'const' else 'a'}", (x, y), xytext=off, textcoords="offset points",
-                           fontsize=5.8, ha="right" if off[0] < 0 else "left")
+            lab8.append((x, y, f"w{w}{'' if rec == 'const' else 'a'}"))
     ax[1].axhline(0, color="k", lw=.8); ax[1].set_xscale("log"); ax[1].set_xlabel("$1-\\tilde H$ (log)")
-    ax[1].set_ylabel("gap $-$ uniform (pp)"); ax[1].legend(fontsize=6.5, loc="upper left")
-    ax[1].set_title("(b) flatness vs benefit (a = annealed)", fontsize=9)
+    ax[1].set_ylabel("gap $-$ uniform (pp)")
+    ax[1].set_title("(b) flatness vs benefit (a = annealed)")
     x = np.arange(1, nl + 1)
     for (c, lbl, col, ls) in [(("cifar100", 64, "const", "gap"), "gap, $\\tau=1$", C["gap"], "-"),
                               (("cifar100", 64, "anneal", "gap"), "gap, annealed", C["ann"], "--"),
@@ -651,9 +649,12 @@ def entropy(results_dir, R, mb, r18, put):
                               (("cifar100", 64, "const", "shuffled"), "shuffled", C["shuffled"], ":")]:
         ax[2].plot(x, 1e3 * mat[c], marker="o", ms=2.5, lw=1.2, color=col, ls=ls, label=lbl)
     ax[2].set_xlabel("dynamic layer (input to output)"); ax[2].set_ylabel("$10^3\\,(1-\\tilde H)$")
-    ax[2].set_xticks([1, 5, 9, 13, 17]); ax[2].legend(fontsize=6.3, loc="upper left")
-    ax[2].set_title("(c) MobileNetV2 by layer, C100 w64", fontsize=9)
-    plt.tight_layout(); plt.savefig("fig/g8_entropy.pdf"); plt.close()
+    ax[2].set_xticks([1, 5, 9, 13, 17])
+    ax[2].set_title("(c) MobileNetV2 by layer, C100 w64")
+    plt.tight_layout(w_pad=1.0)
+    for a_ in ax: PS.place_legend(a_)
+    PS.place_labels(ax[1], lab8, fontsize=5.8)
+    PS.save("fig/g8_entropy.pdf"); plt.close()
 
 
 def P_fl(HR):
@@ -854,7 +855,7 @@ def vgg_part(RV, vg, put):
         axs[k_].set_xticks(range(len(aa))); axs[k_].set_xticklabels(aa, rotation=45, ha="right", fontsize=6)
         axs[k_].set_title(f"{'C100' if ds == 'cifar100' else 'TIN'} w{w}", fontsize=8); axs[k_].tick_params(labelsize=6)
     axs[0].set_ylabel("top-1 accuracy (%)")
-    plt.tight_layout(); plt.savefig("fig/g9_vg_allruns.pdf"); plt.close()
+    plt.tight_layout(); PS.save("fig/g9_vg_allruns.pdf"); plt.close()
     return dec, pairs
 
 
