@@ -1,0 +1,47 @@
+2026-10-22 19:00:38  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 1: out of memory or failed (rc 1)
+2026-10-22 19:00:39  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 2: out of memory or failed (rc 1)
+2026-10-22 19:00:41  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 4: out of memory or failed (rc 1)
+2026-10-22 19:00:42  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 8: out of memory or failed (rc 1)
+2026-10-22 19:01:11  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 1: out of memory or failed (rc 1)
+2026-10-22 19:01:12  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 2: out of memory or failed (rc 1)
+2026-10-22 19:01:14  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 4: out of memory or failed (rc 1)
+2026-10-22 19:01:15  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 8: out of memory or failed (rc 1)
+2026-10-22 19:01:23  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 1: out of memory or failed (rc 1)
+2026-10-22 19:01:24  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 2: out of memory or failed (rc 1)
+2026-10-22 19:01:26  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 4: out of memory or failed (rc 1)
+2026-10-22 19:01:27  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 8: out of memory or failed (rc 1)
+2026-10-22 19:02:44  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 1: out of memory or failed (rc 1)
+2026-10-22 19:02:45  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 2: out of memory or failed (rc 1)
+2026-10-22 19:02:46  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 4: out of memory or failed (rc 1)
+2026-10-22 19:02:47  probe mobilenetv2__cifar100__w64__K4__const frozen_random accum 8: out of memory or failed (rc 1)
+2026-10-22 22:00:11  probe mobilenetv2__cifar100__w64__K4__const: about 73 min per run for the heaviest arm (frozen_random) at micro-batch 128; this group is 6 runs, at most ~7.3 h (training steps only, data loading and evaluation add to it)
+2026-10-22 22:00:11  [1/24] part A mobilenetv2__cifar100__w64__K4__const__d2 frozen_random seed 0 (micro-batch 128)
+2026-10-22 23:42:08     finished in 101.9 min, final 74.01
+2026-10-22 23:42:08  [2/24] part A mobilenetv2__cifar100__w64__K4__const__d3 frozen_random seed 0 (micro-batch 128)
+2026-10-23 01:00:25     finished in 78.3 min, final 73.23
+2026-10-23 01:00:25  [3/24] part A mobilenetv2__cifar100__w64__K4__const__d2 frozen_random seed 1 (micro-batch 128)
+2026-10-23 02:18:28     finished in 78.1 min, final 74.13
+2026-10-23 02:18:28  [4/24] part A mobilenetv2__cifar100__w64__K4__const__d3 frozen_random seed 1 (micro-batch 128)
+2026-10-23 03:36:45     finished in 78.3 min, final 73.73
+2026-10-23 03:36:45  [5/24] part A mobilenetv2__cifar100__w64__K4__const__d2 frozen_random seed 2 (micro-batch 128)
+2026-10-23 04:55:00     finished in 78.2 min, final 74.03
+2026-10-23 04:55:00  [6/24] part A mobilenetv2__cifar100__w64__K4__const__d3 frozen_random seed 2 (micro-batch 128)
+2026-10-23 06:13:52     finished in 78.9 min, final 73.26
+2026-10-23 06:13:52  [7/24] part A mobilenetv2__cifar100__w64__K4__const__d2 frozen_random seed 3 (micro-batch 128)
+2026-10-23 07:31:54     finished in 78.0 min, final 73.90
+2026-10-23 07:31:54  [8/24] part A mobilenetv2__cifar100__w64__K4__const__d3 frozen_random seed 3 (micro-batch 128)
+2026-10-23 08:50:09     finished in 78.3 min, final 73.41
+2026-10-23 08:50:09  [9/24] part A mobilenetv2__cifar100__w64__K4__const__d2 frozen_random seed 4 (micro-batch 128)
+2026-10-23 10:07:07     finished in 77.0 min, final 74.52
+2026-10-23 10:07:07  [10/24] part A mobilenetv2__cifar100__w64__K4__const__d3 frozen_random seed 4 (micro-batch 128)
+2026-10-23 11:24:06     finished in 77.0 min, final 74.72
+2026-10-23 11:24:06  [11/24] part A mobilenetv2__cifar100__w64__K4__const__d2 frozen_random seed 5 (micro-batch 128)
+2026-10-23 12:43:45     finished in 79.7 min, final 73.51
+2026-10-23 12:43:45  [12/24] part A mobilenetv2__cifar100__w64__K4__const__d3 frozen_random seed 5 (micro-batch 128)
+2026-10-23 14:24:20     finished in 100.6 min, final 73.80
+2026-10-23 14:24:53  probe mobilenetv2__cifar100__w16__K4__const: about 84 min per run for the heaviest arm (shuffled) at micro-batch 128; this group is 12 runs, at most ~16.8 h (training steps only, data loading and evaluation add to it)
+2026-10-23 14:24:53  [13/24] part B mobilenetv2__cifar100__w16__K4__const shuffled seed 0 (micro-batch 128)
+2026-10-23 15:58:16     finished in 93.4 min, final 66.89
+2026-10-23 15:58:16  [14/24] part B mobilenetv2__cifar100__w16__K4__const frozen_random seed 0 (micro-batch 128)
+2026-10-23 17:13:22     finished in 75.1 min, final 68.17
+2026-10-23 17:13:22  [15/24] part B mobilenetv2__cifar100__w16__K4__const shuffled seed 1 (micro-batch 128)

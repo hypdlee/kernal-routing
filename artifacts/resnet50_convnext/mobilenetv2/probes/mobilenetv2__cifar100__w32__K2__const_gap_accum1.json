@@ -1,0 +1,18 @@
+{
+  "model": "mobilenetv2",
+  "dataset": "cifar100",
+  "width": 32,
+  "num_kernels": 2,
+  "scope": "all",
+  "router": "gap",
+  "batch_size": 128,
+  "micro_batch": 128,
+  "accum": 1,
+  "params": 1135534,
+  "device": "cuda",
+  "oom": false,
+  "sec_per_step": 0.03482528924942017,
+  "steps_per_epoch": 4,
+  "est_minutes": 0.34825289249420166,
+  "peak_mem_gb": 1.0987658500671387
+}

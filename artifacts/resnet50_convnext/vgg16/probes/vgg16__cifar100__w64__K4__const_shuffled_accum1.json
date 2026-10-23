@@ -1,0 +1,18 @@
+{
+  "model": "vgg16",
+  "dataset": "cifar100",
+  "width": 64,
+  "num_kernels": 4,
+  "scope": "all",
+  "router": "shuffled",
+  "batch_size": 128,
+  "micro_batch": 128,
+  "accum": 1,
+  "params": 59288180,
+  "device": "cuda",
+  "oom": false,
+  "sec_per_step": 0.051726925373077395,
+  "steps_per_epoch": 390,
+  "est_minutes": 50.43375223875046,
+  "peak_mem_gb": 1.247605323791504
+}

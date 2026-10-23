@@ -1,0 +1,10 @@
+{
+  "resnet50__cifar100__w64__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "shuffled",
+    "sec_per_step": 0.12046364545822144,
+    "peak_mem_gb": 3.1397247314453125,
+    "est_minutes_per_run": 117.4520543217659
+  }
+}

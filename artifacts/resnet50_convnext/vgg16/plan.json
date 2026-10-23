@@ -1,0 +1,82 @@
+{
+  "vgg16__cifar100__w64__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "shuffled",
+    "sec_per_step": 0.051726925373077395,
+    "peak_mem_gb": 1.247605323791504,
+    "est_minutes_per_run": 50.43375223875046
+  },
+  "vgg16__cifar100__w32__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.031057846546173096,
+    "peak_mem_gb": 0.4740161895751953,
+    "est_minutes_per_run": 30.28140038251877
+  },
+  "vgg16__cifar100__w16__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.023358678817749022,
+    "peak_mem_gb": 0.21123981475830078,
+    "est_minutes_per_run": 22.774711847305298
+  },
+  "vgg16__cifar100__w32__K2__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.016643404960632324,
+    "peak_mem_gb": 0.3107762336730957,
+    "est_minutes_per_run": 16.227319836616516
+  },
+  "vgg16__cifar100__w32__K8__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.03871793746948242,
+    "peak_mem_gb": 0.7908568382263184,
+    "est_minutes_per_run": 37.749989032745354
+  },
+  "vgg16__tinyimagenet__w32__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.05771150588989258,
+    "peak_mem_gb": 1.341097354888916,
+    "est_minutes_per_run": 112.68171525001526
+  },
+  "vgg16__cifar100__w64__K4__anneal": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.0484677791595459,
+    "peak_mem_gb": 1.2475967407226562,
+    "est_minutes_per_run": 47.25608468055725
+  },
+  "vgg16__cifar100__w32__K4__anneal": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.022724008560180663,
+    "peak_mem_gb": 0.4740161895751953,
+    "est_minutes_per_run": 22.155908346176147
+  },
+  "vgg16__cifar100__w16__K4__anneal": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.021595942974090575,
+    "peak_mem_gb": 0.21123981475830078,
+    "est_minutes_per_run": 21.05604439973831
+  },
+  "vgg16__tinyimagenet__w64__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "gap",
+    "sec_per_step": 0.1516818404197693,
+    "peak_mem_gb": 2.951389789581299,
+    "est_minutes_per_run": 296.15879341959953
+  }
+}

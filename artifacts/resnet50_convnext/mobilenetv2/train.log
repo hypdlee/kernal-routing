@@ -1,0 +1,2696 @@
+
+0.0%
+0.0%
+0.1%
+0.1%
+0.1%
+0.1%
+0.1%
+0.2%
+0.2%
+0.2%
+0.2%
+0.2%
+0.3%
+0.3%
+0.3%
+0.3%
+0.3%
+0.3%
+0.4%
+0.4%
+0.4%
+0.4%
+0.4%
+0.5%
+0.5%
+0.5%
+0.5%
+0.5%
+0.6%
+0.6%
+0.6%
+0.6%
+0.6%
+0.7%
+0.7%
+0.7%
+0.7%
+0.7%
+0.8%
+0.8%
+0.8%
+0.8%
+0.8%
+0.9%
+0.9%
+0.9%
+0.9%
+0.9%
+1.0%
+1.0%
+1.0%
+1.0%
+1.0%
+1.0%
+1.1%
+1.1%
+1.1%
+1.1%
+1.1%
+1.2%
+1.2%
+1.2%
+1.2%
+1.2%
+1.3%
+1.3%
+1.3%
+1.3%
+1.3%
+1.4%
+1.4%
+1.4%
+1.4%
+1.4%
+1.5%
+1.5%
+1.5%
+1.5%
+1.5%
+1.6%
+1.6%
+1.6%
+1.6%
+1.6%
+1.6%
+1.7%
+1.7%
+1.7%
+1.7%
+1.7%
+1.8%
+1.8%
+1.8%
+1.8%
+1.8%
+1.9%
+1.9%
+1.9%
+1.9%
+1.9%
+2.0%
+2.0%
+2.0%
+2.0%
+2.0%
+2.1%
+2.1%
+2.1%
+2.1%
+2.1%
+2.2%
+2.2%
+2.2%
+2.2%
+2.2%
+2.2%
+2.3%
+2.3%
+2.3%
+2.3%
+2.3%
+2.4%
+2.4%
+2.4%
+2.4%
+2.4%
+2.5%
+2.5%
+2.5%
+2.5%
+2.5%
+2.6%
+2.6%
+2.6%
+2.6%
+2.6%
+2.7%
+2.7%
+2.7%
+2.7%
+2.7%
+2.8%
+2.8%
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 23, in <module>
+    import torch
+  File "C:\Users\ankit\Downloads\idea\topoconv\.venv\Lib\site-packages\torch\__init__.py", line 309, in <module>
+    _load_dll_libraries()
+  File "C:\Users\ankit\Downloads\idea\topoconv\.venv\Lib\site-packages\torch\__init__.py", line 292, in _load_dll_libraries
+    raise err
+OSError: [WinError 1114] A dynamic link library (DLL) initialization routine failed. Error loading "C:\Users\ankit\Downloads\idea\topoconv\.venv\Lib\site-packages\torch\lib\c10.dll" or one of its dependencies.
+
+[mobilenetv2 cifar100 static w64 K4 seed=0] device=cuda params=2.35M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.232  acc 11.47  best 11.47  (26s)
+  ep  10  loss 1.674  acc 47.39  best 48.64  (125s)
+  ep  20  loss 1.608  acc 47.70  best 49.06  (224s)
+  ep  30  loss 1.570  acc 51.36  best 51.44  (324s)
+  ep  40  loss 1.525  acc 49.54  best 52.49  (423s)
+  ep  50  loss 1.467  acc 50.55  best 54.32  (524s)
+  ep  60  loss 1.392  acc 51.76  best 55.44  (622s)
+  ep  70  loss 1.327  acc 54.13  best 57.58  (722s)
+  ep  80  loss 1.211  acc 55.76  best 57.58  (822s)
+  ep  90  loss 1.105  acc 60.11  best 61.18  (921s)
+  ep 100  loss 0.963  acc 63.87  best 63.87  (1021s)
+  ep 110  loss 0.807  acc 64.13  best 66.31  (1120s)
+  ep 120  loss 0.615  acc 68.93  best 69.57  (1220s)
+  ep 130  loss 0.415  acc 71.39  best 71.56  (1319s)
+  ep 140  loss 0.269  acc 72.62  best 72.62  (1419s)
+  ep 149  loss 0.236  acc 72.66  best 72.98  (1508s)
+[mobilenetv2 static seed=0] final=72.66 best=72.98 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_static_seed0.json
+[mobilenetv2 cifar100 static w64 K4 seed=1] device=cuda params=2.35M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.250  acc 9.53  best 9.53  (26s)
+  ep  10  loss 1.649  acc 44.85  best 50.20  (122s)
+  ep  20  loss 1.609  acc 49.52  best 50.20  (219s)
+  ep  30  loss 1.564  acc 52.40  best 52.40  (316s)
+  ep  40  loss 1.512  acc 52.76  best 53.43  (413s)
+  ep  50  loss 1.475  acc 51.14  best 54.58  (510s)
+  ep  60  loss 1.404  acc 55.44  best 55.44  (608s)
+  ep  70  loss 1.321  acc 56.17  best 56.17  (705s)
+  ep  80  loss 1.227  acc 57.75  best 59.79  (802s)
+  ep  90  loss 1.108  acc 61.15  best 61.15  (899s)
+  ep 100  loss 0.977  acc 63.05  best 63.62  (997s)
+  ep 110  loss 0.815  acc 66.69  best 66.69  (1095s)
+  ep 120  loss 0.637  acc 68.69  best 68.93  (1191s)
+  ep 130  loss 0.433  acc 70.89  best 70.89  (1289s)
+  ep 140  loss 0.287  acc 72.37  best 72.37  (1386s)
+  ep 149  loss 0.250  acc 72.18  best 72.39  (1474s)
+[mobilenetv2 static seed=1] final=72.18 best=72.39 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_static_seed1.json
+[mobilenetv2 cifar100 static w64 K4 seed=2] device=cuda params=2.35M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.264  acc 7.49  best 7.49  (25s)
+  ep  10  loss 1.658  acc 47.34  best 47.34  (122s)
+  ep  20  loss 1.605  acc 49.41  best 50.98  (220s)
+  ep  30  loss 1.561  acc 44.96  best 50.98  (318s)
+  ep  40  loss 1.527  acc 38.08  best 50.98  (415s)
+  ep  50  loss 1.463  acc 52.91  best 52.91  (513s)
+  ep  60  loss 1.401  acc 54.28  best 54.28  (611s)
+  ep  70  loss 1.318  acc 57.50  best 57.50  (709s)
+  ep  80  loss 1.227  acc 58.08  best 58.08  (807s)
+  ep  90  loss 1.106  acc 60.09  best 60.29  (904s)
+  ep 100  loss 0.980  acc 63.67  best 64.04  (1002s)
+  ep 110  loss 0.822  acc 66.99  best 66.99  (1100s)
+  ep 120  loss 0.635  acc 69.01  best 69.01  (1197s)
+  ep 130  loss 0.434  acc 71.60  best 71.60  (1295s)
+  ep 140  loss 0.290  acc 72.31  best 72.49  (1393s)
+  ep 149  loss 0.252  acc 72.15  best 72.49  (1481s)
+[mobilenetv2 static seed=2] final=72.15 best=72.49 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_static_seed2.json
+[mobilenetv2 cifar100 static w64 K4 seed=3] device=cuda params=2.35M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.286  acc 8.22  best 8.22  (26s)
+  ep  10  loss 1.655  acc 50.33  best 50.33  (124s)
+  ep  20  loss 1.601  acc 51.78  best 51.78  (223s)
+  ep  30  loss 1.559  acc 47.00  best 51.78  (322s)
+  ep  40  loss 1.528  acc 47.35  best 51.78  (421s)
+  ep  50  loss 1.481  acc 51.79  best 53.54  (520s)
+  ep  60  loss 1.406  acc 55.93  best 55.93  (619s)
+  ep  70  loss 1.323  acc 54.57  best 57.37  (717s)
+  ep  80  loss 1.223  acc 57.46  best 58.78  (814s)
+  ep  90  loss 1.100  acc 59.51  best 60.50  (912s)
+  ep 100  loss 0.973  acc 63.19  best 63.54  (1010s)
+  ep 110  loss 0.814  acc 66.41  best 66.41  (1108s)
+  ep 120  loss 0.630  acc 69.61  best 69.76  (1206s)
+  ep 130  loss 0.430  acc 71.47  best 71.47  (1304s)
+  ep 140  loss 0.286  acc 72.10  best 72.37  (1402s)
+  ep 149  loss 0.247  acc 72.25  best 72.48  (1489s)
+[mobilenetv2 static seed=3] final=72.25 best=72.48 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_static_seed3.json
+[mobilenetv2 cifar100 static w64 K4 seed=4] device=cuda params=2.35M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.280  acc 10.01  best 10.01  (26s)
+  ep  10  loss 1.662  acc 50.31  best 50.31  (123s)
+  ep  20  loss 1.601  acc 47.92  best 50.39  (221s)
+  ep  30  loss 1.562  acc 48.69  best 51.10  (319s)
+  ep  40  loss 1.527  acc 47.93  best 51.78  (416s)
+  ep  50  loss 1.472  acc 50.11  best 53.76  (514s)
+  ep  60  loss 1.410  acc 51.75  best 53.76  (612s)
+  ep  70  loss 1.338  acc 54.52  best 56.11  (710s)
+  ep  80  loss 1.233  acc 55.78  best 57.82  (808s)
+  ep  90  loss 1.116  acc 60.19  best 61.45  (905s)
+  ep 100  loss 0.975  acc 63.92  best 64.14  (1003s)
+  ep 110  loss 0.821  acc 66.00  best 66.38  (1101s)
+  ep 120  loss 0.627  acc 68.61  best 69.24  (1198s)
+  ep 130  loss 0.436  acc 71.49  best 71.49  (1296s)
+  ep 140  loss 0.289  acc 72.61  best 72.61  (1394s)
+  ep 149  loss 0.249  acc 72.41  best 72.73  (1481s)
+[mobilenetv2 static seed=4] final=72.41 best=72.73 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_static_seed4.json
+[mobilenetv2 cifar100 static w64 K4 seed=5] device=cuda params=2.35M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.261  acc 9.87  best 9.87  (25s)
+  ep  10  loss 1.656  acc 47.96  best 49.50  (123s)
+  ep  20  loss 1.607  acc 48.15  best 50.99  (220s)
+  ep  30  loss 1.558  acc 52.20  best 52.20  (317s)
+  ep  40  loss 1.520  acc 50.18  best 52.20  (415s)
+  ep  50  loss 1.469  acc 51.59  best 54.45  (512s)
+  ep  60  loss 1.400  acc 54.31  best 55.37  (610s)
+  ep  70  loss 1.314  acc 54.15  best 57.06  (707s)
+  ep  80  loss 1.225  acc 54.12  best 58.34  (805s)
+  ep  90  loss 1.098  acc 60.25  best 60.25  (903s)
+  ep 100  loss 0.966  acc 62.67  best 63.08  (1000s)
+  ep 110  loss 0.811  acc 66.04  best 66.04  (1097s)
+  ep 120  loss 0.631  acc 68.81  best 68.81  (1197s)
+  ep 130  loss 0.432  acc 70.88  best 71.29  (1297s)
+  ep 140  loss 0.292  acc 72.46  best 72.46  (1396s)
+  ep 149  loss 0.256  acc 72.72  best 72.80  (1484s)
+[mobilenetv2 static seed=5] final=72.72 best=72.80 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_static_seed5.json
+[mobilenetv2 cifar100 uniform w64 K4 seed=0] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.251  acc 9.27  best 9.27  (26s)
+  ep  10  loss 1.646  acc 46.84  best 49.02  (133s)
+  ep  20  loss 1.597  acc 50.04  best 50.04  (238s)
+  ep  30  loss 1.557  acc 49.16  best 51.64  (342s)
+  ep  40  loss 1.513  acc 46.45  best 51.71  (447s)
+  ep  50  loss 1.476  acc 50.13  best 51.98  (553s)
+  ep  60  loss 1.413  acc 49.28  best 53.58  (656s)
+  ep  70  loss 1.323  acc 56.44  best 56.44  (761s)
+  ep  80  loss 1.216  acc 57.61  best 57.77  (868s)
+  ep  90  loss 1.118  acc 58.37  best 59.71  (972s)
+  ep 100  loss 0.972  acc 61.85  best 63.86  (1077s)
+  ep 110  loss 0.804  acc 66.16  best 66.16  (1182s)
+  ep 120  loss 0.611  acc 68.88  best 68.88  (1287s)
+  ep 130  loss 0.408  acc 71.12  best 71.48  (1392s)
+  ep 140  loss 0.266  acc 72.29  best 72.29  (1496s)
+  ep 149  loss 0.228  acc 72.32  best 72.52  (1592s)
+[mobilenetv2 uniform seed=0] final=72.32 best=72.52 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_uniform_seed0.json
+[mobilenetv2 cifar100 uniform w64 K4 seed=1] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.263  acc 9.22  best 9.22  (26s)
+  ep  10  loss 1.671  acc 49.32  best 50.03  (131s)
+  ep  20  loss 1.599  acc 49.95  best 51.28  (236s)
+  ep  30  loss 1.562  acc 49.41  best 52.43  (343s)
+  ep  40  loss 1.535  acc 49.57  best 52.43  (448s)
+  ep  50  loss 1.467  acc 51.00  best 53.55  (553s)
+  ep  60  loss 1.419  acc 47.87  best 53.70  (658s)
+  ep  70  loss 1.335  acc 55.43  best 56.83  (764s)
+  ep  80  loss 1.244  acc 58.50  best 58.50  (868s)
+  ep  90  loss 1.111  acc 60.67  best 60.67  (974s)
+  ep 100  loss 0.978  acc 60.63  best 63.40  (1081s)
+  ep 110  loss 0.820  acc 65.66  best 66.55  (1186s)
+  ep 120  loss 0.631  acc 68.38  best 68.38  (1292s)
+  ep 130  loss 0.427  acc 71.31  best 71.31  (1400s)
+  ep 140  loss 0.276  acc 71.86  best 72.12  (1509s)
+  ep 149  loss 0.241  acc 71.77  best 72.12  (1605s)
+[mobilenetv2 uniform seed=1] final=71.77 best=72.12 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_uniform_seed1.json
+[mobilenetv2 cifar100 uniform w64 K4 seed=2] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.262  acc 9.30  best 9.30  (26s)
+  ep  10  loss 1.658  acc 42.06  best 50.23  (131s)
+  ep  20  loss 1.600  acc 49.66  best 50.61  (235s)
+  ep  30  loss 1.565  acc 47.99  best 50.75  (338s)
+  ep  40  loss 1.530  acc 52.38  best 52.38  (442s)
+  ep  50  loss 1.469  acc 49.36  best 53.39  (547s)
+  ep  60  loss 1.404  acc 45.15  best 54.41  (651s)
+  ep  70  loss 1.319  acc 50.73  best 56.32  (755s)
+  ep  80  loss 1.225  acc 57.27  best 57.39  (860s)
+  ep  90  loss 1.096  acc 58.49  best 61.28  (966s)
+  ep 100  loss 0.966  acc 63.04  best 63.04  (1069s)
+  ep 110  loss 0.796  acc 66.70  best 66.82  (1175s)
+  ep 120  loss 0.614  acc 69.26  best 69.26  (1284s)
+  ep 130  loss 0.403  acc 71.24  best 71.33  (1390s)
+  ep 140  loss 0.255  acc 72.66  best 73.00  (1495s)
+  ep 149  loss 0.219  acc 72.75  best 73.00  (1591s)
+[mobilenetv2 uniform seed=2] final=72.75 best=73.00 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_uniform_seed2.json
+[mobilenetv2 cifar100 uniform w64 K4 seed=3] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.270  acc 8.11  best 8.11  (27s)
+  ep  10  loss 1.660  acc 49.27  best 50.40  (135s)
+  ep  20  loss 1.586  acc 50.26  best 50.40  (240s)
+  ep  30  loss 1.561  acc 46.52  best 52.68  (345s)
+  ep  40  loss 1.517  acc 49.20  best 52.68  (451s)
+  ep  50  loss 1.471  acc 52.02  best 53.53  (555s)
+  ep  60  loss 1.409  acc 52.53  best 54.49  (660s)
+  ep  70  loss 1.326  acc 52.45  best 57.38  (766s)
+  ep  80  loss 1.222  acc 58.72  best 58.95  (870s)
+  ep  90  loss 1.107  acc 58.95  best 60.82  (975s)
+  ep 100  loss 0.961  acc 62.97  best 63.60  (1081s)
+  ep 110  loss 0.792  acc 65.92  best 66.42  (1185s)
+  ep 120  loss 0.608  acc 68.79  best 69.40  (1288s)
+  ep 130  loss 0.404  acc 70.92  best 71.68  (1394s)
+  ep 140  loss 0.259  acc 72.22  best 72.38  (1504s)
+  ep 149  loss 0.222  acc 72.24  best 72.38  (1601s)
+[mobilenetv2 uniform seed=3] final=72.24 best=72.38 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_uniform_seed3.json
+[mobilenetv2 cifar100 uniform w64 K4 seed=4] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.265  acc 9.68  best 9.68  (27s)
+  ep  10  loss 1.665  acc 45.99  best 47.89  (135s)
+  ep  20  loss 1.599  acc 51.80  best 51.80  (244s)
+  ep  30  loss 1.561  acc 47.73  best 51.80  (352s)
+  ep  40  loss 1.522  acc 50.86  best 51.94  (458s)
+  ep  50  loss 1.482  acc 50.52  best 52.90  (566s)
+  ep  60  loss 1.415  acc 54.61  best 55.30  (674s)
+  ep  70  loss 1.326  acc 54.12  best 55.30  (781s)
+  ep  80  loss 1.232  acc 57.69  best 58.19  (890s)
+  ep  90  loss 1.111  acc 61.33  best 61.33  (998s)
+  ep 100  loss 0.979  acc 62.57  best 63.63  (1105s)
+  ep 110  loss 0.816  acc 65.88  best 65.88  (1212s)
+  ep 120  loss 0.625  acc 68.55  best 68.78  (1320s)
+  ep 130  loss 0.418  acc 71.10  best 71.10  (1428s)
+  ep 140  loss 0.274  acc 72.26  best 72.26  (1534s)
+  ep 149  loss 0.236  acc 72.25  best 72.28  (1631s)
+[mobilenetv2 uniform seed=4] final=72.25 best=72.28 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_uniform_seed4.json
+[mobilenetv2 cifar100 uniform w64 K4 seed=5] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.258  acc 10.93  best 10.93  (28s)
+  ep  10  loss 1.657  acc 49.19  best 49.74  (137s)
+  ep  20  loss 1.595  acc 48.95  best 51.78  (244s)
+  ep  30  loss 1.562  acc 48.38  best 51.78  (354s)
+  ep  40  loss 1.521  acc 51.61  best 51.91  (462s)
+  ep  50  loss 1.481  acc 50.99  best 51.91  (572s)
+  ep  60  loss 1.411  acc 51.75  best 55.08  (681s)
+  ep  70  loss 1.334  acc 52.97  best 56.33  (790s)
+  ep  80  loss 1.232  acc 54.06  best 58.21  (897s)
+  ep  90  loss 1.119  acc 59.87  best 60.93  (1007s)
+  ep 100  loss 0.977  acc 63.74  best 64.68  (1116s)
+  ep 110  loss 0.814  acc 65.70  best 66.50  (1224s)
+  ep 120  loss 0.628  acc 68.87  best 68.87  (1332s)
+  ep 130  loss 0.428  acc 71.00  best 71.06  (1442s)
+  ep 140  loss 0.276  acc 72.19  best 72.19  (1551s)
+  ep 149  loss 0.240  acc 72.36  best 72.59  (1648s)
+[mobilenetv2 uniform seed=5] final=72.36 best=72.59 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_uniform_seed5.json
+[mobilenetv2 cifar100 gap w64 K4 seed=0] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.275  acc 7.67  best 7.67  (48s)
+  ep  10  loss 1.635  acc 49.22  best 49.72  (363s)
+  ep  20  loss 1.545  acc 47.97  best 51.62  (678s)
+  ep  30  loss 1.517  acc 50.44  best 52.29  (994s)
+  ep  40  loss 1.457  acc 50.91  best 53.44  (1310s)
+  ep  50  loss 1.411  acc 51.02  best 54.10  (1630s)
+  ep  60  loss 1.357  acc 53.56  best 55.63  (1946s)
+  ep  70  loss 1.281  acc 57.81  best 58.00  (2262s)
+  ep  80  loss 1.172  acc 58.00  best 58.70  (2577s)
+  ep  90  loss 1.057  acc 59.58  best 61.69  (2893s)
+  ep 100  loss 0.912  acc 62.40  best 64.86  (3208s)
+  ep 110  loss 0.746  acc 68.07  best 68.07  (3524s)
+  ep 120  loss 0.551  acc 71.08  best 71.08  (3841s)
+  ep 130  loss 0.351  acc 72.80  best 73.36  (4157s)
+  ep 140  loss 0.207  acc 73.85  best 74.00  (4473s)
+  ep 149  loss 0.173  acc 74.22  best 74.22  (4752s)
+[mobilenetv2 gap seed=0] final=74.22 best=74.22 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_gap_seed0.json
+[mobilenetv2 cifar100 gap w64 K4 seed=1] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.286  acc 7.74  best 7.74  (47s)
+  ep  10  loss 1.613  acc 48.74  best 48.76  (358s)
+  ep  20  loss 1.560  acc 48.36  best 52.21  (669s)
+  ep  30  loss 1.514  acc 49.79  best 52.44  (980s)
+  ep  40  loss 1.468  acc 48.33  best 53.92  (1291s)
+  ep  50  loss 1.423  acc 52.60  best 54.05  (1602s)
+  ep  60  loss 1.349  acc 55.75  best 57.20  (1913s)
+  ep  70  loss 1.269  acc 55.14  best 57.20  (2224s)
+  ep  80  loss 1.178  acc 58.97  best 59.41  (2535s)
+  ep  90  loss 1.053  acc 61.09  best 61.09  (2847s)
+  ep 100  loss 0.912  acc 65.32  best 65.32  (3158s)
+  ep 110  loss 0.746  acc 67.07  best 67.91  (3469s)
+  ep 120  loss 0.560  acc 70.25  best 70.25  (3780s)
+  ep 130  loss 0.348  acc 73.29  best 73.29  (4091s)
+  ep 140  loss 0.211  acc 73.35  best 73.42  (4402s)
+  ep 149  loss 0.176  acc 73.26  best 73.72  (4682s)
+[mobilenetv2 gap seed=1] final=73.26 best=73.72 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_gap_seed1.json
+[mobilenetv2 cifar100 gap w64 K4 seed=2] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.257  acc 8.81  best 8.81  (47s)
+  ep  10  loss 1.620  acc 41.15  best 49.57  (358s)
+  ep  20  loss 1.538  acc 47.50  best 54.14  (669s)
+  ep  30  loss 1.500  acc 51.95  best 54.14  (979s)
+  ep  40  loss 1.454  acc 54.26  best 54.26  (1290s)
+  ep  50  loss 1.405  acc 51.59  best 55.06  (1601s)
+  ep  60  loss 1.330  acc 54.47  best 55.85  (1912s)
+  ep  70  loss 1.255  acc 59.40  best 59.40  (2223s)
+  ep  80  loss 1.155  acc 59.17  best 59.48  (2534s)
+  ep  90  loss 1.041  acc 61.98  best 63.19  (2845s)
+  ep 100  loss 0.893  acc 64.28  best 64.40  (3156s)
+  ep 110  loss 0.716  acc 66.84  best 67.79  (3467s)
+  ep 120  loss 0.539  acc 70.46  best 70.46  (3778s)
+  ep 130  loss 0.323  acc 72.61  best 72.61  (4089s)
+  ep 140  loss 0.189  acc 73.56  best 73.82  (4400s)
+  ep 149  loss 0.159  acc 73.93  best 73.99  (4680s)
+[mobilenetv2 gap seed=2] final=73.93 best=73.99 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_gap_seed2.json
+[mobilenetv2 cifar100 gap w64 K4 seed=3] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.273  acc 9.29  best 9.29  (47s)
+  ep  10  loss 1.628  acc 45.77  best 47.28  (358s)
+  ep  20  loss 1.548  acc 49.76  best 51.44  (668s)
+  ep  30  loss 1.502  acc 51.99  best 51.99  (979s)
+  ep  40  loss 1.467  acc 51.30  best 53.77  (1290s)
+  ep  50  loss 1.418  acc 53.90  best 55.39  (1601s)
+  ep  60  loss 1.341  acc 54.66  best 56.05  (1912s)
+  ep  70  loss 1.267  acc 56.89  best 57.56  (2222s)
+  ep  80  loss 1.166  acc 57.01  best 59.40  (2533s)
+  ep  90  loss 1.045  acc 61.05  best 63.11  (2844s)
+  ep 100  loss 0.903  acc 64.66  best 65.59  (3154s)
+  ep 110  loss 0.740  acc 68.71  best 68.71  (3465s)
+  ep 120  loss 0.552  acc 70.67  best 70.67  (3776s)
+  ep 130  loss 0.344  acc 72.77  best 72.86  (4087s)
+  ep 140  loss 0.204  acc 73.89  best 73.89  (4397s)
+  ep 149  loss 0.168  acc 73.91  best 74.00  (4677s)
+[mobilenetv2 gap seed=3] final=73.91 best=74.00 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_gap_seed3.json
+[mobilenetv2 cifar100 gap w64 K4 seed=4] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.258  acc 7.66  best 7.66  (47s)
+  ep  10  loss 1.626  acc 48.21  best 48.25  (356s)
+  ep  20  loss 1.541  acc 47.39  best 50.90  (666s)
+  ep  30  loss 1.513  acc 52.75  best 53.26  (976s)
+  ep  40  loss 1.461  acc 52.85  best 54.61  (1286s)
+  ep  50  loss 1.401  acc 52.22  best 54.71  (1596s)
+  ep  60  loss 1.347  acc 55.47  best 55.47  (1906s)
+  ep  70  loss 1.274  acc 56.46  best 57.74  (2216s)
+  ep  80  loss 1.165  acc 59.06  best 59.06  (2526s)
+  ep  90  loss 1.050  acc 60.60  best 61.68  (2836s)
+  ep 100  loss 0.905  acc 63.72  best 64.29  (3146s)
+  ep 110  loss 0.745  acc 67.41  best 67.68  (3456s)
+  ep 120  loss 0.547  acc 70.99  best 70.99  (3765s)
+  ep 130  loss 0.338  acc 72.75  best 72.75  (4075s)
+  ep 140  loss 0.200  acc 73.28  best 73.85  (4385s)
+  ep 149  loss 0.170  acc 73.60  best 73.85  (4664s)
+[mobilenetv2 gap seed=4] final=73.60 best=73.85 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_gap_seed4.json
+[mobilenetv2 cifar100 gap w64 K4 seed=5] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.255  acc 9.58  best 9.58  (47s)
+  ep  10  loss 1.619  acc 49.75  best 50.18  (357s)
+  ep  20  loss 1.528  acc 50.09  best 50.64  (667s)
+  ep  30  loss 1.494  acc 50.18  best 52.24  (977s)
+  ep  40  loss 1.449  acc 49.21  best 52.24  (1287s)
+  ep  50  loss 1.399  acc 49.22  best 54.53  (1598s)
+  ep  60  loss 1.330  acc 54.67  best 55.71  (1908s)
+  ep  70  loss 1.255  acc 56.08  best 58.47  (2218s)
+  ep  80  loss 1.155  acc 57.63  best 59.99  (2528s)
+  ep  90  loss 1.030  acc 62.35  best 62.79  (2838s)
+  ep 100  loss 0.895  acc 65.09  best 65.23  (3149s)
+  ep 110  loss 0.728  acc 67.61  best 67.72  (3459s)
+  ep 120  loss 0.534  acc 70.13  best 70.25  (3769s)
+  ep 130  loss 0.325  acc 72.33  best 72.37  (4079s)
+  ep 140  loss 0.190  acc 73.38  best 73.56  (4389s)
+  ep 149  loss 0.160  acc 73.61  best 73.84  (4669s)
+[mobilenetv2 gap seed=5] final=73.61 best=73.84 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_gap_seed5.json
+[mobilenetv2 cifar100 shuffled w64 K4 seed=0] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.277  acc 8.97  best 8.97  (50s)
+  ep  10  loss 1.662  acc 42.04  best 46.53  (394s)
+  ep  20  loss 1.596  acc 49.31  best 50.87  (738s)
+  ep  30  loss 1.575  acc 51.71  best 51.71  (1083s)
+  ep  40  loss 1.539  acc 48.89  best 51.71  (1428s)
+  ep  50  loss 1.477  acc 48.04  best 54.23  (1772s)
+  ep  60  loss 1.424  acc 54.05  best 54.61  (2116s)
+  ep  70  loss 1.333  acc 53.70  best 56.15  (2460s)
+  ep  80  loss 1.229  acc 58.59  best 58.59  (2804s)
+  ep  90  loss 1.114  acc 56.94  best 61.45  (3148s)
+  ep 100  loss 0.980  acc 63.23  best 64.48  (3492s)
+  ep 110  loss 0.815  acc 65.44  best 66.11  (3837s)
+  ep 120  loss 0.630  acc 69.33  best 69.33  (4181s)
+  ep 130  loss 0.420  acc 71.14  best 71.14  (4525s)
+  ep 140  loss 0.275  acc 71.96  best 72.22  (4869s)
+  ep 149  loss 0.237  acc 72.34  best 72.36  (5178s)
+[mobilenetv2 shuffled seed=0] final=72.34 best=72.36 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_shuffled_seed0.json
+[mobilenetv2 cifar100 shuffled w64 K4 seed=1] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.268  acc 9.80  best 9.80  (50s)
+  ep  10  loss 1.654  acc 44.87  best 48.90  (394s)
+  ep  20  loss 1.597  acc 49.03  best 51.52  (737s)
+  ep  30  loss 1.559  acc 47.59  best 51.52  (1081s)
+  ep  40  loss 1.517  acc 52.38  best 52.38  (1424s)
+  ep  50  loss 1.471  acc 52.00  best 53.61  (1767s)
+  ep  60  loss 1.397  acc 56.06  best 56.06  (2111s)
+  ep  70  loss 1.323  acc 55.58  best 56.06  (2454s)
+  ep  80  loss 1.220  acc 58.63  best 59.33  (2797s)
+  ep  90  loss 1.100  acc 60.87  best 60.87  (3139s)
+  ep 100  loss 0.961  acc 64.60  best 64.60  (3482s)
+  ep 110  loss 0.806  acc 65.45  best 66.84  (3825s)
+  ep 120  loss 0.611  acc 68.76  best 68.82  (4168s)
+  ep 130  loss 0.405  acc 71.74  best 71.74  (4511s)
+  ep 140  loss 0.261  acc 72.64  best 72.64  (4854s)
+  ep 149  loss 0.222  acc 72.62  best 72.81  (5163s)
+[mobilenetv2 shuffled seed=1] final=72.62 best=72.81 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_shuffled_seed1.json
+[mobilenetv2 cifar100 shuffled w64 K4 seed=2] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.235  acc 10.03  best 10.03  (50s)
+  ep  10  loss 1.654  acc 46.48  best 48.30  (394s)
+  ep  20  loss 1.593  acc 43.43  best 50.57  (738s)
+  ep  30  loss 1.541  acc 50.11  best 51.10  (1082s)
+  ep  40  loss 1.517  acc 51.41  best 51.75  (1426s)
+  ep  50  loss 1.468  acc 45.77  best 52.88  (1770s)
+  ep  60  loss 1.399  acc 54.30  best 55.91  (2114s)
+  ep  70  loss 1.323  acc 57.19  best 57.19  (2458s)
+  ep  80  loss 1.225  acc 57.09  best 58.40  (2802s)
+  ep  90  loss 1.108  acc 60.55  best 61.00  (3146s)
+  ep 100  loss 0.976  acc 63.82  best 63.82  (3490s)
+  ep 110  loss 0.802  acc 65.69  best 66.15  (3834s)
+  ep 120  loss 0.615  acc 68.94  best 68.94  (4177s)
+  ep 130  loss 0.401  acc 71.40  best 71.40  (4521s)
+  ep 140  loss 0.259  acc 72.56  best 72.74  (4865s)
+  ep 149  loss 0.225  acc 72.54  best 72.78  (5175s)
+[mobilenetv2 shuffled seed=2] final=72.54 best=72.78 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_shuffled_seed2.json
+[mobilenetv2 cifar100 shuffled w64 K4 seed=3] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.288  acc 7.55  best 7.55  (50s)
+  ep  10  loss 1.656  acc 46.49  best 50.15  (392s)
+  ep  20  loss 1.600  acc 47.62  best 50.24  (735s)
+  ep  30  loss 1.557  acc 51.13  best 51.13  (1077s)
+  ep  40  loss 1.532  acc 49.28  best 51.13  (1419s)
+  ep  50  loss 1.475  acc 51.41  best 52.56  (1762s)
+  ep  60  loss 1.407  acc 51.42  best 55.70  (2104s)
+  ep  70  loss 1.325  acc 54.24  best 57.60  (2447s)
+  ep  80  loss 1.222  acc 59.55  best 59.55  (2789s)
+  ep  90  loss 1.109  acc 61.31  best 61.31  (3131s)
+  ep 100  loss 0.972  acc 62.62  best 62.85  (3473s)
+  ep 110  loss 0.810  acc 66.89  best 66.89  (3816s)
+  ep 120  loss 0.617  acc 68.40  best 68.88  (4158s)
+  ep 130  loss 0.419  acc 71.27  best 71.27  (4506s)
+  ep 140  loss 0.272  acc 72.61  best 72.61  (4857s)
+  ep 149  loss 0.232  acc 72.74  best 72.83  (5172s)
+[mobilenetv2 shuffled seed=3] final=72.74 best=72.83 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_shuffled_seed3.json
+[mobilenetv2 cifar100 shuffled w64 K4 seed=4] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.269  acc 9.59  best 9.59  (51s)
+  ep  10  loss 1.664  acc 50.26  best 50.26  (396s)
+  ep  20  loss 1.594  acc 49.99  best 50.26  (739s)
+  ep  30  loss 1.574  acc 48.80  best 52.22  (1082s)
+  ep  40  loss 1.527  acc 49.41  best 52.22  (1492s)
+  ep  50  loss 1.469  acc 54.44  best 54.44  (1920s)
+  ep  60  loss 1.402  acc 52.84  best 54.75  (2349s)
+  ep  70  loss 1.329  acc 54.70  best 56.42  (2774s)
+  ep  80  loss 1.230  acc 58.97  best 58.97  (3204s)
+  ep  90  loss 1.114  acc 59.40  best 60.19  (3636s)
+  ep 100  loss 0.965  acc 62.82  best 63.08  (4063s)
+  ep 110  loss 0.813  acc 65.95  best 65.95  (4490s)
+  ep 120  loss 0.619  acc 69.35  best 69.35  (4934s)
+  ep 130  loss 0.413  acc 71.79  best 71.79  (5366s)
+  ep 140  loss 0.266  acc 72.86  best 72.86  (5794s)
+  ep 149  loss 0.232  acc 72.89  best 73.18  (6183s)
+[mobilenetv2 shuffled seed=4] final=72.89 best=73.18 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_shuffled_seed4.json
+[mobilenetv2 cifar100 shuffled w64 K4 seed=5] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.266  acc 9.74  best 9.74  (59s)
+  ep  10  loss 1.657  acc 45.84  best 49.15  (492s)
+  ep  20  loss 1.591  acc 48.10  best 50.38  (917s)
+  ep  30  loss 1.557  acc 43.17  best 52.00  (1342s)
+  ep  40  loss 1.519  acc 50.47  best 52.00  (1766s)
+  ep  50  loss 1.466  acc 50.55  best 52.42  (2193s)
+  ep  60  loss 1.419  acc 50.82  best 55.42  (2632s)
+  ep  70  loss 1.326  acc 52.86  best 55.46  (3072s)
+  ep  80  loss 1.235  acc 58.03  best 58.03  (3535s)
+  ep  90  loss 1.115  acc 60.77  best 60.77  (3973s)
+  ep 100  loss 0.974  acc 60.95  best 63.14  (4413s)
+  ep 110  loss 0.812  acc 66.40  best 66.43  (4851s)
+  ep 120  loss 0.622  acc 69.20  best 69.20  (5258s)
+  ep 130  loss 0.410  acc 70.81  best 71.04  (5601s)
+  ep 140  loss 0.259  acc 72.45  best 72.45  (5945s)
+  ep 149  loss 0.223  acc 72.47  best 72.60  (6254s)
+[mobilenetv2 shuffled seed=5] final=72.47 best=72.60 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_shuffled_seed5.json
+[mobilenetv2 cifar100 frozen_random w64 K4 seed=0] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.286  acc 8.94  best 8.94  (46s)
+  ep  10  loss 1.635  acc 50.08  best 50.08  (352s)
+  ep  20  loss 1.553  acc 47.25  best 51.77  (658s)
+  ep  30  loss 1.512  acc 50.42  best 51.77  (964s)
+  ep  40  loss 1.462  acc 51.05  best 53.45  (1269s)
+  ep  50  loss 1.425  acc 52.03  best 53.45  (1576s)
+  ep  60  loss 1.353  acc 55.90  best 55.90  (1882s)
+  ep  70  loss 1.271  acc 56.49  best 57.97  (2187s)
+  ep  80  loss 1.165  acc 60.42  best 60.42  (2493s)
+  ep  90  loss 1.056  acc 62.58  best 62.58  (2800s)
+  ep 100  loss 0.917  acc 64.80  best 64.83  (3106s)
+  ep 110  loss 0.744  acc 67.35  best 67.67  (3412s)
+  ep 120  loss 0.549  acc 69.77  best 70.26  (3718s)
+  ep 130  loss 0.338  acc 72.62  best 72.62  (4024s)
+  ep 140  loss 0.200  acc 73.90  best 73.90  (4329s)
+  ep 149  loss 0.164  acc 74.22  best 74.28  (4605s)
+[mobilenetv2 frozen_random seed=0] final=74.22 best=74.28 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_frozen_random_seed0.json
+[mobilenetv2 cifar100 frozen_random w64 K4 seed=1] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.272  acc 7.66  best 7.66  (46s)
+  ep  10  loss 1.631  acc 50.10  best 50.10  (352s)
+  ep  20  loss 1.548  acc 49.78  best 50.69  (658s)
+  ep  30  loss 1.515  acc 50.30  best 53.08  (964s)
+  ep  40  loss 1.470  acc 49.57  best 53.82  (1269s)
+  ep  50  loss 1.413  acc 53.98  best 53.98  (1574s)
+  ep  60  loss 1.349  acc 55.34  best 57.08  (1880s)
+  ep  70  loss 1.261  acc 56.22  best 57.50  (2185s)
+  ep  80  loss 1.168  acc 59.86  best 59.86  (2493s)
+  ep  90  loss 1.051  acc 61.17  best 61.98  (2799s)
+  ep 100  loss 0.912  acc 64.64  best 64.64  (3107s)
+  ep 110  loss 0.756  acc 68.09  best 68.09  (3439s)
+  ep 120  loss 0.565  acc 70.76  best 70.76  (3776s)
+  ep 130  loss 0.356  acc 73.18  best 73.18  (4113s)
+  ep 140  loss 0.213  acc 74.02  best 74.02  (4453s)
+  ep 149  loss 0.183  acc 74.30  best 74.59  (4756s)
+[mobilenetv2 frozen_random seed=1] final=74.30 best=74.59 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_frozen_random_seed1.json
+[mobilenetv2 cifar100 frozen_random w64 K4 seed=2] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.267  acc 9.56  best 9.56  (50s)
+  ep  10  loss 1.633  acc 47.23  best 49.95  (385s)
+  ep  20  loss 1.562  acc 50.53  best 51.30  (699s)
+  ep  30  loss 1.518  acc 48.24  best 52.65  (1006s)
+  ep  40  loss 1.473  acc 51.56  best 52.80  (1311s)
+  ep  50  loss 1.429  acc 53.68  best 57.58  (1616s)
+  ep  60  loss 1.363  acc 51.59  best 57.58  (1922s)
+  ep  70  loss 1.271  acc 56.81  best 57.58  (2227s)
+  ep  80  loss 1.174  acc 59.85  best 59.85  (2535s)
+  ep  90  loss 1.051  acc 63.03  best 63.03  (2841s)
+  ep 100  loss 0.923  acc 63.99  best 64.36  (3148s)
+  ep 110  loss 0.758  acc 66.88  best 66.88  (3453s)
+  ep 120  loss 0.560  acc 70.29  best 70.29  (3758s)
+  ep 130  loss 0.361  acc 72.16  best 72.18  (4069s)
+  ep 140  loss 0.214  acc 73.61  best 73.61  (4379s)
+  ep 149  loss 0.185  acc 73.81  best 73.81  (4658s)
+[mobilenetv2 frozen_random seed=2] final=73.81 best=73.81 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_frozen_random_seed2.json
+[mobilenetv2 cifar100 frozen_random w64 K4 seed=3] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.299  acc 8.37  best 8.37  (48s)
+  ep  10  loss 1.653  acc 48.21  best 50.40  (354s)
+  ep  20  loss 1.568  acc 50.19  best 50.40  (660s)
+  ep  30  loss 1.521  acc 50.60  best 53.65  (965s)
+  ep  40  loss 1.472  acc 43.22  best 53.75  (1270s)
+  ep  50  loss 1.421  acc 52.89  best 54.26  (1576s)
+  ep  60  loss 1.365  acc 51.61  best 57.32  (1881s)
+  ep  70  loss 1.282  acc 55.18  best 57.40  (2186s)
+  ep  80  loss 1.181  acc 57.66  best 58.97  (2492s)
+  ep  90  loss 1.063  acc 59.98  best 61.33  (2797s)
+  ep 100  loss 0.916  acc 62.66  best 65.25  (3103s)
+  ep 110  loss 0.745  acc 65.61  best 67.21  (3408s)
+  ep 120  loss 0.556  acc 69.36  best 70.35  (3714s)
+  ep 130  loss 0.346  acc 72.12  best 72.13  (4019s)
+  ep 140  loss 0.208  acc 72.89  best 73.16  (4324s)
+  ep 149  loss 0.174  acc 73.34  best 73.39  (4598s)
+[mobilenetv2 frozen_random seed=3] final=73.34 best=73.39 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_frozen_random_seed3.json
+[mobilenetv2 cifar100 frozen_random w64 K4 seed=4] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.286  acc 9.05  best 9.05  (46s)
+  ep  10  loss 1.633  acc 50.49  best 50.49  (352s)
+  ep  20  loss 1.539  acc 46.53  best 50.56  (658s)
+  ep  30  loss 1.505  acc 50.54  best 51.74  (964s)
+  ep  40  loss 1.466  acc 48.39  best 54.50  (1270s)
+  ep  50  loss 1.410  acc 54.85  best 54.85  (1575s)
+  ep  60  loss 1.354  acc 50.38  best 56.75  (1882s)
+  ep  70  loss 1.261  acc 57.61  best 57.61  (2190s)
+  ep  80  loss 1.164  acc 55.92  best 59.23  (2500s)
+  ep  90  loss 1.046  acc 61.73  best 62.25  (2810s)
+  ep 100  loss 0.909  acc 64.24  best 65.07  (3121s)
+  ep 110  loss 0.747  acc 67.58  best 68.24  (3431s)
+  ep 120  loss 0.545  acc 70.36  best 70.36  (3741s)
+  ep 130  loss 0.339  acc 72.51  best 72.51  (4051s)
+  ep 140  loss 0.199  acc 73.81  best 73.81  (4357s)
+  ep 149  loss 0.167  acc 73.87  best 73.96  (4635s)
+[mobilenetv2 frozen_random seed=4] final=73.87 best=73.96 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_frozen_random_seed4.json
+[mobilenetv2 cifar100 frozen_random w64 K4 seed=5] device=cuda params=2.54M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.286  acc 10.69  best 10.69  (47s)
+  ep  10  loss 1.635  acc 48.09  best 48.99  (358s)
+  ep  20  loss 1.542  acc 48.24  best 49.13  (663s)
+  ep  30  loss 1.504  acc 51.16  best 52.08  (969s)
+  ep  40  loss 1.463  acc 50.31  best 52.47  (1274s)
+  ep  50  loss 1.426  acc 52.51  best 52.51  (1579s)
+  ep  60  loss 1.356  acc 53.15  best 56.69  (1886s)
+  ep  70  loss 1.285  acc 55.62  best 56.69  (2191s)
+  ep  80  loss 1.173  acc 54.94  best 58.00  (2500s)
+  ep  90  loss 1.059  acc 61.50  best 61.50  (2805s)
+  ep 100  loss 0.922  acc 63.80  best 64.64  (3110s)
+  ep 110  loss 0.750  acc 67.66  best 68.66  (3418s)
+  ep 120  loss 0.562  acc 70.14  best 70.41  (3724s)
+  ep 130  loss 0.349  acc 72.20  best 72.45  (4029s)
+  ep 140  loss 0.205  acc 73.62  best 73.68  (4338s)
+  ep 149  loss 0.177  acc 73.90  best 73.95  (4618s)
+[mobilenetv2 frozen_random seed=5] final=73.90 best=73.95 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__const_frozen_random_seed5.json
+[mobilenetv2 cifar100 static w32 K4 seed=0] device=cuda params=0.82M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.339  acc 7.84  best 7.84  (23s)
+  ep  10  loss 1.833  acc 40.49  best 43.78  (98s)
+  ep  20  loss 1.718  acc 48.29  best 48.29  (173s)
+  ep  30  loss 1.653  acc 45.44  best 48.70  (246s)
+  ep  40  loss 1.614  acc 50.90  best 50.90  (318s)
+  ep  50  loss 1.555  acc 49.20  best 52.35  (390s)
+  ep  60  loss 1.481  acc 50.50  best 52.35  (464s)
+  ep  70  loss 1.408  acc 53.82  best 54.46  (537s)
+  ep  80  loss 1.311  acc 51.05  best 56.86  (609s)
+  ep  90  loss 1.210  acc 57.12  best 57.89  (680s)
+  ep 100  loss 1.066  acc 60.10  best 61.32  (750s)
+  ep 110  loss 0.930  acc 62.62  best 64.55  (823s)
+  ep 120  loss 0.767  acc 66.36  best 67.16  (895s)
+  ep 130  loss 0.591  acc 68.71  best 69.38  (965s)
+  ep 140  loss 0.458  acc 71.03  best 71.03  (1034s)
+  ep 149  loss 0.412  acc 70.92  best 71.03  (1097s)
+[mobilenetv2 static seed=0] final=70.92 best=71.03 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_static_seed0.json
+[mobilenetv2 cifar100 static w32 K4 seed=1] device=cuda params=0.82M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.386  acc 7.25  best 7.25  (23s)
+  ep  10  loss 1.842  acc 46.48  best 46.48  (95s)
+  ep  20  loss 1.710  acc 45.82  best 47.49  (167s)
+  ep  30  loss 1.655  acc 47.81  best 50.46  (238s)
+  ep  40  loss 1.600  acc 48.30  best 50.46  (308s)
+  ep  50  loss 1.556  acc 51.22  best 51.22  (379s)
+  ep  60  loss 1.480  acc 50.40  best 53.20  (451s)
+  ep  70  loss 1.400  acc 53.58  best 54.31  (524s)
+  ep  80  loss 1.316  acc 54.54  best 56.47  (594s)
+  ep  90  loss 1.204  acc 57.96  best 59.26  (665s)
+  ep 100  loss 1.079  acc 62.34  best 62.34  (736s)
+  ep 110  loss 0.937  acc 65.20  best 65.20  (808s)
+  ep 120  loss 0.770  acc 66.99  best 67.16  (880s)
+  ep 130  loss 0.597  acc 69.25  best 69.46  (951s)
+  ep 140  loss 0.463  acc 70.75  best 70.75  (1021s)
+  ep 149  loss 0.418  acc 71.05  best 71.05  (1084s)
+[mobilenetv2 static seed=1] final=71.05 best=71.05 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_static_seed1.json
+[mobilenetv2 cifar100 static w32 K4 seed=2] device=cuda params=0.82M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.355  acc 7.70  best 7.70  (22s)
+  ep  10  loss 1.832  acc 44.04  best 44.04  (95s)
+  ep  20  loss 1.700  acc 45.79  best 45.99  (166s)
+  ep  30  loss 1.646  acc 41.76  best 49.46  (236s)
+  ep  40  loss 1.601  acc 47.09  best 49.93  (306s)
+  ep  50  loss 1.547  acc 51.15  best 52.43  (377s)
+  ep  60  loss 1.480  acc 47.00  best 53.48  (450s)
+  ep  70  loss 1.395  acc 52.16  best 55.19  (524s)
+  ep  80  loss 1.301  acc 55.39  best 57.05  (594s)
+  ep  90  loss 1.195  acc 59.09  best 59.09  (666s)
+  ep 100  loss 1.072  acc 60.41  best 63.65  (736s)
+  ep 110  loss 0.926  acc 64.27  best 64.39  (808s)
+  ep 120  loss 0.755  acc 67.68  best 67.68  (880s)
+  ep 130  loss 0.580  acc 69.37  best 69.57  (951s)
+  ep 140  loss 0.446  acc 70.75  best 70.75  (1021s)
+  ep 149  loss 0.404  acc 70.71  best 71.00  (1084s)
+[mobilenetv2 static seed=2] final=70.71 best=71.00 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_static_seed2.json
+[mobilenetv2 cifar100 static w32 K4 seed=3] device=cuda params=0.82M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.359  acc 7.87  best 7.87  (22s)
+  ep  10  loss 1.818  acc 42.90  best 46.59  (96s)
+  ep  20  loss 1.704  acc 45.81  best 46.59  (168s)
+  ep  30  loss 1.666  acc 45.16  best 48.97  (239s)
+  ep  40  loss 1.606  acc 46.63  best 51.40  (309s)
+  ep  50  loss 1.538  acc 51.17  best 51.54  (379s)
+  ep  60  loss 1.477  acc 48.83  best 53.17  (450s)
+  ep  70  loss 1.394  acc 55.32  best 55.59  (522s)
+  ep  80  loss 1.297  acc 55.19  best 56.18  (594s)
+  ep  90  loss 1.193  acc 56.20  best 57.86  (663s)
+  ep 100  loss 1.061  acc 61.77  best 62.05  (733s)
+  ep 110  loss 0.920  acc 64.96  best 64.96  (806s)
+  ep 120  loss 0.756  acc 67.75  best 67.75  (879s)
+  ep 130  loss 0.577  acc 69.55  best 69.55  (949s)
+  ep 140  loss 0.436  acc 70.75  best 70.75  (1019s)
+  ep 149  loss 0.399  acc 70.80  best 71.19  (1082s)
+[mobilenetv2 static seed=3] final=70.80 best=71.19 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_static_seed3.json
+[mobilenetv2 cifar100 static w32 K4 seed=4] device=cuda params=0.82M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.405  acc 7.38  best 7.38  (23s)
+  ep  10  loss 1.826  acc 40.20  best 43.89  (95s)
+  ep  20  loss 1.711  acc 47.11  best 47.35  (166s)
+  ep  30  loss 1.653  acc 46.77  best 49.79  (237s)
+  ep  40  loss 1.609  acc 48.84  best 49.79  (306s)
+  ep  50  loss 1.552  acc 50.08  best 51.08  (376s)
+  ep  60  loss 1.480  acc 50.05  best 52.74  (447s)
+  ep  70  loss 1.413  acc 55.29  best 55.29  (518s)
+  ep  80  loss 1.317  acc 54.61  best 55.32  (588s)
+  ep  90  loss 1.203  acc 57.09  best 58.55  (657s)
+  ep 100  loss 1.067  acc 60.89  best 60.89  (728s)
+  ep 110  loss 0.923  acc 63.74  best 64.85  (799s)
+  ep 120  loss 0.763  acc 67.24  best 67.63  (872s)
+  ep 130  loss 0.581  acc 69.03  best 69.34  (942s)
+  ep 140  loss 0.450  acc 69.96  best 70.27  (1012s)
+  ep 149  loss 0.409  acc 70.41  best 70.42  (1075s)
+[mobilenetv2 static seed=4] final=70.41 best=70.42 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_static_seed4.json
+[mobilenetv2 cifar100 static w32 K4 seed=5] device=cuda params=0.82M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.313  acc 7.63  best 7.63  (23s)
+  ep  10  loss 1.844  acc 44.79  best 44.79  (95s)
+  ep  20  loss 1.721  acc 47.84  best 47.84  (166s)
+  ep  30  loss 1.667  acc 48.65  best 48.65  (236s)
+  ep  40  loss 1.605  acc 43.97  best 50.75  (305s)
+  ep  50  loss 1.548  acc 49.51  best 50.98  (375s)
+  ep  60  loss 1.494  acc 52.71  best 52.71  (446s)
+  ep  70  loss 1.414  acc 54.76  best 54.76  (517s)
+  ep  80  loss 1.321  acc 57.09  best 57.09  (588s)
+  ep  90  loss 1.206  acc 57.97  best 58.27  (657s)
+  ep 100  loss 1.075  acc 63.16  best 63.16  (728s)
+  ep 110  loss 0.929  acc 64.42  best 64.61  (799s)
+  ep 120  loss 0.769  acc 67.05  best 67.05  (871s)
+  ep 130  loss 0.590  acc 69.10  best 69.60  (941s)
+  ep 140  loss 0.458  acc 70.97  best 70.97  (1010s)
+  ep 149  loss 0.415  acc 70.76  best 70.97  (1073s)
+[mobilenetv2 static seed=5] final=70.76 best=70.97 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_static_seed5.json
+[mobilenetv2 cifar100 uniform w32 K4 seed=0] device=cuda params=0.91M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.364  acc 5.91  best 5.91  (24s)
+  ep  10  loss 1.833  acc 43.55  best 44.78  (112s)
+  ep  20  loss 1.722  acc 41.89  best 48.74  (197s)
+  ep  30  loss 1.662  acc 44.59  best 49.39  (281s)
+  ep  40  loss 1.623  acc 44.76  best 49.39  (365s)
+  ep  50  loss 1.570  acc 49.32  best 50.17  (452s)
+  ep  60  loss 1.500  acc 48.28  best 53.85  (538s)
+  ep  70  loss 1.424  acc 51.59  best 53.85  (622s)
+  ep  80  loss 1.323  acc 54.90  best 57.62  (707s)
+  ep  90  loss 1.217  acc 58.07  best 59.50  (793s)
+  ep 100  loss 1.086  acc 60.57  best 61.83  (880s)
+  ep 110  loss 0.943  acc 63.57  best 64.15  (964s)
+  ep 120  loss 0.785  acc 66.21  best 66.54  (1048s)
+  ep 130  loss 0.609  acc 69.26  best 69.26  (1135s)
+  ep 140  loss 0.463  acc 70.43  best 70.43  (1222s)
+  ep 149  loss 0.427  acc 70.49  best 70.76  (1297s)
+[mobilenetv2 uniform seed=0] final=70.49 best=70.76 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_uniform_seed0.json
+[mobilenetv2 cifar100 uniform w32 K4 seed=1] device=cuda params=0.91M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.350  acc 8.27  best 8.27  (24s)
+  ep  10  loss 1.825  acc 46.81  best 46.81  (110s)
+  ep  20  loss 1.718  acc 45.96  best 46.81  (197s)
+  ep  30  loss 1.664  acc 45.88  best 48.17  (284s)
+  ep  40  loss 1.615  acc 46.03  best 48.97  (368s)
+  ep  50  loss 1.556  acc 53.29  best 53.29  (453s)
+  ep  60  loss 1.492  acc 50.77  best 53.29  (540s)
+  ep  70  loss 1.415  acc 52.69  best 53.29  (628s)
+  ep  80  loss 1.319  acc 56.41  best 56.57  (711s)
+  ep  90  loss 1.206  acc 56.57  best 58.53  (796s)
+  ep 100  loss 1.090  acc 60.79  best 61.13  (881s)
+  ep 110  loss 0.938  acc 64.00  best 64.00  (970s)
+  ep 120  loss 0.775  acc 67.34  best 67.34  (1055s)
+  ep 130  loss 0.594  acc 69.07  best 69.16  (1139s)
+  ep 140  loss 0.455  acc 70.13  best 70.43  (1225s)
+  ep 149  loss 0.414  acc 70.39  best 70.55  (1304s)
+[mobilenetv2 uniform seed=1] final=70.39 best=70.55 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_uniform_seed1.json
+[mobilenetv2 cifar100 uniform w32 K4 seed=2] device=cuda params=0.91M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.361  acc 6.75  best 6.75  (25s)
+  ep  10  loss 1.842  acc 43.75  best 43.75  (108s)
+  ep  20  loss 1.731  acc 35.19  best 46.66  (191s)
+  ep  30  loss 1.655  acc 48.05  best 50.04  (275s)
+  ep  40  loss 1.610  acc 47.56  best 50.04  (361s)
+  ep  50  loss 1.549  acc 44.05  best 51.92  (446s)
+  ep  60  loss 1.481  acc 52.89  best 52.89  (529s)
+  ep  70  loss 1.399  acc 52.26  best 54.06  (613s)
+  ep  80  loss 1.307  acc 56.93  best 56.93  (698s)
+  ep  90  loss 1.195  acc 59.11  best 59.51  (784s)
+  ep 100  loss 1.074  acc 61.48  best 61.48  (868s)
+  ep 110  loss 0.923  acc 64.85  best 64.85  (951s)
+  ep 120  loss 0.758  acc 66.72  best 66.72  (1037s)
+  ep 130  loss 0.585  acc 69.40  best 69.76  (1123s)
+  ep 140  loss 0.445  acc 70.75  best 70.75  (1205s)
+  ep 149  loss 0.401  acc 70.98  best 71.00  (1281s)
+[mobilenetv2 uniform seed=2] final=70.98 best=71.00 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_uniform_seed2.json
+[mobilenetv2 cifar100 uniform w32 K4 seed=3] device=cuda params=0.91M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.316  acc 8.04  best 8.04  (24s)
+  ep  10  loss 1.852  acc 40.69  best 44.04  (111s)
+  ep  20  loss 1.729  acc 47.08  best 47.60  (198s)
+  ep  30  loss 1.667  acc 48.33  best 48.33  (282s)
+  ep  40  loss 1.636  acc 50.35  best 50.35  (366s)
+  ep  50  loss 1.580  acc 47.36  best 51.28  (452s)
+  ep  60  loss 1.506  acc 51.08  best 52.18  (539s)
+  ep  70  loss 1.427  acc 50.50  best 54.19  (624s)
+  ep  80  loss 1.332  acc 50.92  best 55.96  (708s)
+  ep  90  loss 1.219  acc 59.19  best 59.19  (792s)
+  ep 100  loss 1.097  acc 61.55  best 61.55  (881s)
+  ep 110  loss 0.949  acc 63.92  best 63.92  (966s)
+  ep 120  loss 0.787  acc 66.87  best 66.87  (1050s)
+  ep 130  loss 0.615  acc 68.76  best 68.76  (1135s)
+  ep 140  loss 0.480  acc 70.31  best 70.35  (1221s)
+  ep 149  loss 0.438  acc 70.72  best 70.72  (1300s)
+[mobilenetv2 uniform seed=3] final=70.72 best=70.72 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_uniform_seed3.json
+[mobilenetv2 cifar100 uniform w32 K4 seed=4] device=cuda params=0.91M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.332  acc 9.15  best 9.15  (24s)
+  ep  10  loss 1.820  acc 43.30  best 43.30  (108s)
+  ep  20  loss 1.703  acc 40.11  best 44.81  (193s)
+  ep  30  loss 1.653  acc 44.72  best 49.62  (279s)
+  ep  40  loss 1.609  acc 41.36  best 49.62  (366s)
+  ep  50  loss 1.567  acc 47.09  best 51.26  (450s)
+  ep  60  loss 1.491  acc 50.63  best 53.23  (534s)
+  ep  70  loss 1.413  acc 52.06  best 53.31  (620s)
+  ep  80  loss 1.315  acc 53.76  best 55.33  (708s)
+  ep  90  loss 1.208  acc 58.06  best 58.06  (792s)
+  ep 100  loss 1.083  acc 60.07  best 60.33  (877s)
+  ep 110  loss 0.931  acc 64.19  best 64.54  (963s)
+  ep 120  loss 0.766  acc 67.16  best 67.45  (1051s)
+  ep 130  loss 0.588  acc 69.49  best 69.49  (1134s)
+  ep 140  loss 0.455  acc 70.33  best 70.42  (1219s)
+  ep 149  loss 0.411  acc 70.75  best 70.91  (1294s)
+[mobilenetv2 uniform seed=4] final=70.75 best=70.91 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_uniform_seed4.json
+[mobilenetv2 cifar100 uniform w32 K4 seed=5] device=cuda params=0.91M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.336  acc 7.24  best 7.24  (25s)
+  ep  10  loss 1.822  acc 43.21  best 44.43  (113s)
+  ep  20  loss 1.719  acc 47.21  best 47.21  (197s)
+  ep  30  loss 1.661  acc 43.73  best 49.25  (281s)
+  ep  40  loss 1.618  acc 47.50  best 49.25  (364s)
+  ep  50  loss 1.554  acc 48.85  best 51.67  (452s)
+  ep  60  loss 1.491  acc 51.18  best 51.75  (536s)
+  ep  70  loss 1.405  acc 52.90  best 54.10  (620s)
+  ep  80  loss 1.329  acc 57.59  best 57.59  (705s)
+  ep  90  loss 1.200  acc 55.86  best 58.76  (793s)
+  ep 100  loss 1.086  acc 61.36  best 61.55  (878s)
+  ep 110  loss 0.936  acc 63.94  best 64.41  (963s)
+  ep 120  loss 0.768  acc 67.97  best 67.97  (1048s)
+  ep 130  loss 0.594  acc 69.66  best 69.66  (1134s)
+  ep 140  loss 0.457  acc 70.58  best 70.58  (1221s)
+  ep 149  loss 0.417  acc 70.71  best 70.91  (1297s)
+[mobilenetv2 uniform seed=5] final=70.71 best=70.91 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_uniform_seed5.json
+[mobilenetv2 cifar100 gap w32 K4 seed=0] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.346  acc 7.64  best 7.64  (34s)
+  ep  10  loss 1.798  acc 43.13  best 44.41  (223s)
+  ep  20  loss 1.671  acc 47.27  best 47.90  (411s)
+  ep  30  loss 1.616  acc 47.46  best 49.57  (599s)
+  ep  40  loss 1.558  acc 47.87  best 49.57  (786s)
+  ep  50  loss 1.497  acc 48.26  best 51.38  (975s)
+  ep  60  loss 1.435  acc 51.10  best 53.62  (1161s)
+  ep  70  loss 1.356  acc 50.70  best 54.75  (1352s)
+  ep  80  loss 1.261  acc 55.72  best 56.34  (1539s)
+  ep  90  loss 1.161  acc 61.57  best 61.57  (1728s)
+  ep 100  loss 1.016  acc 61.81  best 63.06  (1915s)
+  ep 110  loss 0.869  acc 66.54  best 66.54  (2104s)
+  ep 120  loss 0.696  acc 68.08  best 68.08  (2291s)
+  ep 130  loss 0.523  acc 70.96  best 70.96  (2480s)
+  ep 140  loss 0.383  acc 72.29  best 72.29  (2665s)
+  ep 149  loss 0.342  acc 72.39  best 72.54  (2835s)
+[mobilenetv2 gap seed=0] final=72.39 best=72.54 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_gap_seed0.json
+[mobilenetv2 cifar100 gap w32 K4 seed=1] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.364  acc 9.00  best 9.00  (35s)
+  ep  10  loss 1.806  acc 43.33  best 43.48  (222s)
+  ep  20  loss 1.671  acc 47.69  best 47.85  (411s)
+  ep  30  loss 1.610  acc 46.13  best 50.65  (598s)
+  ep  40  loss 1.560  acc 47.06  best 50.65  (787s)
+  ep  50  loss 1.498  acc 50.92  best 52.16  (975s)
+  ep  60  loss 1.431  acc 52.02  best 52.83  (1163s)
+  ep  70  loss 1.350  acc 52.61  best 55.05  (1352s)
+  ep  80  loss 1.261  acc 57.83  best 57.83  (1539s)
+  ep  90  loss 1.147  acc 57.55  best 59.22  (1727s)
+  ep 100  loss 1.016  acc 63.07  best 63.07  (1913s)
+  ep 110  loss 0.871  acc 64.49  best 65.51  (2101s)
+  ep 120  loss 0.699  acc 69.24  best 69.24  (2288s)
+  ep 130  loss 0.514  acc 70.54  best 70.90  (2476s)
+  ep 140  loss 0.378  acc 71.52  best 71.52  (2663s)
+  ep 149  loss 0.338  acc 71.76  best 71.84  (2833s)
+[mobilenetv2 gap seed=1] final=71.76 best=71.84 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_gap_seed1.json
+[mobilenetv2 cifar100 gap w32 K4 seed=2] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.308  acc 7.59  best 7.59  (35s)
+  ep  10  loss 1.793  acc 34.73  best 47.43  (223s)
+  ep  20  loss 1.665  acc 46.04  best 49.68  (413s)
+  ep  30  loss 1.600  acc 44.82  best 49.82  (601s)
+  ep  40  loss 1.556  acc 44.93  best 50.38  (790s)
+  ep  50  loss 1.509  acc 48.81  best 52.73  (978s)
+  ep  60  loss 1.436  acc 53.66  best 53.66  (1167s)
+  ep  70  loss 1.359  acc 53.17  best 55.71  (1354s)
+  ep  80  loss 1.260  acc 54.38  best 56.04  (1543s)
+  ep  90  loss 1.149  acc 60.90  best 60.90  (1731s)
+  ep 100  loss 1.019  acc 58.80  best 62.43  (1920s)
+  ep 110  loss 0.870  acc 64.77  best 65.07  (2109s)
+  ep 120  loss 0.701  acc 68.80  best 68.80  (2298s)
+  ep 130  loss 0.525  acc 70.96  best 71.03  (2487s)
+  ep 140  loss 0.384  acc 71.96  best 72.19  (2675s)
+  ep 149  loss 0.345  acc 72.31  best 72.47  (2844s)
+[mobilenetv2 gap seed=2] final=72.31 best=72.47 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_gap_seed2.json
+[mobilenetv2 cifar100 gap w32 K4 seed=3] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.389  acc 6.94  best 6.94  (34s)
+  ep  10  loss 1.795  acc 44.17  best 44.58  (223s)
+  ep  20  loss 1.669  acc 44.34  best 47.98  (414s)
+  ep  30  loss 1.601  acc 51.14  best 51.14  (601s)
+  ep  40  loss 1.554  acc 50.41  best 51.14  (792s)
+  ep  50  loss 1.506  acc 50.65  best 51.14  (979s)
+  ep  60  loss 1.434  acc 48.99  best 53.58  (1169s)
+  ep  70  loss 1.348  acc 52.02  best 56.13  (1357s)
+  ep  80  loss 1.258  acc 58.97  best 58.97  (1546s)
+  ep  90  loss 1.144  acc 61.76  best 61.76  (1733s)
+  ep 100  loss 1.017  acc 62.65  best 62.66  (1922s)
+  ep 110  loss 0.868  acc 65.79  best 65.79  (2108s)
+  ep 120  loss 0.701  acc 68.87  best 68.87  (2298s)
+  ep 130  loss 0.521  acc 70.25  best 70.25  (2484s)
+  ep 140  loss 0.380  acc 71.33  best 71.46  (2673s)
+  ep 149  loss 0.336  acc 71.70  best 71.83  (2842s)
+[mobilenetv2 gap seed=3] final=71.70 best=71.83 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_gap_seed3.json
+[mobilenetv2 cifar100 gap w32 K4 seed=4] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.340  acc 7.74  best 7.74  (35s)
+  ep  10  loss 1.810  acc 45.76  best 45.76  (223s)
+  ep  20  loss 1.661  acc 48.82  best 48.82  (413s)
+  ep  30  loss 1.599  acc 45.20  best 48.83  (600s)
+  ep  40  loss 1.556  acc 50.62  best 53.05  (789s)
+  ep  50  loss 1.488  acc 51.88  best 53.05  (976s)
+  ep  60  loss 1.417  acc 53.48  best 53.48  (1165s)
+  ep  70  loss 1.339  acc 55.30  best 57.85  (1353s)
+  ep  80  loss 1.250  acc 57.67  best 58.55  (1542s)
+  ep  90  loss 1.138  acc 59.74  best 60.63  (1729s)
+  ep 100  loss 1.005  acc 63.42  best 63.42  (1918s)
+  ep 110  loss 0.862  acc 64.59  best 66.30  (2106s)
+  ep 120  loss 0.696  acc 68.90  best 68.90  (2294s)
+  ep 130  loss 0.520  acc 70.99  best 70.99  (2482s)
+  ep 140  loss 0.379  acc 72.74  best 72.74  (2671s)
+  ep 149  loss 0.343  acc 72.50  best 72.74  (2840s)
+[mobilenetv2 gap seed=4] final=72.50 best=72.74 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_gap_seed4.json
+[mobilenetv2 cifar100 gap w32 K4 seed=5] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.385  acc 6.55  best 6.55  (35s)
+  ep  10  loss 1.802  acc 40.83  best 45.14  (224s)
+  ep  20  loss 1.685  acc 44.16  best 47.41  (414s)
+  ep  30  loss 1.618  acc 46.61  best 48.10  (603s)
+  ep  40  loss 1.563  acc 49.50  best 51.63  (793s)
+  ep  50  loss 1.507  acc 44.94  best 51.63  (980s)
+  ep  60  loss 1.438  acc 48.51  best 52.72  (1170s)
+  ep  70  loss 1.363  acc 51.40  best 58.13  (1358s)
+  ep  80  loss 1.266  acc 57.37  best 58.13  (1547s)
+  ep  90  loss 1.151  acc 61.42  best 61.42  (1736s)
+  ep 100  loss 1.027  acc 61.63  best 62.06  (1924s)
+  ep 110  loss 0.882  acc 66.38  best 66.38  (2112s)
+  ep 120  loss 0.710  acc 68.59  best 68.59  (2302s)
+  ep 130  loss 0.533  acc 70.69  best 70.69  (2490s)
+  ep 140  loss 0.395  acc 71.78  best 71.78  (2680s)
+  ep 149  loss 0.358  acc 71.83  best 71.94  (2849s)
+[mobilenetv2 gap seed=5] final=71.83 best=71.94 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__const_gap_seed5.json
+[mobilenetv2 cifar100 static w16 K4 seed=0] device=cuda params=0.37M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.335  acc 6.71  best 6.71  (22s)
+  ep  10  loss 2.126  acc 37.71  best 37.71  (86s)
+  ep  20  loss 1.945  acc 39.61  best 43.42  (149s)
+  ep  30  loss 1.875  acc 37.12  best 44.20  (212s)
+  ep  40  loss 1.825  acc 44.92  best 46.53  (275s)
+  ep  50  loss 1.777  acc 45.18  best 47.38  (337s)
+  ep  60  loss 1.713  acc 43.33  best 47.96  (402s)
+  ep  70  loss 1.626  acc 48.61  best 49.34  (467s)
+  ep  80  loss 1.544  acc 49.32  best 53.13  (530s)
+  ep  90  loss 1.445  acc 53.03  best 53.13  (593s)
+  ep 100  loss 1.326  acc 55.02  best 56.22  (656s)
+  ep 110  loss 1.205  acc 58.42  best 58.51  (720s)
+  ep 120  loss 1.063  acc 60.95  best 61.78  (784s)
+  ep 130  loss 0.921  acc 63.98  best 63.98  (848s)
+  ep 140  loss 0.805  acc 65.31  best 65.31  (910s)
+  ep 149  loss 0.767  acc 65.43  best 65.45  (966s)
+[mobilenetv2 static seed=0] final=65.43 best=65.45 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_static_seed0.json
+[mobilenetv2 cifar100 static w16 K4 seed=1] device=cuda params=0.37M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.341  acc 8.51  best 8.51  (22s)
+  ep  10  loss 2.104  acc 41.94  best 41.94  (86s)
+  ep  20  loss 1.886  acc 43.87  best 43.87  (153s)
+  ep  30  loss 1.803  acc 38.00  best 46.79  (218s)
+  ep  40  loss 1.753  acc 46.99  best 47.24  (281s)
+  ep  50  loss 1.705  acc 45.96  best 48.88  (345s)
+  ep  60  loss 1.633  acc 49.52  best 49.63  (409s)
+  ep  70  loss 1.553  acc 53.39  best 53.39  (474s)
+  ep  80  loss 1.464  acc 49.99  best 55.03  (539s)
+  ep  90  loss 1.365  acc 55.33  best 55.84  (603s)
+  ep 100  loss 1.253  acc 58.85  best 59.20  (666s)
+  ep 110  loss 1.130  acc 61.33  best 61.33  (729s)
+  ep 120  loss 0.992  acc 64.00  best 64.25  (792s)
+  ep 130  loss 0.853  acc 65.61  best 65.64  (858s)
+  ep 140  loss 0.740  acc 67.38  best 67.38  (922s)
+  ep 149  loss 0.701  acc 67.41  best 67.59  (979s)
+[mobilenetv2 static seed=1] final=67.41 best=67.59 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_static_seed1.json
+[mobilenetv2 cifar100 static w16 K4 seed=2] device=cuda params=0.37M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.345  acc 7.81  best 7.81  (22s)
+  ep  10  loss 2.061  acc 38.62  best 38.80  (85s)
+  ep  20  loss 1.873  acc 41.15  best 44.93  (148s)
+  ep  30  loss 1.799  acc 44.85  best 45.22  (213s)
+  ep  40  loss 1.768  acc 42.00  best 48.73  (276s)
+  ep  50  loss 1.711  acc 47.38  best 48.74  (341s)
+  ep  60  loss 1.645  acc 47.57  best 49.71  (403s)
+  ep  70  loss 1.579  acc 49.63  best 52.51  (466s)
+  ep  80  loss 1.480  acc 50.76  best 53.16  (528s)
+  ep  90  loss 1.389  acc 55.46  best 55.89  (594s)
+  ep 100  loss 1.276  acc 57.28  best 58.55  (658s)
+  ep 110  loss 1.160  acc 60.30  best 60.68  (722s)
+  ep 120  loss 1.019  acc 63.96  best 63.96  (785s)
+  ep 130  loss 0.880  acc 65.15  best 65.19  (848s)
+  ep 140  loss 0.771  acc 66.88  best 66.88  (911s)
+  ep 149  loss 0.730  acc 66.59  best 66.88  (970s)
+[mobilenetv2 static seed=2] final=66.59 best=66.88 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_static_seed2.json
+[mobilenetv2 cifar100 static w16 K4 seed=3] device=cuda params=0.37M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.344  acc 7.48  best 7.48  (22s)
+  ep  10  loss 2.087  acc 35.94  best 40.20  (86s)
+  ep  20  loss 1.931  acc 40.31  best 41.21  (149s)
+  ep  30  loss 1.864  acc 30.57  best 45.06  (212s)
+  ep  40  loss 1.814  acc 41.87  best 46.41  (275s)
+  ep  50  loss 1.760  acc 46.82  best 46.82  (339s)
+  ep  60  loss 1.685  acc 48.38  best 48.56  (403s)
+  ep  70  loss 1.617  acc 49.63  best 49.63  (466s)
+  ep  80  loss 1.525  acc 50.14  best 52.24  (529s)
+  ep  90  loss 1.425  acc 51.60  best 53.49  (591s)
+  ep 100  loss 1.315  acc 54.97  best 56.44  (654s)
+  ep 110  loss 1.191  acc 58.39  best 58.47  (719s)
+  ep 120  loss 1.052  acc 61.76  best 61.76  (784s)
+  ep 130  loss 0.906  acc 63.50  best 63.65  (847s)
+  ep 140  loss 0.792  acc 64.74  best 65.01  (910s)
+  ep 149  loss 0.757  acc 65.18  best 65.32  (966s)
+[mobilenetv2 static seed=3] final=65.18 best=65.32 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_static_seed3.json
+[mobilenetv2 cifar100 static w16 K4 seed=4] device=cuda params=0.37M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.368  acc 6.70  best 6.70  (22s)
+  ep  10  loss 2.105  acc 38.13  best 38.35  (87s)
+  ep  20  loss 1.899  acc 43.21  best 45.35  (153s)
+  ep  30  loss 1.810  acc 45.15  best 45.35  (216s)
+  ep  40  loss 1.743  acc 44.73  best 47.58  (279s)
+  ep  50  loss 1.694  acc 46.73  best 48.46  (342s)
+  ep  60  loss 1.616  acc 49.52  best 50.17  (406s)
+  ep  70  loss 1.547  acc 49.83  best 50.68  (472s)
+  ep  80  loss 1.453  acc 51.87  best 53.06  (535s)
+  ep  90  loss 1.363  acc 56.54  best 57.48  (598s)
+  ep 100  loss 1.243  acc 55.44  best 57.88  (661s)
+  ep 110  loss 1.128  acc 59.89  best 61.18  (725s)
+  ep 120  loss 0.984  acc 63.40  best 63.40  (789s)
+  ep 130  loss 0.847  acc 66.08  best 66.16  (854s)
+  ep 140  loss 0.736  acc 67.33  best 67.33  (918s)
+  ep 149  loss 0.696  acc 67.47  best 67.67  (975s)
+[mobilenetv2 static seed=4] final=67.47 best=67.67 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_static_seed4.json
+[mobilenetv2 cifar100 static w16 K4 seed=5] device=cuda params=0.37M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.412  acc 6.82  best 6.82  (22s)
+  ep  10  loss 2.100  acc 34.31  best 38.67  (85s)
+  ep  20  loss 1.920  acc 45.50  best 45.50  (149s)
+  ep  30  loss 1.843  acc 42.46  best 45.50  (214s)
+  ep  40  loss 1.793  acc 43.84  best 45.50  (279s)
+  ep  50  loss 1.737  acc 45.74  best 48.14  (342s)
+  ep  60  loss 1.675  acc 29.75  best 48.37  (404s)
+  ep  70  loss 1.595  acc 49.72  best 50.18  (467s)
+  ep  80  loss 1.510  acc 48.76  best 50.96  (532s)
+  ep  90  loss 1.407  acc 54.63  best 54.63  (596s)
+  ep 100  loss 1.298  acc 56.56  best 57.13  (660s)
+  ep 110  loss 1.166  acc 58.24  best 58.65  (724s)
+  ep 120  loss 1.034  acc 60.71  best 62.23  (786s)
+  ep 130  loss 0.883  acc 63.63  best 64.23  (849s)
+  ep 140  loss 0.766  acc 65.51  best 65.59  (914s)
+  ep 149  loss 0.725  acc 66.06  best 66.06  (972s)
+[mobilenetv2 static seed=5] final=66.06 best=66.06 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_static_seed5.json
+[mobilenetv2 cifar100 uniform w16 K4 seed=0] device=cuda params=0.42M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.399  acc 7.07  best 7.07  (23s)
+  ep  10  loss 2.075  acc 40.45  best 40.45  (101s)
+  ep  20  loss 1.880  acc 43.27  best 43.70  (180s)
+  ep  30  loss 1.798  acc 43.94  best 46.65  (262s)
+  ep  40  loss 1.747  acc 42.54  best 47.34  (341s)
+  ep  50  loss 1.692  acc 46.84  best 49.80  (420s)
+  ep  60  loss 1.622  acc 48.71  best 49.80  (499s)
+  ep  70  loss 1.557  acc 49.00  best 52.05  (578s)
+  ep  80  loss 1.469  acc 50.73  best 53.55  (659s)
+  ep  90  loss 1.368  acc 52.47  best 54.87  (740s)
+  ep 100  loss 1.258  acc 54.29  best 56.70  (819s)
+  ep 110  loss 1.133  acc 60.96  best 60.96  (898s)
+  ep 120  loss 0.998  acc 62.60  best 62.60  (978s)
+  ep 130  loss 0.856  acc 65.00  best 65.00  (1060s)
+  ep 140  loss 0.744  acc 66.54  best 66.54  (1139s)
+  ep 149  loss 0.707  acc 66.88  best 67.10  (1210s)
+[mobilenetv2 uniform seed=0] final=66.88 best=67.10 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_uniform_seed0.json
+[mobilenetv2 cifar100 uniform w16 K4 seed=1] device=cuda params=0.42M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.381  acc 7.65  best 7.65  (23s)
+  ep  10  loss 2.103  acc 32.50  best 39.03  (102s)
+  ep  20  loss 1.888  acc 41.67  best 43.23  (185s)
+  ep  30  loss 1.827  acc 46.40  best 46.82  (266s)
+  ep  40  loss 1.762  acc 42.40  best 46.82  (345s)
+  ep  50  loss 1.706  acc 48.03  best 48.03  (423s)
+  ep  60  loss 1.642  acc 50.26  best 50.37  (505s)
+  ep  70  loss 1.568  acc 47.73  best 50.96  (587s)
+  ep  80  loss 1.489  acc 53.33  best 53.33  (667s)
+  ep  90  loss 1.389  acc 57.12  best 57.12  (745s)
+  ep 100  loss 1.277  acc 56.18  best 57.51  (824s)
+  ep 110  loss 1.159  acc 61.29  best 61.29  (906s)
+  ep 120  loss 1.023  acc 62.32  best 63.18  (986s)
+  ep 130  loss 0.877  acc 65.04  best 65.39  (1065s)
+  ep 140  loss 0.765  acc 66.73  best 66.73  (1143s)
+  ep 149  loss 0.733  acc 66.90  best 66.93  (1216s)
+[mobilenetv2 uniform seed=1] final=66.90 best=66.93 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_uniform_seed1.json
+[mobilenetv2 cifar100 uniform w16 K4 seed=2] device=cuda params=0.42M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.387  acc 6.68  best 6.68  (24s)
+  ep  10  loss 2.104  acc 41.01  best 41.01  (105s)
+  ep  20  loss 1.887  acc 46.02  best 46.02  (185s)
+  ep  30  loss 1.806  acc 44.62  best 46.02  (263s)
+  ep  40  loss 1.760  acc 48.07  best 48.07  (346s)
+  ep  50  loss 1.706  acc 46.78  best 50.36  (429s)
+  ep  60  loss 1.641  acc 48.81  best 50.36  (509s)
+  ep  70  loss 1.567  acc 51.12  best 51.12  (588s)
+  ep  80  loss 1.476  acc 53.46  best 55.95  (668s)
+  ep  90  loss 1.384  acc 55.76  best 55.95  (750s)
+  ep 100  loss 1.263  acc 58.17  best 58.17  (830s)
+  ep 110  loss 1.149  acc 60.92  best 61.04  (910s)
+  ep 120  loss 1.013  acc 63.24  best 63.24  (989s)
+  ep 130  loss 0.877  acc 65.35  best 65.35  (1071s)
+  ep 140  loss 0.765  acc 66.48  best 66.48  (1152s)
+  ep 149  loss 0.725  acc 66.63  best 66.86  (1224s)
+[mobilenetv2 uniform seed=2] final=66.63 best=66.86 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_uniform_seed2.json
+[mobilenetv2 cifar100 uniform w16 K4 seed=3] device=cuda params=0.42M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.356  acc 6.81  best 6.81  (23s)
+  ep  10  loss 2.123  acc 39.81  best 39.81  (102s)
+  ep  20  loss 1.923  acc 40.51  best 40.95  (182s)
+  ep  30  loss 1.827  acc 41.24  best 45.00  (264s)
+  ep  40  loss 1.754  acc 39.36  best 45.00  (344s)
+  ep  50  loss 1.697  acc 48.06  best 48.06  (422s)
+  ep  60  loss 1.634  acc 48.86  best 49.66  (501s)
+  ep  70  loss 1.562  acc 50.36  best 51.54  (583s)
+  ep  80  loss 1.470  acc 52.77  best 53.56  (664s)
+  ep  90  loss 1.374  acc 57.40  best 57.40  (742s)
+  ep 100  loss 1.254  acc 58.88  best 58.89  (820s)
+  ep 110  loss 1.139  acc 60.10  best 61.37  (899s)
+  ep 120  loss 1.007  acc 64.07  best 64.07  (982s)
+  ep 130  loss 0.861  acc 66.45  best 66.45  (1062s)
+  ep 140  loss 0.746  acc 67.33  best 67.33  (1141s)
+  ep 149  loss 0.712  acc 67.14  best 67.52  (1212s)
+[mobilenetv2 uniform seed=3] final=67.14 best=67.52 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_uniform_seed3.json
+[mobilenetv2 cifar100 uniform w16 K4 seed=4] device=cuda params=0.42M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.370  acc 7.88  best 7.88  (23s)
+  ep  10  loss 2.089  acc 39.67  best 39.67  (104s)
+  ep  20  loss 1.881  acc 38.79  best 44.13  (184s)
+  ep  30  loss 1.802  acc 40.18  best 44.94  (262s)
+  ep  40  loss 1.749  acc 47.10  best 47.10  (340s)
+  ep  50  loss 1.686  acc 44.07  best 47.76  (421s)
+  ep  60  loss 1.630  acc 49.10  best 49.10  (502s)
+  ep  70  loss 1.550  acc 52.75  best 53.86  (581s)
+  ep  80  loss 1.459  acc 53.44  best 54.03  (659s)
+  ep  90  loss 1.368  acc 53.94  best 56.17  (738s)
+  ep 100  loss 1.259  acc 59.07  best 59.07  (819s)
+  ep 110  loss 1.128  acc 61.03  best 61.03  (898s)
+  ep 120  loss 0.999  acc 63.95  best 63.95  (976s)
+  ep 130  loss 0.853  acc 65.04  best 65.62  (1055s)
+  ep 140  loss 0.743  acc 66.93  best 67.30  (1135s)
+  ep 149  loss 0.704  acc 67.32  best 67.39  (1208s)
+[mobilenetv2 uniform seed=4] final=67.32 best=67.39 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_uniform_seed4.json
+[mobilenetv2 cifar100 uniform w16 K4 seed=5] device=cuda params=0.42M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.332  acc 6.94  best 6.94  (24s)
+  ep  10  loss 2.099  acc 41.73  best 41.73  (102s)
+  ep  20  loss 1.903  acc 42.97  best 43.40  (181s)
+  ep  30  loss 1.820  acc 41.58  best 44.67  (259s)
+  ep  40  loss 1.760  acc 41.81  best 48.11  (343s)
+  ep  50  loss 1.717  acc 45.02  best 48.21  (422s)
+  ep  60  loss 1.642  acc 49.58  best 49.58  (499s)
+  ep  70  loss 1.577  acc 50.82  best 52.11  (578s)
+  ep  80  loss 1.486  acc 51.61  best 52.30  (659s)
+  ep  90  loss 1.387  acc 53.63  best 56.28  (739s)
+  ep 100  loss 1.279  acc 57.08  best 57.40  (817s)
+  ep 110  loss 1.155  acc 60.02  best 60.72  (896s)
+  ep 120  loss 1.019  acc 62.49  best 62.61  (975s)
+  ep 130  loss 0.874  acc 65.27  best 65.27  (1057s)
+  ep 140  loss 0.763  acc 66.39  best 66.55  (1137s)
+  ep 149  loss 0.724  acc 66.83  best 66.85  (1207s)
+[mobilenetv2 uniform seed=5] final=66.83 best=66.85 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_uniform_seed5.json
+[mobilenetv2 cifar100 gap w16 K4 seed=0] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.383  acc 6.51  best 6.51  (31s)
+  ep  10  loss 2.054  acc 39.56  best 39.56  (194s)
+  ep  20  loss 1.854  acc 42.93  best 43.34  (358s)
+  ep  30  loss 1.772  acc 43.15  best 46.99  (520s)
+  ep  40  loss 1.718  acc 43.17  best 46.99  (684s)
+  ep  50  loss 1.651  acc 48.73  best 48.84  (844s)
+  ep  60  loss 1.583  acc 46.01  best 51.43  (1010s)
+  ep  70  loss 1.507  acc 51.50  best 52.41  (1171s)
+  ep  80  loss 1.408  acc 56.14  best 56.14  (1337s)
+  ep  90  loss 1.315  acc 54.96  best 56.96  (1497s)
+  ep 100  loss 1.200  acc 59.60  best 60.09  (1659s)
+  ep 110  loss 1.075  acc 61.33  best 62.00  (1822s)
+  ep 120  loss 0.938  acc 64.13  best 64.21  (1982s)
+  ep 130  loss 0.790  acc 67.25  best 67.25  (2147s)
+  ep 140  loss 0.678  acc 68.64  best 68.64  (2307s)
+  ep 149  loss 0.641  acc 68.69  best 68.93  (2457s)
+[mobilenetv2 gap seed=0] final=68.69 best=68.93 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_gap_seed0.json
+[mobilenetv2 cifar100 gap w16 K4 seed=1] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.368  acc 7.84  best 7.84  (32s)
+  ep  10  loss 2.077  acc 39.68  best 39.73  (194s)
+  ep  20  loss 1.856  acc 43.57  best 44.41  (363s)
+  ep  30  loss 1.774  acc 41.49  best 46.17  (524s)
+  ep  40  loss 1.717  acc 46.77  best 48.19  (691s)
+  ep  50  loss 1.656  acc 44.94  best 51.12  (852s)
+  ep  60  loss 1.580  acc 51.58  best 51.58  (1019s)
+  ep  70  loss 1.515  acc 51.66  best 53.33  (1182s)
+  ep  80  loss 1.417  acc 54.68  best 54.68  (1346s)
+  ep  90  loss 1.327  acc 56.66  best 56.66  (1512s)
+  ep 100  loss 1.210  acc 58.78  best 59.69  (1675s)
+  ep 110  loss 1.087  acc 59.53  best 62.19  (1841s)
+  ep 120  loss 0.952  acc 64.28  best 64.28  (2002s)
+  ep 130  loss 0.822  acc 66.60  best 66.60  (2168s)
+  ep 140  loss 0.706  acc 67.69  best 67.69  (2329s)
+  ep 149  loss 0.668  acc 67.83  best 67.92  (2479s)
+[mobilenetv2 gap seed=1] final=67.83 best=67.92 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_gap_seed1.json
+[mobilenetv2 cifar100 gap w16 K4 seed=2] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.342  acc 7.24  best 7.24  (32s)
+  ep  10  loss 2.063  acc 41.21  best 41.21  (194s)
+  ep  20  loss 1.857  acc 41.49  best 43.85  (359s)
+  ep  30  loss 1.775  acc 47.24  best 47.24  (520s)
+  ep  40  loss 1.720  acc 43.18  best 49.01  (684s)
+  ep  50  loss 1.654  acc 49.28  best 49.28  (846s)
+  ep  60  loss 1.599  acc 48.44  best 52.06  (1008s)
+  ep  70  loss 1.518  acc 50.10  best 52.64  (1172s)
+  ep  80  loss 1.435  acc 53.20  best 53.45  (1334s)
+  ep  90  loss 1.333  acc 58.25  best 58.25  (1497s)
+  ep 100  loss 1.223  acc 58.77  best 58.77  (1657s)
+  ep 110  loss 1.100  acc 60.31  best 60.78  (1823s)
+  ep 120  loss 0.970  acc 63.52  best 63.96  (1983s)
+  ep 130  loss 0.819  acc 65.78  best 65.94  (2148s)
+  ep 140  loss 0.707  acc 67.44  best 67.56  (2309s)
+  ep 149  loss 0.670  acc 67.66  best 67.91  (2456s)
+[mobilenetv2 gap seed=2] final=67.66 best=67.91 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_gap_seed2.json
+[mobilenetv2 cifar100 gap w16 K4 seed=3] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.307  acc 7.22  best 7.22  (32s)
+  ep  10  loss 2.056  acc 35.65  best 39.86  (194s)
+  ep  20  loss 1.829  acc 43.05  best 45.70  (357s)
+  ep  30  loss 1.754  acc 43.92  best 47.94  (521s)
+  ep  40  loss 1.687  acc 47.31  best 48.01  (681s)
+  ep  50  loss 1.630  acc 44.17  best 50.42  (845s)
+  ep  60  loss 1.568  acc 47.50  best 50.42  (1005s)
+  ep  70  loss 1.491  acc 53.89  best 53.89  (1170s)
+  ep  80  loss 1.412  acc 52.81  best 54.99  (1331s)
+  ep  90  loss 1.318  acc 57.92  best 57.92  (1495s)
+  ep 100  loss 1.200  acc 59.47  best 59.47  (1656s)
+  ep 110  loss 1.075  acc 60.55  best 62.44  (1820s)
+  ep 120  loss 0.939  acc 64.80  best 64.80  (1981s)
+  ep 130  loss 0.794  acc 67.36  best 67.36  (2143s)
+  ep 140  loss 0.684  acc 68.25  best 68.62  (2306s)
+  ep 149  loss 0.643  acc 69.06  best 69.08  (2451s)
+[mobilenetv2 gap seed=3] final=69.06 best=69.08 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_gap_seed3.json
+[mobilenetv2 cifar100 gap w16 K4 seed=4] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.391  acc 3.42  best 3.42  (33s)
+  ep  10  loss 2.073  acc 37.50  best 38.73  (197s)
+  ep  20  loss 1.906  acc 43.96  best 44.55  (357s)
+  ep  30  loss 1.828  acc 40.37  best 44.66  (521s)
+  ep  40  loss 1.755  acc 46.00  best 46.37  (681s)
+  ep  50  loss 1.689  acc 46.78  best 46.78  (845s)
+  ep  60  loss 1.617  acc 50.39  best 50.89  (1007s)
+  ep  70  loss 1.536  acc 49.13  best 52.85  (1171s)
+  ep  80  loss 1.449  acc 53.93  best 53.93  (1333s)
+  ep  90  loss 1.343  acc 51.28  best 56.20  (1495s)
+  ep 100  loss 1.230  acc 57.95  best 58.61  (1658s)
+  ep 110  loss 1.099  acc 61.10  best 61.10  (1819s)
+  ep 120  loss 0.957  acc 63.97  best 63.97  (1983s)
+  ep 130  loss 0.819  acc 66.33  best 66.33  (2143s)
+  ep 140  loss 0.702  acc 68.03  best 68.03  (2308s)
+  ep 149  loss 0.665  acc 68.10  best 68.22  (2452s)
+[mobilenetv2 gap seed=4] final=68.10 best=68.22 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_gap_seed4.json
+[mobilenetv2 cifar100 gap w16 K4 seed=5] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.401  acc 7.78  best 7.78  (32s)
+  ep  10  loss 2.078  acc 40.05  best 40.05  (197s)
+  ep  20  loss 1.898  acc 41.27  best 45.67  (359s)
+  ep  30  loss 1.790  acc 44.37  best 46.48  (523s)
+  ep  40  loss 1.719  acc 48.03  best 49.43  (685s)
+  ep  50  loss 1.656  acc 50.00  best 50.00  (851s)
+  ep  60  loss 1.586  acc 47.19  best 51.47  (1016s)
+  ep  70  loss 1.506  acc 50.75  best 52.20  (1179s)
+  ep  80  loss 1.415  acc 55.50  best 55.50  (1344s)
+  ep  90  loss 1.311  acc 57.91  best 57.91  (1505s)
+  ep 100  loss 1.204  acc 58.41  best 59.99  (1670s)
+  ep 110  loss 1.079  acc 60.69  best 60.90  (1831s)
+  ep 120  loss 0.942  acc 64.19  best 64.19  (1996s)
+  ep 130  loss 0.792  acc 66.69  best 66.90  (2158s)
+  ep 140  loss 0.681  acc 68.05  best 68.10  (2323s)
+  ep 149  loss 0.643  acc 68.29  best 68.30  (2469s)
+[mobilenetv2 gap seed=5] final=68.29 best=68.30 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__const_gap_seed5.json
+[mobilenetv2 cifar100 gap w32 K2 seed=0] device=cuda params=1.14M router=287.2K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.329  acc 7.90  best 7.90  (32s)
+  ep  10  loss 1.804  acc 38.85  best 40.81  (191s)
+  ep  20  loss 1.674  acc 46.57  best 46.57  (346s)
+  ep  30  loss 1.620  acc 43.47  best 48.48  (501s)
+  ep  40  loss 1.567  acc 48.16  best 49.36  (655s)
+  ep  50  loss 1.508  acc 52.32  best 52.32  (805s)
+  ep  60  loss 1.444  acc 53.46  best 53.46  (960s)
+  ep  70  loss 1.358  acc 55.45  best 55.45  (1110s)
+  ep  80  loss 1.266  acc 56.89  best 57.42  (1263s)
+  ep  90  loss 1.154  acc 57.49  best 60.37  (1413s)
+  ep 100  loss 1.030  acc 63.54  best 63.54  (1564s)
+  ep 110  loss 0.876  acc 66.73  best 66.73  (1715s)
+  ep 120  loss 0.713  acc 68.52  best 68.52  (1863s)
+  ep 130  loss 0.534  acc 70.36  best 70.36  (2016s)
+  ep 140  loss 0.390  acc 71.01  best 71.18  (2165s)
+  ep 149  loss 0.354  acc 71.24  best 71.52  (2321s)
+[mobilenetv2 gap seed=0] final=71.24 best=71.52 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K2__const_gap_seed0.json
+[mobilenetv2 cifar100 gap w32 K2 seed=1] device=cuda params=1.14M router=287.2K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.340  acc 8.11  best 8.11  (46s)
+  ep  10  loss 1.802  acc 44.41  best 44.41  (207s)
+  ep  20  loss 1.690  acc 40.38  best 47.96  (359s)
+  ep  30  loss 1.629  acc 42.85  best 51.06  (508s)
+  ep  40  loss 1.571  acc 47.87  best 51.63  (665s)
+  ep  50  loss 1.519  acc 51.02  best 51.63  (818s)
+  ep  60  loss 1.454  acc 52.03  best 52.54  (980s)
+  ep  70  loss 1.362  acc 56.51  best 56.51  (1148s)
+  ep  80  loss 1.273  acc 55.38  best 57.38  (1301s)
+  ep  90  loss 1.158  acc 58.15  best 58.94  (1457s)
+  ep 100  loss 1.039  acc 62.72  best 62.72  (1607s)
+  ep 110  loss 0.888  acc 64.86  best 64.86  (1761s)
+  ep 120  loss 0.716  acc 67.62  best 68.37  (1920s)
+  ep 130  loss 0.534  acc 70.04  best 70.48  (2073s)
+  ep 140  loss 0.397  acc 71.90  best 71.97  (2226s)
+  ep 149  loss 0.354  acc 72.38  best 72.45  (2360s)
+[mobilenetv2 gap seed=1] final=72.38 best=72.45 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K2__const_gap_seed1.json
+[mobilenetv2 cifar100 gap w32 K2 seed=2] device=cuda params=1.14M router=287.2K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.338  acc 6.66  best 6.66  (31s)
+  ep  10  loss 1.800  acc 43.97  best 44.67  (183s)
+  ep  20  loss 1.689  acc 46.33  best 49.10  (334s)
+  ep  30  loss 1.630  acc 50.00  best 50.00  (486s)
+  ep  40  loss 1.570  acc 49.36  best 51.07  (637s)
+  ep  50  loss 1.513  acc 51.48  best 51.48  (785s)
+  ep  60  loss 1.437  acc 47.65  best 51.89  (937s)
+  ep  70  loss 1.362  acc 54.91  best 55.37  (1085s)
+  ep  80  loss 1.261  acc 54.61  best 58.90  (1236s)
+  ep  90  loss 1.145  acc 58.18  best 60.93  (1386s)
+  ep 100  loss 1.029  acc 61.90  best 62.44  (1535s)
+  ep 110  loss 0.872  acc 65.73  best 65.73  (1686s)
+  ep 120  loss 0.706  acc 67.51  best 68.03  (1834s)
+  ep 130  loss 0.531  acc 70.47  best 70.66  (1985s)
+  ep 140  loss 0.391  acc 71.46  best 71.81  (2133s)
+  ep 149  loss 0.354  acc 71.54  best 71.81  (2267s)
+[mobilenetv2 gap seed=2] final=71.54 best=71.81 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K2__const_gap_seed2.json
+[mobilenetv2 cifar100 gap w32 K2 seed=3] device=cuda params=1.14M router=287.2K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.356  acc 7.08  best 7.08  (31s)
+  ep  10  loss 1.856  acc 42.74  best 42.74  (182s)
+  ep  20  loss 1.686  acc 37.34  best 50.21  (330s)
+  ep  30  loss 1.624  acc 48.34  best 50.21  (482s)
+  ep  40  loss 1.559  acc 45.14  best 50.43  (630s)
+  ep  50  loss 1.501  acc 51.35  best 51.93  (782s)
+  ep  60  loss 1.426  acc 53.15  best 53.18  (931s)
+  ep  70  loss 1.358  acc 53.25  best 54.30  (1081s)
+  ep  80  loss 1.260  acc 55.75  best 58.59  (1231s)
+  ep  90  loss 1.145  acc 59.33  best 60.96  (1379s)
+  ep 100  loss 1.020  acc 61.75  best 62.76  (1619s)
+  ep 110  loss 0.880  acc 65.46  best 65.46  (1903s)
+  ep 120  loss 0.702  acc 67.92  best 67.92  (2189s)
+  ep 130  loss 0.528  acc 70.44  best 70.44  (2474s)
+  ep 140  loss 0.388  acc 72.08  best 72.08  (2762s)
+  ep 149  loss 0.346  acc 72.34  best 72.53  (3018s)
+[mobilenetv2 gap seed=3] final=72.34 best=72.53 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K2__const_gap_seed3.json
+[mobilenetv2 cifar100 gap w32 K2 seed=4] device=cuda params=1.14M router=287.2K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.319  acc 7.75  best 7.75  (62s)
+  ep  10  loss 1.805  acc 45.11  best 45.11  (343s)
+  ep  20  loss 1.670  acc 49.85  best 49.85  (622s)
+  ep  30  loss 1.618  acc 46.36  best 49.85  (905s)
+  ep  40  loss 1.573  acc 48.09  best 49.85  (1182s)
+  ep  50  loss 1.521  acc 51.87  best 51.95  (1485s)
+  ep  60  loss 1.440  acc 54.96  best 54.96  (1768s)
+  ep  70  loss 1.356  acc 53.99  best 55.70  (2050s)
+  ep  80  loss 1.270  acc 59.46  best 59.46  (2334s)
+  ep  90  loss 1.151  acc 60.02  best 60.81  (2548s)
+  ep 100  loss 1.027  acc 62.32  best 62.32  (2832s)
+  ep 110  loss 0.877  acc 66.21  best 66.21  (3117s)
+  ep 120  loss 0.721  acc 67.51  best 67.77  (3401s)
+  ep 130  loss 0.547  acc 70.24  best 70.24  (3684s)
+  ep 140  loss 0.406  acc 71.36  best 71.50  (3969s)
+  ep 149  loss 0.362  acc 71.78  best 71.85  (4225s)
+[mobilenetv2 gap seed=4] final=71.78 best=71.85 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K2__const_gap_seed4.json
+[mobilenetv2 cifar100 gap w32 K2 seed=5] device=cuda params=1.14M router=287.2K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.330  acc 7.50  best 7.50  (62s)
+  ep  10  loss 1.815  acc 44.87  best 45.25  (352s)
+  ep  20  loss 1.690  acc 37.43  best 47.57  (644s)
+  ep  30  loss 1.630  acc 47.03  best 50.43  (935s)
+  ep  40  loss 1.575  acc 43.24  best 50.43  (1222s)
+  ep  50  loss 1.522  acc 47.05  best 52.07  (1512s)
+  ep  60  loss 1.445  acc 51.36  best 52.72  (1801s)
+  ep  70  loss 1.365  acc 54.65  best 54.81  (2090s)
+  ep  80  loss 1.272  acc 57.85  best 57.85  (2380s)
+  ep  90  loss 1.168  acc 60.63  best 60.70  (2668s)
+  ep 100  loss 1.030  acc 62.48  best 62.59  (2956s)
+  ep 110  loss 0.885  acc 64.63  best 64.75  (3243s)
+  ep 120  loss 0.718  acc 67.59  best 68.14  (3532s)
+  ep 130  loss 0.539  acc 70.01  best 70.01  (3819s)
+  ep 140  loss 0.403  acc 71.55  best 71.55  (4109s)
+  ep 149  loss 0.361  acc 71.36  best 71.63  (4370s)
+[mobilenetv2 gap seed=5] final=71.36 best=71.63 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K2__const_gap_seed5.json
+[mobilenetv2 cifar100 gap w32 K8 seed=0] device=cuda params=1.34M router=292.8K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.317  acc 8.02  best 8.02  (79s)
+  ep  10  loss 1.826  acc 40.57  best 41.08  (526s)
+  ep  20  loss 1.651  acc 47.82  best 47.82  (964s)
+  ep  30  loss 1.601  acc 46.32  best 50.45  (1393s)
+  ep  40  loss 1.551  acc 45.74  best 50.45  (1797s)
+  ep  50  loss 1.506  acc 50.64  best 51.90  (2198s)
+  ep  60  loss 1.439  acc 47.81  best 55.01  (2599s)
+  ep  70  loss 1.360  acc 56.36  best 56.36  (3000s)
+  ep  80  loss 1.264  acc 57.32  best 57.63  (3401s)
+  ep  90  loss 1.152  acc 59.48  best 59.55  (3801s)
+  ep 100  loss 1.015  acc 63.93  best 63.93  (4203s)
+  ep 110  loss 0.868  acc 64.75  best 65.43  (4604s)
+  ep 120  loss 0.694  acc 69.73  best 69.73  (5006s)
+  ep 130  loss 0.510  acc 71.18  best 71.18  (5397s)
+  ep 140  loss 0.374  acc 71.83  best 72.12  (5790s)
+  ep 149  loss 0.334  acc 72.07  best 72.17  (6144s)
+[mobilenetv2 gap seed=0] final=72.07 best=72.17 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K8__const_gap_seed0.json
+[mobilenetv2 cifar100 gap w32 K8 seed=1] device=cuda params=1.34M router=292.8K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.326  acc 8.26  best 8.26  (62s)
+  ep  10  loss 1.807  acc 38.90  best 43.23  (456s)
+  ep  20  loss 1.683  acc 42.65  best 46.27  (848s)
+  ep  30  loss 1.621  acc 44.91  best 49.79  (1240s)
+  ep  40  loss 1.559  acc 51.08  best 51.08  (1630s)
+  ep  50  loss 1.510  acc 50.60  best 52.85  (2022s)
+  ep  60  loss 1.445  acc 53.00  best 54.26  (2415s)
+  ep  70  loss 1.356  acc 54.72  best 55.37  (2807s)
+  ep  80  loss 1.256  acc 55.92  best 59.26  (3197s)
+  ep  90  loss 1.146  acc 58.15  best 60.33  (3588s)
+  ep 100  loss 1.022  acc 61.39  best 62.63  (3980s)
+  ep 110  loss 0.866  acc 64.41  best 65.22  (4373s)
+  ep 120  loss 0.693  acc 68.08  best 68.39  (4766s)
+  ep 130  loss 0.512  acc 70.20  best 70.43  (5156s)
+  ep 140  loss 0.370  acc 71.79  best 72.00  (5548s)
+  ep 149  loss 0.329  acc 72.16  best 72.16  (5901s)
+[mobilenetv2 gap seed=1] final=72.16 best=72.16 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K8__const_gap_seed1.json
+[mobilenetv2 cifar100 gap w32 K8 seed=2] device=cuda params=1.34M router=292.8K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.348  acc 6.97  best 6.97  (62s)
+  ep  10  loss 1.802  acc 45.06  best 45.06  (453s)
+  ep  20  loss 1.665  acc 45.42  best 47.99  (845s)
+  ep  30  loss 1.612  acc 44.82  best 49.79  (1239s)
+  ep  40  loss 1.552  acc 45.36  best 50.91  (1630s)
+  ep  50  loss 1.502  acc 51.87  best 51.87  (2020s)
+  ep  60  loss 1.434  acc 52.61  best 54.75  (2411s)
+  ep  70  loss 1.366  acc 52.31  best 55.36  (2804s)
+  ep  80  loss 1.266  acc 51.23  best 57.49  (3196s)
+  ep  90  loss 1.146  acc 58.60  best 61.12  (3588s)
+  ep 100  loss 1.018  acc 61.94  best 62.56  (3979s)
+  ep 110  loss 0.869  acc 65.25  best 65.95  (4375s)
+  ep 120  loss 0.699  acc 68.08  best 68.15  (4774s)
+  ep 130  loss 0.508  acc 71.82  best 71.82  (5172s)
+  ep 140  loss 0.370  acc 71.73  best 72.09  (5569s)
+  ep 149  loss 0.330  acc 71.93  best 72.15  (5927s)
+[mobilenetv2 gap seed=2] final=71.93 best=72.15 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K8__const_gap_seed2.json
+[mobilenetv2 cifar100 gap w32 K8 seed=3] device=cuda params=1.34M router=292.8K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.330  acc 8.23  best 8.23  (63s)
+  ep  10  loss 1.812  acc 44.09  best 44.09  (462s)
+  ep  20  loss 1.687  acc 43.35  best 49.62  (860s)
+  ep  30  loss 1.623  acc 46.17  best 49.62  (1257s)
+  ep  40  loss 1.564  acc 45.65  best 51.31  (1653s)
+  ep  50  loss 1.507  acc 46.84  best 51.31  (2051s)
+  ep  60  loss 1.443  acc 45.29  best 53.08  (2449s)
+  ep  70  loss 1.357  acc 50.08  best 57.23  (2857s)
+  ep  80  loss 1.266  acc 53.82  best 57.23  (3255s)
+  ep  90  loss 1.151  acc 58.92  best 60.22  (3653s)
+  ep 100  loss 1.025  acc 61.64  best 63.41  (4050s)
+  ep 110  loss 0.872  acc 64.74  best 65.21  (4447s)
+  ep 120  loss 0.702  acc 67.86  best 67.86  (4844s)
+  ep 130  loss 0.527  acc 70.66  best 70.66  (5240s)
+  ep 140  loss 0.387  acc 71.77  best 71.88  (5637s)
+  ep 149  loss 0.342  acc 71.95  best 72.13  (5994s)
+[mobilenetv2 gap seed=3] final=71.95 best=72.13 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K8__const_gap_seed3.json
+[mobilenetv2 cifar100 gap w32 K8 seed=4] device=cuda params=1.34M router=292.8K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.319  acc 8.46  best 8.46  (63s)
+  ep  10  loss 1.808  acc 44.95  best 44.95  (464s)
+  ep  20  loss 1.665  acc 44.96  best 46.41  (863s)
+  ep  30  loss 1.602  acc 49.38  best 49.38  (1262s)
+  ep  40  loss 1.540  acc 49.67  best 51.61  (1662s)
+  ep  50  loss 1.491  acc 53.97  best 54.23  (2061s)
+  ep  60  loss 1.423  acc 53.78  best 54.23  (2460s)
+  ep  70  loss 1.351  acc 54.35  best 55.13  (2860s)
+  ep  80  loss 1.252  acc 54.15  best 58.10  (3263s)
+  ep  90  loss 1.135  acc 60.08  best 60.08  (3662s)
+  ep 100  loss 1.021  acc 60.29  best 62.98  (4060s)
+  ep 110  loss 0.864  acc 63.24  best 65.60  (4458s)
+  ep 120  loss 0.695  acc 67.99  best 67.99  (4858s)
+  ep 130  loss 0.512  acc 70.30  best 70.72  (5256s)
+  ep 140  loss 0.375  acc 71.59  best 71.59  (5654s)
+  ep 149  loss 0.332  acc 72.11  best 72.11  (6012s)
+[mobilenetv2 gap seed=4] final=72.11 best=72.11 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K8__const_gap_seed4.json
+[mobilenetv2 cifar100 gap w32 K8 seed=5] device=cuda params=1.34M router=292.8K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.313  acc 7.86  best 7.86  (63s)
+  ep  10  loss 1.787  acc 46.77  best 46.77  (461s)
+  ep  20  loss 1.650  acc 44.39  best 49.40  (857s)
+  ep  30  loss 1.595  acc 45.70  best 49.95  (1254s)
+  ep  40  loss 1.555  acc 46.30  best 51.23  (1653s)
+  ep  50  loss 1.501  acc 49.87  best 51.50  (2050s)
+  ep  60  loss 1.431  acc 52.17  best 54.07  (2445s)
+  ep  70  loss 1.345  acc 51.86  best 56.03  (2843s)
+  ep  80  loss 1.256  acc 57.84  best 57.84  (3240s)
+  ep  90  loss 1.145  acc 55.69  best 59.73  (3638s)
+  ep 100  loss 1.008  acc 62.06  best 62.71  (4034s)
+  ep 110  loss 0.861  acc 64.93  best 65.04  (4433s)
+  ep 120  loss 0.689  acc 67.92  best 67.92  (4737s)
+  ep 130  loss 0.509  acc 69.95  best 69.95  (5032s)
+  ep 140  loss 0.369  acc 70.90  best 71.11  (5327s)
+  ep 149  loss 0.332  acc 71.09  best 71.14  (5593s)
+[mobilenetv2 gap seed=5] final=71.09 best=71.14 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K8__const_gap_seed5.json
+[mobilenetv2 tinyimagenet static w32 K4 seed=0] device=cuda params=0.94M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 5.012  acc 5.60  best 5.60  (129s)
+  ep  10  loss 2.740  acc 25.52  best 27.61  (567s)
+  ep  20  loss 2.647  acc 23.02  best 29.99  (1019s)
+  ep  30  loss 2.634  acc 21.31  best 30.77  (1470s)
+  ep  40  loss 2.603  acc 30.65  best 31.70  (1921s)
+  ep  50  loss 2.569  acc 30.56  best 32.16  (2376s)
+  ep  60  loss 2.509  acc 29.50  best 32.20  (2832s)
+  ep  70  loss 2.430  acc 34.63  best 34.91  (3288s)
+  ep  80  loss 2.339  acc 35.39  best 36.63  (3744s)
+  ep  90  loss 2.229  acc 36.27  best 38.06  (4200s)
+  ep 100  loss 2.107  acc 40.40  best 42.83  (4656s)
+  ep 110  loss 1.956  acc 44.41  best 45.69  (5111s)
+  ep 120  loss 1.795  acc 50.34  best 50.34  (5568s)
+  ep 130  loss 1.605  acc 54.03  best 54.03  (6024s)
+  ep 140  loss 1.421  acc 56.26  best 56.58  (6479s)
+  ep 149  loss 1.350  acc 57.01  best 57.29  (6890s)
+[mobilenetv2 static seed=0] final=57.01 best=57.29 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_static_seed0.json
+[mobilenetv2 tinyimagenet static w32 K4 seed=1] device=cuda params=0.94M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.989  acc 5.97  best 5.97  (80s)
+  ep  10  loss 2.747  acc 26.21  best 27.03  (537s)
+  ep  20  loss 2.657  acc 25.87  best 29.85  (996s)
+  ep  30  loss 2.636  acc 31.74  best 32.80  (1455s)
+  ep  40  loss 2.603  acc 29.18  best 33.95  (1914s)
+  ep  50  loss 2.566  acc 33.93  best 33.95  (2372s)
+  ep  60  loss 2.503  acc 28.21  best 33.95  (2831s)
+  ep  70  loss 2.434  acc 31.80  best 35.62  (3291s)
+  ep  80  loss 2.344  acc 37.91  best 37.91  (3749s)
+  ep  90  loss 2.225  acc 38.50  best 39.50  (4208s)
+  ep 100  loss 2.099  acc 39.65  best 42.64  (4666s)
+  ep 110  loss 1.954  acc 44.17  best 46.24  (5125s)
+  ep 120  loss 1.793  acc 50.85  best 50.85  (5583s)
+  ep 130  loss 1.605  acc 53.50  best 53.50  (6042s)
+  ep 140  loss 1.422  acc 56.39  best 56.39  (6500s)
+  ep 149  loss 1.350  acc 57.08  best 57.21  (6913s)
+[mobilenetv2 static seed=1] final=57.08 best=57.21 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_static_seed1.json
+[mobilenetv2 tinyimagenet static w32 K4 seed=2] device=cuda params=0.94M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 5.002  acc 4.02  best 4.02  (81s)
+  ep  10  loss 2.748  acc 29.99  best 29.99  (537s)
+  ep  20  loss 2.656  acc 28.77  best 29.99  (996s)
+  ep  30  loss 2.633  acc 30.80  best 31.57  (1454s)
+  ep  40  loss 2.607  acc 31.48  best 32.98  (1913s)
+  ep  50  loss 2.563  acc 28.52  best 32.98  (2370s)
+  ep  60  loss 2.506  acc 31.87  best 33.80  (2828s)
+  ep  70  loss 2.428  acc 30.52  best 35.54  (3287s)
+  ep  80  loss 2.336  acc 38.87  best 38.87  (3745s)
+  ep  90  loss 2.223  acc 39.39  best 39.39  (4204s)
+  ep 100  loss 2.095  acc 40.20  best 42.71  (4662s)
+  ep 110  loss 1.954  acc 45.08  best 46.56  (5120s)
+  ep 120  loss 1.786  acc 49.63  best 49.63  (5579s)
+  ep 130  loss 1.600  acc 53.90  best 53.90  (6038s)
+  ep 140  loss 1.418  acc 55.90  best 55.92  (6496s)
+  ep 149  loss 1.345  acc 56.45  best 56.69  (6910s)
+[mobilenetv2 static seed=2] final=56.45 best=56.69 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_static_seed2.json
+[mobilenetv2 tinyimagenet static w32 K4 seed=3] device=cuda params=0.94M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.987  acc 5.88  best 5.88  (80s)
+  ep  10  loss 2.729  acc 29.29  best 29.29  (539s)
+  ep  20  loss 2.652  acc 28.54  best 32.23  (998s)
+  ep  30  loss 2.631  acc 28.29  best 32.23  (1456s)
+  ep  40  loss 2.605  acc 26.70  best 32.23  (1915s)
+  ep  50  loss 2.561  acc 28.69  best 32.73  (2375s)
+  ep  60  loss 2.502  acc 32.59  best 33.91  (2833s)
+  ep  70  loss 2.418  acc 35.75  best 36.84  (3292s)
+  ep  80  loss 2.328  acc 35.48  best 37.14  (3751s)
+  ep  90  loss 2.222  acc 36.44  best 39.45  (4215s)
+  ep 100  loss 2.098  acc 41.07  best 42.36  (4680s)
+  ep 110  loss 1.949  acc 45.25  best 45.66  (5139s)
+  ep 120  loss 1.781  acc 49.47  best 49.54  (5594s)
+  ep 130  loss 1.599  acc 53.89  best 53.89  (6047s)
+  ep 140  loss 1.413  acc 56.31  best 56.72  (6506s)
+  ep 149  loss 1.339  acc 57.22  best 57.41  (6918s)
+[mobilenetv2 static seed=3] final=57.22 best=57.41 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_static_seed3.json
+[mobilenetv2 tinyimagenet static w32 K4 seed=4] device=cuda params=0.94M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.975  acc 4.95  best 4.95  (81s)
+  ep  10  loss 2.730  acc 27.60  best 29.22  (546s)
+  ep  20  loss 2.661  acc 26.43  best 31.31  (1026s)
+  ep  30  loss 2.635  acc 25.18  best 32.64  (1510s)
+  ep  40  loss 2.601  acc 21.47  best 32.64  (1963s)
+  ep  50  loss 2.564  acc 31.24  best 32.64  (2427s)
+  ep  60  loss 2.496  acc 33.63  best 33.63  (2953s)
+  ep  70  loss 2.428  acc 36.67  best 36.67  (3516s)
+  ep  80  loss 2.337  acc 36.46  best 37.13  (3976s)
+  ep  90  loss 2.225  acc 39.25  best 40.83  (4435s)
+  ep 100  loss 2.094  acc 42.51  best 44.63  (4896s)
+  ep 110  loss 1.950  acc 46.46  best 46.46  (5355s)
+  ep 120  loss 1.782  acc 50.15  best 50.29  (5820s)
+  ep 130  loss 1.596  acc 53.56  best 53.56  (6286s)
+  ep 140  loss 1.409  acc 56.26  best 56.26  (6752s)
+  ep 149  loss 1.334  acc 56.49  best 56.60  (7170s)
+[mobilenetv2 static seed=4] final=56.49 best=56.60 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_static_seed4.json
+[mobilenetv2 tinyimagenet static w32 K4 seed=5] device=cuda params=0.94M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 5.023  acc 6.15  best 6.15  (81s)
+  ep  10  loss 2.734  acc 23.95  best 29.39  (544s)
+  ep  20  loss 2.669  acc 27.80  best 29.86  (1008s)
+  ep  30  loss 2.637  acc 29.04  best 29.86  (1472s)
+  ep  40  loss 2.614  acc 27.97  best 32.37  (1936s)
+  ep  50  loss 2.584  acc 29.10  best 32.37  (2400s)
+  ep  60  loss 2.512  acc 31.26  best 34.69  (2865s)
+  ep  70  loss 2.446  acc 28.32  best 35.26  (3329s)
+  ep  80  loss 2.342  acc 34.39  best 36.91  (3794s)
+  ep  90  loss 2.235  acc 38.00  best 38.08  (4258s)
+  ep 100  loss 2.111  acc 39.31  best 42.09  (4722s)
+  ep 110  loss 1.962  acc 44.95  best 47.11  (5187s)
+  ep 120  loss 1.790  acc 49.69  best 49.69  (5651s)
+  ep 130  loss 1.606  acc 53.65  best 53.65  (6115s)
+  ep 140  loss 1.426  acc 56.51  best 56.51  (6579s)
+  ep 149  loss 1.349  acc 57.55  best 57.55  (6997s)
+[mobilenetv2 static seed=5] final=57.55 best=57.55 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_static_seed5.json
+[mobilenetv2 tinyimagenet uniform w32 K4 seed=0] device=cuda params=1.04M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 5.013  acc 5.02  best 5.02  (84s)
+  ep  10  loss 2.731  acc 29.86  best 29.86  (585s)
+  ep  20  loss 2.659  acc 31.24  best 31.25  (1085s)
+  ep  30  loss 2.646  acc 25.99  best 31.25  (1587s)
+  ep  40  loss 2.613  acc 29.94  best 32.46  (2089s)
+  ep  50  loss 2.578  acc 26.66  best 32.46  (2590s)
+  ep  60  loss 2.508  acc 29.79  best 32.77  (3090s)
+  ep  70  loss 2.437  acc 34.15  best 34.47  (3590s)
+  ep  80  loss 2.353  acc 34.36  best 35.87  (4091s)
+  ep  90  loss 2.240  acc 37.81  best 38.94  (4590s)
+  ep 100  loss 2.113  acc 40.08  best 41.75  (5089s)
+  ep 110  loss 1.967  acc 47.21  best 47.21  (5589s)
+  ep 120  loss 1.803  acc 48.96  best 48.96  (6089s)
+  ep 130  loss 1.614  acc 52.49  best 52.49  (6588s)
+  ep 140  loss 1.429  acc 55.41  best 55.66  (7086s)
+  ep 149  loss 1.354  acc 56.06  best 56.42  (7535s)
+[mobilenetv2 uniform seed=0] final=56.06 best=56.42 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_uniform_seed0.json
+[mobilenetv2 tinyimagenet uniform w32 K4 seed=1] device=cuda params=1.04M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.947  acc 6.00  best 6.00  (85s)
+  ep  10  loss 2.730  acc 29.98  best 29.98  (589s)
+  ep  20  loss 2.651  acc 24.07  best 30.66  (1095s)
+  ep  30  loss 2.639  acc 30.86  best 30.86  (1602s)
+  ep  40  loss 2.612  acc 28.17  best 32.09  (2110s)
+  ep  50  loss 2.577  acc 28.65  best 32.09  (2614s)
+  ep  60  loss 2.522  acc 31.05  best 32.24  (3118s)
+  ep  70  loss 2.443  acc 36.80  best 36.80  (3622s)
+  ep  80  loss 2.359  acc 34.77  best 36.80  (4127s)
+  ep  90  loss 2.244  acc 36.43  best 39.55  (4630s)
+  ep 100  loss 2.117  acc 40.75  best 41.38  (5135s)
+  ep 110  loss 1.971  acc 43.69  best 46.38  (5640s)
+  ep 120  loss 1.810  acc 50.27  best 50.28  (6143s)
+  ep 130  loss 1.623  acc 53.69  best 53.69  (6647s)
+  ep 140  loss 1.445  acc 56.25  best 56.31  (7150s)
+  ep 149  loss 1.372  acc 56.65  best 56.81  (7604s)
+[mobilenetv2 uniform seed=1] final=56.65 best=56.81 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_uniform_seed1.json
+[mobilenetv2 tinyimagenet uniform w32 K4 seed=2] device=cuda params=1.04M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.946  acc 5.83  best 5.83  (85s)
+  ep  10  loss 2.728  acc 27.65  best 27.65  (592s)
+  ep  20  loss 2.655  acc 29.39  best 31.31  (1100s)
+  ep  30  loss 2.631  acc 28.78  best 31.31  (1607s)
+  ep  40  loss 2.621  acc 25.13  best 31.31  (2115s)
+  ep  50  loss 2.573  acc 28.68  best 32.78  (2621s)
+  ep  60  loss 2.516  acc 31.00  best 32.78  (3130s)
+  ep  70  loss 2.447  acc 32.62  best 33.86  (3636s)
+  ep  80  loss 2.349  acc 32.79  best 36.20  (4142s)
+  ep  90  loss 2.231  acc 41.17  best 41.17  (4649s)
+  ep 100  loss 2.110  acc 41.11  best 42.06  (5157s)
+  ep 110  loss 1.962  acc 42.15  best 45.97  (5663s)
+  ep 120  loss 1.802  acc 49.87  best 50.18  (6169s)
+  ep 130  loss 1.607  acc 53.43  best 53.43  (6676s)
+  ep 140  loss 1.427  acc 56.32  best 56.32  (7096s)
+  ep 149  loss 1.350  acc 56.88  best 56.99  (7471s)
+[mobilenetv2 uniform seed=2] final=56.88 best=56.99 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_uniform_seed2.json
+[mobilenetv2 tinyimagenet uniform w32 K4 seed=3] device=cuda params=1.04M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.953  acc 5.37  best 5.37  (57s)
+  ep  10  loss 2.721  acc 24.34  best 29.25  (469s)
+  ep  20  loss 2.637  acc 27.83  best 29.25  (882s)
+  ep  30  loss 2.625  acc 31.30  best 31.30  (1295s)
+  ep  40  loss 2.624  acc 29.81  best 31.56  (1707s)
+  ep  50  loss 2.576  acc 27.12  best 32.48  (2120s)
+  ep  60  loss 2.519  acc 30.61  best 32.48  (2533s)
+  ep  70  loss 2.442  acc 26.50  best 34.47  (2946s)
+  ep  80  loss 2.344  acc 38.54  best 38.54  (3359s)
+  ep  90  loss 2.236  acc 38.65  best 38.65  (3772s)
+  ep 100  loss 2.114  acc 41.63  best 42.93  (4186s)
+  ep 110  loss 1.969  acc 44.44  best 46.10  (4599s)
+  ep 120  loss 1.804  acc 50.27  best 50.27  (5011s)
+  ep 130  loss 1.618  acc 53.19  best 53.42  (5424s)
+  ep 140  loss 1.440  acc 56.31  best 56.31  (5837s)
+  ep 149  loss 1.363  acc 56.73  best 57.03  (6209s)
+[mobilenetv2 uniform seed=3] final=56.73 best=57.03 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_uniform_seed3.json
+[mobilenetv2 tinyimagenet uniform w32 K4 seed=4] device=cuda params=1.04M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.971  acc 6.37  best 6.37  (57s)
+  ep  10  loss 2.728  acc 31.17  best 31.17  (468s)
+  ep  20  loss 2.663  acc 28.03  best 31.17  (881s)
+  ep  30  loss 2.647  acc 26.71  best 32.14  (1294s)
+  ep  40  loss 2.616  acc 25.28  best 32.14  (1708s)
+  ep  50  loss 2.576  acc 30.89  best 32.14  (2122s)
+  ep  60  loss 2.522  acc 32.23  best 32.28  (2535s)
+  ep  70  loss 2.447  acc 32.05  best 32.85  (2949s)
+  ep  80  loss 2.351  acc 35.86  best 36.43  (3363s)
+  ep  90  loss 2.240  acc 36.84  best 38.40  (3776s)
+  ep 100  loss 2.109  acc 42.05  best 42.05  (4190s)
+  ep 110  loss 1.968  acc 44.30  best 46.41  (4604s)
+  ep 120  loss 1.803  acc 49.51  best 49.51  (5017s)
+  ep 130  loss 1.618  acc 53.78  best 53.78  (5431s)
+  ep 140  loss 1.439  acc 56.52  best 56.52  (5845s)
+  ep 149  loss 1.365  acc 57.17  best 57.25  (6217s)
+[mobilenetv2 uniform seed=4] final=57.17 best=57.25 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_uniform_seed4.json
+[mobilenetv2 tinyimagenet uniform w32 K4 seed=5] device=cuda params=1.04M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.968  acc 5.83  best 5.83  (57s)
+  ep  10  loss 2.730  acc 28.97  best 31.45  (467s)
+  ep  20  loss 2.655  acc 26.84  best 31.70  (879s)
+  ep  30  loss 2.647  acc 25.49  best 31.70  (1291s)
+  ep  40  loss 2.619  acc 28.55  best 32.29  (1703s)
+  ep  50  loss 2.575  acc 27.01  best 33.77  (2115s)
+  ep  60  loss 2.512  acc 33.34  best 33.98  (2528s)
+  ep  70  loss 2.431  acc 32.04  best 35.80  (2940s)
+  ep  80  loss 2.348  acc 36.01  best 37.35  (3352s)
+  ep  90  loss 2.241  acc 39.54  best 41.23  (3764s)
+  ep 100  loss 2.106  acc 41.06  best 44.31  (4177s)
+  ep 110  loss 1.963  acc 44.17  best 45.64  (4589s)
+  ep 120  loss 1.798  acc 50.04  best 50.04  (5001s)
+  ep 130  loss 1.607  acc 53.71  best 53.71  (5414s)
+  ep 140  loss 1.424  acc 56.19  best 56.59  (5826s)
+  ep 149  loss 1.349  acc 57.15  best 57.32  (6197s)
+[mobilenetv2 uniform seed=5] final=57.15 best=57.32 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_uniform_seed5.json
+[mobilenetv2 tinyimagenet gap w32 K4 seed=0] device=cuda params=1.33M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.950  acc 6.07  best 6.07  (152s)
+  ep  10  loss 2.655  acc 28.07  best 31.06  (1511s)
+  ep  20  loss 2.556  acc 30.21  best 36.46  (2869s)
+  ep  30  loss 2.525  acc 19.79  best 36.46  (4228s)
+  ep  40  loss 2.509  acc 27.37  best 36.46  (5586s)
+  ep  50  loss 2.469  acc 31.55  best 36.46  (6945s)
+  ep  60  loss 2.424  acc 34.55  best 36.46  (8304s)
+  ep  70  loss 2.338  acc 36.02  best 36.86  (9662s)
+  ep  80  loss 2.243  acc 34.75  best 38.46  (11021s)
+  ep  90  loss 2.129  acc 41.43  best 42.48  (12379s)
+  ep 100  loss 2.001  acc 42.57  best 44.19  (13738s)
+  ep 110  loss 1.852  acc 46.58  best 47.37  (15097s)
+  ep 120  loss 1.679  acc 52.82  best 52.82  (16455s)
+  ep 130  loss 1.482  acc 55.81  best 55.81  (17814s)
+  ep 140  loss 1.295  acc 58.37  best 58.37  (19173s)
+  ep 149  loss 1.216  acc 58.90  best 59.20  (20395s)
+[mobilenetv2 gap seed=0] final=58.90 best=59.20 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_gap_seed0.json
+[mobilenetv2 tinyimagenet gap w32 K4 seed=1] device=cuda params=1.33M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 5.015  acc 3.82  best 3.82  (152s)
+  ep  10  loss 2.660  acc 33.30  best 33.30  (1511s)
+  ep  20  loss 2.563  acc 29.61  best 33.45  (2871s)
+  ep  30  loss 2.534  acc 31.46  best 33.56  (4230s)
+  ep  40  loss 2.508  acc 28.24  best 34.11  (5590s)
+  ep  50  loss 2.466  acc 24.61  best 34.11  (6949s)
+  ep  60  loss 2.406  acc 33.86  best 36.13  (8308s)
+  ep  70  loss 2.329  acc 36.60  best 37.81  (9668s)
+  ep  80  loss 2.240  acc 38.22  best 40.01  (11027s)
+  ep  90  loss 2.127  acc 38.58  best 42.59  (12386s)
+  ep 100  loss 1.996  acc 42.64  best 44.84  (13746s)
+  ep 110  loss 1.847  acc 45.43  best 48.71  (15105s)
+  ep 120  loss 1.678  acc 50.67  best 52.21  (16464s)
+  ep 130  loss 1.480  acc 55.61  best 55.61  (17824s)
+  ep 140  loss 1.294  acc 57.99  best 57.99  (19184s)
+  ep 149  loss 1.211  acc 58.34  best 58.62  (20408s)
+[mobilenetv2 gap seed=1] final=58.34 best=58.62 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_gap_seed1.json
+[mobilenetv2 tinyimagenet gap w32 K4 seed=2] device=cuda params=1.33M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.966  acc 6.05  best 6.05  (152s)
+  ep  10  loss 2.656  acc 26.15  best 29.67  (1511s)
+  ep  20  loss 2.549  acc 32.10  best 34.50  (2870s)
+  ep  30  loss 2.521  acc 29.11  best 34.50  (4229s)
+  ep  40  loss 2.508  acc 31.27  best 34.55  (5588s)
+  ep  50  loss 2.465  acc 32.67  best 34.55  (6947s)
+  ep  60  loss 2.400  acc 34.24  best 36.20  (8306s)
+  ep  70  loss 2.324  acc 35.47  best 37.47  (9665s)
+  ep  80  loss 2.226  acc 39.43  best 39.59  (11024s)
+  ep  90  loss 2.112  acc 40.94  best 41.53  (12383s)
+  ep 100  loss 1.982  acc 43.26  best 45.09  (13743s)
+  ep 110  loss 1.833  acc 48.11  best 48.11  (15102s)
+  ep 120  loss 1.664  acc 52.29  best 52.35  (16461s)
+  ep 130  loss 1.460  acc 56.05  best 56.05  (17820s)
+  ep 140  loss 1.263  acc 58.66  best 58.85  (19179s)
+  ep 149  loss 1.189  acc 59.06  best 59.54  (20403s)
+[mobilenetv2 gap seed=2] final=59.06 best=59.54 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_gap_seed2.json
+[mobilenetv2 tinyimagenet gap w32 K4 seed=3] device=cuda params=1.33M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.972  acc 5.86  best 5.86  (152s)
+  ep  10  loss 2.702  acc 26.73  best 28.57  (1512s)
+  ep  20  loss 2.615  acc 30.31  best 30.31  (2872s)
+  ep  30  loss 2.588  acc 29.08  best 32.67  (4232s)
+  ep  40  loss 2.577  acc 32.95  best 33.82  (5592s)
+  ep  50  loss 2.523  acc 31.97  best 33.82  (6953s)
+  ep  60  loss 2.465  acc 34.38  best 34.38  (8314s)
+  ep  70  loss 2.387  acc 32.18  best 35.11  (9674s)
+  ep  80  loss 2.293  acc 30.27  best 38.12  (11034s)
+  ep  90  loss 2.181  acc 38.19  best 39.37  (12395s)
+  ep 100  loss 2.053  acc 43.75  best 43.75  (13755s)
+  ep 110  loss 1.904  acc 46.05  best 47.33  (15115s)
+  ep 120  loss 1.728  acc 49.74  best 50.46  (16475s)
+  ep 130  loss 1.535  acc 54.82  best 54.82  (17836s)
+  ep 140  loss 1.340  acc 57.43  best 57.43  (19196s)
+  ep 149  loss 1.263  acc 57.68  best 57.85  (20420s)
+[mobilenetv2 gap seed=3] final=57.68 best=57.85 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_gap_seed3.json
+[mobilenetv2 tinyimagenet gap w32 K4 seed=4] device=cuda params=1.33M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.963  acc 5.64  best 5.64  (152s)
+  ep  10  loss 2.660  acc 23.43  best 27.58  (1510s)
+  ep  20  loss 2.566  acc 30.61  best 33.41  (2869s)
+  ep  30  loss 2.538  acc 25.56  best 33.41  (4227s)
+  ep  40  loss 2.526  acc 30.12  best 33.70  (5586s)
+  ep  50  loss 2.478  acc 32.81  best 34.68  (6945s)
+  ep  60  loss 2.409  acc 33.10  best 34.68  (8304s)
+  ep  70  loss 2.336  acc 37.47  best 37.47  (9662s)
+  ep  80  loss 2.237  acc 38.77  best 38.77  (11021s)
+  ep  90  loss 2.133  acc 42.39  best 42.99  (12380s)
+  ep 100  loss 2.001  acc 45.99  best 45.99  (13739s)
+  ep 110  loss 1.851  acc 48.97  best 48.97  (15098s)
+  ep 120  loss 1.682  acc 52.28  best 52.28  (16456s)
+  ep 130  loss 1.484  acc 55.47  best 55.47  (17815s)
+  ep 140  loss 1.299  acc 57.98  best 58.23  (19176s)
+  ep 149  loss 1.219  acc 58.75  best 58.78  (20411s)
+[mobilenetv2 gap seed=4] final=58.75 best=58.78 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_gap_seed4.json
+[mobilenetv2 tinyimagenet gap w32 K4 seed=5] device=cuda params=1.33M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.988  acc 5.78  best 5.78  (152s)
+  ep  10  loss 2.646  acc 29.09  best 30.43  (1515s)
+  ep  20  loss 2.566  acc 30.58  best 33.84  (2886s)
+  ep  30  loss 2.537  acc 32.94  best 33.84  (4258s)
+  ep  40  loss 2.515  acc 27.85  best 34.70  (5631s)
+  ep  50  loss 2.465  acc 26.65  best 34.70  (6997s)
+  ep  60  loss 2.417  acc 33.01  best 36.60  (8360s)
+  ep  70  loss 2.330  acc 36.69  best 38.54  (9729s)
+  ep  80  loss 2.239  acc 38.52  best 38.63  (11103s)
+  ep  90  loss 2.123  acc 40.84  best 41.18  (12467s)
+  ep 100  loss 1.993  acc 41.36  best 45.10  (13838s)
+  ep 110  loss 1.854  acc 48.65  best 48.65  (15207s)
+  ep 120  loss 1.679  acc 50.32  best 52.11  (16578s)
+  ep 130  loss 1.485  acc 55.30  best 55.51  (17950s)
+  ep 140  loss 1.296  acc 58.29  best 58.70  (19316s)
+  ep 149  loss 1.219  acc 59.24  best 59.30  (20569s)
+[mobilenetv2 gap seed=5] final=59.24 best=59.30 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w32__K4__const_gap_seed5.json
+[mobilenetv2 cifar100 gap w64 K4 seed=0] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.253  acc 9.75  best 9.75  tau 30.00  (64s)
+  ep  10  loss 1.664  acc 44.68  best 47.91  tau 1.00  (455s)
+  ep  20  loss 1.591  acc 50.75  best 50.75  tau 1.00  (841s)
+  ep  30  loss 1.558  acc 48.57  best 50.75  tau 1.00  (1224s)
+  ep  40  loss 1.498  acc 48.06  best 52.19  tau 1.00  (1769s)
+  ep  50  loss 1.450  acc 48.23  best 52.94  tau 1.00  (2335s)
+  ep  60  loss 1.394  acc 53.96  best 54.34  tau 1.00  (2799s)
+  ep  70  loss 1.322  acc 54.32  best 56.08  tau 1.00  (3449s)
+  ep  80  loss 1.210  acc 59.01  best 59.01  tau 1.00  (4246s)
+  ep  90  loss 1.093  acc 59.68  best 60.80  tau 1.00  (5051s)
+  ep 100  loss 0.958  acc 61.44  best 64.64  tau 1.00  (5854s)
+  ep 110  loss 0.792  acc 65.35  best 66.06  tau 1.00  (6659s)
+  ep 120  loss 0.599  acc 69.71  best 69.71  tau 1.00  (7465s)
+  ep 130  loss 0.398  acc 71.60  best 71.60  tau 1.00  (8266s)
+  ep 140  loss 0.253  acc 72.90  best 73.07  tau 1.00  (8831s)
+  ep 149  loss 0.217  acc 73.07  best 73.28  tau 1.00  (9164s)
+[mobilenetv2 gap seed=0] final=73.07 best=73.28 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__anneal_gap_seed0.json
+[mobilenetv2 cifar100 gap w64 K4 seed=1] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.308  acc 8.73  best 8.73  tau 30.00  (57s)
+  ep  10  loss 1.647  acc 47.74  best 50.42  tau 1.00  (426s)
+  ep  20  loss 1.591  acc 51.06  best 51.06  tau 1.00  (790s)
+  ep  30  loss 1.563  acc 49.63  best 51.29  tau 1.00  (1159s)
+  ep  40  loss 1.506  acc 50.18  best 54.44  tau 1.00  (1482s)
+  ep  50  loss 1.469  acc 49.20  best 54.77  tau 1.00  (1791s)
+  ep  60  loss 1.392  acc 54.11  best 54.77  tau 1.00  (2100s)
+  ep  70  loss 1.317  acc 55.26  best 57.86  tau 1.00  (2409s)
+  ep  80  loss 1.214  acc 53.82  best 58.60  tau 1.00  (2718s)
+  ep  90  loss 1.093  acc 61.26  best 61.26  tau 1.00  (3027s)
+  ep 100  loss 0.956  acc 63.11  best 63.65  tau 1.00  (3335s)
+  ep 110  loss 0.791  acc 64.89  best 66.11  tau 1.00  (3644s)
+  ep 120  loss 0.605  acc 69.13  best 69.37  tau 1.00  (3953s)
+  ep 130  loss 0.396  acc 71.67  best 71.67  tau 1.00  (4262s)
+  ep 140  loss 0.255  acc 72.82  best 72.82  tau 1.00  (4571s)
+  ep 149  loss 0.221  acc 72.68  best 72.92  tau 1.00  (4849s)
+[mobilenetv2 gap seed=1] final=72.68 best=72.92 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__anneal_gap_seed1.json
+[mobilenetv2 cifar100 gap w64 K4 seed=2] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.247  acc 9.73  best 9.73  tau 30.00  (47s)
+  ep  10  loss 1.653  acc 46.87  best 48.44  tau 1.00  (359s)
+  ep  20  loss 1.589  acc 48.47  best 49.98  tau 1.00  (670s)
+  ep  30  loss 1.548  acc 44.84  best 51.31  tau 1.00  (982s)
+  ep  40  loss 1.518  acc 51.35  best 52.51  tau 1.00  (1293s)
+  ep  50  loss 1.462  acc 49.11  best 53.84  tau 1.00  (1605s)
+  ep  60  loss 1.395  acc 55.43  best 55.43  tau 1.00  (1916s)
+  ep  70  loss 1.330  acc 54.17  best 55.80  tau 1.00  (2228s)
+  ep  80  loss 1.228  acc 56.54  best 57.81  tau 1.00  (2540s)
+  ep  90  loss 1.107  acc 61.43  best 61.94  tau 1.00  (2851s)
+  ep 100  loss 0.975  acc 64.45  best 64.45  tau 1.00  (3163s)
+  ep 110  loss 0.811  acc 66.61  best 66.61  tau 1.00  (3474s)
+  ep 120  loss 0.623  acc 68.55  best 68.66  tau 1.00  (3786s)
+  ep 130  loss 0.418  acc 71.13  best 71.36  tau 1.00  (4097s)
+  ep 140  loss 0.271  acc 72.32  best 72.61  tau 1.00  (4409s)
+  ep 149  loss 0.237  acc 72.72  best 72.99  tau 1.00  (4689s)
+[mobilenetv2 gap seed=2] final=72.72 best=72.99 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__anneal_gap_seed2.json
+[mobilenetv2 cifar100 gap w64 K4 seed=3] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.250  acc 8.77  best 8.77  tau 30.00  (47s)
+  ep  10  loss 1.656  acc 40.75  best 46.71  tau 1.00  (357s)
+  ep  20  loss 1.595  acc 49.82  best 49.82  tau 1.00  (667s)
+  ep  30  loss 1.561  acc 47.59  best 52.46  tau 1.00  (976s)
+  ep  40  loss 1.511  acc 48.98  best 52.46  tau 1.00  (1286s)
+  ep  50  loss 1.469  acc 53.42  best 53.42  tau 1.00  (1596s)
+  ep  60  loss 1.388  acc 54.35  best 54.35  tau 1.00  (1906s)
+  ep  70  loss 1.317  acc 55.89  best 56.67  tau 1.00  (2216s)
+  ep  80  loss 1.214  acc 58.09  best 58.54  tau 1.00  (2526s)
+  ep  90  loss 1.100  acc 58.39  best 60.65  tau 1.00  (2836s)
+  ep 100  loss 0.961  acc 63.05  best 63.44  tau 1.00  (3146s)
+  ep 110  loss 0.793  acc 66.74  best 66.97  tau 1.00  (3456s)
+  ep 120  loss 0.608  acc 68.03  best 68.41  tau 1.00  (3766s)
+  ep 130  loss 0.405  acc 70.92  best 71.57  tau 1.00  (4076s)
+  ep 140  loss 0.259  acc 72.72  best 72.72  tau 1.00  (4386s)
+  ep 149  loss 0.220  acc 72.65  best 72.75  tau 1.00  (4666s)
+[mobilenetv2 gap seed=3] final=72.65 best=72.75 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__anneal_gap_seed3.json
+[mobilenetv2 cifar100 gap w64 K4 seed=4] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.265  acc 7.14  best 7.14  tau 30.00  (47s)
+  ep  10  loss 1.647  acc 47.66  best 48.26  tau 1.00  (357s)
+  ep  20  loss 1.584  acc 46.46  best 51.02  tau 1.00  (667s)
+  ep  30  loss 1.545  acc 46.10  best 53.19  tau 1.00  (977s)
+  ep  40  loss 1.513  acc 51.71  best 53.19  tau 1.00  (1287s)
+  ep  50  loss 1.458  acc 45.87  best 53.19  tau 1.00  (1597s)
+  ep  60  loss 1.391  acc 55.07  best 55.07  tau 1.00  (1907s)
+  ep  70  loss 1.317  acc 52.26  best 56.10  tau 1.00  (2218s)
+  ep  80  loss 1.220  acc 58.06  best 58.31  tau 1.00  (2528s)
+  ep  90  loss 1.103  acc 60.65  best 60.65  tau 1.00  (2838s)
+  ep 100  loss 0.964  acc 62.15  best 62.61  tau 1.00  (3148s)
+  ep 110  loss 0.802  acc 65.62  best 66.47  tau 1.00  (3459s)
+  ep 120  loss 0.609  acc 69.39  best 69.68  tau 1.00  (3769s)
+  ep 130  loss 0.405  acc 72.13  best 72.13  tau 1.00  (4079s)
+  ep 140  loss 0.261  acc 73.26  best 73.26  tau 1.00  (4389s)
+  ep 149  loss 0.225  acc 73.12  best 73.33  tau 1.00  (4668s)
+[mobilenetv2 gap seed=4] final=73.12 best=73.33 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__anneal_gap_seed4.json
+[mobilenetv2 cifar100 gap w64 K4 seed=5] device=cuda params=3.68M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.261  acc 10.43  best 10.43  tau 30.00  (47s)
+  ep  10  loss 1.659  acc 48.90  best 48.90  tau 1.00  (357s)
+  ep  20  loss 1.590  acc 47.02  best 49.65  tau 1.00  (668s)
+  ep  30  loss 1.568  acc 50.01  best 51.80  tau 1.00  (978s)
+  ep  40  loss 1.512  acc 46.64  best 51.80  tau 1.00  (1289s)
+  ep  50  loss 1.468  acc 50.36  best 52.74  tau 1.00  (1599s)
+  ep  60  loss 1.406  acc 50.75  best 54.70  tau 1.00  (1909s)
+  ep  70  loss 1.321  acc 55.38  best 56.89  tau 1.00  (2220s)
+  ep  80  loss 1.223  acc 57.14  best 58.76  tau 1.00  (2530s)
+  ep  90  loss 1.102  acc 59.39  best 59.81  tau 1.00  (2840s)
+  ep 100  loss 0.958  acc 63.52  best 63.52  tau 1.00  (3151s)
+  ep 110  loss 0.805  acc 67.15  best 67.15  tau 1.00  (3461s)
+  ep 120  loss 0.618  acc 69.05  best 69.17  tau 1.00  (3772s)
+  ep 130  loss 0.412  acc 71.21  best 71.67  tau 1.00  (4083s)
+  ep 140  loss 0.266  acc 72.56  best 72.65  tau 1.00  (4393s)
+  ep 149  loss 0.229  acc 72.76  best 73.10  tau 1.00  (4672s)
+[mobilenetv2 gap seed=5] final=72.76 best=73.10 -> results_models\mobilenetv2\mobilenetv2__cifar100__w64__K4__anneal_gap_seed5.json
+[mobilenetv2 cifar100 gap w32 K4 seed=0] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.339  acc 8.08  best 8.08  tau 30.00  (35s)
+  ep  10  loss 1.826  acc 44.85  best 44.85  tau 1.00  (223s)
+  ep  20  loss 1.709  acc 45.08  best 48.82  tau 1.00  (413s)
+  ep  30  loss 1.663  acc 47.71  best 48.82  tau 1.00  (601s)
+  ep  40  loss 1.608  acc 46.06  best 49.15  tau 1.00  (791s)
+  ep  50  loss 1.554  acc 45.37  best 49.65  tau 1.00  (977s)
+  ep  60  loss 1.496  acc 47.12  best 51.61  tau 1.00  (1167s)
+  ep  70  loss 1.405  acc 53.22  best 55.17  tau 1.00  (1354s)
+  ep  80  loss 1.319  acc 54.59  best 55.82  tau 1.00  (1543s)
+  ep  90  loss 1.201  acc 56.34  best 60.55  tau 1.00  (1731s)
+  ep 100  loss 1.071  acc 60.83  best 60.87  tau 1.00  (1919s)
+  ep 110  loss 0.926  acc 63.37  best 63.62  tau 1.00  (2107s)
+  ep 120  loss 0.763  acc 66.47  best 66.59  tau 1.00  (2295s)
+  ep 130  loss 0.592  acc 69.16  best 69.16  tau 1.00  (2484s)
+  ep 140  loss 0.449  acc 70.38  best 70.39  tau 1.00  (2672s)
+  ep 149  loss 0.409  acc 70.41  best 70.55  tau 1.00  (2842s)
+[mobilenetv2 gap seed=0] final=70.41 best=70.55 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__anneal_gap_seed0.json
+[mobilenetv2 cifar100 gap w32 K4 seed=1] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.348  acc 8.38  best 8.38  tau 30.00  (35s)
+  ep  10  loss 1.829  acc 38.55  best 42.95  tau 1.00  (222s)
+  ep  20  loss 1.717  acc 43.95  best 46.46  tau 1.00  (413s)
+  ep  30  loss 1.656  acc 40.44  best 48.73  tau 1.00  (602s)
+  ep  40  loss 1.604  acc 48.38  best 49.79  tau 1.00  (791s)
+  ep  50  loss 1.564  acc 48.27  best 52.57  tau 1.00  (979s)
+  ep  60  loss 1.494  acc 49.53  best 52.57  tau 1.00  (1169s)
+  ep  70  loss 1.410  acc 53.36  best 55.06  tau 1.00  (1356s)
+  ep  80  loss 1.317  acc 53.89  best 55.32  tau 1.00  (1546s)
+  ep  90  loss 1.202  acc 57.61  best 59.71  tau 1.00  (1732s)
+  ep 100  loss 1.070  acc 60.76  best 61.35  tau 1.00  (1922s)
+  ep 110  loss 0.934  acc 63.55  best 63.90  tau 1.00  (2110s)
+  ep 120  loss 0.762  acc 66.44  best 66.70  tau 1.00  (2299s)
+  ep 130  loss 0.582  acc 69.25  best 69.25  tau 1.00  (2487s)
+  ep 140  loss 0.447  acc 70.93  best 71.02  tau 1.00  (2675s)
+  ep 149  loss 0.404  acc 71.22  best 71.41  tau 1.00  (2845s)
+[mobilenetv2 gap seed=1] final=71.22 best=71.41 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__anneal_gap_seed1.json
+[mobilenetv2 cifar100 gap w32 K4 seed=2] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.308  acc 9.24  best 9.24  tau 30.00  (35s)
+  ep  10  loss 1.833  acc 44.72  best 44.72  tau 1.00  (223s)
+  ep  20  loss 1.709  acc 43.35  best 47.52  tau 1.00  (413s)
+  ep  30  loss 1.653  acc 44.53  best 48.78  tau 1.00  (601s)
+  ep  40  loss 1.619  acc 49.71  best 51.70  tau 1.00  (791s)
+  ep  50  loss 1.562  acc 50.45  best 51.70  tau 1.00  (979s)
+  ep  60  loss 1.505  acc 52.87  best 52.87  tau 1.00  (1170s)
+  ep  70  loss 1.416  acc 52.55  best 54.09  tau 1.00  (1358s)
+  ep  80  loss 1.315  acc 56.90  best 56.96  tau 1.00  (1549s)
+  ep  90  loss 1.205  acc 58.35  best 58.48  tau 1.00  (1737s)
+  ep 100  loss 1.079  acc 59.73  best 60.57  tau 1.00  (1926s)
+  ep 110  loss 0.939  acc 64.41  best 64.41  tau 1.00  (2114s)
+  ep 120  loss 0.770  acc 67.01  best 67.01  tau 1.00  (2305s)
+  ep 130  loss 0.595  acc 69.38  best 69.38  tau 1.00  (2492s)
+  ep 140  loss 0.461  acc 70.22  best 70.57  tau 1.00  (2682s)
+  ep 149  loss 0.417  acc 70.84  best 70.92  tau 1.00  (2852s)
+[mobilenetv2 gap seed=2] final=70.84 best=70.92 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__anneal_gap_seed2.json
+[mobilenetv2 cifar100 gap w32 K4 seed=3] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.333  acc 7.17  best 7.17  tau 30.00  (35s)
+  ep  10  loss 1.836  acc 38.90  best 45.92  tau 1.00  (223s)
+  ep  20  loss 1.717  acc 48.62  best 48.62  tau 1.00  (413s)
+  ep  30  loss 1.662  acc 46.69  best 49.49  tau 1.00  (601s)
+  ep  40  loss 1.608  acc 44.42  best 50.86  tau 1.00  (790s)
+  ep  50  loss 1.563  acc 50.67  best 51.01  tau 1.00  (978s)
+  ep  60  loss 1.489  acc 47.80  best 53.33  tau 1.00  (1168s)
+  ep  70  loss 1.394  acc 50.87  best 55.19  tau 1.00  (1356s)
+  ep  80  loss 1.316  acc 54.60  best 55.57  tau 1.00  (1546s)
+  ep  90  loss 1.202  acc 55.34  best 58.54  tau 1.00  (1733s)
+  ep 100  loss 1.068  acc 60.93  best 61.75  tau 1.00  (1923s)
+  ep 110  loss 0.925  acc 64.83  best 64.83  tau 1.00  (2110s)
+  ep 120  loss 0.757  acc 67.25  best 67.25  tau 1.00  (2299s)
+  ep 130  loss 0.582  acc 69.16  best 69.16  tau 1.00  (2487s)
+  ep 140  loss 0.446  acc 70.39  best 70.42  tau 1.00  (2676s)
+  ep 149  loss 0.403  acc 70.55  best 70.80  tau 1.00  (2844s)
+[mobilenetv2 gap seed=3] final=70.55 best=70.80 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__anneal_gap_seed3.json
+[mobilenetv2 cifar100 gap w32 K4 seed=4] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.317  acc 8.09  best 8.09  tau 30.00  (35s)
+  ep  10  loss 1.837  acc 30.26  best 41.86  tau 1.00  (224s)
+  ep  20  loss 1.714  acc 45.51  best 45.61  tau 1.00  (413s)
+  ep  30  loss 1.654  acc 39.21  best 47.77  tau 1.00  (601s)
+  ep  40  loss 1.614  acc 45.88  best 48.81  tau 1.00  (791s)
+  ep  50  loss 1.561  acc 48.16  best 50.04  tau 1.00  (978s)
+  ep  60  loss 1.495  acc 47.68  best 51.85  tau 1.00  (1167s)
+  ep  70  loss 1.408  acc 49.31  best 52.49  tau 1.00  (1354s)
+  ep  80  loss 1.322  acc 53.88  best 56.10  tau 1.00  (1543s)
+  ep  90  loss 1.206  acc 56.81  best 58.09  tau 1.00  (1731s)
+  ep 100  loss 1.082  acc 58.37  best 60.15  tau 1.00  (1920s)
+  ep 110  loss 0.935  acc 64.27  best 64.27  tau 1.00  (2107s)
+  ep 120  loss 0.771  acc 67.16  best 67.16  tau 1.00  (2297s)
+  ep 130  loss 0.599  acc 69.48  best 69.49  tau 1.00  (2484s)
+  ep 140  loss 0.459  acc 71.06  best 71.06  tau 1.00  (2673s)
+  ep 149  loss 0.414  acc 71.00  best 71.26  tau 1.00  (2842s)
+[mobilenetv2 gap seed=4] final=71.00 best=71.26 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__anneal_gap_seed4.json
+[mobilenetv2 cifar100 gap w32 K4 seed=5] device=cuda params=1.20M router=289.1K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.327  acc 8.35  best 8.35  tau 30.00  (34s)
+  ep  10  loss 1.839  acc 41.61  best 45.10  tau 1.00  (225s)
+  ep  20  loss 1.722  acc 43.99  best 46.83  tau 1.00  (414s)
+  ep  30  loss 1.663  acc 47.15  best 47.15  tau 1.00  (603s)
+  ep  40  loss 1.629  acc 49.59  best 51.45  tau 1.00  (792s)
+  ep  50  loss 1.561  acc 50.06  best 51.45  tau 1.00  (980s)
+  ep  60  loss 1.492  acc 52.16  best 52.16  tau 1.00  (1169s)
+  ep  70  loss 1.416  acc 50.87  best 54.24  tau 1.00  (1357s)
+  ep  80  loss 1.314  acc 55.52  best 56.52  tau 1.00  (1547s)
+  ep  90  loss 1.212  acc 58.33  best 58.33  tau 1.00  (1735s)
+  ep 100  loss 1.085  acc 60.37  best 61.26  tau 1.00  (1923s)
+  ep 110  loss 0.937  acc 64.82  best 64.87  tau 1.00  (2110s)
+  ep 120  loss 0.766  acc 66.43  best 66.86  tau 1.00  (2300s)
+  ep 130  loss 0.591  acc 68.90  best 69.57  tau 1.00  (2487s)
+  ep 140  loss 0.460  acc 70.46  best 70.57  tau 1.00  (2676s)
+  ep 149  loss 0.419  acc 70.81  best 70.88  tau 1.00  (2845s)
+[mobilenetv2 gap seed=5] final=70.81 best=70.88 -> results_models\mobilenetv2\mobilenetv2__cifar100__w32__K4__anneal_gap_seed5.json
+[mobilenetv2 cifar100 gap w16 K4 seed=0] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.380  acc 5.41  best 5.41  tau 30.00  (34s)
+  ep  10  loss 2.106  acc 36.81  best 36.81  tau 1.00  (200s)
+  ep  20  loss 1.898  acc 41.26  best 45.69  tau 1.00  (360s)
+  ep  30  loss 1.813  acc 44.61  best 45.69  tau 1.00  (527s)
+  ep  40  loss 1.765  acc 41.48  best 47.59  tau 1.00  (689s)
+  ep  50  loss 1.693  acc 47.62  best 47.62  tau 1.00  (856s)
+  ep  60  loss 1.624  acc 46.05  best 49.52  tau 1.00  (1018s)
+  ep  70  loss 1.554  acc 48.02  best 50.96  tau 1.00  (1182s)
+  ep  80  loss 1.465  acc 53.65  best 53.65  tau 1.00  (1343s)
+  ep  90  loss 1.359  acc 53.69  best 55.47  tau 1.00  (1506s)
+  ep 100  loss 1.250  acc 57.13  best 57.75  tau 1.00  (1672s)
+  ep 110  loss 1.127  acc 60.20  best 60.20  tau 1.00  (1833s)
+  ep 120  loss 0.986  acc 62.86  best 63.17  tau 1.00  (1998s)
+  ep 130  loss 0.842  acc 65.81  best 65.86  tau 1.00  (2157s)
+  ep 140  loss 0.734  acc 67.30  best 67.64  tau 1.00  (2324s)
+  ep 149  loss 0.698  acc 67.77  best 68.01  tau 1.00  (2470s)
+[mobilenetv2 gap seed=0] final=67.77 best=68.01 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__anneal_gap_seed0.json
+[mobilenetv2 cifar100 gap w16 K4 seed=1] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.356  acc 6.49  best 6.49  tau 30.00  (32s)
+  ep  10  loss 2.139  acc 37.98  best 37.98  tau 1.00  (198s)
+  ep  20  loss 1.952  acc 35.39  best 42.20  tau 1.00  (360s)
+  ep  30  loss 1.878  acc 41.99  best 43.38  tau 1.00  (525s)
+  ep  40  loss 1.831  acc 43.53  best 46.31  tau 1.00  (687s)
+  ep  50  loss 1.764  acc 33.77  best 46.59  tau 1.00  (851s)
+  ep  60  loss 1.693  acc 46.47  best 47.47  tau 1.00  (1016s)
+  ep  70  loss 1.620  acc 45.52  best 49.20  tau 1.00  (1178s)
+  ep  80  loss 1.531  acc 50.40  best 52.28  tau 1.00  (1343s)
+  ep  90  loss 1.438  acc 53.89  best 54.01  tau 1.00  (1504s)
+  ep 100  loss 1.333  acc 55.96  best 56.51  tau 1.00  (1670s)
+  ep 110  loss 1.201  acc 57.53  best 58.73  tau 1.00  (1830s)
+  ep 120  loss 1.063  acc 60.68  best 60.83  tau 1.00  (1995s)
+  ep 130  loss 0.926  acc 63.24  best 63.78  tau 1.00  (2157s)
+  ep 140  loss 0.811  acc 64.98  best 65.28  tau 1.00  (2323s)
+  ep 149  loss 0.768  acc 65.22  best 65.28  tau 1.00  (2468s)
+[mobilenetv2 gap seed=1] final=65.22 best=65.28 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__anneal_gap_seed1.json
+[mobilenetv2 cifar100 gap w16 K4 seed=2] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.369  acc 7.26  best 7.26  tau 30.00  (32s)
+  ep  10  loss 2.102  acc 38.27  best 40.03  tau 1.00  (198s)
+  ep  20  loss 1.933  acc 39.74  best 42.47  tau 1.00  (361s)
+  ep  30  loss 1.853  acc 36.03  best 44.56  tau 1.00  (524s)
+  ep  40  loss 1.803  acc 46.25  best 46.25  tau 1.00  (691s)
+  ep  50  loss 1.744  acc 46.41  best 46.91  tau 1.00  (854s)
+  ep  60  loss 1.674  acc 47.29  best 48.77  tau 1.00  (1018s)
+  ep  70  loss 1.579  acc 48.54  best 50.08  tau 1.00  (1179s)
+  ep  80  loss 1.485  acc 51.82  best 53.29  tau 1.00  (1346s)
+  ep  90  loss 1.383  acc 53.62  best 55.85  tau 1.00  (1508s)
+  ep 100  loss 1.268  acc 56.85  best 57.76  tau 1.00  (1672s)
+  ep 110  loss 1.134  acc 59.71  best 60.08  tau 1.00  (1833s)
+  ep 120  loss 1.002  acc 62.93  best 63.88  tau 1.00  (1997s)
+  ep 130  loss 0.856  acc 66.16  best 66.16  tau 1.00  (2160s)
+  ep 140  loss 0.744  acc 67.35  best 67.35  tau 1.00  (2323s)
+  ep 149  loss 0.705  acc 67.66  best 67.82  tau 1.00  (2471s)
+[mobilenetv2 gap seed=2] final=67.66 best=67.82 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__anneal_gap_seed2.json
+[mobilenetv2 cifar100 gap w16 K4 seed=3] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.361  acc 6.19  best 6.19  tau 30.00  (32s)
+  ep  10  loss 2.094  acc 33.82  best 39.38  tau 1.00  (196s)
+  ep  20  loss 1.912  acc 39.58  best 41.41  tau 1.00  (362s)
+  ep  30  loss 1.845  acc 39.96  best 43.66  tau 1.00  (525s)
+  ep  40  loss 1.768  acc 47.99  best 47.99  tau 1.00  (691s)
+  ep  50  loss 1.704  acc 45.94  best 48.18  tau 1.00  (852s)
+  ep  60  loss 1.637  acc 45.81  best 48.80  tau 1.00  (1018s)
+  ep  70  loss 1.556  acc 51.01  best 51.84  tau 1.00  (1179s)
+  ep  80  loss 1.469  acc 49.65  best 53.60  tau 1.00  (1347s)
+  ep  90  loss 1.377  acc 53.13  best 54.48  tau 1.00  (1508s)
+  ep 100  loss 1.265  acc 57.71  best 57.76  tau 1.00  (1673s)
+  ep 110  loss 1.136  acc 59.56  best 60.18  tau 1.00  (1838s)
+  ep 120  loss 1.000  acc 62.31  best 63.38  tau 1.00  (2001s)
+  ep 130  loss 0.863  acc 65.13  best 65.13  tau 1.00  (2167s)
+  ep 140  loss 0.751  acc 67.01  best 67.01  tau 1.00  (2330s)
+  ep 149  loss 0.712  acc 66.99  best 67.11  tau 1.00  (2480s)
+[mobilenetv2 gap seed=3] final=66.99 best=67.11 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__anneal_gap_seed3.json
+[mobilenetv2 cifar100 gap w16 K4 seed=4] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.366  acc 5.98  best 5.98  tau 30.00  (32s)
+  ep  10  loss 2.094  acc 41.25  best 41.25  tau 1.00  (194s)
+  ep  20  loss 1.871  acc 41.89  best 44.64  tau 1.00  (361s)
+  ep  30  loss 1.800  acc 43.98  best 45.82  tau 1.00  (520s)
+  ep  40  loss 1.736  acc 43.68  best 46.15  tau 1.00  (686s)
+  ep  50  loss 1.689  acc 48.36  best 49.08  tau 1.00  (848s)
+  ep  60  loss 1.629  acc 51.05  best 51.05  tau 1.00  (1013s)
+  ep  70  loss 1.553  acc 49.86  best 51.52  tau 1.00  (1174s)
+  ep  80  loss 1.463  acc 53.92  best 54.63  tau 1.00  (1339s)
+  ep  90  loss 1.368  acc 54.15  best 56.09  tau 1.00  (1502s)
+  ep 100  loss 1.262  acc 57.16  best 57.50  tau 1.00  (1665s)
+  ep 110  loss 1.132  acc 61.09  best 61.14  tau 1.00  (1829s)
+  ep 120  loss 0.995  acc 62.91  best 62.91  tau 1.00  (1990s)
+  ep 130  loss 0.860  acc 65.70  best 65.70  tau 1.00  (2156s)
+  ep 140  loss 0.748  acc 66.93  best 67.12  tau 1.00  (2317s)
+  ep 149  loss 0.707  acc 67.17  best 67.50  tau 1.00  (2467s)
+[mobilenetv2 gap seed=4] final=67.17 best=67.50 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__anneal_gap_seed4.json
+[mobilenetv2 cifar100 gap w16 K4 seed=5] device=cuda params=0.49M router=75.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.440  acc 6.19  best 6.19  tau 30.00  (32s)
+  ep  10  loss 2.115  acc 40.59  best 40.59  tau 1.00  (195s)
+  ep  20  loss 1.880  acc 43.85  best 43.85  tau 1.00  (362s)
+  ep  30  loss 1.798  acc 44.01  best 44.01  tau 1.00  (524s)
+  ep  40  loss 1.745  acc 46.88  best 46.88  tau 1.00  (691s)
+  ep  50  loss 1.691  acc 47.55  best 49.33  tau 1.00  (853s)
+  ep  60  loss 1.625  acc 49.25  best 49.33  tau 1.00  (1016s)
+  ep  70  loss 1.546  acc 51.49  best 51.79  tau 1.00  (1181s)
+  ep  80  loss 1.462  acc 52.27  best 54.37  tau 1.00  (1343s)
+  ep  90  loss 1.350  acc 56.67  best 56.67  tau 1.00  (1508s)
+  ep 100  loss 1.242  acc 58.36  best 58.62  tau 1.00  (1669s)
+  ep 110  loss 1.120  acc 60.88  best 60.88  tau 1.00  (1838s)
+  ep 120  loss 0.979  acc 64.16  best 64.27  tau 1.00  (1998s)
+  ep 130  loss 0.837  acc 66.44  best 66.44  tau 1.00  (2165s)
+  ep 140  loss 0.728  acc 67.71  best 67.71  tau 1.00  (2326s)
+  ep 149  loss 0.688  acc 67.86  best 67.86  tau 1.00  (2475s)
+[mobilenetv2 gap seed=5] final=67.86 best=67.86 -> results_models\mobilenetv2\mobilenetv2__cifar100__w16__K4__anneal_gap_seed5.json
+[mobilenetv2 tinyimagenet static w64 K4 seed=0] device=cuda params=2.48M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.878  acc 8.28  best 8.28  (90s)
+  ep  10  loss 2.611  acc 25.31  best 31.12  (829s)
+  ep  20  loss 2.567  acc 29.43  best 33.30  (1570s)
+  ep  30  loss 2.564  acc 28.07  best 33.64  (2313s)
+  ep  40  loss 2.549  acc 28.99  best 33.64  (3067s)
+  ep  50  loss 2.505  acc 27.16  best 33.64  (3809s)
+  ep  60  loss 2.441  acc 28.82  best 34.76  (4551s)
+  ep  70  loss 2.358  acc 31.79  best 37.50  (5301s)
+  ep  80  loss 2.261  acc 37.73  best 38.72  (6067s)
+  ep  90  loss 2.141  acc 40.73  best 41.10  (6817s)
+  ep 100  loss 1.996  acc 43.88  best 45.31  (7565s)
+  ep 110  loss 1.850  acc 47.48  best 48.14  (8314s)
+  ep 120  loss 1.658  acc 51.73  best 51.73  (9063s)
+  ep 130  loss 1.437  acc 55.28  best 55.50  (9809s)
+  ep 140  loss 1.219  acc 58.36  best 58.36  (10564s)
+  ep 149  loss 1.126  acc 59.07  best 59.07  (11262s)
+[mobilenetv2 static seed=0] final=59.07 best=59.07 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_static_seed0.json
+[mobilenetv2 tinyimagenet uniform w64 K4 seed=0] device=cuda params=2.67M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.898  acc 7.28  best 7.28  (96s)
+  ep  10  loss 2.601  acc 26.28  best 31.10  (877s)
+  ep  20  loss 2.562  acc 31.06  best 31.42  (1664s)
+  ep  30  loss 2.554  acc 30.46  best 32.18  (2472s)
+  ep  40  loss 2.548  acc 26.84  best 32.42  (3274s)
+  ep  50  loss 2.491  acc 20.68  best 34.62  (4067s)
+  ep  60  loss 2.436  acc 35.43  best 35.74  (4836s)
+  ep  70  loss 2.363  acc 36.88  best 36.88  (5591s)
+  ep  80  loss 2.267  acc 38.06  best 39.54  (6344s)
+  ep  90  loss 2.154  acc 36.64  best 41.24  (7097s)
+  ep 100  loss 2.014  acc 44.45  best 44.45  (7849s)
+  ep 110  loss 1.854  acc 48.49  best 48.49  (8877s)
+  ep 120  loss 1.667  acc 51.96  best 51.96  (9752s)
+  ep 130  loss 1.445  acc 55.43  best 55.43  (10612s)
+  ep 140  loss 1.225  acc 57.53  best 57.56  (11407s)
+  ep 149  loss 1.136  acc 58.39  best 58.58  (12167s)
+[mobilenetv2 uniform seed=0] final=58.39 best=58.58 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_uniform_seed0.json
+[mobilenetv2 tinyimagenet gap w64 K4 seed=0] device=cuda params=3.81M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.856  acc 7.92  best 7.92  (295s)
+  ep  10  loss 2.510  acc 33.26  best 33.26  (3433s)
+  ep  20  loss 2.462  acc 35.53  best 35.53  (6350s)
+  ep  30  loss 2.461  acc 32.07  best 35.53  (9244s)
+  ep  40  loss 2.439  acc 26.86  best 35.53  (12127s)
+  ep  50  loss 2.405  acc 33.38  best 35.86  (15010s)
+  ep  60  loss 2.350  acc 35.90  best 38.80  (17891s)
+  ep  70  loss 2.269  acc 31.75  best 38.80  (20762s)
+  ep  80  loss 2.167  acc 38.11  best 40.41  (23632s)
+  ep  90  loss 2.044  acc 43.94  best 43.94  (26500s)
+  ep 100  loss 1.903  acc 46.51  best 46.51  (29375s)
+  ep 110  loss 1.734  acc 49.33  best 50.46  (32240s)
+  ep 120  loss 1.547  acc 53.09  best 53.09  (35104s)
+  ep 130  loss 1.316  acc 57.63  best 57.63  (37969s)
+  ep 140  loss 1.087  acc 59.65  best 59.93  (40831s)
+  ep 149  loss 0.996  acc 60.45  best 60.50  (43412s)
+[mobilenetv2 gap seed=0] final=60.45 best=60.50 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_gap_seed0.json
+[mobilenetv2 tinyimagenet static w64 K4 seed=1] device=cuda params=2.48M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.859  acc 9.33  best 9.33  (97s)
+  ep  10  loss 2.619  acc 30.80  best 32.51  (848s)
+  ep  20  loss 2.576  acc 27.07  best 33.55  (1599s)
+  ep  30  loss 2.557  acc 26.36  best 33.55  (2352s)
+  ep  40  loss 2.546  acc 25.45  best 33.55  (3104s)
+  ep  50  loss 2.513  acc 31.09  best 33.55  (3856s)
+  ep  60  loss 2.440  acc 34.76  best 35.42  (4609s)
+  ep  70  loss 2.369  acc 37.88  best 37.88  (5362s)
+  ep  80  loss 2.269  acc 38.47  best 40.45  (6115s)
+  ep  90  loss 2.150  acc 38.98  best 41.60  (6868s)
+  ep 100  loss 2.014  acc 42.89  best 44.57  (7621s)
+  ep 110  loss 1.848  acc 47.39  best 47.73  (8374s)
+  ep 120  loss 1.661  acc 51.48  best 52.14  (9127s)
+  ep 130  loss 1.439  acc 55.78  best 55.78  (9879s)
+  ep 140  loss 1.217  acc 58.05  best 58.32  (10632s)
+  ep 149  loss 1.133  acc 58.99  best 58.99  (11310s)
+[mobilenetv2 static seed=1] final=58.99 best=58.99 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_static_seed1.json
+[mobilenetv2 tinyimagenet uniform w64 K4 seed=1] device=cuda params=2.67M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.912  acc 8.21  best 8.21  (99s)
+  ep  10  loss 2.598  acc 32.42  best 32.42  (857s)
+  ep  20  loss 2.547  acc 26.67  best 33.99  (1611s)
+  ep  30  loss 2.560  acc 29.72  best 33.99  (2365s)
+  ep  40  loss 2.527  acc 23.93  best 33.99  (3142s)
+  ep  50  loss 2.491  acc 27.25  best 33.99  (3912s)
+  ep  60  loss 2.430  acc 33.99  best 33.99  (4686s)
+  ep  70  loss 2.364  acc 30.99  best 35.61  (5515s)
+  ep  80  loss 2.263  acc 33.16  best 39.29  (6300s)
+  ep  90  loss 2.137  acc 39.14  best 40.87  (7088s)
+  ep 100  loss 2.004  acc 42.67  best 44.78  (7913s)
+  ep 110  loss 1.842  acc 48.34  best 48.34  (8718s)
+  ep 120  loss 1.645  acc 50.70  best 51.98  (9520s)
+  ep 130  loss 1.424  acc 55.21  best 55.21  (10312s)
+  ep 140  loss 1.200  acc 57.58  best 57.58  (11108s)
+  ep 149  loss 1.104  acc 58.16  best 58.42  (11831s)
+[mobilenetv2 uniform seed=1] final=58.16 best=58.42 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_uniform_seed1.json
+[mobilenetv2 tinyimagenet gap w64 K4 seed=1] device=cuda params=3.81M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.899  acc 6.67  best 6.67  (327s)
+  ep  10  loss 2.500  acc 29.88  best 31.99  (5757s)
+  ep  20  loss 2.446  acc 33.29  best 33.32  (9644s)
+  ep  30  loss 2.457  acc 35.30  best 35.30  (16167s)
+  ep  40  loss 2.437  acc 32.99  best 35.30  (20423s)
+  ep  50  loss 2.400  acc 29.77  best 35.30  (28446s)
+  ep  60  loss 2.334  acc 31.47  best 36.17  (36985s)
+  ep  70  loss 2.262  acc 38.92  best 39.53  (45613s)
+  ep  80  loss 2.158  acc 36.68  best 40.20  (53131s)
+  ep  90  loss 2.042  acc 42.83  best 43.06  (59360s)
+  ep 100  loss 1.901  acc 45.59  best 46.26  (67817s)
+  ep 110  loss 1.737  acc 51.03  best 51.03  (76709s)
+  ep 120  loss 1.544  acc 53.42  best 53.52  (82935s)
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main
+    return _main()
+           ^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 297, in _main
+    run_loss += train_step(model, opt, sched, crit, scaler, x, y, device, amp_dtype, args.accum)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 65, in train_step
+    total += loss.item()
+             ^^^^^^^^^^^
+RuntimeError: CUDA error: an illegal memory access was encountered
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Unhandled exception caught in c10/util/AbortHandler.h
+00007FFCA1C8CC3400007FFCA1C697F0 torch_python.dll!THPGenerator_initDefaultGenerator [<unknown file> @ <unknown line number>]
+00007FFCF636218700007FFCF6362170 ucrtbase.dll!terminate [<unknown file> @ <unknown line number>]
+00007FFCD8A51911 <unknown symbol address> VCRUNTIME140_1.dll!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FFCD8A5218F <unknown symbol address> VCRUNTIME140_1.dll!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FFCD8A521E9 <unknown symbol address> VCRUNTIME140_1.dll!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FFCD8A5401900007FFCD8A53F70 VCRUNTIME140_1.dll!_CxxFrameHandler4 [<unknown file> @ <unknown line number>]
+00007FFCF8EA54FF00007FFCF8EA5460 ntdll.dll!_chkstk [<unknown file> @ <unknown line number>]
+00007FFCF8E0BD2500007FFCF8E0B6D0 ntdll.dll!RtlWow64GetCurrentMachine [<unknown file> @ <unknown line number>]
+00007FFCF8D4F88D00007FFCF8D4F700 ntdll.dll!RtlRaiseException [<unknown file> @ <unknown line number>]
+00007FFCF64C41CA00007FFCF64C4140 KERNELBASE.dll!RaiseException [<unknown file> @ <unknown line number>]
+00007FFCE05D526700007FFCE05D51D0 VCRUNTIME140.dll!CxxThrowException [<unknown file> @ <unknown line number>]
+00007FFCAAB37A7E00007FFCAAB37A10 c10.dll!c10::detail::torchCheckFail [<unknown file> @ <unknown line number>]
+00007FFCAE134E3F00007FFCAE134B40 c10_cuda.dll!c10::cuda::c10_cuda_check_implementation [<unknown file> @ <unknown line number>]
+00007FFADCCF515C00007FFADCCF5050 torch_cuda.dll!at::cuda::CUDAEvent::record [<unknown file> @ <unknown line number>]
+00007FFADCD0332900007FFADCD021A0 torch_cuda.dll!at::cuda::getCachingHostAllocator [<unknown file> @ <unknown line number>]
+00007FFADCD01B7900007FFADCD00240 torch_cuda.dll!torch::cuda::CUDAPluggableAllocator::CUDAPluggableAllocator::enable [<unknown file> @ <unknown line number>]
+00007FFCAAAFB5F400007FFCAAAFB5A0 c10.dll!c10::StorageImpl::~StorageImpl [<unknown file> @ <unknown line number>]
+00007FFCAAAFC1F700007FFCAAAFC040 c10.dll!c10::SymBool::operator| [<unknown file> @ <unknown line number>]
+00007FFCAAAEF30200007FFCAAAEF290 c10.dll!c10::SymNodeImpl::~SymNodeImpl [<unknown file> @ <unknown line number>]
+00007FFCAAB204C500007FFCAAB20450 c10.dll!c10::TensorImpl::~TensorImpl [<unknown file> @ <unknown line number>]
+00007FFB700E6B6500007FFB700E5340 torch_cpu.dll!at::DynamicLibrary::sym [<unknown file> @ <unknown line number>]
+00007FFB7008CE9800007FFB7008CE10 torch_cpu.dll!at::TensorBase::reset [<unknown file> @ <unknown line number>]
+00007FFCA1C9B9B500007FFCA1C8D720 torch_python.dll!initModule [<unknown file> @ <unknown line number>]
+00007FFCA1D3C20600007FFCA1D39C90 torch_python.dll!THPVariable_Wrap [<unknown file> @ <unknown line number>]
+00007FFCA1D3C48200007FFCA1D39C90 torch_python.dll!THPVariable_Wrap [<unknown file> @ <unknown line number>]
+00007FFC423822CC00007FFC42382054 python312.dll!PyObject_GC_UnTrack [<unknown file> @ <unknown line number>]
+00007FFC42381F1800007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC42381F0900007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC42381F0900007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC42381F0900007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC42381F0900007FFC42381868 python312.dll!PyLong_Lshift [<unknown file> @ <unknown line number>]
+00007FFC423AD6E100007FFC423AB9BC python312.dll!PyArg_CheckPositional [<unknown file> @ <unknown line number>]
+00007FFC42384DA600007FFC42384D0C python312.dll!PyDict_SetItem [<unknown file> @ <unknown line number>]
+00007FFC4234A41B00007FFC4234A3BC python312.dll!PyDict_SetItemString [<unknown file> @ <unknown line number>]
+00007FFC4234D00200007FFC4234CDA4 python312.dll!PyModule_AddFunctions [<unknown file> @ <unknown line number>]
+00007FFC4234CF4800007FFC4234CDA4 python312.dll!PyModule_AddFunctions [<unknown file> @ <unknown line number>]
+00007FFC42351D9800007FFC42351244 python312.dll!PyUnicode_EncodeUTF32 [<unknown file> @ <unknown line number>]
+00007FFC4235953900007FFC4235946C python312.dll!Py_FinalizeEx [<unknown file> @ <unknown line number>]
+00007FFC4235870500007FFC423586E8 python312.dll!Py_RunMain [<unknown file> @ <unknown line number>]
+00007FF7820243CC <unknown symbol address> python3.12.exe!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FF782025CD4 <unknown symbol address> python3.12.exe!<unknown symbol> [<unknown file> @ <unknown line number>]
+00007FFCF6B4CD8700007FFCF6B4CD70 KERNEL32.DLL!BaseThreadInitThunk [<unknown file> @ <unknown line number>]
+00007FFCF8DECAEC00007FFCF8DECAC0 ntdll.dll!RtlUserThreadStart [<unknown file> @ <unknown line number>]
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main
+    return _main()
+           ^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 278, in _main
+    torch.set_rng_state(ck["rng_cpu"])
+  File "C:\Users\ankit\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\torch\random.py", line 19, in set_rng_state
+    default_generator.set_state(new_state)
+TypeError: RNG state must be a torch.ByteTensor
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main
+    return _main()
+           ^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 278, in _main
+    torch.set_rng_state(ck["rng_cpu"])
+  File "C:\Users\ankit\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\torch\random.py", line 19, in set_rng_state
+    default_generator.set_state(new_state)
+TypeError: RNG state must be a torch.ByteTensor
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main
+    return _main()
+           ^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 278, in _main
+    torch.set_rng_state(ck["rng_cpu"])
+  File "C:\Users\ankit\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\torch\random.py", line 19, in set_rng_state
+    default_generator.set_state(new_state)
+TypeError: RNG state must be a torch.ByteTensor
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main
+    return _main()
+           ^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 278, in _main
+    torch.set_rng_state(ck["rng_cpu"])
+  File "C:\Users\ankit\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\torch\random.py", line 19, in set_rng_state
+    default_generator.set_state(new_state)
+TypeError: RNG state must be a torch.ByteTensor
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main
+    return _main()
+           ^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 278, in _main
+    torch.set_rng_state(ck["rng_cpu"])
+  File "C:\Users\ankit\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\torch\random.py", line 19, in set_rng_state
+    default_generator.set_state(new_state)
+TypeError: RNG state must be a torch.ByteTensor
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main
+    return _main()
+           ^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 278, in _main
+    torch.set_rng_state(ck["rng_cpu"])
+  File "C:\Users\ankit\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\torch\random.py", line 19, in set_rng_state
+    default_generator.set_state(new_state)
+TypeError: RNG state must be a torch.ByteTensor
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 369, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 138, in main
+    return _main()
+           ^^^^^^^
+  File "C:\Users\ankit\Downloads\idea\topoconv\kernelroute\others\src\train.py", line 278, in _main
+    torch.set_rng_state(ck["rng_cpu"])
+  File "C:\Users\ankit\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\torch\random.py", line 19, in set_rng_state
+    default_generator.set_state(new_state)
+TypeError: RNG state must be a torch.ByteTensor
+  resumed from results_models\mobilenetv2\ckpt\mobilenetv2__tinyimagenet__w64__K4__const_gap_seed1.pt at epoch 125
+[mobilenetv2 tinyimagenet gap w64 K4 seed=1] device=cuda params=3.81M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep 130  loss 1.311  acc 56.71  best 57.46  (85832s)
+  ep 140  loss 1.080  acc 60.25  best 60.25  (88345s)
+  ep 149  loss 0.984  acc 61.15  best 61.15  (90664s)
+[mobilenetv2 gap seed=1] final=61.15 best=61.15 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_gap_seed1.json
+[mobilenetv2 tinyimagenet static w64 K4 seed=2] device=cuda params=2.48M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.899  acc 8.23  best 8.23  (92s)
+  ep  10  loss 2.622  acc 29.98  best 31.91  (852s)
+  ep  20  loss 2.572  acc 32.07  best 32.07  (1614s)
+  ep  30  loss 2.555  acc 28.58  best 33.50  (2358s)
+  ep  40  loss 2.543  acc 30.45  best 33.50  (3097s)
+  ep  50  loss 2.493  acc 30.45  best 33.50  (3838s)
+  ep  60  loss 2.446  acc 28.33  best 35.10  (4584s)
+  ep  70  loss 2.375  acc 30.13  best 35.94  (5334s)
+  ep  80  loss 2.264  acc 38.06  best 38.85  (6094s)
+  ep  90  loss 2.149  acc 40.47  best 41.90  (6853s)
+  ep 100  loss 2.010  acc 44.33  best 44.69  (7609s)
+  ep 110  loss 1.851  acc 47.00  best 47.97  (8369s)
+  ep 120  loss 1.668  acc 51.04  best 51.27  (9114s)
+  ep 130  loss 1.447  acc 55.40  best 55.40  (9857s)
+  ep 140  loss 1.229  acc 58.14  best 58.14  (10622s)
+  ep 149  loss 1.137  acc 58.89  best 58.96  (11289s)
+[mobilenetv2 static seed=2] final=58.89 best=58.96 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_static_seed2.json
+[mobilenetv2 tinyimagenet uniform w64 K4 seed=2] device=cuda params=2.67M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.874  acc 7.11  best 7.11  (91s)
+  ep  10  loss 2.590  acc 29.07  best 33.20  (834s)
+  ep  20  loss 2.556  acc 32.29  best 33.20  (1575s)
+  ep  30  loss 2.554  acc 27.86  best 33.20  (2317s)
+  ep  40  loss 2.538  acc 30.18  best 33.20  (3059s)
+  ep  50  loss 2.502  acc 31.41  best 34.74  (3801s)
+  ep  60  loss 2.447  acc 31.91  best 37.44  (4543s)
+  ep  70  loss 2.364  acc 33.41  best 37.44  (5286s)
+  ep  80  loss 2.268  acc 36.96  best 37.44  (6028s)
+  ep  90  loss 2.146  acc 41.14  best 41.14  (6770s)
+  ep 100  loss 2.010  acc 40.86  best 43.62  (7513s)
+  ep 110  loss 1.846  acc 48.88  best 48.88  (8255s)
+  ep 120  loss 1.660  acc 51.50  best 51.50  (8997s)
+  ep 130  loss 1.439  acc 55.21  best 55.48  (9740s)
+  ep 140  loss 1.218  acc 58.38  best 58.43  (10482s)
+  ep 149  loss 1.128  acc 58.99  best 59.08  (11151s)
+[mobilenetv2 uniform seed=2] final=58.99 best=59.08 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_uniform_seed2.json
+[mobilenetv2 tinyimagenet gap w64 K4 seed=2] device=cuda params=3.81M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.895  acc 7.43  best 7.43  (268s)
+  ep  10  loss 2.525  acc 32.98  best 32.98  (2781s)
+  ep  20  loss 2.462  acc 34.09  best 34.38  (5293s)
+  ep  30  loss 2.459  acc 32.90  best 34.38  (7804s)
+  ep  40  loss 2.440  acc 31.55  best 35.32  (10316s)
+  ep  50  loss 2.403  acc 33.16  best 35.32  (12827s)
+  ep  60  loss 2.349  acc 35.47  best 36.60  (15339s)
+  ep  70  loss 2.272  acc 38.07  best 38.07  (17850s)
+  ep  80  loss 2.185  acc 39.49  best 40.17  (20361s)
+  ep  90  loss 2.059  acc 42.75  best 43.19  (22872s)
+  ep 100  loss 1.918  acc 46.80  best 46.80  (25383s)
+  ep 110  loss 1.751  acc 48.18  best 49.84  (27894s)
+  ep 120  loss 1.552  acc 53.48  best 53.63  (30405s)
+  ep 130  loss 1.324  acc 57.30  best 57.30  (32916s)
+  ep 140  loss 1.092  acc 59.81  best 59.81  (35427s)
+  ep 149  loss 1.000  acc 60.04  best 60.12  (37687s)
+[mobilenetv2 gap seed=2] final=60.04 best=60.12 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_gap_seed2.json
+[mobilenetv2 tinyimagenet static w64 K4 seed=3] device=cuda params=2.48M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.881  acc 7.92  best 7.92  (90s)
+  ep  10  loss 2.605  acc 32.65  best 32.65  (828s)
+  ep  20  loss 2.571  acc 31.26  best 32.65  (1568s)
+  ep  30  loss 2.553  acc 31.52  best 32.65  (2308s)
+  ep  40  loss 2.540  acc 27.37  best 32.65  (3048s)
+  ep  50  loss 2.495  acc 29.83  best 32.65  (3788s)
+  ep  60  loss 2.448  acc 30.54  best 34.24  (4534s)
+  ep  70  loss 2.372  acc 34.83  best 36.01  (5301s)
+  ep  80  loss 2.279  acc 34.03  best 38.99  (6083s)
+  ep  90  loss 2.161  acc 38.37  best 42.95  (6858s)
+  ep 100  loss 2.021  acc 44.45  best 44.64  (7622s)
+  ep 110  loss 1.859  acc 47.24  best 47.62  (8372s)
+  ep 120  loss 1.678  acc 51.42  best 51.42  (9123s)
+  ep 130  loss 1.461  acc 56.28  best 56.28  (9891s)
+  ep 140  loss 1.243  acc 58.33  best 58.33  (10648s)
+  ep 149  loss 1.156  acc 58.74  best 58.74  (11341s)
+[mobilenetv2 static seed=3] final=58.74 best=58.74 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_static_seed3.json
+[mobilenetv2 tinyimagenet uniform w64 K4 seed=3] device=cuda params=2.67M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.892  acc 8.31  best 8.31  (98s)
+  ep  10  loss 2.602  acc 30.37  best 32.58  (862s)
+  ep  20  loss 2.552  acc 28.70  best 32.65  (1626s)
+  ep  30  loss 2.559  acc 30.17  best 32.65  (2388s)
+  ep  40  loss 2.544  acc 25.58  best 32.65  (3151s)
+  ep  50  loss 2.505  acc 30.08  best 32.65  (3918s)
+  ep  60  loss 2.451  acc 33.24  best 35.38  (4686s)
+  ep  70  loss 2.378  acc 29.07  best 35.38  (5430s)
+  ep  80  loss 2.274  acc 37.58  best 38.56  (6175s)
+  ep  90  loss 2.164  acc 41.01  best 41.01  (6918s)
+  ep 100  loss 2.022  acc 42.69  best 43.69  (7679s)
+  ep 110  loss 1.863  acc 45.58  best 47.32  (8442s)
+  ep 120  loss 1.677  acc 50.30  best 51.27  (9192s)
+  ep 130  loss 1.457  acc 54.71  best 54.75  (9955s)
+  ep 140  loss 1.234  acc 58.38  best 58.38  (10700s)
+  ep 149  loss 1.146  acc 58.75  best 58.75  (11369s)
+[mobilenetv2 uniform seed=3] final=58.75 best=58.75 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_uniform_seed3.json
+[mobilenetv2 tinyimagenet gap w64 K4 seed=3] device=cuda params=3.81M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.891  acc 6.82  best 6.82  (268s)
+  ep  10  loss 2.511  acc 32.33  best 35.77  (2795s)
+  ep  20  loss 2.454  acc 32.68  best 35.77  (5319s)
+  ep  30  loss 2.453  acc 30.83  best 35.77  (7895s)
+  ep  40  loss 2.441  acc 32.44  best 35.77  (10455s)
+  ep  50  loss 2.402  acc 31.38  best 36.13  (12967s)
+  ep  60  loss 2.340  acc 36.69  best 36.69  (15478s)
+  ep  70  loss 2.264  acc 33.53  best 37.69  (17990s)
+  ep  80  loss 2.166  acc 39.22  best 39.82  (20501s)
+  ep  90  loss 2.049  acc 43.57  best 43.57  (23012s)
+  ep 100  loss 1.904  acc 45.29  best 46.88  (25524s)
+  ep 110  loss 1.743  acc 50.57  best 50.57  (28035s)
+  ep 120  loss 1.547  acc 53.05  best 53.42  (30546s)
+  ep 130  loss 1.321  acc 58.13  best 58.13  (33058s)
+  ep 140  loss 1.092  acc 60.04  best 60.08  (35569s)
+  ep 149  loss 0.997  acc 60.62  best 60.83  (37830s)
+[mobilenetv2 gap seed=3] final=60.62 best=60.83 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_gap_seed3.json
+[mobilenetv2 tinyimagenet static w64 K4 seed=4] device=cuda params=2.48M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.897  acc 8.15  best 8.15  (90s)
+  ep  10  loss 2.610  acc 27.96  best 32.74  (827s)
+  ep  20  loss 2.570  acc 33.85  best 34.46  (1567s)
+  ep  30  loss 2.568  acc 28.98  best 34.46  (2306s)
+  ep  40  loss 2.557  acc 25.29  best 34.46  (3046s)
+  ep  50  loss 2.504  acc 31.88  best 34.57  (3786s)
+  ep  60  loss 2.450  acc 33.97  best 34.57  (4526s)
+  ep  70  loss 2.362  acc 33.68  best 35.36  (5267s)
+  ep  80  loss 2.265  acc 34.49  best 39.33  (6007s)
+  ep  90  loss 2.147  acc 40.12  best 41.08  (6747s)
+  ep 100  loss 2.015  acc 44.44  best 44.44  (7487s)
+  ep 110  loss 1.862  acc 48.10  best 48.64  (8228s)
+  ep 120  loss 1.667  acc 51.16  best 51.16  (8968s)
+  ep 130  loss 1.443  acc 55.30  best 55.30  (9709s)
+  ep 140  loss 1.225  acc 58.19  best 58.19  (10449s)
+  ep 149  loss 1.135  acc 58.75  best 59.04  (11115s)
+[mobilenetv2 static seed=4] final=58.75 best=59.04 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_static_seed4.json
+[mobilenetv2 tinyimagenet uniform w64 K4 seed=4] device=cuda params=2.67M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.906  acc 8.42  best 8.42  (90s)
+  ep  10  loss 2.602  acc 33.86  best 33.86  (832s)
+  ep  20  loss 2.558  acc 29.27  best 33.86  (1575s)
+  ep  30  loss 2.578  acc 30.17  best 33.86  (2318s)
+  ep  40  loss 2.551  acc 29.76  best 33.86  (3062s)
+  ep  50  loss 2.511  acc 33.68  best 33.86  (3805s)
+  ep  60  loss 2.456  acc 33.02  best 35.04  (4549s)
+  ep  70  loss 2.375  acc 35.95  best 37.54  (5293s)
+  ep  80  loss 2.273  acc 36.64  best 37.54  (6037s)
+  ep  90  loss 2.160  acc 38.93  best 40.68  (6781s)
+  ep 100  loss 2.025  acc 42.25  best 43.52  (7525s)
+  ep 110  loss 1.859  acc 47.29  best 47.29  (8268s)
+  ep 120  loss 1.668  acc 52.01  best 52.01  (9012s)
+  ep 130  loss 1.444  acc 55.69  best 55.69  (9756s)
+  ep 140  loss 1.225  acc 58.20  best 58.68  (10500s)
+  ep 149  loss 1.133  acc 58.77  best 59.00  (11170s)
+[mobilenetv2 uniform seed=4] final=58.77 best=59.00 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_uniform_seed4.json
+[mobilenetv2 tinyimagenet gap w64 K4 seed=4] device=cuda params=3.81M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.897  acc 8.32  best 8.32  (268s)
+  ep  10  loss 2.509  acc 35.10  best 35.10  (2783s)
+  ep  20  loss 2.461  acc 30.98  best 35.37  (5297s)
+  ep  30  loss 2.454  acc 31.06  best 35.37  (7810s)
+  ep  40  loss 2.438  acc 28.69  best 35.37  (10326s)
+  ep  50  loss 2.405  acc 34.35  best 35.37  (12879s)
+  ep  60  loss 2.357  acc 31.34  best 35.37  (15415s)
+  ep  70  loss 2.268  acc 36.74  best 37.61  (17979s)
+  ep  80  loss 2.165  acc 38.95  best 40.86  (20524s)
+  ep  90  loss 2.047  acc 39.40  best 42.71  (23040s)
+  ep 100  loss 1.902  acc 47.01  best 47.01  (25554s)
+  ep 110  loss 1.741  acc 50.30  best 50.30  (28067s)
+  ep 120  loss 1.549  acc 52.87  best 52.87  (30581s)
+  ep 130  loss 1.321  acc 57.44  best 57.44  (33106s)
+  ep 140  loss 1.091  acc 59.47  best 59.47  (35620s)
+  ep 149  loss 0.993  acc 60.04  best 60.20  (37881s)
+[mobilenetv2 gap seed=4] final=60.04 best=60.20 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_gap_seed4.json
+[mobilenetv2 tinyimagenet static w64 K4 seed=5] device=cuda params=2.48M router=0.0K dyn_layers=0 micro_batch=128 accum=1
+  ep   0  loss 4.870  acc 6.85  best 6.85  (90s)
+  ep  10  loss 2.619  acc 29.58  best 30.80  (829s)
+  ep  20  loss 2.569  acc 31.46  best 33.68  (1570s)
+  ep  30  loss 2.559  acc 24.04  best 33.68  (2311s)
+  ep  40  loss 2.529  acc 26.97  best 33.68  (3053s)
+  ep  50  loss 2.491  acc 26.86  best 33.68  (3795s)
+  ep  60  loss 2.443  acc 30.75  best 36.64  (4537s)
+  ep  70  loss 2.363  acc 35.38  best 36.64  (5279s)
+  ep  80  loss 2.264  acc 34.54  best 39.19  (6021s)
+  ep  90  loss 2.150  acc 41.37  best 41.37  (6763s)
+  ep 100  loss 2.016  acc 44.50  best 44.50  (7504s)
+  ep 110  loss 1.850  acc 47.79  best 47.79  (8246s)
+  ep 120  loss 1.665  acc 52.08  best 52.08  (8989s)
+  ep 130  loss 1.445  acc 55.29  best 55.29  (9731s)
+  ep 140  loss 1.233  acc 57.93  best 57.93  (10473s)
+  ep 149  loss 1.143  acc 58.46  best 58.58  (11141s)
+[mobilenetv2 static seed=5] final=58.46 best=58.58 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_static_seed5.json
+[mobilenetv2 tinyimagenet uniform w64 K4 seed=5] device=cuda params=2.67M router=0.0K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.898  acc 7.75  best 7.75  (90s)
+  ep  10  loss 2.594  acc 30.27  best 33.88  (832s)
+  ep  20  loss 2.551  acc 31.32  best 33.88  (1576s)
+  ep  30  loss 2.554  acc 31.96  best 33.88  (2319s)
+  ep  40  loss 2.532  acc 31.80  best 33.88  (3063s)
+  ep  50  loss 2.493  acc 28.38  best 33.88  (3808s)
+  ep  60  loss 2.430  acc 27.63  best 35.68  (4552s)
+  ep  70  loss 2.354  acc 34.55  best 35.68  (5296s)
+  ep  80  loss 2.265  acc 33.90  best 38.28  (6041s)
+  ep  90  loss 2.139  acc 39.55  best 40.18  (6785s)
+  ep 100  loss 2.000  acc 43.58  best 43.88  (7529s)
+  ep 110  loss 1.839  acc 46.80  best 47.96  (8274s)
+  ep 120  loss 1.648  acc 51.56  best 51.56  (9018s)
+  ep 130  loss 1.425  acc 55.28  best 55.57  (9762s)
+  ep 140  loss 1.199  acc 58.70  best 58.70  (10507s)
+  ep 149  loss 1.108  acc 58.79  best 58.84  (11177s)
+[mobilenetv2 uniform seed=5] final=58.79 best=58.84 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_uniform_seed5.json
+[mobilenetv2 tinyimagenet gap w64 K4 seed=5] device=cuda params=3.81M router=1137.3K dyn_layers=17 micro_batch=128 accum=1
+  ep   0  loss 4.908  acc 7.14  best 7.14  (268s)
+  ep  10  loss 2.519  acc 34.36  best 35.17  (2785s)
+  ep  20  loss 2.459  acc 30.04  best 35.17  (5302s)
+  ep  30  loss 2.445  acc 34.47  best 36.24  (7818s)
+  ep  40  loss 2.441  acc 32.74  best 36.24  (10333s)
+  ep  50  loss 2.408  acc 27.26  best 36.24  (12849s)
+  ep  60  loss 2.349  acc 36.65  best 37.06  (15365s)
+  ep  70  loss 2.273  acc 35.21  best 38.79  (17880s)
+  ep  80  loss 2.169  acc 39.99  best 41.41  (20395s)
+  ep  90  loss 2.054  acc 41.14  best 43.10  (22911s)
+  ep 100  loss 1.911  acc 45.31  best 47.52  (25426s)
+  ep 110  loss 1.746  acc 49.27  best 49.27  (27942s)
+  ep 120  loss 1.552  acc 54.21  best 54.21  (30457s)
+  ep 130  loss 1.327  acc 57.15  best 57.40  (33005s)
+  ep 140  loss 1.096  acc 59.86  best 59.86  (35562s)
+  ep 149  loss 1.000  acc 60.39  best 60.39  (37826s)
+[mobilenetv2 gap seed=5] final=60.39 best=60.39 -> results_models\mobilenetv2\mobilenetv2__tinyimagenet__w64__K4__const_gap_seed5.json
