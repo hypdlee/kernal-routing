@@ -65,13 +65,13 @@ def ctag(model, g, draw):
     return t if draw == "d1" else f"{t}__{draw}"
 
 
-def jobs(model, parts):
+def jobs(model, parts, seeds=SEEDS):
     """Seed-major inside each part, so an interruption leaves complete seed sets."""
     out = []
     P = parts_for(model)
     for p in parts:
         cells = P[p]
-        for s in SEEDS:
+        for s in seeds:
             for g, arm, fs, draw in cells:
                 out.append((p, g, arm, fs, draw, s))
     return out
@@ -130,7 +130,7 @@ def run_model(a, model, execute=default_exec):
     d = Path(a.out) / model
     d.mkdir(parents=True, exist_ok=True)
     plan = json.loads((d / "plan.json").read_text()) if (d / "plan.json").exists() else {}
-    J = jobs(model, a.parts)
+    J = jobs(model, a.parts, a.seeds)
     if not J:
         return "nothing"
     for i, (p, g, arm, fs, draw, seed) in enumerate(J, 1):
@@ -169,6 +169,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--models", nargs="+", default=DEFAULT_MODELS, choices=MODELS)
     ap.add_argument("--parts", nargs="+", default=["A", "B", "C"], choices=["A", "B", "C", "D", "E"])
+    ap.add_argument("--seeds", nargs="+", type=int, default=list(SEEDS),
+                    help="only these seeds (to split the work over two processes or two PCs)")
     ap.add_argument("--data-root", default="./data")
     ap.add_argument("--out", default="results_controls")
     ap.add_argument("--epochs", type=int, default=150)
@@ -182,7 +184,7 @@ def main(argv=None):
     if a.status:
         for m in a.models:
             d = Path(a.out) / m
-            J = jobs(m, a.parts)
+            J = jobs(m, a.parts, a.seeds)
             done = sum(result_path(d, m, g, arm, draw, s).exists() for _, g, arm, _, draw, s in J)
             print(f"{m:<13} {done:>3} of {len(J)} done (parts {' '.join(a.parts)})")
         return 0

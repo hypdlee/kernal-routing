@@ -102,3 +102,35 @@ git push
 Do not run these on both PCs for the same model, and do not run the
 MobileNetV2 or VGG-16 controls again. Keep the PC awake (Settings, Power:
 sleep Never) and the window open.
+
+### Two processes on one GPU (optional, to finish sooner)
+
+Two runs can share a GPU, but they only finish sooner if one run leaves the
+GPU partly idle (small models and CPU-bound data loading often do). Test
+before relying on it:
+
+1. Start one process and note the seconds in brackets on its epoch lines
+   (`ep 10 ... (362s)` is cumulative seconds). Look at `nvidia-smi -l 2`:
+   memory used, and GPU-Util.
+2. Start a second process in another window. If the first process's epoch
+   time grows by less than 2x, the GPU was not saturated and running two
+   processes is faster overall (throughput = 2 / slowdown). At 2x or more it
+   is not; stop the second process (Ctrl-C; it resumes later from its
+   checkpoint).
+
+Split the work by seed, with a separate output folder for each process, so
+the two never write the same files:
+
+```powershell
+python run_controls.py --models resnet18 --parts B C E --seeds 0 1 2 --out results_controls_a
+python run_controls.py --models resnet18 --parts B C E --seeds 3 4 5 --out results_controls_b   # second window
+```
+
+Merge afterwards (both result sets plus the logs):
+
+```powershell
+robocopy results_controls_a artifacts\controls /E /XD ckpt /XF *.pt train.log runner.log
+robocopy results_controls_b artifacts\controls /E /XD ckpt /XF *.pt train.log runner.log
+Get-Content results_controls_a\resnet18\train.log, results_controls_b\resnet18\train.log | Set-Content artifacts\controls\resnet18\train.log
+Get-Content results_controls_a\resnet18\runner.log, results_controls_b\resnet18\runner.log | Set-Content artifacts\controls\resnet18\runner.log
+```

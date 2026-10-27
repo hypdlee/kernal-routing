@@ -81,5 +81,14 @@ def test_resnet18_command():
     print("ok   ResNet-18 dry run: 36 commands (width 16, width 32, Tiny-ImageNet width 32), original code path")
 
 
+def test_seed_split():
+    a = RC.jobs("resnet18", ["B", "C", "E"], (0, 1, 2)); b = RC.jobs("resnet18", ["B", "C", "E"], (3, 4, 5))
+    full = RC.jobs("resnet18", ["B", "C", "E"])
+    key = lambda j: (j[0], j[1].dataset, j[1].width, j[2], j[5])
+    assert len(a) == len(b) == 18 and {key(x) for x in a} | {key(x) for x in b} == {key(x) for x in full}
+    assert not ({key(x) for x in a} & {key(x) for x in b})
+    print("ok   --seeds splits the 36 ResNet-18 jobs into two disjoint halves of 18")
+
+
 if __name__ == "__main__":
-    test_default_router_unchanged(); test_jobs(); test_dry_run(); test_resnet18_command()
+    test_default_router_unchanged(); test_jobs(); test_dry_run(); test_resnet18_command(); test_seed_split()
