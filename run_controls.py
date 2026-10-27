@@ -8,6 +8,12 @@ only (six seeds, one frozen-router draw). This runner adds:
   B  both controls at CIFAR-100 width 16                    (shuffled, frozen_random)
   C  both controls on Tiny-ImageNet at width 32, VGG-16     (shuffled, frozen_random)
   D  both controls on Tiny-ImageNet at width 32, MobileNetV2 (optional; about 74 h)
+  E  both controls at CIFAR-100 width 32, ResNet-18 only
+
+ResNet-18 (the original study, recorded under the older file names) is opt-in:
+parts A, B, C and E apply to it, and a plain run does not start it:
+
+    python run_controls.py --models resnet18 --parts B C E      # about 74 GPU-h on the RTX 4070 Ti
 
 Every new run uses the recipe, code path, seeds 0-5 and micro-batch rules of
 run_all_models.py, so it pairs by seed with the static, uniform and gap runs
@@ -33,7 +39,8 @@ from pathlib import Path
 from src.program import Group, SEEDS
 from run_all_models import (arm_flags, choose_accum, default_exec, log, tin_ready)
 
-MODELS = ["mobilenetv2", "vgg16"]
+MODELS = ["mobilenetv2", "vgg16", "resnet18"]
+DEFAULT_MODELS = ["mobilenetv2", "vgg16"]   # ResNet-18 is opt-in (--models resnet18)
 DRAWS = {"d2": 1, "d3": 2}           # d1 is the original router, FROZEN_SEED = 20260908
 
 
@@ -44,9 +51,11 @@ def parts_for(model):
         "B": [(Group("cifar100", 16, 4, "const", ("shuffled", "frozen_random")), a, None, "d1")
               for a in ("shuffled", "frozen_random")],
         "C": [(Group("tinyimagenet", 32, 4, "const", ("shuffled", "frozen_random")), a, None, "d1")
-              for a in ("shuffled", "frozen_random")] if model == "vgg16" else [],
+              for a in ("shuffled", "frozen_random")] if model in ("vgg16", "resnet18") else [],
         "D": [(Group("tinyimagenet", 32, 4, "const", ("shuffled", "frozen_random")), a, None, "d1")
               for a in ("shuffled", "frozen_random")] if model == "mobilenetv2" else [],
+        "E": [(Group("cifar100", 32, 4, "const", ("shuffled", "frozen_random")), a, None, "d1")
+              for a in ("shuffled", "frozen_random")] if model == "resnet18" else [],
     }
     return P
 
@@ -158,8 +167,8 @@ def run_model(a, model, execute=default_exec):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--models", nargs="+", default=MODELS, choices=MODELS)
-    ap.add_argument("--parts", nargs="+", default=["A", "B", "C"], choices=["A", "B", "C", "D"])
+    ap.add_argument("--models", nargs="+", default=DEFAULT_MODELS, choices=MODELS)
+    ap.add_argument("--parts", nargs="+", default=["A", "B", "C"], choices=["A", "B", "C", "D", "E"])
     ap.add_argument("--data-root", default="./data")
     ap.add_argument("--out", default="results_controls")
     ap.add_argument("--epochs", type=int, default=150)

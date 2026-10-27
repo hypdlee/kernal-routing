@@ -37,18 +37,21 @@ def test_default_router_unchanged():
 
 def test_jobs():
     exp = {("mobilenetv2", "A"): 12, ("mobilenetv2", "B"): 12, ("mobilenetv2", "C"): 0, ("mobilenetv2", "D"): 12,
-           ("vgg16", "A"): 12, ("vgg16", "B"): 12, ("vgg16", "C"): 12, ("vgg16", "D"): 0}
+           ("mobilenetv2", "E"): 0, ("vgg16", "A"): 12, ("vgg16", "B"): 12, ("vgg16", "C"): 12, ("vgg16", "D"): 0,
+           ("vgg16", "E"): 0, ("resnet18", "A"): 12, ("resnet18", "B"): 12, ("resnet18", "C"): 12, ("resnet18", "D"): 0,
+           ("resnet18", "E"): 12}
     for (m, p), n in exp.items():
         assert len(RC.jobs(m, [p])) == n, (m, p)
     for m in RC.MODELS:
-        J = RC.jobs(m, ["A", "B", "C", "D"])
+        J = RC.jobs(m, ["A", "B", "C", "D", "E"])
         names = [RC.result_path(pathlib.Path("x"), m, g, arm, d, s).name for _, g, arm, _, d, s in J]
         assert len(names) == len(set(names)), "two jobs share a result file"
         for p, g, arm, fs, d, s in J:
             assert (fs is None) == (p != "A") and (d == "d1") == (p != "A")
             if p == "A":
                 assert (g.dataset, g.width, arm) == ("cifar100", 64, "frozen_random") and fs in (1, 2)
-    print("ok   jobs: A 12+12, B 12+12, C 12 (VGG-16), D 12 (MobileNetV2), unique result files")
+    assert RC.DEFAULT_MODELS == ["mobilenetv2", "vgg16"], "a plain run must not start ResNet-18"
+    print("ok   jobs: A 12+12, B 12+12, C 12 (VGG-16), D 12 (MobileNetV2), ResNet-18 A/B/C/E 12 each, unique result files")
 
 
 def test_dry_run(tmp="results_controls_test_dry"):
@@ -62,5 +65,21 @@ def test_dry_run(tmp="results_controls_test_dry"):
     print("ok   dry run: 60 commands for parts A-C, 24 with --frozen-seed, recipe unchanged")
 
 
+def test_resnet18_command():
+    """ResNet-18 control runs use the same code path as the original 132 runs:
+    the default model and placement, scope and router by arm, recipe unchanged."""
+    out = subprocess.run([sys.executable, "run_controls.py", "--dry-run", "--models", "resnet18", "--parts", "B", "C", "E",
+                          "--out", str(ROOT / "results_controls_test_r18")], cwd=ROOT, capture_output=True, text=True).stdout
+    cmds = [l for l in out.splitlines() if "src.train" in l]
+    assert len(cmds) == 36, len(cmds)
+    assert all("--model resnet18" in c and "--placement spatial" in c and "--epochs 150" in c and "--batch-size 128" in c
+               and "--amp bf16" in c and "--impl blend" in c and "--frozen-seed" not in c for c in cmds)
+    assert sum("--dataset tinyimagenet --data-root" in c and "--width 32" in c for c in cmds) == 12
+    assert sum("--dataset cifar100" in c and "--width 16" in c for c in cmds) == 12
+    assert sum("--dataset cifar100" in c and "--width 32" in c for c in cmds) == 12
+    import shutil; shutil.rmtree(ROOT / "results_controls_test_r18", ignore_errors=True)
+    print("ok   ResNet-18 dry run: 36 commands (width 16, width 32, Tiny-ImageNet width 32), original code path")
+
+
 if __name__ == "__main__":
-    test_default_router_unchanged(); test_jobs(); test_dry_run()
+    test_default_router_unchanged(); test_jobs(); test_dry_run(); test_resnet18_command()

@@ -59,3 +59,46 @@ Zip the whole `results_controls` folder (result files, `train.log`,
 `runner.log`, `plan.json`, `probes`). The analysis pairs every new run with
 the existing runs of the same seed, checks every result file against its log,
 and adds the controls to Section 7 and Table 5 of the paper.
+
+## ResNet-18 controls (opt-in; run on another PC)
+
+ResNet-18 has `shuffled` and `frozen_random` only at CIFAR-100 width 64 with
+one draw. The missing cells are runs of parts B (width 16), E (width 32) and
+C (Tiny-ImageNet width 32), 36 runs, about 74 GPU-hours on the RTX 4070 Ti.
+Part A for ResNet-18 (frozen draws 2 and 3 at width 64) is optional.
+
+Before the first run, fill in the date in `PREREGISTRATION_CONTROLS_R18.md`,
+edit the predictions if you disagree, commit and push it.
+
+Setup on a second PC (PowerShell), then run:
+
+```powershell
+git clone https://github.com/hypdlee/kernal-routing.git
+cd kernal-routing
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+pip install -r requirements.txt
+python -c "import torch; print(torch.__version__, torch.cuda.is_available())"   # must print True
+python tests\test_controls.py
+python download_tinyimagenet.py --root .\data        # for part C
+python run_controls.py --models resnet18 --parts B C E --dry-run   # 36 commands
+python run_controls.py --models resnet18 --parts B C E
+python run_controls.py --models resnet18 --status
+```
+
+The same command resumes after an interruption. Results go to
+`results_controls\resnet18\` with `runner.log` and `train.log`. Push them
+back (checkpoints are not pushed):
+
+```powershell
+robocopy results_controls artifacts\controls /E /XD ckpt /XF *.pt
+git add artifacts\controls
+git commit -m "ResNet-18 control results (in progress)"
+git pull --rebase
+git push
+```
+
+Do not run these on both PCs for the same model, and do not run the
+MobileNetV2 or VGG-16 controls again. Keep the PC awake (Settings, Power:
+sleep Never) and the window open.
