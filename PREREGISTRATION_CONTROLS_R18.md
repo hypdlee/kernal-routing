@@ -1,10 +1,10 @@
-# Pre-registration addendum: ResNet-18 routing controls
+﻿# Pre-registration addendum: ResNet-18 routing controls
 
 **Status: DRAFT. Edit the predictions if you disagree, fill in the date and
 time, commit this file (better: also upload it to OSF Registries or
 AsPredicted) BEFORE the first ResNet-18 control run starts.**
 
-Date and time recorded: ____________ (before any run of
+Date and time recorded: 2026-10-27 14:56 (local time, Malta) (before any run of
 `run_controls.py --models resnet18`)
 
 ## What is known when this is written
