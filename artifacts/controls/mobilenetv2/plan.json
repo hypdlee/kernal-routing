@@ -14,5 +14,13 @@
     "sec_per_step": 0.0859595537185669,
     "peak_mem_gb": 0.721977710723877,
     "est_minutes_per_run": 83.81056487560272
+  },
+  "mobilenetv2__tinyimagenet__w32__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "shuffled",
+    "sec_per_step": 0.24707343578338622,
+    "peak_mem_gb": 4.6999921798706055,
+    "est_minutes_per_run": 482.4108833670616
   }
 }

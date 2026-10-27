@@ -1,0 +1,26 @@
+{
+  "vgg16__cifar100__w64__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "frozen_random",
+    "sec_per_step": 0.06136155128479004,
+    "peak_mem_gb": 1.2426795959472656,
+    "est_minutes_per_run": 59.82751250267029
+  },
+  "vgg16__cifar100__w16__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "shuffled",
+    "sec_per_step": 0.058549273014068606,
+    "peak_mem_gb": 0.2112407684326172,
+    "est_minutes_per_run": 57.08554118871689
+  },
+  "vgg16__tinyimagenet__w32__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "shuffled",
+    "sec_per_step": 0.0959889531135559,
+    "peak_mem_gb": 1.341841220855713,
+    "est_minutes_per_run": 187.41843095421788
+  }
+}

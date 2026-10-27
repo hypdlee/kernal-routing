@@ -45,3 +45,24 @@
 2026-10-23 15:58:16  [14/24] part B mobilenetv2__cifar100__w16__K4__const frozen_random seed 0 (micro-batch 128)
 2026-10-23 17:13:22     finished in 75.1 min, final 68.17
 2026-10-23 17:13:22  [15/24] part B mobilenetv2__cifar100__w16__K4__const shuffled seed 1 (micro-batch 128)
+2026-10-23 20:45:28     finished in 212.1 min, final 67.45
+2026-10-23 20:45:28  [16/24] part B mobilenetv2__cifar100__w16__K4__const frozen_random seed 1 (micro-batch 128)
+2026-10-23 22:09:59     finished in 84.5 min, final 67.99
+2026-10-23 22:09:59  [17/24] part B mobilenetv2__cifar100__w16__K4__const shuffled seed 2 (micro-batch 128)
+2026-10-23 23:48:49     finished in 98.8 min, final 65.88
+2026-10-23 23:48:49  [18/24] part B mobilenetv2__cifar100__w16__K4__const frozen_random seed 2 (micro-batch 128)
+2026-10-24 01:08:57     finished in 80.1 min, final 68.27
+2026-10-24 01:08:57  [19/24] part B mobilenetv2__cifar100__w16__K4__const shuffled seed 3 (micro-batch 128)
+2026-10-24 02:51:56     finished in 103.0 min, final 65.35
+2026-10-24 02:51:56  [20/24] part B mobilenetv2__cifar100__w16__K4__const frozen_random seed 3 (micro-batch 128)
+2026-10-24 04:13:07     finished in 81.2 min, final 68.39
+2026-10-24 04:13:07  [21/24] part B mobilenetv2__cifar100__w16__K4__const shuffled seed 4 (micro-batch 128)
+2026-10-24 05:56:32     finished in 103.4 min, final 67.15
+2026-10-24 05:56:32  [22/24] part B mobilenetv2__cifar100__w16__K4__const frozen_random seed 4 (micro-batch 128)
+2026-10-24 07:17:05     finished in 80.5 min, final 68.82
+2026-10-24 07:17:05  [23/24] part B mobilenetv2__cifar100__w16__K4__const shuffled seed 5 (micro-batch 128)
+2026-10-24 08:59:25     finished in 102.3 min, final 66.48
+2026-10-24 08:59:25  [24/24] part B mobilenetv2__cifar100__w16__K4__const frozen_random seed 5 (micro-batch 128)
+2026-10-24 10:20:05     finished in 80.7 min, final 66.69
+2026-10-27 13:50:37  probe mobilenetv2__tinyimagenet__w32__K4__const: about 482 min per run for the heaviest arm (shuffled) at micro-batch 128; this group is 12 runs, at most ~96.5 h (training steps only, data loading and evaluation add to it)
+2026-10-27 13:50:37  [1/12] part D mobilenetv2__tinyimagenet__w32__K4__const shuffled seed 0 (micro-batch 128)

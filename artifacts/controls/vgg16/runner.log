@@ -1,0 +1,76 @@
+2026-10-24 10:20:14  probe vgg16__cifar100__w64__K4__const: about 60 min per run for the heaviest arm (frozen_random) at micro-batch 128; this group is 6 runs, at most ~6.0 h (training steps only, data loading and evaluation add to it)
+2026-10-24 10:20:14  [1/36] part A vgg16__cifar100__w64__K4__const__d2 frozen_random seed 0 (micro-batch 128)
+2026-10-24 11:23:30     finished in 63.3 min, final 74.65
+2026-10-24 11:23:30  [2/36] part A vgg16__cifar100__w64__K4__const__d3 frozen_random seed 0 (micro-batch 128)
+2026-10-24 12:26:52     finished in 63.4 min, final 74.80
+2026-10-24 12:26:52  [3/36] part A vgg16__cifar100__w64__K4__const__d2 frozen_random seed 1 (micro-batch 128)
+2026-10-24 13:29:56     finished in 63.1 min, final 74.58
+2026-10-24 13:29:56  [4/36] part A vgg16__cifar100__w64__K4__const__d3 frozen_random seed 1 (micro-batch 128)
+2026-10-24 14:33:11     finished in 63.2 min, final 74.60
+2026-10-24 14:33:11  [5/36] part A vgg16__cifar100__w64__K4__const__d2 frozen_random seed 2 (micro-batch 128)
+2026-10-24 15:36:11     finished in 63.0 min, final 74.86
+2026-10-24 15:36:11  [6/36] part A vgg16__cifar100__w64__K4__const__d3 frozen_random seed 2 (micro-batch 128)
+2026-10-24 16:39:53     finished in 63.7 min, final 74.54
+2026-10-24 16:39:53  [7/36] part A vgg16__cifar100__w64__K4__const__d2 frozen_random seed 3 (micro-batch 128)
+2026-10-24 17:43:30     finished in 63.6 min, final 74.86
+2026-10-24 17:43:30  [8/36] part A vgg16__cifar100__w64__K4__const__d3 frozen_random seed 3 (micro-batch 128)
+2026-10-24 18:47:16     finished in 63.8 min, final 74.49
+2026-10-24 18:47:16  [9/36] part A vgg16__cifar100__w64__K4__const__d2 frozen_random seed 4 (micro-batch 128)
+2026-10-24 19:50:40     finished in 63.4 min, final 74.86
+2026-10-24 19:50:40  [10/36] part A vgg16__cifar100__w64__K4__const__d3 frozen_random seed 4 (micro-batch 128)
+2026-10-24 20:53:42     finished in 63.0 min, final 74.94
+2026-10-24 20:53:42  [11/36] part A vgg16__cifar100__w64__K4__const__d2 frozen_random seed 5 (micro-batch 128)
+2026-10-24 21:56:53     finished in 63.2 min, final 74.71
+2026-10-24 21:56:53  [12/36] part A vgg16__cifar100__w64__K4__const__d3 frozen_random seed 5 (micro-batch 128)
+2026-10-24 22:59:56     finished in 63.1 min, final 74.69
+2026-10-24 23:00:04  probe vgg16__cifar100__w16__K4__const: about 57 min per run for the heaviest arm (shuffled) at micro-batch 128; this group is 12 runs, at most ~11.4 h (training steps only, data loading and evaluation add to it)
+2026-10-24 23:00:04  [13/36] part B vgg16__cifar100__w16__K4__const shuffled seed 0 (micro-batch 128)
+2026-10-25 00:03:30     finished in 63.4 min, final 65.53
+2026-10-25 00:03:30  [14/36] part B vgg16__cifar100__w16__K4__const frozen_random seed 0 (micro-batch 128)
+2026-10-25 00:53:30     finished in 50.0 min, final 65.34
+2026-10-25 00:53:30  [15/36] part B vgg16__cifar100__w16__K4__const shuffled seed 1 (micro-batch 128)
+2026-10-25 01:57:05     finished in 63.6 min, final 64.61
+2026-10-25 01:57:05  [16/36] part B vgg16__cifar100__w16__K4__const frozen_random seed 1 (micro-batch 128)
+2026-10-25 02:47:15     finished in 50.2 min, final 66.17
+2026-10-25 02:47:15  [17/36] part B vgg16__cifar100__w16__K4__const shuffled seed 2 (micro-batch 128)
+2026-10-25 02:50:50     finished in 63.6 min, final 64.73
+2026-10-25 02:50:50  [18/36] part B vgg16__cifar100__w16__K4__const frozen_random seed 2 (micro-batch 128)
+2026-10-25 03:41:23     finished in 50.6 min, final 65.77
+2026-10-25 03:41:23  [19/36] part B vgg16__cifar100__w16__K4__const shuffled seed 3 (micro-batch 128)
+2026-10-25 04:44:44     finished in 63.3 min, final 65.34
+2026-10-25 04:44:44  [20/36] part B vgg16__cifar100__w16__K4__const frozen_random seed 3 (micro-batch 128)
+2026-10-25 05:34:53     finished in 50.2 min, final 65.28
+2026-10-25 05:34:53  [21/36] part B vgg16__cifar100__w16__K4__const shuffled seed 4 (micro-batch 128)
+2026-10-25 06:38:27     finished in 63.6 min, final 65.04
+2026-10-25 06:38:27  [22/36] part B vgg16__cifar100__w16__K4__const frozen_random seed 4 (micro-batch 128)
+2026-10-25 07:28:39     finished in 50.2 min, final 65.88
+2026-10-25 07:28:39  [23/36] part B vgg16__cifar100__w16__K4__const shuffled seed 5 (micro-batch 128)
+2026-10-25 08:32:12     finished in 63.6 min, final 65.56
+2026-10-25 08:32:12  [24/36] part B vgg16__cifar100__w16__K4__const frozen_random seed 5 (micro-batch 128)
+2026-10-25 09:22:28     finished in 50.3 min, final 65.70
+2026-10-25 09:22:28  Tiny-ImageNet not prepared at C:\Users\ankit\Downloads\idea\topoconv\data. Run: python download_tinyimagenet.py --root C:\Users\ankit\Downloads\idea\topoconv\data   then rerun this command; it resumes here.
+2026-10-25 14:43:51  probe vgg16__tinyimagenet__w32__K4__const: about 187 min per run for the heaviest arm (shuffled) at micro-batch 128; this group is 12 runs, at most ~37.5 h (training steps only, data loading and evaluation add to it)
+2026-10-25 14:43:51  [1/12] part C vgg16__tinyimagenet__w32__K4__const shuffled seed 0 (micro-batch 128)
+2026-10-25 18:00:58     finished in 197.1 min, final 59.35
+2026-10-25 18:00:58  [2/12] part C vgg16__tinyimagenet__w32__K4__const frozen_random seed 0 (micro-batch 128)
+2026-10-25 20:55:30     finished in 174.5 min, final 59.74
+2026-10-25 20:55:30  [3/12] part C vgg16__tinyimagenet__w32__K4__const shuffled seed 1 (micro-batch 128)
+2026-10-26 00:42:55     finished in 227.4 min, final 59.09
+2026-10-26 00:42:55  [4/12] part C vgg16__tinyimagenet__w32__K4__const frozen_random seed 1 (micro-batch 128)
+2026-10-26 03:43:50     finished in 180.9 min, final 59.55
+2026-10-26 03:43:50  [5/12] part C vgg16__tinyimagenet__w32__K4__const shuffled seed 2 (micro-batch 128)
+2026-10-26 07:31:15     finished in 227.4 min, final 59.33
+2026-10-26 07:31:15  [6/12] part C vgg16__tinyimagenet__w32__K4__const frozen_random seed 2 (micro-batch 128)
+2026-10-26 10:27:32     finished in 176.3 min, final 60.17
+2026-10-26 10:27:32  [7/12] part C vgg16__tinyimagenet__w32__K4__const shuffled seed 3 (micro-batch 128)
+2026-10-26 14:13:45     finished in 226.2 min, final 59.49
+2026-10-26 14:13:45  [8/12] part C vgg16__tinyimagenet__w32__K4__const frozen_random seed 3 (micro-batch 128)
+2026-10-26 18:09:59     finished in 236.2 min, final 59.95
+2026-10-26 18:09:59  [9/12] part C vgg16__tinyimagenet__w32__K4__const shuffled seed 4 (micro-batch 128)
+2026-10-26 22:10:21     finished in 240.4 min, final 59.41
+2026-10-26 22:10:21  [10/12] part C vgg16__tinyimagenet__w32__K4__const frozen_random seed 4 (micro-batch 128)
+2026-10-27 01:11:46     finished in 181.4 min, final 59.64
+2026-10-27 01:11:46  [11/12] part C vgg16__tinyimagenet__w32__K4__const shuffled seed 5 (micro-batch 128)
+2026-10-27 04:53:04     finished in 221.3 min, final 58.62
+2026-10-27 04:53:04  [12/12] part C vgg16__tinyimagenet__w32__K4__const frozen_random seed 5 (micro-batch 128)
+2026-10-27 07:40:02     finished in 167.0 min, final 59.56
