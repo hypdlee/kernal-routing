@@ -312,6 +312,8 @@ file in the archive; VGG-16 has no entropy at all in this draft.
 
 # 8. One random draw of the frozen router
 
+**Status (27 October 2026): done for MobileNetV2 and VGG-16 at CIFAR-100 width 64** (draws 2 and 3, 24 runs, pre-registered 22 October; paper Section 7.1). MobileNetV2: both draws beat `uniform`, none distinguishable from `gap`. VGG-16: both equivalent to `uniform`, both lower than `gap`. Draws beyond three and other conditions remain one-draw.
+
 **Severity: Medium.** The frozen router is one fixed random draw, shared
 by all seeds, in one condition. "A random router is enough" (MobileNetV2)
 and "only the trained router departs from the constant mixture" (VGG-16)
@@ -422,6 +424,8 @@ conditions. The paper already says the settings differ (backbone, dataset,
 bank size, schedule length) and does not claim DY-Conv is wrong.
 
 # 16. "The ablations were run on CIFAR-100 only"
+
+**Status (27 October 2026): partly addressed.** Both controls now exist at CIFAR-100 width 16 (MobileNetV2, VGG-16) and on Tiny-ImageNet width 32 (VGG-16); MobileNetV2 on Tiny-ImageNet (about 74 GPU-h) and ResNet-18 are not run. Paper Section 7.1; prediction C4 failed (one of four comparisons).
 
 **Severity: Low-Medium.** Already addressed in the paper (Threats: Scope
 of the ablations, with measured cost ratios of 4 to 10 times).

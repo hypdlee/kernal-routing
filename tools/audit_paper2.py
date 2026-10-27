@@ -349,4 +349,31 @@ for b in ai_words:
     check(f"template avoids {b!r} (avoid-ai-writing pass)", b not in tex.lower())
 for b in banned:
     check(f"template does not contain {b!r}", b not in tex)
+
+# 9. routing controls (PREREGISTRATION_CONTROLS.md): files, logs, outcomes, dates
+if (built / "macros_mb.tex").exists():
+    import json as _j, subprocess as _sp, re as _r2
+    sys.path.insert(0, str(ROOT / "tools"))
+    import controls_analysis as _CA
+    for m_, n_ in (("mobilenetv2", 24), ("vgg16", 36)):
+        fs = sorted((ROOT / "artifacts" / "controls" / m_).glob("*_seed*.json"))
+        check(f"{m_}: {n_} control result files", len(fs) == n_, str(len(fs)))
+        seeds = {}
+        for f_ in fs:
+            r_ = _j.loads(f_.read_text()); seeds.setdefault((r_["tag"], r_["arm"]), set()).add(r_["seed"])
+        check(f"{m_}: every control cell has seeds 0 to 5", all(v == set(range(6)) for v in seeds.values()), str(len(seeds)))
+        _, probs = _CA.load(m_)
+        check(f"{m_}: every final accuracy equals its train.log line", not probs, str(probs[:2]))
+    check("macros: 60 control runs (24 + 36)", MAC["ctruns"] == "60" and MAC["ctmbruns"] == "24" and MAC["ctvgruns"] == "36")
+    check("control predictions match docs/CONTROLS_RESULTS.md (tools/controls_analysis.py): C1 held, C2 held, C3 held, C4 failed",
+          (MAC["ctC1o"], MAC["ctC2o"], MAC["ctC3o"], MAC["ctC4o"]) == ("held", "held", "held", "failed"))
+    tpl_ = (ROOT / "report" / "paper2_template.tex").read_text()
+    check("text says exactly one control prediction failed", "\\V{ctnfail}" in tpl_ and MAC["ctnfail"] == "1")
+    log_ = _sp.run(["git", "log", "--format=%ad", "--date=iso", "--", "PREREGISTRATION_CONTROLS.md"], cwd=ROOT, capture_output=True, text=True).stdout.splitlines()
+    first = _r2.search(r"(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d)\s+\[1/\d+\] part A",
+                       (ROOT / "artifacts" / "controls" / "mobilenetv2" / "runner.log").read_text())
+    dated = [l for l in log_ if l.startswith("2026-10-22 19:15")]
+    check("pre-registration commit 22 Oct 19:15 (+0200) precedes the first control run in runner.log", bool(dated) and bool(first) and first.group(1) > "2026-10-22 19:15:59", f"{dated[:1]} {first.group(1) if first else None}")
+    check("no em-dash or double hyphen in the control text", "—" not in tpl_)
+
 sys.exit(1 if fails else 0)

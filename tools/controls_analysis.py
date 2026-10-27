@@ -31,11 +31,11 @@ def log_values(path):
     return out
 
 
-def load(model):
+def load(model, root=ROOT):
     """{(dataset, width, arm, draw): [acc by seed]} with every value checked against its log."""
     acc, problems = {}, []
-    main = ROOT / "artifacts" / model
-    ctl = ROOT / "artifacts" / "controls" / model
+    main = root / "artifacts" / model
+    ctl = root / "artifacts" / "controls" / model
     for d, logp, is_ctl in ((main / "results", main / "train.log", False), (ctl, ctl / "train.log", True)):
         lv = log_values(logp)
         for f in sorted(d.glob("*_seed*.json")):

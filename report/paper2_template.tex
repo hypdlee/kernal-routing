@@ -15,9 +15,9 @@
 \input{macros_mb.tex}
 
 \title{\vspace{-1.3cm}\textbf{Where Does the Gain in Dynamic Convolution Come From?}\\[3pt]
-\large A controlled study of routing, capacity and width on three backbones\thanks{Draft of 22 October 2026. ResNet-18, MobileNetV2 and VGG-16 are complete; the same program on ResNet-50 and ConvNeXt-Tiny is pre-registered and running.}}
+\large A controlled study of routing, capacity and width on three backbones\thanks{Draft of 27 October 2026. ResNet-18, MobileNetV2 and VGG-16 are complete, together with \V{ctruns} routing-control runs added on 22 to 27 October; the same program on ResNet-50 and ConvNeXt-Tiny is pre-registered and running.}}
 \author{Ankit Kumar\\\small University of Malta, Msida, Malta}
-\date{\small 24 September 2026; revised 22 October 2026}
+\date{\small 24 September 2026; revised 27 October 2026}
 
 \begin{document}
 \maketitle
@@ -44,9 +44,11 @@ the gain: the pooled routing term is \V{poolrout}\,pp. The two pairs
 without an effect, CIFAR-100 at width 64 on ResNet-18 and on VGG-16, are
 equivalent to the plain network, and we could not explain them. (3)
 Whether the router has to be trained depends on the backbone: on
-MobileNetV2 a router frozen at random initialisation is not
-distinguishable from a trained one, while on VGG-16 only the trained
-router beats the constant mixture. (4) On CIFAR-100 at width 32, banks
+MobileNetV2 routers frozen at random initialisation (three draws at width 64, one at
+width 16) beat the constant mixture and are not distinguishable from a
+trained one, while on VGG-16 the mean of three draws is equivalent to the
+constant mixture on CIFAR-100 at width 64 and
+\V{ctvgW64frz3gap}\,pp from the trained router ($p=\V{ctvgW64frz3gapp}$). (4) On CIFAR-100 at width 32, banks
 larger than $K=2$ are not distinguishable from $K=2$ on any backbone. (5)
 The cost question has two answers. A plain network of twice the width,
 which on ResNet-18 and VGG-16 has as many parameters as the routed one,
@@ -107,12 +109,13 @@ schedules, two datasets and three backbones: ResNet-18 and VGG-16, where
 almost every parameter sits in a dynamic layer and VGG-16 has no residual
 connections, and MobileNetV2, where the dynamic layers are depthwise and
 hold \V{mbdynshare}\,\% of the parameters. That is \V{totruns} training
-runs and \V{totgpuh} GPU-hours on one RTX 4070 Ti. Every comparison is
+runs and \V{totgpuh} GPU-hours on one RTX 4070 Ti, plus \V{ctruns}
+routing-control runs (\V{ctgpuh} GPU-hours) added afterwards. Every comparison is
 paired by seed and tested for equivalence as well as for difference, so a
 null result is a claim with a stated margin rather than a failure to
 reject. The three backbones run the same program, and the MobileNetV2 and
 VGG-16 predictions were written down, dated, before the first run of
-either.
+either, and the control predictions before the first control run.
 
 \paragraph{Terms.} Throughout, \emph{routing} means that the mixing
 weights $\zv$ depend on the input image, whether or not the function that
@@ -301,12 +304,17 @@ of $g$ held fixed and never optimised: Gaussian weights scaled by
 $1/\sqrt{\text{fan-in}}$ and zero biases. Routing varies with the input but
 is not trained. The weights are drawn from one fixed seed that does not
 depend on the run seed, so the six seeds of this arm share the same random
-router and the control tests one random router, not a distribution of them.
+router and the main program's control tests one random router, not a
+distribution of them; the extension adds two more draws at width 64.
 \end{description}
 The five main conditions (CIFAR-100 at widths 16, 32 and 64,
 Tiny-ImageNet at widths 32 and 64) each have \texttt{static},
 \texttt{uniform} and \texttt{gap}. \texttt{shuffled} and
-\texttt{frozen\_random} were run on CIFAR-100 at width 64 only. The
+\texttt{frozen\_random} were run on CIFAR-100 at width 64 only in the main
+program; \V{ctruns} further runs, pre-registered on 22 October 2026, add two
+more random draws at width 64, both controls at CIFAR-100 width 16 and,
+for VGG-16, both controls on Tiny-ImageNet at width 32
+(Section~\ref{sec:ctrl}). The
 bank-size groups ($K=2$ and $K=8$, CIFAR-100 width 32 only) and the
 temperature groups (CIFAR-100, widths 16, 32 and 64) run \texttt{gap} only.
 
@@ -919,8 +927,9 @@ whether routing needs to be trained.
 \paragraph{Summary.} Whether the router has to be trained depends on the
 backbone: on MobileNetV2 a frozen random router does as well as a trained
 one; on VGG-16 only the trained router departs from the constant mixture;
-on ResNet-18 the question cannot be tested. All of this rests on one condition, CIFAR-100 at width 64, and
-on one random draw of the frozen router.
+on ResNet-18 the question cannot be tested. This paragraph rests on one condition, CIFAR-100 at width 64, and on one
+random draw of the frozen router; Section~\ref{sec:ctrl} repeats it with
+two more draws, a second width and, for VGG-16, Tiny-ImageNet.
 
 \paragraph{What the routers output.} On all three backbones the trained
 router is the furthest from uniform (Tables~\ref{tab:mbentw64}
@@ -960,6 +969,110 @@ comparison & $\Delta$ (pp) & $p$ & verdict & $\Delta$ (pp) & $p$ & verdict & $\D
 \bottomrule
 \end{tabular}}
 \end{table}
+
+\subsection{Controls beyond CIFAR-100 width 64}\label{sec:ctrl}
+
+The main program ran the two controls in one condition and the frozen
+router with one random draw, which are the obvious objections to the
+paragraphs above. After the main program we therefore ran \V{ctruns}
+further runs (\V{ctmbruns} on MobileNetV2, \V{ctvgruns} on VGG-16;
+\V{ctgpuh} GPU-hours) with the same recipe, code and seeds: two more draws of
+the frozen router at CIFAR-100 width 64 (draws 2 and 3, drawn from seeds 1
+and 2), both controls at CIFAR-100 width 16, and both controls on
+Tiny-ImageNet at width 32 for VGG-16. Tiny-ImageNet runs of MobileNetV2
+are not in this draft. Each new run is paired by seed with the main
+program's \texttt{static}, \texttt{uniform} and \texttt{gap} runs. The design
+and four predictions (Table~\ref{tab:ctprereg}) were committed to the
+project repository on 22 October 2026 at 19:15 (UTC+2), before the first of
+these runs started at 22:00. Every final accuracy was checked against its
+training log. Table~\ref{tab:ctrl} and Figure~\ref{fig:ctrl} give the
+results. Each comparison is tested at 0.05 without correction across
+comparisons; every comparison behind a prediction that held also passes a
+Bonferroni correction over the comparisons of its own prediction.
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\textwidth]{fig/g4_controls.pdf}
+\caption{Routing arms minus the constant mixture (\texttt{uniform}) in the
+five control cells, \SI{95}{\percent} CIs over six seeds; the band is
+$\pm$\SI{0.5}{pp}. Draws 2 and 3 of the frozen router exist at width 64
+only.}
+\label{fig:ctrl}
+\end{figure}
+
+\begin{table}[!htbp]\centering\small
+\caption{New routing-control comparisons, paired by seed. $\Delta$ is the
+first arm minus the second, in pp; verdicts use $p<0.05$ and a TOST margin
+of \SI{0.5}{pp}. At width 64 the main program's draw 1 is in
+Table~\ref{tab:mbw64}.}
+\label{tab:ctrl}
+\begin{tabular}{l r l l l}
+\toprule
+comparison & $\Delta$ (pp) & \SI{95}{\percent} CI & $p$ & verdict \\
+\midrule
+%%CTRL%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{MobileNetV2.} Both new draws beat \texttt{uniform} at width 64
+(draw 2 \V{ctmbW64frzBuni}\,pp, $p=\V{ctmbW64frzBunip}$; draw 3
+\V{ctmbW64frzCuni}\,pp, $p=\V{ctmbW64frzCunip}$), as draw 1 did, and
+neither is distinguishable from the trained router
+($\V{ctmbW64frzBgap}$ and $\V{ctmbW64frzCgap}$\,pp, $p=\V{ctmbW64frzBgapp}$
+and $\V{ctmbW64frzCgapp}$). The three draws differ from one another by
+little: the standard deviation of their means is \V{ctmbW64frzsd}\,pp. At
+width 16 the frozen router beats \texttt{static} by
+\V{ctmbW16frzAsta}\,pp ($p=\V{ctmbW16frzAstap}$) and \texttt{uniform} by
+\V{ctmbW16frzAuni}\,pp ($p=\V{ctmbW16frzAunip}$) and is not
+distinguishable from \texttt{gap} ($\V{ctmbW16frzAgap}$\,pp, $p=\V{ctmbW16frzAgapp}$;
+$p_{\text{TOST}}=\V{ctmbW16frzAgapT}$, so not equivalent either).
+\texttt{shuffled} is lower than \texttt{gap} ($\V{ctmbW16shufgap}$\,pp,
+$p=\V{ctmbW16shufgapp}$) and not distinguishable from \texttt{static}
+($\V{ctmbW16shufsta}$\,pp, $p=\V{ctmbW16shufstap}$). The MobileNetV2 result of
+the previous paragraphs therefore does not rest on one draw or on one width
+(predictions C1 and C3 held).
+
+\paragraph{VGG-16.} At width 64 neither new draw departs from the constant
+mixture (\V{ctvgW64frzBuni} and \V{ctvgW64frzCuni}\,pp, both equivalent at the
+margin), so no frozen draw has now beaten \texttt{uniform} on VGG-16 at this
+width (prediction C2 held). Averaging the three draws per seed, the frozen
+router is \V{ctvgW64frz3uni}\,pp from \texttt{uniform} ($p_{\text{TOST}}=\V{ctvgW64frz3uniT}$) and
+\V{ctvgW64frz3gap}\,pp from \texttt{gap} (\SI{95}{\percent} CI
+[\V{ctvgW64frz3gaplo}, \V{ctvgW64frz3gaphi}], $p=\V{ctvgW64frz3gapp}$);
+draws 2 and 3 are each lower than \texttt{gap}, and draw 1, taken alone,
+was inconclusive (\V{ctvgW64frzAgap}\,pp, $p=\V{ctvgW64frzAgapp}$). At
+width 16 the trained router beats the constant mixture
+($\V{ctvgW16gapuni}$\,pp, $p=\V{ctvgW16gapunip}$) and the frozen router is
+not distinguishable from either, but is above \texttt{static}
+($\V{ctvgW16frzAsta}$\,pp, $p=\V{ctvgW16frzAstap}$). On Tiny-ImageNet at width 32 the
+picture differs from CIFAR-100: the trained router is \V{ctvgTINgapunia}\,pp above the constant
+mixture, the frozen router is also above it (\V{ctvgTINfrzAuni}\,pp,
+$p=\V{ctvgTINfrzAunip}$), about \V{ctvgTINshare}\,\% of the trained
+router's margin, and \V{ctvgTINfrzAgapa}\,pp below the trained router
+($p=\V{ctvgTINfrzAgapp}$), while \texttt{shuffled} is not distinguishable
+from \texttt{static} ($\V{ctvgTINshufsta}$\,pp) and \V{ctvgTINshufgapa}\,pp below
+\texttt{gap} ($p=\V{ctvgTINshufgapp}$). So the earlier statement that only
+the trained router departs from the constant mixture on VGG-16 holds at
+CIFAR-100 width 64 but not on Tiny-ImageNet, where a random router
+recovers part of the gain.
+
+\paragraph{Prediction C4 failed.} C4 required all four comparisons to
+hold: \texttt{frozen\_random} and \texttt{shuffled} lower than \texttt{gap} at
+CIFAR-100 width 16 and on Tiny-ImageNet width 32. Three held. The one that
+did not is \V{ctC4fail}: the difference is \V{ctC4dFail}\,pp
+($p=\V{ctC4pFail}$), in the predicted direction but with a confidence
+interval that includes zero. We report it as failed, as the
+pre-registration requires.
+
+\paragraph{What changes.} Whether the router has to be trained depends on
+the backbone and on the condition, as before, and the MobileNetV2 half of
+that statement is now supported by three draws at width 64 and a second
+width. For VGG-16 the trained router was ahead of the frozen one in every
+comparison: significantly for draws 2 and 3 at width 64 and on
+Tiny-ImageNet, and in the same direction but inconclusively for draw 1 at
+width 64 and for CIFAR-100 at width 16. Not tested: ResNet-18
+beyond width 64, MobileNetV2 on Tiny-ImageNet, more than three draws, and
+other widths.
 
 \section{Bank size}\label{sec:ksize}
 
@@ -1399,14 +1512,16 @@ conclusions concern dynamic convolution of this form.
 \paragraph{Global routing.} Every router here uses a global descriptor.
 Spatially resolved routing is not covered.
 
-\paragraph{One random router.} The \texttt{frozen\_random} control uses a
-single random draw, identical across seeds, in one condition. It shows that
-a random router can match a trained one on MobileNetV2, not how often; on
-VGG-16 the same kind of draw did not depart from the constant mixture.
+\paragraph{Few random routers.} Each cell of the \texttt{frozen\_random}
+control uses one random draw shared by the six seeds, except
+CIFAR-100 at width 64, where three draws were run on MobileNetV2 and
+VGG-16. The width 16 and Tiny-ImageNet results rest on one draw, and no
+ResNet-18 control exists beyond width 64.
 
-\paragraph{Scope of the ablations.} The bank-size, temperature and
-routing-control groups were run on CIFAR-100 only, and each of their
-results is stated as a CIFAR-100 result. On ResNet-18 these groups were
+\paragraph{Scope of the ablations.} The bank-size and temperature groups, and the
+routing controls of the main program, were run on CIFAR-100 only, and each
+of their results is stated as a CIFAR-100 result; the later control runs
+add CIFAR-100 width 16 and, for VGG-16, Tiny-ImageNet width 32. On ResNet-18 these groups were
 added in stages; for MobileNetV2 and VGG-16 the same program, including
 this scope, was fixed in the pre-registration before any run. A
 Tiny-ImageNet run of the routed network costs 4 to 10 times a CIFAR-100
@@ -1485,9 +1600,11 @@ of \V{poolbankmargin}\,pp. Dynamic convolution beat the plain network in
 \V{alleffrout} of those the routing term was significant on its own; on CIFAR-100 at width 32, banks larger than $K=2$ added nothing that
 we could detect on any backbone. Whether the router had to be trained
 depended on the backbone: on MobileNetV2 a router frozen at random
-initialisation did as well as a trained one, provided each image was
-routed by its own descriptor, while on VGG-16 only the trained router
-departed from the constant mixture.
+initialisation did as well as a trained one in three draws and two widths,
+provided each image was routed by its own descriptor, while on VGG-16 the
+frozen router matched the constant mixture on CIFAR-100 and the trained
+router was ahead of it, a gap that was larger on Tiny-ImageNet, where the
+frozen router also recovered part of the gain.
 
 How much this is worth depends on the backbone and on the cost held
 fixed. A plain network of twice the width, which on ResNet-18 and VGG-16
@@ -1507,12 +1624,12 @@ indicate whether routing helped: it ordered the benefit within MobileNetV2,
 not reliably within ResNet-18 and not significantly within VGG-16, and
 almost the same entropy accompanied benefits of \V{rbguC}, \V{mbguC} and
 \V{vgguC}\,pp on the three backbones. Of our \V{allpred} recorded
-predictions, \V{allpredfail} failed. Section~\ref{sec:practice} turns these
+predictions, \V{allpredfail} failed, and of the four control predictions, \V{ctnfail} failed. Section~\ref{sec:practice} turns these
 results into recommendations.
 
 \paragraph{Reproducibility.} \V{totruns} runs (\V{nruns} ResNet-18,
-\V{mbruns} MobileNetV2, \V{vgruns} VGG-16), \V{totgpuh} GPU-hours, one
-RTX 4070 Ti. Code, the pre-registrations, the dated prediction, the gate
+\V{mbruns} MobileNetV2, \V{vgruns} VGG-16), \V{totgpuh} GPU-hours, plus
+\V{ctruns} control runs (\V{ctgpuh} GPU-hours), one RTX 4070 Ti. Code, the pre-registrations, the dated prediction, the gate
 ledgers with recorded evidence, the result files of all \V{totruns} runs,
 the MobileNetV2 and VGG-16 training and runner logs, and every per-seed
 value accompany this report.
@@ -1952,6 +2069,19 @@ VGG-16 run, and the outcomes.}
 \end{tabular}
 \end{table}
 
+\begin{table}[!htbp]\centering\small
+\caption{Routing controls: predictions committed on 22 October 2026, before
+the first control run, and the outcomes (Section~\ref{sec:ctrl}).}
+\label{tab:ctprereg}
+\begin{tabular}{l p{8.2cm} l l}
+\toprule
+& prediction & measured & outcome \\
+\midrule
+%%CTPREREG%%
+\bottomrule
+\end{tabular}
+\end{table}
+
 \FloatBarrier
 
 \clearpage
@@ -2205,6 +2335,23 @@ dataset & width & arm & params (M) & router (K) & train loss & min/run \\
 dataset & width & $K$ & $\tau$ & arms & runs & GPU-h \\
 \midrule
 %%VGINVENT%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Complete results: routing controls}
+
+\begin{table}[h]\centering\scriptsize
+\caption{Routing-control runs (Section~\ref{sec:ctrl}): final-epoch top-1
+accuracy (\si{\percent}) of every run, $K=4$ and $\tau=1$. Draw 1 of the
+frozen router at width 64 is in Tables~\ref{tab:mballruns}
+and~\ref{tab:vgallruns}.}
+\label{tab:ctallruns}
+\begin{tabular}{l l r l rrrrrr rr}
+\toprule
+backbone & dataset & width & arm & s0 & s1 & s2 & s3 & s4 & s5 & mean & sd \\
+\midrule
+%%CTALLRUNS%%
 \bottomrule
 \end{tabular}
 \end{table}

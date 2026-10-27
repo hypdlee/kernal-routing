@@ -488,6 +488,8 @@ def main(log_path, results_dir, vgg_log, vgg_results=None, r18_data=None):
     put("mbmacextra", f"{100 * max(macs[('mobilenetv2', ds, w, 4, 'gap')] / macs[('mobilenetv2', ds, w, 4, 'static')] - 1 for ds, w in COND):.0f}")
 
     pooled_part(r18, mb, vg, put)
+    import controls_section
+    controls_section.main(put)
     if vgg_results is None:
         raise SystemExit("--vgg-results is required: the VGG-16 routing entropies are in its result files")
     entropy(results_dir, R, mb, r18, put, vgg_results, RV, vg)
