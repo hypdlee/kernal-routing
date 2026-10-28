@@ -78,6 +78,7 @@ def build(src, out):
     note = t_arg[t_arg.index("\\thanks{") + 7:]
     note = note[1:arg_end(note, 0) - 1]
     note = re.sub(r"\\V\{(\w+)\}", lambda m: macros[m.group(1)], note)
+    note = re.sub(r"Section~\\ref\{([^}]+)\}", lambda m: "Section " + labels[m.group(1)], note)
     title_main = re.sub(r"\\vspace\{[^}]*\}|\\textbf|\\large|\\\\\[3pt\]", "", thanks)
     title_main = title_main.replace("{", "").replace("}", "").strip()
     first, sub = [x.strip() for x in title_main.split("\n", 1)] if "\n" in title_main else (title_main, "")
