@@ -1,0 +1,18 @@
+{
+  "model": "resnet18",
+  "dataset": "cifar100",
+  "width": 16,
+  "num_kernels": 4,
+  "scope": "all",
+  "router": "shuffled",
+  "batch_size": 128,
+  "micro_batch": 128,
+  "accum": 1,
+  "params": 2794148,
+  "device": "cuda",
+  "oom": false,
+  "sec_per_step": 0.03728197813034058,
+  "steps_per_epoch": 390,
+  "est_minutes": 36.34992867708207,
+  "peak_mem_gb": 0.42315673828125
+}

@@ -1,0 +1,18 @@
+{
+  "model": "resnet18",
+  "dataset": "tinyimagenet",
+  "width": 32,
+  "num_kernels": 4,
+  "scope": "all",
+  "router": "shuffled",
+  "batch_size": 128,
+  "micro_batch": 128,
+  "accum": 1,
+  "params": 11160120,
+  "device": "cuda",
+  "oom": false,
+  "sec_per_step": 0.2873008131980896,
+  "steps_per_epoch": 781,
+  "est_minutes": 560.95483776927,
+  "peak_mem_gb": 3.1248483657836914
+}

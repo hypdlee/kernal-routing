@@ -1,0 +1,21 @@
+2026-10-27 15:18:19  probe resnet18__cifar100__w16__K4__const: about 36 min per run for the heaviest arm (shuffled) at micro-batch 128; this group is 12 runs, at most ~7.3 h (training steps only, data loading and evaluation add to it)
+2026-10-27 15:18:19  [1/18] part B resnet18__cifar100__w16__K4__const shuffled seed 3 (micro-batch 128)
+2026-10-27 16:43:26     finished in 85.1 min, final 70.06
+2026-10-27 16:43:26  [2/18] part B resnet18__cifar100__w16__K4__const frozen_random seed 3 (micro-batch 128)
+2026-10-27 17:29:34     finished in 46.1 min, final 70.21
+2026-10-27 17:29:34  [3/18] part B resnet18__cifar100__w16__K4__const shuffled seed 4 (micro-batch 128)
+2026-10-27 18:24:36     finished in 55.0 min, final 70.23
+2026-10-27 18:24:36  [4/18] part B resnet18__cifar100__w16__K4__const frozen_random seed 4 (micro-batch 128)
+2026-10-27 19:11:11     finished in 46.6 min, final 70.15
+2026-10-27 19:11:11  [5/18] part B resnet18__cifar100__w16__K4__const shuffled seed 5 (micro-batch 128)
+2026-10-27 20:06:36     finished in 55.4 min, final 69.93
+2026-10-27 20:06:36  [6/18] part B resnet18__cifar100__w16__K4__const frozen_random seed 5 (micro-batch 128)
+2026-10-27 20:55:41     finished in 49.1 min, final 70.29
+2026-10-27 20:55:55  probe resnet18__tinyimagenet__w32__K4__const: about 776 min per run for the heaviest arm (shuffled) at micro-batch 128; this group is 12 runs, at most ~155.2 h (training steps only, data loading and evaluation add to it)
+2026-10-27 20:55:55  [7/18] part C resnet18__tinyimagenet__w32__K4__const shuffled seed 3 (micro-batch 128)
+2026-10-28 10:24:45     finished in 808.8 min, final 62.03
+2026-10-28 10:24:45  [8/18] part C resnet18__tinyimagenet__w32__K4__const frozen_random seed 3 (micro-batch 128)
+2026-10-28 23:13:49     finished in 769.1 min, final 62.92
+2026-10-28 23:13:49  [9/18] part C resnet18__tinyimagenet__w32__K4__const shuffled seed 4 (micro-batch 128)
+2026-10-29 12:54:52     finished in 821.1 min, final 61.49
+2026-10-29 12:54:52  [10/18] part C resnet18__tinyimagenet__w32__K4__const frozen_random seed 4 (micro-batch 128)
