@@ -33,10 +33,15 @@ def load(root):
         ds, w = OLD[r["tag"]]
         arm = r["router"]
         acc.setdefault((ds, w, arm, "d1"), {})[r["seed"]] = r["final_acc"]
-    ctl = root / "artifacts" / "controls" / "resnet18"
-    lv = CA.log_values(ctl / "train.log") if (ctl / "train.log").exists() else {}
-    for f in sorted(ctl.glob("*_seed*.json")):
+    dirs = [root / "artifacts" / "controls" / "resnet18"] + [root / d / "resnet18" for d in ("results_controls", "results_controls_a", "results_controls_b")]
+    runs = []
+    for ctl in dirs:
+        lv = CA.log_values(ctl / "train.log") if (ctl / "train.log").exists() else {}
+        runs += [(f, lv) for f in sorted(ctl.glob("*_seed*.json"))]
+    gpus = set()
+    for f, lv in runs:
         r = json.loads(f.read_text())
+        gpus.add(str(r.get("env", {}).get("gpu", r.get("env", {}).get("device", "?"))))
         m = re.match(r"resnet18__(\w+?)__w(\d+)__K(\d+)__(\w+?)(?:__(d\d))?$", r["tag"])
         if not m or int(m.group(3)) != 4 or m.group(4) != "const":
             continue
@@ -45,6 +50,7 @@ def load(root):
         elif abs(lv[f.name] - r["final_acc"]) > 0.005:
             problems.append(f"{f.name}: json {r['final_acc']} != log {lv[f.name]}")
         acc.setdefault((m.group(1), int(m.group(2)), r["arm"], m.group(5) or "d1"), {})[r["seed"]] = r["final_acc"]
+    load.gpus = sorted(gpus)
     return {k: np.array([v.get(s, np.nan) for s in range(6)], float) for k, v in acc.items()}, problems
 
 
@@ -56,7 +62,7 @@ def q(A, cell, x, y):
 def have(A, cell, arm, draw="d1"):
     ds, w = CELL[cell]
     k = (ds, w, arm, draw)
-    return k in A and not np.isnan(A[k]).any()
+    return k in A and int((~np.isnan(A[k])).sum()) >= (2 if arm in ("shuffled", "frozen_random") else 6)
 
 
 def main():
@@ -75,24 +81,31 @@ def main():
         new = [t for t in arms if t[0] in ("shuffled", "frozen_random") and (cell != "W64" or t[1] != "d1" or True)]
         if not any(t[0] in ("shuffled", "frozen_random") for t in arms) or len(arms) < 4:
             continue
-        rows.append(f"| **ResNet-18, {CELL[cell][0]} width {CELL[cell][1]}** | | | | | |")
+        nn = {f"{t[0]}{'' if t[1]=='d1' else ' '+t[1]}": int((~np.isnan(A[(CELL[cell][0], CELL[cell][1], t[0], t[1])])).sum()) for t in arms if t[0] in ("shuffled", "frozen_random")}
+        rows.append(f"| **ResNet-18, {CELL[cell][0]} width {CELL[cell][1]}** (seeds finished of 6: {nn}) | | | | | |")
         for t in new:
             for ref in (("static", "d1"), ("uniform", "d1"), ("gap", "d1")):
                 qq = q(A, cell, t, ref); res[(cell, t, ref)] = qq
                 rows.append(f"| {t[0]}{'' if t[1]=='d1' else ' '+t[1]} - {ref[0]} | {qq['mean']:+.2f} | [{qq['lo']:+.2f}, {qq['hi']:+.2f}] | "
                             f"{qq['p']:.4f} | {qq['tost']:.4f} | {S.verdict(qq)} |")
     sh, fz, gp, un = ("shuffled", "d1"), ("frozen_random", "d1"), ("gap", "d1"), ("uniform", "d1")
+    full = lambda c, t, r: (c, t, r) in res and res[(c, t, r)]["n"] == 6
     lo = lambda c, t: (c, t, gp) in res and res[(c, t, gp)]["p"] < 0.05 and res[(c, t, gp)]["mean"] < 0
     hi = lambda c, t, r: (c, t, r) in res and res[(c, t, r)]["p"] < 0.05 and res[(c, t, r)]["mean"] > 0
     P = ["| prediction | statement | outcome |\n|---|---|---|"]
-    if all((("TIN", t, gp) in res) for t in (sh, fz)):
+    pend = lambda k, txt: P.append(f"| {k} | {txt} | pending: cell incomplete or not run |")
+    if all(full("TIN", t, gp) for t in (sh, fz)):
         outcome["R1"] = lo("TIN", sh) and lo("TIN", fz); P.append(f"| R1 | Tiny-ImageNet w32: shuffled and frozen_random each lower than gap | **{'held' if outcome['R1'] else 'failed'}** |")
-    if all((("W16", sh, gp) in res, ("W32", sh, gp) in res)):
+    if "R1" not in outcome: pend("R1", "Tiny-ImageNet w32: shuffled and frozen_random each lower than gap")
+    if full("W16", sh, gp) and full("W32", sh, gp):
         outcome["R2"] = lo("W16", sh) and lo("W32", sh); P.append(f"| R2 | CIFAR-100 w16 and w32: shuffled lower than gap | **{'held' if outcome['R2'] else 'failed'}** |")
-    if ("TIN", fz, un) in res:
+    if "R2" not in outcome: pend("R2", "CIFAR-100 w16 and w32: shuffled lower than gap")
+    if full("TIN", fz, un):
         outcome["R3"] = hi("TIN", fz, un); P.append(f"| R3 | Tiny-ImageNet w32: frozen_random higher than uniform | **{'held' if outcome['R3'] else 'failed'}** |")
+    if "R3" not in outcome: pend("R3", "Tiny-ImageNet w32: frozen_random higher than uniform")
+    L.append("GPU recorded in result files: " + ", ".join(getattr(load, "gpus", [])))
     txt = ("# ResNet-18 routing controls: pre-registered analysis\n\n" + "\n".join("- " + l for l in L) +
-           "\n\n## Predictions (PREREGISTRATION_CONTROLS_R18.md)\n\n" + ("\n".join(P) if len(P) > 1 else "no control results yet") +
+           "\n\n## Predictions (PREREGISTRATION_CONTROLS_R18.md)\n\n" + "\n".join(P) +
            "\n\n## Paired comparisons\n\n" + "\n".join(rows) + "\n")
     pathlib.Path(a.out).write_text(txt); print(txt)
     return 0 if not problems else 1
