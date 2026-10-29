@@ -15,7 +15,7 @@
 \input{macros_mb.tex}
 
 \title{\vspace{-1.3cm}\textbf{Where Does the Gain in Dynamic Convolution Come From?}\\[3pt]
-\large Separating routing from capacity on three backbones\thanks{Draft of 28 October 2026. ResNet-18, MobileNetV2 and VGG-16 are complete, with \V{ctruns} routing-control runs on MobileNetV2 and VGG-16. The same program on ResNet-50 and ConvNeXt-Tiny, and the routing controls on ResNet-18, are not complete and nothing from them is reported here (Section~\ref{sec:open}).}}
+\large Separating routing from capacity on three backbones\thanks{Draft of 28 October 2026. ResNet-18, MobileNetV2 and VGG-16 are complete, with \V{ctruns} routing-control runs on MobileNetV2 and VGG-16. The same program on ResNet-50 and ConvNeXt-Tiny, are not complete and nothing from them is reported here. The ResNet-18 routing controls are partly run and reported with their seed counts (Section~\ref{sec:partial}); the rest is in Section~\ref{sec:open}.}}
 \author{Ankit Kumar\\\small University of Malta, Msida, Malta}
 \date{\small 24 September 2026; revised 28 October 2026}
 
@@ -52,7 +52,7 @@ have equal parameters, and in one of three on MobileNetV2. Annealing the
 softmax temperature never detectably improved accuracy, and routing entropy
 did not reliably indicate whether routing helped. Of \V{allpred} predictions
 recorded before the runs that test them, \V{allpredfail} failed. ResNet-50,
-ConvNeXt-Tiny and ResNet-18 controls beyond width 64 are not yet run, so the
+ConvNeXt-Tiny are not yet run and the ResNet-18 controls are incomplete, so the
 conclusions are limited to the three backbones reported.
 \end{abstract}
 
@@ -1024,6 +1024,76 @@ width 64 and for CIFAR-100 at width 16. Not tested: ResNet-18
 beyond width 64, MobileNetV2 on Tiny-ImageNet, more than three draws, and
 other widths.
 
+\subsection{Controls still running at submission}\label{sec:partial}
+
+The ResNet-18 controls were unfinished when this draft was built. They are
+reported with the number of seeds each cell has, they are not part of
+predictions C1 to C4, and they should be read as incomplete.
+
+\paragraph{ResNet-18.} The design and three predictions (R1 to R3,
+Table~\ref{tab:r18prereg}) were committed on 27 October 2026 at 14:56
+(UTC+1), after the MobileNetV2 and VGG-16 control results were known and
+before the first run at 15:14 that day. They are therefore not blind to those
+results. Of the 36 planned runs, \V{pdr18runs} had finished (\V{pdr18hours}
+run-hours; two processes shared one \V{pdr18gpu}, so run-hours exceed
+clock hours): all twelve at CIFAR-100 width 16, \V{pdr18TINshufn} of six
+seeds of \texttt{shuffled} and \V{pdr18TINfrzn} of six of
+\texttt{frozen\_random} on Tiny-ImageNet at width 32, and none at CIFAR-100
+at width 32. Each of R1 to R3 needs a cell that is not complete (R2 also
+needs width 32), so none is scored. They are pending, not held.
+
+\begin{table}[!htbp]\centering\small
+\caption{ResNet-18 control comparisons on the seeds finished, paired by
+seed against the main program's \texttt{static}, \texttt{uniform} and
+\texttt{gap} runs. $\Delta$ is the first arm minus the second, in pp; a
+verdict with $n<6$ rests on fewer seeds than the rest of the paper.}
+\label{tab:r18ctrl}
+\begin{tabular}{l r l l l}
+\toprule
+comparison & $\Delta$ (pp) & \SI{95}{\percent} CI & $p$ & verdict \\
+\midrule
+%%PDR18%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]\centering\small
+\caption{Predictions recorded for the ResNet-18 controls on 27 October
+2026, and their status when this draft was built.}
+\label{tab:r18prereg}
+\begin{tabular}{l p{8.2cm} l}
+\toprule
+& prediction & status \\
+\midrule
+R1 & Tiny-ImageNet width 32: \texttt{shuffled} and \texttt{frozen\_random} are each lower than \texttt{gap} & pending, seeds not finished \\
+R2 & CIFAR-100 widths 16 and 32: \texttt{shuffled} is lower than \texttt{gap} at both & pending, width 32 not run \\
+R3 & Tiny-ImageNet width 32: \texttt{frozen\_random} is higher than \texttt{uniform} & pending, seeds not finished \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{CIFAR-100 at width 16.} The cell is complete. The shuffled router
+is lower than the trained router (\V{pdr18W16shufgap}\,pp,
+$p=\V{pdr18W16shufgapp}$) and equivalent to the plain network
+(\V{pdr18W16shufsta}\,pp, $p_{\text{TOST}}=\V{pdr18W16shufstaT}$). The frozen
+router is above the constant mixture (\V{pdr18W16frzuni}\,pp,
+$p=\V{pdr18W16frzunip}$) and equivalent to the trained one
+(\V{pdr18W16frzgap}\,pp, $p_{\text{TOST}}=\V{pdr18W16frzgapT}$). At this width
+a router that is not trained is therefore not distinguishable from a trained
+one on ResNet-18, as on MobileNetV2. At width 64 the test was uninformative,
+because no ResNet-18 arm differs from the plain network
+(Table~\ref{tab:mbw64}).
+
+\paragraph{Tiny-ImageNet at width 32.} The cell is incomplete.
+\texttt{shuffled}, with \V{pdr18TINshufn} seeds, is lower than the trained
+router (\V{pdr18TINshufgap}\,pp, $p=\V{pdr18TINshufgapp}$) and not
+distinguishable from the plain network (\V{pdr18TINshufsta}\,pp). The frozen
+router has \V{pdr18TINfrzn} seeds, and every comparison with it has a
+confidence interval that is too wide to read (for example against \texttt{gap}:
+\V{pdr18TINfrzgap}\,pp, [\V{pdr18TINfrzgaplo}, \V{pdr18TINfrzgaphi}]). We draw
+no conclusion from it. The full table of runs is in
+Appendix~\ref{app:partial}.
+
 \paragraph{What this gives.} Routing is the active ingredient, and it is not
 the same thing on every backbone: on MobileNetV2 a router that is not trained did as well as a trained one in
 our comparisons, while on VGG-16 the trained router was ahead of a random one. With the ingredient identified, the practical
@@ -1449,22 +1519,23 @@ dependence in Section~\ref{sec:summary} rests on three backbones, and any
 grouping of them (for example, ResNet-18 and VGG-16 against MobileNetV2) could
 change.
 
-\paragraph{ResNet-18 routing controls.} On ResNet-18 the controls exist only
-at CIFAR-100 width 64 with one frozen-router draw, where no arm differs from
-the plain network. Question~3 is therefore untested on ResNet-18. A further
-36 runs (\texttt{shuffled} and \texttt{frozen\_random} at CIFAR-100 widths 16
-and 32 and Tiny-ImageNet width 32) were pre-registered on 27 October 2026,
-after the MobileNetV2 and VGG-16 control results were known, and assigned to
-a second machine. None of their result files is in the archive this draft
-was built from. When they are, the predictions are scored as held or failed
-whatever they show.
+\paragraph{ResNet-18 routing controls.} Of the 36 planned runs,
+\V{pdr18runs} have finished (Section~\ref{sec:partial}): the twelve at
+CIFAR-100 width 16 and part of Tiny-ImageNet width 32. CIFAR-100 width 32 has
+not started and the Tiny-ImageNet cell has \V{pdr18TINshufn} and
+\V{pdr18TINfrzn} of six seeds for its two arms. The three predictions R1 to R3
+are unscored until their cells are complete, and they will be scored as held
+or failed whatever the remaining runs show. The ResNet-18 result for question~3
+therefore rests on width 16 alone.
 
 \paragraph{MobileNetV2 controls on Tiny-ImageNet.} The VGG-16 controls
 include Tiny-ImageNet width 32, where a random router recovered part of the
 trained router's margin, a pattern absent at CIFAR-100. The MobileNetV2
-statement in Section~\ref{sec:router} rests on CIFAR-100 alone. Twelve runs
-would test it; they need a dated prediction first, and none has been written
-or run.
+statement in Section~\ref{sec:router} rests on CIFAR-100 alone. Twelve
+control runs on this cell were started on 27 October 2026, after the dated
+control predictions, with no recorded prediction of their own. They were
+unfinished when this draft was built and are not reported. Whatever they show
+will be reported as exploratory.
 
 \paragraph{The CIFAR-100 width-64 null.} It is well powered on ResNet-18,
 holds on ResNet-18 and VGG-16 as an equivalence, survives both temperature
@@ -1543,8 +1614,8 @@ Spatially resolved routing is not covered.
 \paragraph{Few random routers.} Each cell of the \texttt{frozen\_random}
 control uses one random draw shared by the six seeds, except
 CIFAR-100 at width 64, where three draws were run on MobileNetV2 and
-VGG-16. The width 16 and Tiny-ImageNet results rest on one draw, and no
-ResNet-18 control exists beyond width 64.
+VGG-16. The width 16 and Tiny-ImageNet results rest on one draw, and the ResNet-18
+controls beyond width 64 are incomplete (Section~\ref{sec:partial}).
 
 \paragraph{Scope of the ablations.} The bank-size and temperature groups, and the
 routing controls of the main program, were run on CIFAR-100 only, and each
@@ -1572,7 +1643,8 @@ results. The 30 September date therefore rests on the file's own statement.
 The control predictions are better placed: they were committed on 22 October
 2026 at 19:15 (UTC+2), before the first control run started at 22:00, and the
 ResNet-18 control predictions were committed on 27 October 2026 at 14:56
-(UTC+1); no ResNet-18 control result file is in the archive. A reader cannot confirm any of
+(UTC+1), 18 minutes before the first ResNet-18 control run started, as the runner log
+records. A reader cannot confirm any of
 these dates independently of the repository.
 
 \paragraph{Counted compute.} The equal-compute comparison uses counted
@@ -1617,8 +1689,9 @@ as a trained one in three draws and two widths, provided each image was
 routed by its own descriptor. On VGG-16 the frozen router matched the constant
 mixture on CIFAR-100 at width 64, the trained router was ahead of it, and on
 Tiny-ImageNet the frozen router recovered part of the gain. On ResNet-18 the
-question could not be tested at width 64, and the controls beyond it have not
-been run.
+question could not be tested at width 64, and at width 16 a router that is not
+trained was not distinguishable from a trained one; the remaining ResNet-18
+controls are incomplete (Section~\ref{sec:partial}).
 
 Whether the layer is worth having depends on the budget held fixed. A plain
 network of twice the width, which on ResNet-18 and VGG-16 has as many
@@ -1636,8 +1709,8 @@ helped.
 The evidence has limits that the reader should weigh. Of \V{allpred}
 predictions recorded before the main runs, \V{allpredfail} failed, and of the
 four control predictions, \V{ctnfail} failed. The frozen-router results use
-three draws at one width and one draw elsewhere. ResNet-50, ConvNeXt-Tiny and
-the ResNet-18 controls are not yet run (Section~\ref{sec:open}), so the claim
+three draws at one width and one draw elsewhere. ResNet-50 and ConvNeXt-Tiny are not yet run and the ResNet-18 controls are
+incomplete (Section~\ref{sec:open}), so the claim
 of backbone dependence rests on three backbones. Section~\ref{sec:practice}
 turns the results into recommendations within that scope.
 
@@ -2436,6 +2509,25 @@ and~\ref{tab:vgallruns}.}
 backbone & dataset & width & arm & s0 & s1 & s2 & s3 & s4 & s5 & mean & sd \\
 \midrule
 %%CTALLRUNS%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Runs not in the pre-registered control set}\label{app:partial}
+
+\begin{table}[h]\centering\scriptsize
+\caption{Runs reported with fewer than six seeds or added after the
+pre-registered control set (Section~\ref{sec:partial}): final-epoch top-1
+accuracy (\si{\percent}), $K=4$ and $\tau=1$; ``--'' marks a seed that had
+not finished. The mean is over the seeds finished, so means of arms with
+different $n$ are not comparable; the paired differences in
+Table~\ref{tab:r18ctrl} use only seeds both arms have.}
+\label{tab:partialruns}
+\begin{tabular}{l l r l rrrrrr r r}
+\toprule
+backbone & dataset & width & arm & s0 & s1 & s2 & s3 & s4 & s5 & mean & $n$ \\
+\midrule
+%%PDALLRUNS%%
 \bottomrule
 \end{tabular}
 \end{table}

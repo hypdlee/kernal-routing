@@ -490,6 +490,8 @@ def main(log_path, results_dir, vgg_log, vgg_results=None, r18_data=None):
     pooled_part(r18, mb, vg, put)
     import controls_section
     controls_section.main(put)
+    import partial_section
+    partial_section.main(put)
     if vgg_results is None:
         raise SystemExit("--vgg-results is required: the VGG-16 routing entropies are in its result files")
     entropy(results_dir, R, mb, r18, put, vgg_results, RV, vg)

@@ -376,4 +376,38 @@ if (built / "macros_mb.tex").exists():
     check("pre-registration commit 22 Oct 19:15 (+0200) precedes the first control run in runner.log", bool(dated) and bool(first) and first.group(1) > "2026-10-22 19:15:59", f"{dated[:1]} {first.group(1) if first else None}")
     check("no em-dash or double hyphen in the control text", "—" not in tpl_)
 
+# 10. ResNet-18 controls reported with seed counts (PREREGISTRATION_CONTROLS_R18.md)
+import json as _j2, subprocess as _sp2, re as _r3
+sys.path.insert(0, str(ROOT / "tools"))
+_spec = __import__("importlib.util").util.spec_from_file_location("r18c", ROOT / "tools" / "controls_r18_analysis.py")
+_R18 = __import__("importlib.util").util.module_from_spec(_spec); _spec.loader.exec_module(_R18)
+_A, _probs = _R18.load(ROOT)
+check("ResNet-18 controls: every final accuracy equals its train.log line", not _probs, str(_probs[:2]))
+_fs = [f for d in ("results_controls_a", "results_controls_b") for f in sorted((ROOT / d / "resnet18").glob("*_seed*.json"))]
+check("macros: ResNet-18 control run count equals the result files", MAC["pdr18runs"] == str(len(_fs)), f"{MAC['pdr18runs']} vs {len(_fs)}")
+check("ResNet-18 control files are unique runs", len({(_j2.loads(f.read_text())["tag"], _j2.loads(f.read_text())["arm"], _j2.loads(f.read_text())["seed"]) for f in _fs}) == len(_fs))
+_n = {}
+for f in _fs:
+    r = _j2.loads(f.read_text()); _n[(r["tag"].split("__")[1], r["arm"])] = _n.get((r["tag"].split("__")[1], r["arm"]), 0) + 1
+check("macros: seed counts shown for the incomplete cells match the files",
+      MAC["pdr18TINshufn"] == str(_n.get(("tinyimagenet", "shuffled"), 0)) and MAC["pdr18TINfrzn"] == str(_n.get(("tinyimagenet", "frozen_random"), 0))
+      and MAC["pdr18W16shufn"] == str(_n.get(("cifar100", "shuffled"), 0)) and MAC["pdr18W16frzn"] == str(_n.get(("cifar100", "frozen_random"), 0)), str(_n))
+_rl = ((ROOT / "results_controls_a/resnet18/runner.log").read_text() + (ROOT / "results_controls_b/resnet18/runner.log").read_text())
+_ts = sorted(_r3.findall(r"(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d)\s+\[\d+/\d+\] part", _rl))
+_pc = _sp2.run(["git", "log", "-1", "--format=%ad", "--date=iso", "dbbacb8"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+check("ResNet-18 pre-registration commit (dbbacb8) precedes the first ResNet-18 control run", bool(_ts) and bool(_pc) and _pc[:19] < _ts[0], f"{_pc} vs {_ts[:1]}")
+for nm in ("PDR18", "PDALLRUNS"):
+    check(f"table tab_{nm}.tex exists and is non-empty", (built / f"tab_{nm}.tex").exists() and (built / f"tab_{nm}.tex").stat().st_size > 0)
+_tb = (built / "tab_PDR18.tex").read_text().splitlines()
+_bad = []; _cur = 6
+for l in _tb:
+    m = _r3.search(r"shuffled\} (\d) of 6 seeds, .*?frozen.*?\} (\d) of 6 seeds", l)
+    if m: _cur = (int(m.group(1)), int(m.group(2))); continue
+    if "equivalent" in l or "inconclusive" in l or "lower" in l or "higher" in l:
+        n_ = _cur[1] if "frozen" in l.split("$-$")[0] else _cur[0]
+        if n_ != 6 and f"(n={n_})" not in l: _bad.append(l[:50])
+check("every ResNet-18 comparison with n<6 carries its n in the verdict", not _bad, str(_bad[:2]))
+check("built paper has no em-dash", "\u2014" not in (built / "main.tex").read_text())
+check("template mentions the n shown in every partial cell (sec:partial)", "sec:partial" in tpl_ and "app:partial" in tpl_)
+
 sys.exit(1 if fails else 0)
