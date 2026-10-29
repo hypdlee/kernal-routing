@@ -1,0 +1,18 @@
+{
+  "model": "mobilenetv2",
+  "dataset": "tinyimagenet",
+  "width": 32,
+  "num_kernels": 4,
+  "scope": "all",
+  "router": "shuffled",
+  "batch_size": 128,
+  "micro_batch": 128,
+  "accum": 1,
+  "params": 1330596,
+  "device": "cuda",
+  "oom": false,
+  "sec_per_step": 0.24707343578338622,
+  "steps_per_epoch": 781,
+  "est_minutes": 482.4108833670616,
+  "peak_mem_gb": 4.6999921798706055
+}
