@@ -15,7 +15,7 @@
 \input{macros_mb.tex}
 
 \title{\vspace{-1.3cm}\textbf{Where Does the Gain in Dynamic Convolution Come From?}\\[3pt]
-\large Separating routing from capacity on three backbones\thanks{Draft of 28 October 2026. ResNet-18, MobileNetV2 and VGG-16 are complete, with \V{ctruns} routing-control runs on MobileNetV2 and VGG-16. The same program on ResNet-50 and ConvNeXt-Tiny, are not complete and nothing from them is reported here. The ResNet-18 routing controls are partly run and reported with their seed counts (Section~\ref{sec:partial}); the rest is in Section~\ref{sec:open}.}}
+\large Separating routing from capacity on three backbones\thanks{Draft of 2 November 2026. ResNet-18, MobileNetV2 and VGG-16 are complete, with \V{ctruns} pre-registered routing-control runs on MobileNetV2 and VGG-16 and \V{ctDruns} exploratory ones on MobileNetV2. The same program on ResNet-50 and ConvNeXt-Tiny, are not complete and nothing from them is reported here. The ResNet-18 routing controls are partly run and reported with their seed counts (Section~\ref{sec:partial}); the rest is in Section~\ref{sec:open}.}}
 \author{Ankit Kumar\\\small University of Malta, Msida, Malta}
 \date{\small 24 September 2026; revised 28 October 2026}
 
@@ -929,13 +929,16 @@ further runs (\V{ctmbruns} on MobileNetV2, \V{ctvgruns} on VGG-16;
 \V{ctgpuh} GPU-hours) with the same recipe, code and seeds: two more draws of
 the frozen router at CIFAR-100 width 64 (draws 2 and 3, drawn from seeds 1
 and 2), both controls at CIFAR-100 width 16, and both controls on
-Tiny-ImageNet at width 32 for VGG-16. Tiny-ImageNet runs of MobileNetV2
-are not in this draft. Each new run is paired by seed with the main
+Tiny-ImageNet at width 32 for VGG-16. Twelve further runs, MobileNetV2 on
+Tiny-ImageNet, were added on 27 October without a recorded prediction and are
+reported separately as exploratory. Each new run is paired by seed with the main
 program's \texttt{static}, \texttt{uniform} and \texttt{gap} runs. The design
 and four predictions (Table~\ref{tab:ctprereg}) were committed to the
 project repository on 22 October 2026 at 19:15 (UTC+2), before the first of
 these runs started at 22:00. Every final accuracy was checked against its
-training log. Table~\ref{tab:ctrl} and Figure~\ref{fig:ctrl} give the
+training log, except for the twelve exploratory runs, whose log is not in the
+archive; those were checked against the per-epoch history stored in each
+result file (150 epochs, last test accuracy equal to the final accuracy). Table~\ref{tab:ctrl} and Figure~\ref{fig:ctrl} give the
 results. Each comparison is tested at 0.05 without correction across
 comparisons; every comparison behind a prediction that held also passes a
 Bonferroni correction over the comparisons of its own prediction.
@@ -1014,14 +1017,54 @@ did not is \V{ctC4fail}: the difference is \V{ctC4dFail}\,pp
 interval that includes zero. We report it as failed, as the
 pre-registration requires.
 
+\paragraph{MobileNetV2 on Tiny-ImageNet (exploratory).} The VGG-16 controls
+showed a pattern on Tiny-ImageNet that CIFAR-100 did not, so we ran the same
+two controls for MobileNetV2 at width 32 (\V{ctDruns} runs, \V{ctDgpuh}
+GPU-hours, seeds 0 to 5). The pre-registration lists this part as optional and
+names no prediction for it, so the result is exploratory and is not scored as
+held or failed. Means over six seeds are \V{ctDstam}\,\% for \texttt{static},
+\V{ctDunim}\,\% for \texttt{uniform}, \V{ctDgapm}\,\% for \texttt{gap},
+\V{ctDfrzAm}\,\% for \texttt{frozen\_random} and \V{ctDshufm}\,\% for
+\texttt{shuffled}. Table~\ref{tab:ctD} gives the paired comparisons. The frozen random
+router is above both \texttt{static} (\V{ctDfrzAsta}\,pp, $p=\V{ctDfrzAstap}$)
+and \texttt{uniform} (\V{ctDfrzAuni}\,pp, $p=\V{ctDfrzAunip}$), and it is
+\V{ctDfrzAgap}\,pp from the trained router ($p=\V{ctDfrzAgapp}$, \SI{95}{\percent} CI
+[\V{ctDfrzAgaplo}, \V{ctDfrzAgaphi}]): the interval excludes zero but not by much,
+the comparison is not equivalent at the margin ($p_{\text{TOST}}=\V{ctDfrzAgapT}$), and it
+would not survive a correction over the six comparisons. The frozen router
+therefore recovers the whole of the trained router's margin over the constant
+mixture (\V{ctDfrzshare}\,\% of it), against \V{ctvgTINshare}\,\% on VGG-16.
+\texttt{shuffled} is not distinguishable from \texttt{static}
+(\V{ctDshufsta}\,pp, $p=\V{ctDshufstap}$) or \texttt{uniform}
+(\V{ctDshufuni}\,pp, $p=\V{ctDshufunip}$) and is \V{ctDshufgapa}\,pp below
+\texttt{gap} ($p=\V{ctDshufgapp}$). On this backbone and condition, then, the gain does not
+need a trained router, and it disappears when the mixtures are shuffled
+across samples, which breaks the link between a sample and its mixture. The pattern matches the CIFAR-100 results for
+MobileNetV2. Only one frozen draw was run here, so the draw-to-draw spread is not measured
+in this cell.
+
+\begin{table}[!htbp]\centering\small
+\caption{MobileNetV2, Tiny-ImageNet width 32, exploratory controls, paired by
+seed. $\Delta$ is the first arm minus the second, in pp; no prediction was
+recorded for these runs.}
+\label{tab:ctD}
+\begin{tabular}{l r l l l}
+\toprule
+comparison & $\Delta$ (pp) & \SI{95}{\percent} CI & $p$ & verdict \\
+\midrule
+%%CTD%%
+\bottomrule
+\end{tabular}
+\end{table}
+
 \paragraph{What changes.} Whether the router has to be trained depends on
 the backbone and on the condition, as before, and the MobileNetV2 half of
-that statement is now supported by three draws at width 64 and a second
-width. For VGG-16 the trained router was ahead of the frozen one in every
+that statement is now supported by three draws at width 64, a second
+width, and an exploratory run on Tiny-ImageNet. For VGG-16 the trained router was ahead of the frozen one in every
 comparison: significantly for draws 2 and 3 at width 64 and on
 Tiny-ImageNet, and in the same direction but inconclusively for draw 1 at
 width 64 and for CIFAR-100 at width 16. Not tested: ResNet-18
-beyond width 64, MobileNetV2 on Tiny-ImageNet, more than three draws, and
+beyond width 64, more than three draws, and
 other widths.
 
 \subsection{Controls still running at submission}\label{sec:partial}
@@ -1528,14 +1571,12 @@ are unscored until their cells are complete, and they will be scored as held
 or failed whatever the remaining runs show. The ResNet-18 result for question~3
 therefore rests on width 16 alone.
 
-\paragraph{MobileNetV2 controls on Tiny-ImageNet.} The VGG-16 controls
-include Tiny-ImageNet width 32, where a random router recovered part of the
-trained router's margin, a pattern absent at CIFAR-100. The MobileNetV2
-statement in Section~\ref{sec:router} rests on CIFAR-100 alone. Twelve
-control runs on this cell were started on 27 October 2026, after the dated
-control predictions, with no recorded prediction of their own. They were
-unfinished when this draft was built and are not reported. Whatever they show
-will be reported as exploratory.
+\paragraph{MobileNetV2 controls on Tiny-ImageNet.} These twelve runs are
+complete and reported in Section~\ref{sec:router}, as exploratory: they were
+started after the dated control predictions and have no prediction of their own.
+Their training log is not in the archive, so they were checked against the
+history stored in each result file, and only one frozen draw exists for the
+cell.
 
 \paragraph{The CIFAR-100 width-64 null.} It is well powered on ResNet-18,
 holds on ResNet-18 and VGG-16 as an equivalence, survives both temperature

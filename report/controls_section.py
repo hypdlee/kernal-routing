@@ -145,16 +145,44 @@ def main(put, root=ROOT):
                 put(key + "p", pv(qq["p"])); put(key + "T", f(qq["tost"], 4)); put(key + "v", S.verdict(qq))
             put(f"ct{b}W64frzsd", f(np.std([vals(b, "W64", x).mean() for x in ("frzA", "frzB", "frzC")], ddof=1), 2))
 
+
+    # ---- part D (exploratory, no recorded prediction): MobileNetV2 on Tiny-ImageNet width 32.
+    # These 12 runs have no train.log in the archive, so each file is checked against its own
+    # per-epoch history instead (last test accuracy equals the stored final accuracy, 150 epochs).
+    dd = root / "results_controls" / "mobilenetv2"
+    D, dmin = {}, 0.0
+    for fp in sorted(dd.glob("mobilenetv2__tinyimagenet__w32__K4__const_*_seed*.json")):
+        r = json.loads(fp.read_text())
+        if r["config"]["epochs"] != 150 or len(r["history"]) != 150 or abs(r["history"][-1]["test_acc"] - r["final_acc"]) > 0.005:
+            raise SystemExit(f"part D file fails its own history check: {fp.name}")
+        D.setdefault(r["arm"], {})[r["seed"]] = r["final_acc"]; dmin += r["minutes"]
+    if sorted(D) != ["frozen_random", "shuffled"] or any(sorted(v) != list(range(6)) for v in D.values()):
+        raise SystemExit("part D is not 6 seeds for both arms")
+    Dv = {"frzA": np.array([D["frozen_random"][s] for s in range(6)]), "shuf": np.array([D["shuffled"][s] for s in range(6)])}
+    for x in ("sta", "uni", "gap"):
+        Dv[x] = vals("mb", "TIN", x)
+    put("ctDruns", "12"); put("ctDgpuh", f"{dmin / 60:.0f}")
+    drows = []
+    for x, y in (("frzA", "sta"), ("frzA", "uni"), ("frzA", "gap"), ("shuf", "sta"), ("shuf", "uni"), ("shuf", "gap")):
+        qq = S.paired(Dv[x], Dv[y], margin=MARGIN); key = f"ctD{x}{y}"
+        put(key, sg(qq["mean"])); put(key + "lo", sg(qq["lo"])); put(key + "hi", sg(qq["hi"]))
+        put(key + "p", pv(qq["p"])); put(key + "T", f(qq["tost"], 4)); put(key + "v", S.verdict(qq))
+        put(key + "a", f(abs(qq["mean"]), 2))
+        drows.append(f"{tt(SHORT[x])} $-$ {tt(SHORT[y])} & {sg(qq['mean'])} & [{sg(qq['lo'])}, {sg(qq['hi'])}] & "
+                     f"{pv(qq['p'])} & {S.verdict(qq)} \\\\")
+    for x in ("sta", "uni", "gap", "frzA", "shuf"):
+        put(f"ctD{x}m", f(Dv[x].mean(), 2)); put(f"ctD{x}sd", f(Dv[x].std(ddof=1), 2))
+    pathlib.Path("tab_CTD.tex").write_text("\n".join(drows) + "\n")
+    put("ctDfrzshare", f"{100 * (Dv['frzA'] - Dv['uni']).mean() / (Dv['gap'] - Dv['uni']).mean():.0f}")
+
     # ---- per-seed appendix table
     rows = []
     for b in ("mb", "vg"):
         for cell in ("W64", "W16", "TIN"):
-            if cell == "TIN" and b == "mb":
-                continue
             ds, w = CELLS[cell]
             xs = ["frzB", "frzC"] if cell == "W64" else ["shuf", "frzA"]
             for x in xs:
-                v = vals(b, cell, x)
+                v = Dv[x] if (b == "mb" and cell == "TIN") else vals(b, cell, x)
                 rows.append(f"{MODELNAME[b]} & {'CIFAR-100' if ds == 'cifar100' else 'Tiny-ImageNet'} & {w} & {tt(ARM[x][0])}"
                             f"{' (' + ARM[x][1] + ')' if cell == 'W64' else ''} & " + " & ".join(f"{z:.2f}" for z in v)
                             + f" & {f(v.mean(), 2)} & {f(v.std(ddof=1), 2)} \\\\")
