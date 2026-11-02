@@ -19,3 +19,21 @@
 2026-10-28 23:13:49  [9/18] part C resnet18__tinyimagenet__w32__K4__const shuffled seed 4 (micro-batch 128)
 2026-10-29 12:54:52     finished in 821.1 min, final 61.49
 2026-10-29 12:54:52  [10/18] part C resnet18__tinyimagenet__w32__K4__const frozen_random seed 4 (micro-batch 128)
+2026-10-30 01:42:47     finished in 767.9 min, final 63.16
+2026-10-30 01:42:47  [11/18] part C resnet18__tinyimagenet__w32__K4__const shuffled seed 5 (micro-batch 128)
+2026-10-30 15:05:09     finished in 802.4 min, final 61.51
+2026-10-30 15:05:09  [12/18] part C resnet18__tinyimagenet__w32__K4__const frozen_random seed 5 (micro-batch 128)
+2026-10-31 04:24:38     finished in 799.5 min, final 63.25
+2026-10-31 04:24:49  probe resnet18__cifar100__w32__K4__const: about 105 min per run for the heaviest arm (shuffled) at micro-batch 128; this group is 12 runs, at most ~20.9 h (training steps only, data loading and evaluation add to it)
+2026-10-31 04:24:49  [13/18] part E resnet18__cifar100__w32__K4__const shuffled seed 3 (micro-batch 128)
+2026-10-31 05:56:24     finished in 91.6 min, final 74.99
+2026-10-31 05:56:24  [14/18] part E resnet18__cifar100__w32__K4__const frozen_random seed 3 (micro-batch 128)
+2026-10-31 07:17:59     finished in 81.6 min, final 75.97
+2026-10-31 07:17:59  [15/18] part E resnet18__cifar100__w32__K4__const shuffled seed 4 (micro-batch 128)
+2026-10-31 08:48:49     finished in 90.8 min, final 75.30
+2026-10-31 08:48:49  [16/18] part E resnet18__cifar100__w32__K4__const frozen_random seed 4 (micro-batch 128)
+2026-10-31 10:13:33     finished in 84.7 min, final 75.15
+2026-10-31 10:13:33  [17/18] part E resnet18__cifar100__w32__K4__const shuffled seed 5 (micro-batch 128)
+2026-10-31 11:42:17     finished in 88.7 min, final 74.79
+2026-10-31 11:42:17  [18/18] part E resnet18__cifar100__w32__K4__const frozen_random seed 5 (micro-batch 128)
+2026-10-31 13:03:59     finished in 81.7 min, final 75.68

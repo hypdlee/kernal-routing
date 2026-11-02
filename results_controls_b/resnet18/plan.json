@@ -14,5 +14,13 @@
     "sec_per_step": 0.3975643038749695,
     "peak_mem_gb": 3.1248483657836914,
     "est_minutes_per_run": 776.2443033158779
+  },
+  "resnet18__cifar100__w32__K4__const": {
+    "accum": 1,
+    "micro_batch": 128,
+    "arm": "shuffled",
+    "sec_per_step": 0.10730530023574829,
+    "peak_mem_gb": 0.8806643486022949,
+    "est_minutes_per_run": 104.62266772985458
   }
 }
