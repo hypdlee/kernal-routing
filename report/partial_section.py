@@ -25,8 +25,8 @@ f = lambda x, n=2: "--" if x is None or (isinstance(x, float) and math.isnan(x))
 sg = lambda x, n=2: f"{x:+.{n}f}"
 pv = lambda p: "$<10^{-4}$" if p < 1e-4 else f"{p:.4f}"
 tt = lambda a: "\\texttt{" + a.replace("_", "\\_") + "}"
-CELLS = {"W16": ("cifar100", 16), "TIN": ("tinyimagenet", 32)}
-CELLNAME = {"W16": "CIFAR-100, width 16", "TIN": "Tiny-ImageNet, width 32"}
+CELLS = {"W16": ("cifar100", 16), "W32": ("cifar100", 32), "TIN": ("tinyimagenet", 32)}
+CELLNAME = {"W16": "CIFAR-100, width 16", "W32": "CIFAR-100, width 32", "TIN": "Tiny-ImageNet, width 32"}
 ARMS = {"shuf": "shuffled", "frz": "frozen_random"}
 REFS = {"sta": "static", "uni": "uniform", "gap": "gap"}
 MARGIN = 0.5
@@ -73,7 +73,7 @@ def main(put, root=ROOT):
         return np.asarray(A[(ds, w, arm, "d1")], float)
 
     rows, allrows = [], []
-    for cell in ("W16", "TIN"):
+    for cell in ("W16", "W32", "TIN"):
         ns = {x: nseeds(vals(cell, a)) for x, a in ARMS.items()}
         for x, n in ns.items():
             put(f"pdr18{cell}{x}n", str(n))
@@ -87,14 +87,40 @@ def main(put, root=ROOT):
                 key = f"pdr18{cell}{x}{y}"
                 put(key, sg(q["mean"])); put(key + "lo", sg(q["lo"])); put(key + "hi", sg(q["hi"]))
                 put(key + "p", pv(q["p"])); put(key + "T", f(q["tost"], 4)); put(key + "v", S.verdict(q))
+                put(key + "peq", "p<10^{-4}" if q["p"] < 1e-4 else f"p={q['p']:.4f}")
                 put(key + "a", f(abs(q["mean"])))
                 rows.append(f"{tt(a)} $-$ {tt(b)} & {sg(q['mean'])} & [{sg(q['lo'])}, {sg(q['hi'])}] & "
                             f"{pv(q['p'])} & {S.verdict(q)} \\\\")
+        for y, b_ in (("uni", "uniform"), ("sta", "static")):
+            q = S.paired(vals(cell, "gap"), vals(cell, b_), margin=MARGIN); key = f"pdr18{cell}gap{y}"
+            put(key, sg(q["mean"])); put(key + "p", pv(q["p"])); put(key + "v", S.verdict(q))
         for a in (list(ARMS.values()) + ["static", "uniform", "gap"]):
             v = vals(cell, a)
             allrows.append(f"ResNet-18 & {CELLNAME[cell].split(',')[0]} & {CELLS[cell][1]} & {tt(a)} & " +
                            " & ".join("--" if np.isnan(z) else f"{z:.2f}" for z in v) +
                            f" & {f(np.nanmean(v))} & {nseeds(v)} \\\\")
+
+    # ---- the three recorded predictions (PREREGISTRATION_CONTROLS_R18.md), scored only on complete cells
+    complete = all(nseeds(vals(c, a)) == 6 for c in CELLS for a in ARMS.values())
+    put("pdr18complete", "yes" if complete else "no")
+    if complete:
+        Q = lambda c, a, b: S.paired(vals(c, a), vals(c, b), margin=MARGIN)
+        lower = lambda z: z["p"] < 0.05 and z["mean"] < 0
+        r1q = [Q("TIN", "shuffled", "gap"), Q("TIN", "frozen_random", "gap")]
+        r2q = [Q("W16", "shuffled", "gap"), Q("W32", "shuffled", "gap")]
+        r3q = [Q("TIN", "frozen_random", "uniform")]
+        res = {"R1": all(lower(z) for z in r1q), "R2": all(lower(z) for z in r2q),
+               "R3": r3q[0]["p"] < 0.05 and r3q[0]["mean"] > 0}
+        for k, v in res.items():
+            put(f"pdr18{k}o", "held" if v else "failed")
+        put("pdr18nfail", str(sum(not v for v in res.values())))
+        for k, qs in (("R1", r1q), ("R2", r2q), ("R3", r3q)):
+            if res[k] and not all(z["p"] * len(qs) < 0.05 for z in qs):
+                raise SystemExit(f"{k} held but a comparison fails Bonferroni over its own prediction; fix the text")
+        put("pdr18TINfrzshare", f(100 * Q("TIN", "frozen_random", "uniform")["mean"] / Q("TIN", "gap", "uniform")["mean"], 0))
+        put("pdr18W32frzshare", f(100 * Q("W32", "frozen_random", "uniform")["mean"] / Q("W32", "gap", "uniform")["mean"], 0))
+        put("pdr18W16frzshare", f(100 * Q("W16", "frozen_random", "uniform")["mean"] / Q("W16", "gap", "uniform")["mean"], 0))
+
     # verdict column
     out = []
     for r_ in rows:

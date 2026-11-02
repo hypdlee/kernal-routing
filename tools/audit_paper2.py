@@ -391,7 +391,8 @@ for f in _fs:
     r = _j2.loads(f.read_text()); _n[(r["tag"].split("__")[1], r["arm"])] = _n.get((r["tag"].split("__")[1], r["arm"]), 0) + 1
 check("macros: seed counts shown for the incomplete cells match the files",
       MAC["pdr18TINshufn"] == str(_n.get(("tinyimagenet", "shuffled"), 0)) and MAC["pdr18TINfrzn"] == str(_n.get(("tinyimagenet", "frozen_random"), 0))
-      and MAC["pdr18W16shufn"] == str(_n.get(("cifar100", "shuffled"), 0)) and MAC["pdr18W16frzn"] == str(_n.get(("cifar100", "frozen_random"), 0)), str(_n))
+      and int(MAC["pdr18W16shufn"]) + int(MAC["pdr18W32shufn"]) == _n.get(("cifar100", "shuffled"), 0)
+      and int(MAC["pdr18W16frzn"]) + int(MAC["pdr18W32frzn"]) == _n.get(("cifar100", "frozen_random"), 0), str(_n))
 _rl = ((ROOT / "results_controls_a/resnet18/runner.log").read_text() + (ROOT / "results_controls_b/resnet18/runner.log").read_text())
 _ts = sorted(_r3.findall(r"(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d)\s+\[\d+/\d+\] part", _rl))
 _pc = _sp2.run(["git", "log", "-1", "--format=%ad", "--date=iso", "dbbacb8"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
@@ -408,6 +409,9 @@ for l in _tb:
         if n_ != 6 and f"(n={n_})" not in l: _bad.append(l[:50])
 check("every ResNet-18 comparison with n<6 carries its n in the verdict", not _bad, str(_bad[:2]))
 check("built paper has no em-dash", "\u2014" not in (built / "main.tex").read_text())
-check("template mentions the n shown in every partial cell (sec:partial)", "sec:partial" in tpl_ and "app:partial" in tpl_)
+check("template reports the ResNet-18 controls (sec:r18ctrl, app:r18runs)", "sec:r18ctrl" in tpl_ and "app:r18runs" in tpl_)
+check("ResNet-18 controls complete (36 runs, six seeds in every cell)", MAC["pdr18complete"] == "yes" and MAC["pdr18runs"] == "36", MAC["pdr18runs"])
+check("ResNet-18 predictions R1 to R3 scored from the data", all(MAC[f"pdr18R{i}o"] in ("held", "failed") for i in (1, 2, 3)))
+check("template no longer says the ResNet-18 controls are incomplete or pending", not any(x in tpl_ for x in ("controls are incomplete", "pending, seeds", "unscored until", "Controls still running")))
 
 sys.exit(1 if fails else 0)
